@@ -1,4 +1,4 @@
-const foodRepository = require("../repositories/food.repository");
+import * as foodRepository from "../repositories/food.repository";
 
 export const createFood = async (data: any, restaurantId: any) => {
 

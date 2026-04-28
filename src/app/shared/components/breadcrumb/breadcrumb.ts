@@ -5,6 +5,7 @@ import { LoggerService } from '../../../core/services/logger.service';
 
 @Component({
   selector: 'app-breadcrumb',
+  standalone: true,
   imports: [RouterLink],
   templateUrl: './breadcrumb.html',
   styleUrl: './breadcrumb.sass',
@@ -47,7 +48,7 @@ export class Breadcrumb {
     if (label === 'restaurant') {
       label = child.snapshot.params['restaurant'];
     }
-    if (label === 'cart') {
+    if (label === 'cart' || label === 'checkout') {
       const restaurantParam = child.snapshot.params['restaurant'];
 
       if (restaurantParam) {
@@ -61,10 +62,11 @@ export class Breadcrumb {
 
         breadcrumbs.push({
           label: formattedRestaurant,
-          url: url.replace('/cart', '') // 👈 restaurant URL
+          url: url.replace(`/${label}`, '') // 👈 restaurant URL
         });
       }
     }
+  
     if (label) {
       label = label.split('-')
         .filter(Boolean)

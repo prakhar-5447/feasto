@@ -1,19 +1,17 @@
-const multer = require("multer");
-const { CloudinaryStorage } =
-    require("multer-storage-cloudinary");
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-const cloudinary =
-    require("../config/cloudinary");
+import cloudinary from "../config/cloudinary";
 
 const storage = new CloudinaryStorage({
-
-    cloudinary,
-
-    params: {
-        folder: "food-items",
-        allowed_formats: ["jpg", "png", "jpeg"]
-    }
-
+  cloudinary,
+  params: async (req, file) => {
+    return {
+      folder: "food-items",
+      format: "png", // or derive from file
+      public_id: file.originalname.split(".")[0],
+    };
+  },
 });
 
 const upload = multer({ storage });

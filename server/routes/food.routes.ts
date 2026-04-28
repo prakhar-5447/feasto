@@ -9,9 +9,7 @@ import upload from "../middlewares/upload.middleware";
 
 import validate from "../middlewares/validation.middleware";
 
-const {
-    createFoodSchema
-} = require("../validations/food.validation");
+import { createFoodSchema } from "../validations/food.validation";
 
 router.post(
     "/:restaurantId",

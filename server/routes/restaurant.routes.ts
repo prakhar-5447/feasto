@@ -9,9 +9,7 @@ import role from "../middlewares/role.middleware";
 
 import validate from "../middlewares/validation.middleware";
 
-const {
-    createRestaurantSchema
-} = require("../validations/restaurant.validation");
+import { createRestaurantSchema } from "../validations/restaurant.validation";
 
 router.get("/nearby", restaurantController.getNearbyRestaurants);
 
