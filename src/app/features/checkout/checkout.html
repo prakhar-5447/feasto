@@ -1,0 +1,212 @@
+<div class="cart-page">
+    <!-- Items -->
+    <div class="items">
+        <h2>{{ cart[0]?.restaurantName }}</h2>
+        @for(item of cart;track item.id)
+        { <div class="item">
+            <img [src]="item.image" alt="item" />
+
+            <div class="details">
+                <h3>{{ item.name }}</h3>
+                <p>₹{{ item.price }}</p>
+            </div>
+
+            <div class="actions">
+                <div class="qty-box">
+                    <button class="btn" (click)="updateQuantity(item.id, item.quantity - 1)"><fa-icon
+                            [icon]="faMinus"></fa-icon></button>
+                    <span>{{ item.quantity }}</span>
+                    <button class="btn" (click)="updateQuantity(item.id, item.quantity + 1)"><fa-icon
+                            [icon]="faPlus"></fa-icon></button>
+                </div>
+
+                <button class="remove" (click)="removeItem(item.id)"><fa-icon [icon]="faTrashCan"></fa-icon></button>
+            </div>
+        </div>}
+    </div>
+
+    <!-- BILL -->
+    <div class="billing-section">
+        <div class="bill">
+            <h3>Order Summary</h3>
+            <div class="header">
+                <span>
+                    {{restaurantService.cart[0].restaurantName || ''}}
+                </span>
+            </div>
+            @for( item of cart;track item.id){
+            <div class="row">
+                <span>{{ item.name }} x {{ item.quantity }}</span>
+                <span>₹{{ item.price * item.quantity }}</span>
+            </div>
+            }
+            <div class="row divider">
+                <span>Item Total</span>
+                <span>₹{{ getTotal() }}</span>
+            </div>
+            <div class="row">
+                <span>Delivery Fee</span>
+                <span>₹{{ deliveryFee }}</span>
+            </div>
+            <div class="row">
+                <span>Platform Fee</span>
+                <span>₹{{ platformFee }}</span>
+            </div>
+            <div class="row">
+                <span>GST ({{gstPrecentage*100}}%)</span>
+                <span>₹{{ gst }}</span>
+            </div>
+            <!-- ✅ Discount -->
+            @if(discount>0){
+            <div class="row discount">
+                <span><fa-icon [icon]="faTag"></fa-icon> Discount</span>
+                <span>-₹{{ discount }}</span>
+            </div>
+            }
+
+            <div class="total">
+                <span>Total</span>
+                <span>₹{{ finalTotal }}</span>
+            </div>
+
+            <!-- ✅ Savings Message -->
+            @if(discount>0){
+            <div class="savings">
+                You saved ₹{{ discount }} on this order!
+            </div>
+            }
+            <button class="checkout">
+                Place Order
+            </button>
+        </div>
+    </div>
+</div>
+<!-- 
+<div class="checkout">
+    <div class="left">
+        <div class="card">
+            <h2>Delivery Address</h2>
+
+            <div class="address-list">
+                @for(addr of savedAddresses;track addr){
+                <div (click)="selectAddress(addr.id)" [class.active]="selectedAddressId === addr.id"
+                    class="address-card">
+                    <h4>{{ addr.label }}</h4>
+                    <p>{{ addr.street }}, {{ addr.landmark }}</p>
+                    <p>{{ addr.city }} - {{ addr.pincode }}</p>
+                </div>
+                }
+
+                <div class="address-card new" (click)="newAddress()">
+                    + Add New Address
+                </div>
+            </div>
+
+             @if(showNewAddressForm){<div class="form">
+                <input placeholder="Street" [(ngModel)]="address.street" />
+                <input placeholder="Landmark" [(ngModel)]="address.landmark" />
+
+                <div class="row">
+                    <input placeholder="City" [(ngModel)]="address.city" />
+                    <input placeholder="Pincode" [(ngModel)]="address.pincode" />
+                </div>
+
+                <label>
+                    <input type="checkbox" [(ngModel)]="saveAddress" />
+                    Save this address
+                </label>
+            </div>}
+        </div>
+
+         <div class="card">
+            <h2>Payment Method</h2>
+
+            <label>
+                <input type="radio" value="online" [(ngModel)]="paymentMethod" />
+                Online Payment
+            </label>
+
+            @if(paymentMethod === 'online'){
+            <div class="payment-options">
+                <button (click)="selectedPaymentOption='upi'">UPI</button>
+                <button (click)="selectedPaymentOption='card'">Card</button>
+                <button (click)="selectedPaymentOption='wallet'">Wallet</button>
+            </div>
+            }
+
+            <label>
+                <input type="radio" value="cod" [(ngModel)]="paymentMethod" />
+                Cash on Delivery
+            </label>
+        </div>
+
+    </div>
+
+     <div class="right">
+        <div class="card summary">
+
+            <h3>Order Summary</h3>
+            @for( item of cart;track item.id){
+            <div class="item">
+                <span>{{ item.name }} x {{ item.quantity }}</span>
+                <span>₹{{ item.price * item.quantity }}</span>
+            </div>
+            }
+
+            <hr />
+
+            <div class="row">
+                <span>Item Total</span>
+                <span>₹{{ itemTotal }}</span>
+            </div>
+
+            <div class="row">
+                <span>Delivery</span>
+                <span>₹{{ deliveryFee }}</span>
+            </div>
+
+            <div class="row">
+                <span>Platform Fee</span>
+                <span>₹{{ platformFee }}</span>
+            </div>
+
+            <div class="row">
+                <span>GST</span>
+                <span>₹{{ gst }}</span>
+            </div>
+
+            <hr />
+
+            <div class="total">
+                ₹{{ total }}
+            </div>
+
+            <button (click)="placeOrder()" [disabled]="processing">
+                {{ processing ? 'Processing...' : 'Place Order' }}
+            </button>
+
+        </div>
+    </div>
+
+
+     @if(showQRModal){
+    <div class="modal">
+        <div class="modal-content">
+            <h3>Scan to Pay ₹{{ total }}</h3>
+            <p>Auto completing in {{ countdown }} sec</p>
+        </div>
+    </div>
+    }
+
+     @if(showOrderSuccess){
+    <div class="modal">
+        <div class="modal-content success">
+            <h2>Order Placed!</h2>
+            <p>Order ID: {{ orderId }}</p>
+            <button (click)="showOrderSuccess=false">Continue</button>
+        </div>
+    </div>
+    }
+
+
+</div> -->

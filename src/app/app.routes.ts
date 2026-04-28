@@ -9,6 +9,7 @@ import { TabMenu } from './features/restaurant/tab-menu/tab-menu';
 import { TabReviews } from './features/restaurant/tab-reviews/tab-reviews';
 import { Cart } from './features/cart/cart';
 import { RestaurantResolver } from './shared/pipes/resolver';
+import { Checkout } from './features/checkout/checkout';
 
 export const routes: Routes = [
     {
@@ -58,13 +59,23 @@ export const routes: Routes = [
 
                     },
                     {
-                        path: ':restaurant/cart',
+                        path: ':restaurant/cart' ,
                         loadComponent: () => Cart,
                         resolve: {
                             restaurant: RestaurantResolver
                         },
                         data: {
                             breadcrumb: 'cart'
+                        }
+                    },
+                    {
+                        path: ':restaurant/checkout',
+                        loadComponent: () => Checkout,
+                        resolve: {
+                            restaurant: RestaurantResolver
+                        },
+                        data: {
+                            breadcrumb: 'checkout'
                         }
                     }
                 ]

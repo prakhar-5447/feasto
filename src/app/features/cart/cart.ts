@@ -10,9 +10,11 @@ import {
   faMinus, faPlus, faTag
 } from '@fortawesome/free-solid-svg-icons';
 import { Coupons } from './coupons/coupons';
+import { LocationServicePersistence } from '../../core/services/location.service';
 
 @Component({
   selector: 'app-cart',
+  standalone: true,
   imports: [FontAwesomeModule, Coupons],
   templateUrl: './cart.html',
   styleUrl: './cart.sass',
@@ -29,6 +31,7 @@ export class Cart {
   constructor(
     public cartService: CartService,
     public restaurantService: RestaurantService,
+    public locationService: LocationServicePersistence,
     private router: Router
   ) { }
 
@@ -72,15 +75,17 @@ export class Cart {
     this.cartService.removeFromCart(itemId);
   }
 
-  clearCart() {
-    this.cartService.clearCart();
-  }
-
   goBack() {
     this.router.navigate(['/india']);
   }
-
+ formatSlug(name: string) {
+    return name.
+      toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '')
+  }
   checkout() {
-    this.router.navigate(['/checkout']);
+    this.router.navigate(['/india', this.locationService.getCity(), this.formatSlug(this.restaurantService.restaurant.name), 'checkout'
+    ]);
   }
 }

@@ -8,7 +8,6 @@
     display: flex
     gap: 20px
 
-
     .items
         height: 100%
         flex: 3
@@ -90,6 +89,11 @@
                 font-weight: 600
                 margin-bottom: 10px
                 font-size: 24px
+            .header
+                margin-bottom: 12px
+                span
+                    font-weight: 600
+                    font-size: 16px
             .row
                 display: flex
                 justify-content: space-between
@@ -97,6 +101,11 @@
                 font-size: 16px
                 font-weight: 400
                 color: $color-text-secondary
+                &.divider
+                    border-bottom: 1px solid #eeeeee
+                    margin-bottom: 18px
+                    padding-bottom: 18px
+
                 &.discount
                     color: #1fcc5e
                     font-weight: 500
@@ -131,16 +140,103 @@
                 font-weight: 600
                 cursor: pointer
 
-    .empty-cart
-        text-align: center
-        padding: 100px 20px
+// .checkout
+//     min-height: 100vh
+//     padding: 8px 16px
+//     max-width: 1200px
+//     margin: 0 auto
+//     display: flex
+//     gap: 20px
 
-        h2
-            font-size: 24px
+//     .left
+//         display: flex
+//         flex-direction: column
+//         flex: 3
 
-        button
-            margin-top: 20px
-            background: $color-primary
-            color: $color-white
-            padding: 10px 20px
-            border-radius: 6px
+//         .card
+//             background: white
+//             padding: 16px
+//             border-radius: 10px
+
+//             .address-list
+//                 display: grid
+//                 gap: 10px
+
+//                 .address-card
+//                     border: 1px solid #ddd
+//                     padding: 10px
+//                     cursor: pointer
+
+//                     &.active
+//                         border-color: orange
+//                         background: #fff3e0
+
+//                     &.new
+//                         text-align: center
+//                         font-weight: bold
+
+//             .form
+//                 margin-top: 10px
+
+//                 input
+//                     width: 100%
+//                     margin-bottom: 10px
+//                     padding: 8px
+
+//                 .row
+//                     display: flex
+//                     gap: 10px
+
+//             .payment-options
+//                 display: flex
+//                 gap: 10px
+//                 margin: 10px 0
+//     .right
+//         flex: 2
+//         .card
+//             background: white
+//             padding: 16px
+//             border-radius: 10px
+
+//             &.summary
+//                 position: sticky
+//                 top: 80px
+
+//                 .item
+//                     display: flex
+//                     justify-content: space-between
+
+//                 .row
+//                     display: flex
+//                     justify-content: space-between
+//                     margin: 5px 0
+
+//                 .total
+//                     font-size: 20px
+//                     font-weight: bold
+
+//                 button
+//                     width: 100%
+//                     padding: 12px
+//                     background: orange
+//                     color: white
+//                     border: none
+
+//     .modal
+//         position: fixed
+//         top: 0
+//         left: 0
+//         right: 0
+//         bottom: 0
+//         background: rgba(0,0,0,0.5)
+//         display: flex
+//         justify-content: center
+//         align-items: center
+
+//         .modal-content
+//             background: white
+//             padding: 20px
+//             border-radius: 10px
+
+//             &.success
+//                 text-align: center
