@@ -9,7 +9,7 @@ import {
   faTrashCan
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faMinus, faPlus, faTag
+  faMinus, faPlus, faTag,faLocationDot
 } from '@fortawesome/free-solid-svg-icons';
 
 interface Address {
@@ -33,6 +33,7 @@ export class Checkout {
   deliveryFee = 40;
   platformFee = 5;
   faMinus = faMinus
+  faLocationDot = faLocationDot
   faPlus = faPlus
   faTag = faTag
   gstPrecentage = 0.05
@@ -43,6 +44,11 @@ export class Checkout {
     public locationService: LocationServicePersistence,
     private router: Router
   ) { }
+
+  get appliedCoupon() {
+    return this.cartService.getAppliedCoupon();
+  }
+
 
   get cart() {
     return this.restaurantService.cart;
@@ -99,129 +105,107 @@ export class Checkout {
   }
   // appliedCoupon: any = null;
 
-  // paymentMethod = 'online';
-  // selectedPaymentOption = 'upi';
+  paymentMethod = 'online';
+  selectedPaymentOption = 'upi';
 
-  // selectedAddressId: string | null = null;
-  // showNewAddressForm = false;
-  // saveAddress = false;
+  selectedAddressId: string | null = null;
+  showNewAddressForm = false;
+  saveAddress = false;
 
-  // address = {
-  //   street: '',
-  //   landmark: '',
-  //   city: '',
-  //   pincode: ''
-  // };
+  address = {
+    street: 'saas',
+    landmark: 'sas',
+    city: 'sas',
+    pincode: 'sasa'
+  };
 
-  // processing = false;
-  // showQRModal = false;
-  // countdown = 10;
+  processing = false;
+  showQRModal = false;
+  countdown = 10;
 
-  // orderId = '';
-  // showOrderSuccess = false;
+  orderId = '';
+  showOrderSuccess = false;
 
-  // deliveryFee = 40;
-  // platformFee = 5;
+  savedAddresses: Address[] = [
+    {
+      id: '1',
+      label: 'Home',
+      street: '123, Park Avenue',
+      landmark: 'Near Central Park',
+      city: 'Mumbai',
+      pincode: '400001',
+    },
+    {
+      id: '2',
+      label: 'Work',
+      street: '45, Corporate Plaza',
+      landmark: 'Opposite Tech Hub',
+      city: 'Mumbai',
+      pincode: '400051',
+    }
+  ];
 
-  // savedAddresses: Address[] = [
-  //   {
-  //     id: '1',
-  //     label: 'Home',
-  //     street: '123, Park Avenue',
-  //     landmark: 'Near Central Park',
-  //     city: 'Mumbai',
-  //     pincode: '400001',
-  //   },
-  //   {
-  //     id: '2',
-  //     label: 'Work',
-  //     street: '45, Corporate Plaza',
-  //     landmark: 'Opposite Tech Hub',
-  //     city: 'Mumbai',
-  //     pincode: '400051',
-  //   }
-  // ];
+  get total() {
+    return this.itemTotal + this.deliveryFee + this.platformFee + this.gst - this.discount;
+  }
 
-  // constructor(private router: Router, private restaurantService: RestaurantService) {
-  // }
+  selectAddress(id: string) {
+    this.selectedAddressId = id;
+    this.showNewAddressForm = false;
 
-  // get cart() {
-  //   return this.restaurantService.cart;
-  // }
+    const selected = this.savedAddresses.find(a => a.id === id);
+    if (selected) {
+      this.address = { ...selected };
+    }
+  }
 
-  // get itemTotal() {
-  //   return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  // }
+  newAddress() {
+    this.selectedAddressId = null;
+    this.showNewAddressForm = true;
 
-  // get discount() {
-  //   return 0;
-  // }
+    this.address = {
+      street: '',
+      landmark: '',
+      city: '',
+      pincode: ''
+    };
+  }
 
-  // get gst() {
-  //   return Math.round((this.itemTotal - this.discount) * 0.05);
-  // }
+  placeOrder() {
+    if (!this.address.street || !this.address.city || !this.address.pincode) {
+      alert('Please fill address');
+      return;
+    }
 
-  // get total() {
-  //   return this.itemTotal + this.deliveryFee + this.platformFee + this.gst - this.discount;
-  // }
+    this.processing = true;
 
-  // selectAddress(id: string) {
-  //   this.selectedAddressId = id;
-  //   this.showNewAddressForm = false;
+    setTimeout(() => {
+      this.processing = false;
 
-  //   const selected = this.savedAddresses.find(a => a.id === id);
-  //   if (selected) {
-  //     this.address = { ...selected };
-  //   }
-  // }
+      if (this.paymentMethod === 'online') {
+        this.countdown = 10;
+        this.showQRModal = true;
+        this.startTimer();
+      } else {
+        this.successOrder();
+      }
+    }, 1000);
+  }
 
-  // newAddress() {
-  //   this.selectedAddressId = null;
-  //   this.showNewAddressForm = true;
+  startTimer() {
+    const interval = setInterval(() => {
+      this.countdown--;
 
-  //   this.address = {
-  //     street: '',
-  //     landmark: '',
-  //     city: '',
-  //     pincode: ''
-  //   };
-  // }
+      if (this.countdown === 0) {
+        clearInterval(interval);
+        this.successOrder();
+      }
+    }, 1000);
+  }
 
-  // placeOrder() {
-  //   if (!this.address.street || !this.address.city || !this.address.pincode) {
-  //     alert('Please fill address');
-  //     return;
-  //   }
-
-  //   this.processing = true;
-
-  //   setTimeout(() => {
-  //     this.processing = false;
-
-  //     if (this.paymentMethod === 'online') {
-  //       this.countdown = 10;
-  //       this.showQRModal = true;
-  //       this.startTimer();
-  //     } else {
-  //       this.successOrder();
-  //     }
-  //   }, 1000);
-  // }
-
-  // startTimer() {
-  //   const interval = setInterval(() => {
-  //     this.countdown--;
-
-  //     if (this.countdown === 0) {
-  //       clearInterval(interval);
-  //       this.successOrder();
-  //     }
-  //   }, 1000);
-  // }
-
-  // successOrder() {
-  //   this.orderId = 'FO' + Date.now().toString().slice(-8);
-  //   this.showQRModal = false;
-  //   this.showOrderSuccess = true;
-  // }
+  successOrder() {
+    this.orderId = 'FO' + Date.now().toString().slice(-8);
+    this.showQRModal = false;
+    this.showOrderSuccess = true;
+  }
 }

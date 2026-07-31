@@ -8,71 +8,70 @@
     display: flex
     gap: 20px
 
-    .items
-        height: 100%
+    .left
+        display: flex
+        flex-direction: column
         flex: 3
-        background: $color-white
-        padding: 20px
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05)
-        border-radius: 10px
 
-        h2
-            font-weight: 600
-            margin-bottom: 16px
-
-        .item
-            display: flex
-            gap: 16px
-            &:not(:last-child)
-                padding-bottom: 20px
-                margin-bottom: 20px
-                border-bottom: 1px solid #eee
-
-            img
-                width: 80px
-                height: 80px
-                object-fit: cover
-                border-radius: 8px
-
-            .details
-                flex: 1
-
-                h3
-                    font-weight: 600
+        .card
+            background: white
+            padding: 16px
+            border-radius: 10px
+            h2
+                font-size: 18px
+                font-weight: 600
+                margin-bottom: 12px
+                fa-icon
                     font-size: 18px
-                p
-                    font-weight: 500
-                    font-size: 16px
-                    color: $color-text-secondary
 
-            .actions
+            h4
+                font-size: 16px
+                font-weight: 400   
+            .address-list
                 display: flex
                 flex-direction: column
-                align-items: flex-end
-                gap: 8px
-                button
-                    border: none
-                    background: transparent
-                    cursor: pointer
-                    color: $color-primary
-                    font-size: 14px
+                gap: 10px
 
-                .qty-box
-                    background: $color-white
-                    border: 1px solid $color-primary
-                    border-radius: 6px
-                    font-size: 14px
-                    display: flex
-                    align-items: center
-                    gap: 4px
-                    margin-bottom: 8px
-                    .btn
-                        width: 28px
-                        height: 28px
-                        border-radius: 6px
-                        font-size: 14px
-                    span
+                .address-card
+                    border: 1px solid #ddd
+                    border-radius: 8px
+                    padding: 12px
+                    cursor: pointer
+                    font-weight: 500
+                    h4
+                        font-weight: 600
                         font-size: 16px
+                        margin-bottom: 4px
+                    p
+                        font-size: 14px
+                        line-height: 18px
+                        color: $color-text-secondary
+                    &.active
+                        border-color: orange
+                        background: #fff3e0
+
+                    &.new
+                        font-weight: 500
+                        fa-icon
+                            margin-right: 8px
+                            color: $color-primary
+
+            .form
+                margin-top: 10px
+
+                input
+                    width: 100%
+                    margin-bottom: 10px
+                    padding: 8px
+
+                .row
+                    display: flex
+                    gap: 10px
+
+            .payment-options
+                display: flex
+                gap: 10px
+                margin: 10px 0
 
     .billing-section
         flex: 2
@@ -94,11 +93,16 @@
                 span
                     font-weight: 600
                     font-size: 16px
+            .divider
+                border-bottom: 1px solid #eeeeee
+                margin-bottom: 18px
+                padding-bottom: 18px
+
             .row
                 display: flex
                 justify-content: space-between
-                margin-bottom: 6px
-                font-size: 16px
+                margin-bottom: 2px
+                font-size: 14px
                 font-weight: 400
                 color: $color-text-secondary
                 &.divider
@@ -112,6 +116,30 @@
                     font-size: 14px
                     fa-icon
                         font-size: 14px
+
+                .applied
+                    display: flex
+                    justify-content: space-between
+                    width: 100%
+                   
+                    border-bottom: 1px solid #eeeeee
+                    margin-bottom: 18px
+                    padding-bottom: 18px
+                    .info
+                        background: #1fcc5e1d
+                        border: 1px solid #1fcc5e
+                        padding: 10px
+                        border-radius: 8px
+                        width: 100%
+                        .code
+                            color: #1fcc5e
+                            font-size: 16px
+                            font-weight: 600
+
+                        .desc
+                            font-size: 12px
+                            font-weight: 500
+                            color:  $color-text-secondary
 
             .total
                 display: flex
@@ -139,104 +167,5 @@
                 border: none
                 font-weight: 600
                 cursor: pointer
-
-// .checkout
-//     min-height: 100vh
-//     padding: 8px 16px
-//     max-width: 1200px
-//     margin: 0 auto
-//     display: flex
-//     gap: 20px
-
-//     .left
-//         display: flex
-//         flex-direction: column
-//         flex: 3
-
-//         .card
-//             background: white
-//             padding: 16px
-//             border-radius: 10px
-
-//             .address-list
-//                 display: grid
-//                 gap: 10px
-
-//                 .address-card
-//                     border: 1px solid #ddd
-//                     padding: 10px
-//                     cursor: pointer
-
-//                     &.active
-//                         border-color: orange
-//                         background: #fff3e0
-
-//                     &.new
-//                         text-align: center
-//                         font-weight: bold
-
-//             .form
-//                 margin-top: 10px
-
-//                 input
-//                     width: 100%
-//                     margin-bottom: 10px
-//                     padding: 8px
-
-//                 .row
-//                     display: flex
-//                     gap: 10px
-
-//             .payment-options
-//                 display: flex
-//                 gap: 10px
-//                 margin: 10px 0
-//     .right
-//         flex: 2
-//         .card
-//             background: white
-//             padding: 16px
-//             border-radius: 10px
-
-//             &.summary
-//                 position: sticky
-//                 top: 80px
-
-//                 .item
-//                     display: flex
-//                     justify-content: space-between
-
-//                 .row
-//                     display: flex
-//                     justify-content: space-between
-//                     margin: 5px 0
-
-//                 .total
-//                     font-size: 20px
-//                     font-weight: bold
-
-//                 button
-//                     width: 100%
-//                     padding: 12px
-//                     background: orange
-//                     color: white
-//                     border: none
-
-//     .modal
-//         position: fixed
-//         top: 0
-//         left: 0
-//         right: 0
-//         bottom: 0
-//         background: rgba(0,0,0,0.5)
-//         display: flex
-//         justify-content: center
-//         align-items: center
-
-//         .modal-content
-//             background: white
-//             padding: 20px
-//             border-radius: 10px
-
-//             &.success
-//                 text-align: center
+                span
+                    font-size: 16px
