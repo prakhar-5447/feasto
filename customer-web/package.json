@@ -1,5 +1,5 @@
 {
-  "name": "feasto-frontend",
+  "name": "customer-web",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:feasto-frontend": "node dist/feasto-frontend/server/server.mjs"
+    "serve:ssr:customer-web": "node dist/customer-web/server/server.mjs"
   },
   "private": true,
   "packageManager": "npm@11.9.0",

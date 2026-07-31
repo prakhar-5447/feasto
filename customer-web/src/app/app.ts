@@ -14,7 +14,7 @@ import { AppState } from './store/app.state';
   styleUrl: './app.sass'
 })
 export class App {
-  protected readonly title = signal('feasto-frontend');
+  protected readonly title = signal('customer-web');
   constructor(private locationService: LocationServicePersistence, @Inject(Store) private store: Store<AppState>,   @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // 🔥 ONLY RUN IN BROWSER

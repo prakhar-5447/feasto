@@ -141,7 +141,7 @@ In SSR mode, Angular's `src/server.ts` bootstraps an Express app that serves bot
 ## 🗂️ Project Structure
 
 ```
-feasto-frontend/
+customer-web/
 ├── server/                          # Express REST API (monolith backend)
 │   ├── index.js                     # API bootstrap — registers all routes & middleware
 │   ├── config/
@@ -338,8 +338,8 @@ NgRx Effects handle all async HTTP interactions with the backend, keeping compon
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/prakhar-5447/feasto-frontend.git
-cd feasto-frontend
+git clone https://github.com/prakhar-5447/customer-web.git
+cd customer-web
 ```
 
 ### 2. Install All Dependencies
@@ -392,7 +392,7 @@ API runs at: `http://localhost:3000/api`
 
 ```bash
 npm run build
-node dist/feasto-frontend/server/server.mjs
+node dist/customer-web/server/server.mjs
 ```
 
 This starts the unified Angular SSR + Express server on the configured `PORT`.
@@ -406,8 +406,8 @@ npm run build
 ```
 
 Output artifacts:
-- `dist/feasto-frontend/browser/` — Static client-side assets
-- `dist/feasto-frontend/server/server.mjs` — The unified SSR + API server entry point
+- `dist/customer-web/browser/` — Static client-side assets
+- `dist/customer-web/server/server.mjs` — The unified SSR + API server entry point
 
 ---
 
