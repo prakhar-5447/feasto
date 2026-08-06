@@ -19,46 +19,56 @@
                 </div>
                 }
                 }
-                <div class="address-card new" (click)="newAddress()">
+                <div class="address-card new" [class.selected]="selectedAddressId==null && showNewAddressForm"
+                    (click)="newAddress()">
                     <fa-icon [icon]="faPlus"></fa-icon> Add New Address
                 </div>
             </div>
 
             @if(showNewAddressForm){<div class="form">
-                <input placeholder="Street" [(ngModel)]="address.street" />
-                <input placeholder="Landmark" [(ngModel)]="address.landmark" />
+                <input class="field" placeholder="Street" [(ngModel)]="address.street" />
+                <input class="field" placeholder="Landmark" [(ngModel)]="address.landmark" />
 
                 <div class="row">
-                    <input placeholder="City" [(ngModel)]="address.city" />
-                    <input placeholder="Pincode" [(ngModel)]="address.pincode" />
+                    <input class="field" placeholder="City" [(ngModel)]="address.city" />
+                    <input class="field" placeholder="Pincode" [(ngModel)]="address.pincode" />
                 </div>
 
-                <label>
+                <label class="checkbox">
                     <input type="checkbox" [(ngModel)]="saveAddress" />
-                    Save this address
+                    <span class="checkmark"></span>
+                    <span>Save this address</span>
                 </label>
             </div>}
         </div>
 
-        <div class="card">
+        <div class="card payment-card">
             <h2>Payment Method</h2>
 
-            <label>
+            <label class="payment-method">
                 <input type="radio" value="online" [(ngModel)]="paymentMethod" />
-                Online Payment
+
+                <div class="method-content">
+                    <div class="method-info">
+                        <span class="method-title">Online Payment (UPI)</span>
+                        <div class="payment-icons">
+                            <img src="/src/assets/images/gpay.png" alt="Google Pay" />
+                            <img src="/src/assets/images/phonepe.png" alt="PhonePe" />
+                        </div>
+                    </div>
+                    <span class="radio"></span>
+                </div>
             </label>
-
-            @if(paymentMethod === 'online'){
-            <div class="payment-options">
-                <button (click)="selectedPaymentOption='upi'">UPI</button>
-                <button (click)="selectedPaymentOption='card'">Card</button>
-                <button (click)="selectedPaymentOption='wallet'">Wallet</button>
-            </div>
-            }
-
-            <label>
+            <label class="payment-method">
                 <input type="radio" value="cod" [(ngModel)]="paymentMethod" />
-                Cash on Delivery
+
+                <div class="method-content">
+                    <div class="method-info">
+                        <span class="method-title">Cash on Delivery</span>
+                        <span class="method-subtitle">Pay when your order arrives</span>
+                    </div>
+                    <span class="radio"></span>
+                </div>
             </label>
         </div>
 
@@ -124,7 +134,7 @@
                 You saved ₹{{ discount }} on this order!
             </div>
             }
-            <button class="checkout">
+            <button class="checkout" (click)="payment()">
                 Place Order<span>
                     (₹{{ finalTotal }})
                 </span>
