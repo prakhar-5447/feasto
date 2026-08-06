@@ -9,7 +9,7 @@ import {
   faTrashCan
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faMinus, faPlus, faTag,faLocationDot
+  faMinus, faPlus, faTag, faLocationDot
 } from '@fortawesome/free-solid-svg-icons';
 
 interface Address {
@@ -19,6 +19,12 @@ interface Address {
   landmark: string;
   city: string;
   pincode: string;
+}
+
+enum PaymentState {
+  QR,
+  Processing,
+  Success
 }
 
 @Component({
@@ -99,10 +105,7 @@ export class Checkout {
       .replace(/\s+/g, '-')
       .replace(/[^\w-]+/g, '')
   }
-  checkout() {
-    this.router.navigate(['/india', this.locationService.getCity(), this.formatSlug(this.restaurantService.restaurant.name), 'checkout'
-    ]);
-  }
+ 
   // appliedCoupon: any = null;
 
   paymentMethod = 'online';
@@ -145,6 +148,24 @@ export class Checkout {
     }
   ];
 
+
+  //   GET https://api.postalpincode.in/pincode/110001
+
+  // Response:
+  // [
+  //   {
+  //     "Status": "Success",
+  //     "PostOffice": [
+  //       {
+  //         "Name": "Baroda House",
+  //         "District": "New Delhi",
+  //         "State": "Delhi",
+  //         "Country": "India",
+  //         "Pincode": "110001"
+  //       }
+  //     ]
+  //   }
+  // ]
   get total() {
     return this.itemTotal + this.deliveryFee + this.platformFee + this.gst - this.discount;
   }
@@ -160,6 +181,7 @@ export class Checkout {
   }
 
   newAddress() {
+    if (this.showNewAddressForm) return;
     this.selectedAddressId = null;
     this.showNewAddressForm = true;
 
@@ -177,35 +199,22 @@ export class Checkout {
       return;
     }
 
-    this.processing = true;
+    // this.processing = true;
 
-    setTimeout(() => {
-      this.processing = false;
+    // setTimeout(() => {
+    //   this.processing = false;
 
-      if (this.paymentMethod === 'online') {
-        this.countdown = 10;
-        this.showQRModal = true;
-        this.startTimer();
-      } else {
-        this.successOrder();
-      }
-    }, 1000);
+    //   if (this.paymentMethod === 'online') {
+    //     this.countdown = 10;
+    //     this.showQRModal = true;
+    //   } else {
+    //   }
+    // }, 1000);
   }
 
-  startTimer() {
-    const interval = setInterval(() => {
-      this.countdown--;
-
-      if (this.countdown === 0) {
-        clearInterval(interval);
-        this.successOrder();
-      }
-    }, 1000);
-  }
-
-  successOrder() {
-    this.orderId = 'FO' + Date.now().toString().slice(-8);
-    this.showQRModal = false;
-    this.showOrderSuccess = true;
+  payment() {
+    console.log("clicked")
+    this.router.navigate(['/india', this.locationService.getCity(), this.formatSlug(this.restaurantService.restaurant.name), 'payment'
+    ]);
   }
 }

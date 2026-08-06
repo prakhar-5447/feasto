@@ -1,0 +1,258 @@
+<section class="payment">
+    @if (stage === 'qr') {
+    <div class="payment-page">
+        <div class="top-bar">
+            <div class="amount-section">
+                <p class="payment-type"> UPI Payment
+                </p>
+                <h1 class="amount"> ₹{{ meta.total }}
+                </h1>
+                <p class="restaurant-name"> {{ meta.restaurantName }}
+                </p>
+            </div>
+            <div class="secured-badge">
+                <fa-icon [icon]="faShieldAlt"></fa-icon>
+                <span>Secured</span>
+            </div>
+        </div>
+
+        <div class="qr-card">
+            <div class="card-header">
+                <p class="title"> Scan & Pay
+                </p>
+                <p class="subtitle"> Open any UPI app and scan the QR code below
+                </p>
+            </div>
+
+            <div class="card-body">
+                <div class="qr-frame">
+                    <div class="qr-wrapper">
+                        <div class="qr-grid" [style.gridTemplateColumns]="'repeat(' + qrSize + ',1fr)'">
+                            @for (cell of qrCells; track $index) {
+                            <div class="qr-cell" [class.filled]="cell">
+                            </div>
+                            }
+                        </div>
+
+                        <div class="qr-logo">
+                            F
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upi-apps">
+                    @for (app of upiApps; track app) {
+                    <div class="app-chip">
+                        {{ app }} </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="expiry-row">
+                    <div class="expiry-left">
+                        <i class="fa-regular fa-clock"></i>
+                        <span>
+                            QR expires in
+                        </span>
+                    </div>
+                    <span class="expiry-time" [class.expired]="expiry < 60">
+                        {{ expiryMinutes }}:{{ expirySeconds }}
+                    </span>
+                </div>
+
+                <div class="supported-text">
+                    <span>
+                        Supports all UPI Apps </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+    @else if (stage === 'processing') {
+    <div class="processing-page">
+        <div class="processing-container">
+            <div class="loader-wrapper">
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+                <div class="ring ring-3"></div>
+                <div class="loader-circle">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                </div>
+            </div>
+
+            <div class="processing-text">
+                <h2> Verifying Payment{{ processingDots }}
+                </h2>
+                <p> Please don't close this page
+                </p>
+            </div>
+
+            <div class="steps-card">
+                @for (step of processingSteps; track $index) {
+                <div class="step">
+                    <div class="step-icon" [class.completed]="step.done">
+                        @if (step.done) {
+                        <fa-icon [icon]="faCheckCircle"></fa-icon>
+                        } @else {
+                        <span></span>
+                        }
+                    </div>
+                    <p [class.completed]="step.done">
+                        {{ step.label }}
+                    </p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    }
+
+    @if (stage === 'confirmed') {
+    <div class="success-page">
+        <div class="section-left">
+            <div class="success-card">
+                <div class="card-top">
+                    <div class="success-icon">
+                        <fa-icon [icon]="faCheckCircle"></fa-icon>
+                    </div>
+                    <h1> Order Confirmed!
+                    </h1>
+                    <p> Payment successful • ₹{{ meta.total }} paid
+                    </p>
+                </div>
+                <div class="order-id">
+                    <span class="label">
+                        Order ID </span>
+                    <span class="value">
+                        {{ orderId }} </span>
+                </div>
+            </div>
+
+            <div class="eta-card">
+                <div class="eta-header">
+                    <div class="bike">
+                        <fa-icon [icon]="faMotorcycle"></fa-icon>
+                    </div>
+                    <div>
+                        <p class="small">
+                            Estimated Delivery
+                        </p>
+                        <h3>
+                            {{ estimatedTime }} • ~35 min
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="delivery-progress">
+                    @for (item of deliverySteps; track item) {
+                    <div class="progress-step">
+                        <div class="dot" [class.active]="$index=== 0">
+                        </div>
+                        <span>
+                            {{ item }}
+                        </span>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="section-right">
+            <div class="summary-card">
+                <div class="summary-header">
+                    <fa-icon [icon]="faShoppingBasket"></fa-icon>
+                    <span>
+                        Order from {{ meta.restaurantName }} </span>
+                </div>
+
+                <div class="items">
+                    @for (item of meta.items; track $index) {
+                    <div class="item-row">
+                        <div class="left">
+                            <span class="qty">
+                                {{ item.quantity }}×
+                            </span>
+                            <span class="name">
+                                {{ item.name }}
+                            </span>
+                        </div>
+                        <span class="price">
+                            ₹{{ item.price * item.quantity }}
+                        </span>
+                    </div>
+                    }
+                </div>
+
+                <div class="bill">
+                    <div class="bill-row">
+                        <span>Item Total</span>
+                        <span>
+                            ₹{{ meta.itemTotal }}
+                        </span>
+                    </div>
+
+                    @if (meta.discount > 0) {
+                    <div class="bill-row discount">
+                        <span>
+                            Discount
+                            @if (meta.couponCode) {
+                            ({{ meta.couponCode }})
+                            }
+                        </span>
+                        <span>
+                            -₹{{ meta.discount }}
+                        </span>
+                    </div>
+                    }
+
+                    <div class="bill-row">
+                        <span>
+                            Delivery + Platform Fee
+                        </span>
+                        <span>
+                            ₹{{ meta.deliveryFee + meta.platformFee }}
+                        </span>
+                    </div>
+                    <div class="bill-row">
+                        <span>
+                            GST
+                        </span>
+                        <span>
+                            ₹{{ meta.gst }}
+                        </span>
+                    </div>
+                    <div class="bill-row total">
+                        <span>
+                            Total Paid
+                        </span>
+                        <span>
+                            ₹{{ meta.total }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="address-card">
+                <fa-icon [icon]="faLocationDot"></fa-icon>
+                <div>
+                    <p class="label">
+                        Delivering To </p>
+                    <p class="value">
+                        {{ meta.address }} </p>
+                </div>
+            </div>
+
+            <button class="home-button" (click)="goHome()">
+                Back to Home
+                <fa-icon [icon]="faAngleRight"></fa-icon> </button>
+
+            <p class="support-text">
+                Need help? Contact support with Order ID
+                <span> #{{ orderId }}</span>
+            </p>
+        </div>
+    </div>
+    }
+</section>

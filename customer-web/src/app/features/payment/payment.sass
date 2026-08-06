@@ -1,0 +1,573 @@
+@use '../../../styles/index' as *
+
+.payment
+    min-height: 60vh
+    padding: 52px 18px
+    display: flex
+    align-items: center
+    justify-content: center
+    .payment-page
+        .top-bar
+            width: 100%
+            max-width: 430px
+            display: flex
+            justify-content: space-between
+            align-items: flex-start
+            margin-bottom: 12px
+
+            .amount-section
+                .payment-type
+                    font-size: 14px
+                    font-weight: 600
+                    text-transform: uppercase
+                    letter-spacing: 2px
+                    color: $color-text-secondary
+                    margin-bottom: 8px
+
+                .amount
+                    font-size: 24px
+                    font-weight: 700
+                    color: $color-black
+                    margin: 0
+                    line-height: 24px
+
+                .restaurant-name
+                    font-size: 14px
+                    color: $color-text-secondary
+
+            .secured-badge
+                display: flex
+                align-items: center
+                gap: 8px
+                background: #ecfdf5
+                color: #16a34a
+                border: 1px solid #bbf7d0
+                padding: 6px 12px
+                border-radius: 999px
+                font-size: 12px
+                font-weight: 600
+
+                fa-icon
+                    font-size: 12px
+
+        .qr-card
+            width: 100%
+            max-width: 430px
+            background: white
+            border-radius: 22px
+            overflow: hidden
+            box-shadow: 0 12px 35px rgba(0,0,0,.08)
+
+            .card-header
+                background: linear-gradient(135deg,#f97316,#ea580c)
+                color: white
+                min-height: 120px
+                padding: 18px
+
+                .title
+                    font-size: 18px
+                    font-weight: 700
+                    margin-bottom: 2px
+
+                .subtitle
+                    font-size: .82rem
+                    opacity: .8
+                    line-height: 1.5
+
+            .card-body
+                margin-top: -36px
+                padding: 0 24px
+                display: flex
+                flex-direction: column
+                align-items: center
+
+                .qr-frame
+                    background: white
+                    border-radius: 20px
+                    padding: 18px
+                    border: 1px solid #f1f5f9
+                    box-shadow: 0 10px 30px rgba(0,0,0,.08)
+                    margin-bottom: 24px
+
+                    .qr-wrapper
+                        position: relative
+
+                        .qr-grid
+                            width: 192px
+                            height: 192px
+                            display: grid
+
+                            .qr-cell
+                                background: white
+
+                                &.filled
+                                    background: #111827
+
+                        .qr-logo
+                            position: absolute
+                            top: 50%
+                            left: 50%
+                            transform: translate(-50%,-50%)
+                            width: 32px
+                            height: 32px
+                            background: $color-primary
+                            color: white
+                            display: flex
+                            justify-content: center
+                            align-items: center
+                            border-radius: 8px
+                            font-weight: 700
+                            box-shadow: 0 5px 15px rgba(0,0,0,.2)
+
+                .upi-apps
+                    display: flex
+                    flex-wrap: wrap
+                    justify-content: center
+                    gap: 10px
+                    margin-bottom: 24px
+
+                    .app-chip
+                        background: #f9fafb
+                        border: 1px solid #e5e7eb
+                        padding: 6px 14px
+                        border-radius: 8px
+                        font-size: 12px
+                        font-weight: 600
+                        color: #6b7280
+
+            .card-footer
+                padding: 24px
+
+                .expiry-row
+                    display: flex
+                    justify-content: space-between
+                    align-items: center
+                    margin-bottom: 18px
+
+                    .expiry-left
+                        display: flex
+                        align-items: center
+                        gap: .45rem
+                        color: #6b7280
+                        font-size: 14px
+
+                    .expiry-time
+                        font-weight: 700
+                        font-size: 16px
+                        color: $color-text-primary
+
+                        &.expired
+                            color: #ef4444
+
+                .supported-text
+                    display: flex
+                    justify-content: center
+                    align-items: center
+                    color: $color-text-muted
+                    font-size: 12px
+
+    .processing-page
+        .processing-container
+            width: 100%
+            max-width: 420px
+            text-align: center
+
+            .loader-wrapper
+                position: relative
+                width: 100px
+                height: 100px
+                margin: 0 auto 24px
+
+                .ring
+                    position: absolute
+                    inset: 0
+                    border-radius: 50%
+                    animation: pulse 1.5s infinite linear
+
+                    @keyframes pulse
+                        0%
+                            transform: scale(.5)
+                            opacity: 0
+                        20%
+                            transform: scale(.8)
+                            opacity: 1
+                        60%
+                            transform: scale(1.3)
+                            opacity: 0
+                        100%
+                            transform: scale(1.3)
+                            opacity: 0
+
+                .ring-1
+                    border: 4px solid rgba(249,115,22,.15)
+                    animation-delay: 0s
+                .ring-2
+                    border: 4px solid rgba(249,115,22,.25)
+                    animation-delay: 0.5s
+                .ring-3
+                    border: 4px solid rgba(249,115,22,.25)
+                    animation-delay: 1s
+
+                .loader-circle
+                    position: absolute
+                    inset: 24px
+                    display: flex
+                    justify-content: center
+                    align-items: center
+                    border-radius: 50%
+                    background: linear-gradient(135deg,#fb923c,$color-primary)
+                    color: $color-white
+                    box-shadow: 0 12px 30px rgba(249,115,22,.35)
+
+            .processing-text
+                margin-bottom: 32px
+                h2
+                    font-size: 28px
+                    font-weight: 600
+                    color: $color-text-primary
+
+                p
+                    color: $color-text-secondary
+                    font-size: 16px
+
+            .steps-card
+                background: $color-white
+                border-radius: 20px
+                padding: 28px
+                width: 380px
+                border: 1px solid #e5e7eb
+
+                .step
+                    display: flex
+                    align-items: center
+                    gap: 16px
+
+                    &:not(:last-child)
+                        margin-bottom: 16px
+
+                    .step-icon
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        flex-shrink: 0
+                        color: #1fcc5e
+                        width: 30px
+                        fa-icon
+                            font-size: 18px
+                        span
+                            width: 18px
+                            height: 18px
+                            background: #d1d5db
+                            border-radius: 50%
+
+                    p
+                        color: $color-text-secondary
+                        font-size: 16px
+                        font-weight: 500
+
+                        &.completed
+                            color: $color-text-primary
+                            font-weight: 600
+
+    .success-page
+        margin: auto
+        width: 100%
+        display: flex
+        justify-content: center
+        gap: 32px
+        max-width: 992px
+
+        .section-left
+            flex: 5
+            display: flex
+            flex-direction: column
+            .success-card
+                flex: 1
+                width: 100%
+                background: linear-gradient(135deg,#22c55e,#0a8c3a)
+                color: $color-white
+                border-radius: 24px
+                display: flex
+                flex-direction: column
+                gap: 4px
+                padding: 24px
+                box-shadow: 0 15px 35px rgba(16,185,129,.3)
+                margin-bottom: 24px
+                .card-top
+                    flex: 1
+                    text-align: center
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    flex-direction: column
+                    .success-icon
+                        width: 70px
+                        height: 70px
+                        margin: 16px
+                        background: rgba(255,255,255,.18)
+                        border-radius: 50%
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        fa-icon
+                            font-size: 32px
+                    h1
+                        font-size: 32px
+                        font-weight: 600
+
+                    p
+                        color: rgba(255,255,255,.9)
+                        font-size: 16px
+
+                .order-id
+                    margin-top: 24px
+                    display: inline-flex
+                    width: 100%
+                    text-align: center
+                    flex-direction: column
+                    background: rgba(255,255,255,.15)
+                    padding: 14px 18px
+                    border-radius: 12px
+
+                    .label
+                        font-size: 12px
+                        letter-spacing: 2px
+                        text-transform: uppercase
+                        font-weight: 500
+                        color: rgba(255,255,255,.8)
+
+                    .value
+                        font-size: 18px
+                        font-weight: 600
+
+            .eta-card
+                border-radius: 20px
+                border: 1px solid #e5e7eb
+                margin-bottom: 1rem
+                overflow: hidden
+
+            .eta-card
+                margin: 0
+                padding: 24px
+
+                .eta-header
+                    display: flex
+                    align-items: center
+                    gap: 16px
+                    margin-bottom: 24px
+
+                    .bike
+                        width: 48px
+                        height: 48px
+                        background: #fff7ed
+                        color: #ea580c
+                        border-radius: 50%
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        fa-icon
+                            font-size: 18px
+
+                    .small
+                        font-size: 12px
+                        color: $color-text-secondary
+                        text-transform: uppercase
+
+                    h3
+                        font-size: 18px
+                        color: $color-text-primary
+                        font-weight: 600
+
+            .delivery-progress
+                display: flex
+                justify-content: space-between
+                gap: 8px
+
+                .progress-step
+                    flex: 1
+                    text-align: center
+
+                    .dot
+                        width: 14px
+                        height: 14px
+                        background: #d1d5db
+                        border-radius: 50%
+                        margin: 6px auto
+
+                        &.active
+                            background: $color-primary
+                            box-shadow: 0 0 0 5px rgba(249,115,22,.15)
+
+                    span
+                        font-size: 12px
+                        color: $color-text-secondary
+                        font-weight: 400
+        .section-right
+            flex: 4
+            .summary-card
+                border-radius: 20px
+                border: 1px solid #e5e7eb
+                margin-bottom: 16px
+                overflow: hidden
+                padding: 16px 24px
+                .summary-header
+                    display: flex
+                    align-items: center
+                    gap: 12px
+                    border-bottom: 1px solid #f3f4f6
+                    font-weight: 500
+                    margin-bottom: 14px
+                    fa-icon
+                        font-size: 16px
+
+                .items
+                    margin-bottom: 14px
+                    .item-row
+                        display: flex
+                        justify-content: space-between
+                        align-items: center
+
+                        &:not(:last-child)
+                            margin-bottom: 12px
+
+                        .left
+                            display: flex
+                            align-items: center
+                            gap: 12px
+
+                            .qty
+                                background: #f9fafb
+                                border: 1px solid #e5e7eb
+                                border-radius: 6px
+                                padding: 2px 8px
+                                font-size: 12px
+                                font-weight: 600
+
+                            .name
+                                font-size: 14px
+                                font-weight: 500
+                                color: $color-text-secondary
+
+                        .price
+                            font-size: 14px
+                            font-weight: 600
+
+                .bill
+                    background: #f9fafb
+                    border-top: 1px solid #e5e7eb
+                    padding-top: 16px
+
+                    .bill-row
+                        display: flex
+                        justify-content: space-between
+                        margin-bottom: 8px
+                        font-size: 14px
+                        color: $color-text-secondary
+
+                        &.discount
+                            color: #16a34a
+                            font-weight: 600
+
+                        &.total
+                            margin-top: 16px
+                            padding-top: 16px
+                            border-top: 1px solid #d1d5db
+                            color: $color-text-primary
+                            font-weight: 700
+                            font-size: 16px
+
+            .address-card
+                border-radius: 20px
+                border: 1px solid #e5e7eb
+                margin-bottom: 16px
+                overflow: hidden
+                padding: 16px 24px
+                display: flex
+                align-items: flex-start
+                gap: 12px
+
+                fa-icon 
+                    font-size: 16px
+                    color: $color-text-secondary
+
+                .label
+                    font-size: 12px
+                    font-weight: 500
+                    text-transform: uppercase
+                    color: $color-text-muted
+
+                .value
+                    font-size: 16px
+                    color: $color-text-secondary
+                    font-weight: 500
+
+            .home-button
+                width: 100%
+                height: 56px
+                border: none
+                border-radius: 14px
+                background: $color-primary
+                color: white
+                font-size: 16px
+                font-weight: 700
+                cursor: pointer
+                display: flex
+                justify-content: center
+                align-items: center
+                gap: 8px
+                transition: .25s
+                box-shadow: 0 10px 25px rgba(249,115,22,.3)
+
+                &:hover
+                    background: $color-primary-hover
+
+                &:active
+                    transform: scale(.98)
+                fa-icon
+                    color: $color-white
+                    font-size: 14px
+            .support-text
+                margin-top: 18px
+                text-align: center
+                color: $color-text-secondary
+                font-size: 12px
+                font-weight: 500
+
+                span
+                    color: $color-text-dark
+                    font-weight: 700
+                    font-family: monospace
+
+// @media (max-width: 480px)
+
+// .payment-page,
+// .success-page
+//     padding-left: .75rem
+//     padding-right: .75rem
+
+// .processing-page
+
+//     .processing-container
+
+//     .processing-text
+
+//         h2
+//             font-size: 1.7rem
+
+// .success-page
+
+//     .success-container
+
+//     .success-card
+
+//         h1
+//             font-size: 1.7rem
+
+//     .eta-card
+
+//         .delivery-progress
+
+//         .progress-step
+
+//             span
+//                 font-size: .55rem

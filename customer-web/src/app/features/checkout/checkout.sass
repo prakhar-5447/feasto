@@ -26,7 +26,7 @@
 
             h4
                 font-size: 16px
-                font-weight: 400   
+                font-weight: 400
             .address-list
                 display: flex
                 flex-direction: column
@@ -47,8 +47,11 @@
                         line-height: 18px
                         color: $color-text-secondary
                     &.active
-                        border-color: orange
-                        background: #fff3e0
+                        border-color: $color-primary
+                        background: $color-primary
+                        color: $color-white
+                        p
+                            color: $color-white
 
                     &.new
                         font-weight: 500
@@ -56,22 +59,178 @@
                             margin-right: 8px
                             color: $color-primary
 
+                        &:hover
+                            background-color: $color-primary
+                            color: $color-white
+                            fa-icon
+                                color: $color-white
+                        &.selected
+                            background-color: $color-primary
+                            color: $color-white
+                            fa-icon
+                                color: $color-white
             .form
-                margin-top: 10px
-
-                input
+                border-radius: 8px
+                padding: 8px 0px
+                .field
+                    font-weight: 400
+                    border: 2px solid $color-primary
+                    outline: none
+                    border-radius: 8px
+                    padding: 12px 12px
                     width: 100%
                     margin-bottom: 10px
-                    padding: 8px
-
                 .row
                     display: flex
                     gap: 10px
+                input::placeholder
+                    color: $color-text-secondary
+                input:-webkit-autofill,
+                textarea:-webkit-autofill
+                    -webkit-box-shadow: 0 0 0 1000px $color-white inset !important
+                    -webkit-text-fill-color: $color-black !important
+                .checkbox
+                    display: inline-flex
+                    align-items: center
+                    gap: 10px
+                    cursor: pointer
+                    user-select: none
+                    font-size: 14px
+                    color: #444
 
-            .payment-options
+                    input
+                        display: none
+
+                    .checkmark
+                        width: 18px
+                        height: 18px
+                        border: 2px solid $color-border
+                        border-radius: 5px
+                        background: $color-white
+                        position: relative
+                        transition: .2s ease
+
+                    input:checked + .checkmark
+                        background: $color-primary
+                        border-color: $color-primary
+
+                    input:checked + .checkmark::after
+                        content: ''
+                        position: absolute
+                        left: 5px
+                        top: 1px
+                        width: 4px
+                        height: 9px
+                        border: solid $color-white
+                        border-width: 0 2px 2px 0
+                        transform: rotate(45deg)
+
+                    &:hover .checkmark
+                        border-color: $color-primary
+
+    .payment-card
+        display: flex
+        flex-direction: column
+        gap: 18px
+
+        .payment-method
+            cursor: pointer
+            input[type="radio"]
+                display: none
+
+            input
+                display: none
+
+            .method-content
                 display: flex
-                gap: 10px
-                margin: 10px 0
+                justify-content: space-between
+                align-items: center
+                padding: 16px 18px
+                border: 1.5px solid #e5e7eb
+                border-radius: 14px
+                transition: .25s ease
+                background: $color-white
+                .radio
+                    width: 20px
+                    height: 20px
+                    border-radius: 50%
+                    border: 2px solid #d1d5db
+                    position: relative
+                    transition: .2s
+                .method-info
+                    display: flex
+                    flex-direction: column
+                    gap: 4px
+
+                    .method-title
+                        font-size: 16px
+                        font-weight: 500
+                        color: $color-black
+                    .method-subtitle
+                        font-size: 14px
+                        color: $color-text-secondary
+                    .payment-icons
+                        display: none
+                        align-items: center
+                        gap: 12px
+                        margin-top: 8px
+
+                        img
+                            height: 24px
+                            width: auto
+                            object-fit: contain
+                            background: none
+            &:hover .method-content
+                border-color: $color-primary
+                box-shadow: 0 6px 18px rgba(0,0,0,.05)
+
+            input:checked + .method-content
+                border-color: $color-primary
+                background: rgba(255,107,107,.06)
+                .method-info
+                    .payment-icons
+                        display: flex
+
+
+
+        .payment-method input:checked + .method-content .radio
+            border-color: $color-primary
+
+        .payment-method input:checked + .method-content .radio::after
+            content: ''
+            position: absolute
+            width: 10px
+            height: 10px
+            border-radius: 50%
+            background: $color-primary
+            top: 50%
+            left: 50%
+            transform: translate(-50%, -50%)
+
+        .payment-options
+            display: flex
+            gap: 10px
+            margin: -4px 0 8px 0
+            flex-wrap: wrap
+
+            button
+                padding: 10px 18px
+                border: 1px solid #e5e7eb
+                background: $color-white
+                border-radius: 999px
+                cursor: pointer
+                transition: .25s
+                font-size: 14px
+                font-weight: 500
+
+                &:hover
+                    border-color: $color-primary
+                    color: $color-primary
+
+                &.active
+                    background: $color-primary
+                    border-color: $color-primary
+                    color: $color-white
 
     .billing-section
         flex: 2
@@ -121,7 +280,7 @@
                     display: flex
                     justify-content: space-between
                     width: 100%
-                   
+
                     border-bottom: 1px solid #eeeeee
                     margin-bottom: 18px
                     padding-bottom: 18px
@@ -139,7 +298,7 @@
                         .desc
                             font-size: 12px
                             font-weight: 500
-                            color:  $color-text-secondary
+                            color: $color-text-secondary
 
             .total
                 display: flex
