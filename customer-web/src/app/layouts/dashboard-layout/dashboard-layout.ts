@@ -34,7 +34,6 @@ export class DashboardLayout {
   }
 
   closeAuth() {
-    console.log("dajwijowij")
     this.showAuthModal = false;
   }
 }

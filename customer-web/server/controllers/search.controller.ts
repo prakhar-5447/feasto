@@ -1,9 +1,12 @@
-const searchService = require("../services/search.service");
+import * as searchService from "../services/search.service";
+import { Request, Response, NextFunction } from "express";
 
-exports.searchRestaurants = async (req, res, next) => {
-
+export const searchRestaurants = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     try {
-
         const result = await searchService.searchRestaurants(req.query);
 
         res.json({
@@ -13,9 +16,6 @@ exports.searchRestaurants = async (req, res, next) => {
         });
 
     } catch (error) {
-
         next(error);
-
     }
-
 };

@@ -12,7 +12,7 @@ import validate from "../middlewares/validation.middleware";
 import { createFoodSchema } from "../validations/food.validation";
 
 router.post(
-    "/:restaurantId",
+    "/restaurant/:restaurantId/foods",
     protect,
     validate(createFoodSchema),
     upload.single("image"),
@@ -20,20 +20,26 @@ router.post(
 );
 
 router.get(
-    "/:restaurantId",
+    "/restaurant/:restaurantId/foods",
     foodController.getRestaurantMenu
 );
 
 router.put(
-    "restaurant/item/:id",
+    "/:id",
     protect,
     foodController.updateFood
 );
 
 router.delete(
-    "restaurant/item/:id",
+    "/:id",
     protect,
     foodController.deleteFood
 );
+
+// router.get(
+//     "/:id",
+//     protect,
+//     foodController.getFood
+// );
 
 export default router;

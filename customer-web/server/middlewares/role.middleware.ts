@@ -1,10 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 
-const authorize = (...roles: string[]) => {
-    return (req: Request, res: Response, next: NextFunction): void => {
-        const user = (req as any).user;
+interface AuthRequest extends Request {
+    user?: any;
+}
 
-        if (!user || !roles.includes(user.role)) {
+export const role = (...roles: string[]) => {
+    return (
+        req: AuthRequest,
+        res: Response,
+        next: NextFunction
+    ): void => {
+        if (!req.user) {
+            res.status(401).json({
+                message: "Unauthorized"
+            });
+            return;
+        }
+
+        if (!roles.includes(req.user.role)) {
             res.status(403).json({
                 message: "Access denied"
             });
@@ -14,5 +27,3 @@ const authorize = (...roles: string[]) => {
         next();
     };
 };
-
-export default authorize;

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { selectUser } from '../../../store/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.state'; // ✅ add this
-import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import * as AuthActions from '../../../store/auth/auth.actions';
@@ -94,6 +94,7 @@ export class Navbar {
     this.locationQuery = '';
   }
 
+  city = "";
   detectLocation() {
     if (!this.detectLocationLoader()) {
       this.detectLocationLoader.set(true)
@@ -107,6 +108,7 @@ export class Navbar {
               this.detectLocationLoader.set(false)
               this.locationServicePersistence.setCity(data['context'][2]['text'])
               this.showLocationDropdown = false
+              this.city = data['context'][2]['text'].toLowerCase();
               this.router.navigate(['/india', data['context'][2]['text'].toLowerCase()]);
             })
         },
@@ -121,28 +123,52 @@ export class Navbar {
   }
 
   searchRestaurant() {
-
-    if (!this.restaurantQuery) {
+    if (this.restaurantQuery.length < 2) {
+      debounceTime(300);
+      distinctUntilChanged();
       this.restaurantResults = [];
       return;
     }
-
-    // Replace with your API later
-    this.restaurantResults = [
-      { name: 'Dominos Pizza' },
-      { name: 'Burger King' },
-      { name: 'KFC' },
-      { name: 'Subway' }
-    ].filter(r =>
-      r.name.toLowerCase().includes(this.restaurantQuery.toLowerCase())
-    );
-
-    this.showRestaurantDropdown = true;
+    this.http.get<any>(
+      "/api/v1/search/suggestions",
+      {
+        params: {
+          keyword: this.restaurantQuery
+        }
+      }
+    ).subscribe(res => {
+      this.restaurantResults = res.data;
+      this.showLocationDropdown = true;
+    });
   }
 
+
   selectRestaurant(res: any) {
-    this.restaurantQuery = res.name;
-    this.restaurantResults = [];
+    if (res.type == "restaurant") {
+      this.router.navigate([
+        '/india',
+        this.city,
+        "restaurants"
+      ]);
+    } else if (res.type == "cuisine") {
+      this.router.navigate([
+        '/india',
+        this.city
+      ], {
+        queryParams: {
+          cuisine: res.name
+        }
+      });
+    } else if (res.type == "food") {
+      this.router.navigate([
+        '/india',
+        this.city
+      ], {
+        queryParams: {
+          food: res.name
+        }
+      });
+    }
     this.showRestaurantDropdown = false;
   }
 

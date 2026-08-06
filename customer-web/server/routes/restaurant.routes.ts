@@ -5,7 +5,7 @@ import * as restaurantController from "../controllers/restaurant.controller";
 
 import { protect } from '../middlewares/auth.middleware';
 
-import role from "../middlewares/role.middleware";
+import { role } from "../middlewares/role.middleware";
 
 import validate from "../middlewares/validation.middleware";
 
@@ -28,16 +28,34 @@ router.get(
     restaurantController.getMyRestaurant
 );
 
-router.put(
+router.patch(
     "/:id",
     protect,
     role("restaurant_partner"),
     restaurantController.updateRestaurant
 );
 
-router.get(
-    "/",
-    restaurantController.getRestaurants
-);
+// router.delete(
+//     "/:id",
+//     protect,
+//     role("restaurant_partner"),
+//     restaurantController.deleteRestaurant
+// );
+
+// router.get(
+//     "/restaurants/nearby",
+//     protect,
+//     restaurantController.getNearByRestaurant
+// );
+
+// router.get(
+//     "/get-restaurant-list",
+//     restaurantController.getRestaurantsList
+// );
+
+// router.get(
+//     "/:id",
+//     restaurantController.restaurantInfo
+// );
 
 export default router;
