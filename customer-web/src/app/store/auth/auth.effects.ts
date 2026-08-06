@@ -10,6 +10,7 @@ export class AuthEffects {
     private http = inject(HttpClient);
 
     loadUser$ = createEffect(() =>
+
         this.actions$.pipe(
             ofType(AuthActions.loadUser),
             mergeMap(() =>
@@ -25,5 +26,6 @@ export class AuthEffects {
                 )
             )
         )
+
     );
 }

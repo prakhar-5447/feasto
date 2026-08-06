@@ -1,4 +1,4 @@
-import { Component, signal, Inject,PLATFORM_ID } from '@angular/core';
+import { Component, signal, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LocationServicePersistence } from './core/services/location.service';
 import { Store } from '@ngrx/store';
@@ -15,10 +15,11 @@ import { AppState } from './store/app.state';
 })
 export class App {
   protected readonly title = signal('customer-web');
-  constructor(private locationService: LocationServicePersistence, @Inject(Store) private store: Store<AppState>,   @Inject(PLATFORM_ID) private platformId: Object
+  constructor(private locationService: LocationServicePersistence, @Inject(Store) private store: Store<AppState>, @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // 🔥 ONLY RUN IN BROWSER
     if (isPlatformBrowser(this.platformId)) {
+
       this.store.dispatch(AuthActions.loadUser());
     }
   }

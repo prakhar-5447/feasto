@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RestaurantCard } from '../../../shared/components/restaurant-card/restaurant-card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -12,7 +13,27 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class RestaurantList {
   @Input() selectedCategory: string | null = null;
   currentCity = ''
-  constructor(private router: ActivatedRoute) {
+
+  constructor(private router: ActivatedRoute, private http: HttpClient) {
+    router.queryParamMap.subscribe(params => {
+
+      const cuisine = params.get("cuisine");
+      const food = params.get("food");
+
+      if (cuisine || food) {
+
+        this.http.get("/api/v1/search-items", {
+          params: {
+            cuisine: cuisine ?? "",
+            food: food ?? ""
+          }
+        }).subscribe((res: any) => {
+          console.log(res);
+        });
+
+      }
+
+    });
   }
 
   ngOnInit() {

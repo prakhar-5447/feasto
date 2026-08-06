@@ -64,18 +64,19 @@ export class Auth {
   }
 
   verifyOTP() {
-    if (this.otp.length !== 6) return;
-    this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-      // simulate API response
-      const existingUser = Math.random() > 0.5;
-      if (existingUser) {
-        this.loginSuccess();
-      } else {
-        this.step.set('details');
-      }
-    }, 1000);
+    this.http.post('/api/v1/auth/verify-otp', {
+      phone: this.phoneNumber,
+      otp: this.otp
+    }, { withCredentials: true })
+      .subscribe((res: any) => {
+
+        if (res.isNewUser) {
+          this.step.set("details");
+        } else {
+          this.store.dispatch(AuthActions.loadUser());
+          this.closeAuth.emit();
+        }
+      });
   }
 
   startResendTimer() {
@@ -110,7 +111,6 @@ export class Auth {
   user$: Observable<any> = this.store.select(selectUser);
 
   completeSignup() {
-
     if (!this.name || this.name.length < 2) {
       alert('Enter valid name');
       return;
@@ -130,7 +130,6 @@ export class Auth {
         this.store.dispatch(AuthActions.loadUser());
         Promise.resolve().then(() => {
           // this.router.navigate(['/']);
-          console.log("qwweqw")
           this.closeAuth.emit()
         });
       });
@@ -147,17 +146,12 @@ export class Auth {
       .subscribe((res: any) => {
 
         this.loading = false;
-
         if (res.isNewUser) {
           this.step.set('details');
           this.startResendTimer();
         } else {
-          this.store.dispatch(AuthActions.loadUser());
-          Promise.resolve().then(() => {
-            // this.router.navigate(['/']);
-            console.log("sdadas")
-            this.closeAuth.emit()
-          });
+          console.log("OTP:", res.otp);
+          this.step.set('otp');
         }
       });
   }

@@ -1,4 +1,4 @@
-const restaurantRepository = require("../repositories/restaurant.repository");
+import *as restaurantRepository from "../repositories/restaurant.repository";
 
 export const createRestaurant = async (data: any, ownerId: any) => {
 

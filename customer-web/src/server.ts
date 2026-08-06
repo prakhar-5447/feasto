@@ -26,7 +26,7 @@ import backendApp from '../server/app';
 import connectDB from '../server/config/db';
 
 // 🔥 Connect MongoDB
-connectDB();
+await connectDB();
 app.use(requestIdMiddleware);
 app.use((req, res, next) => {
   // 🚫 Skip SSR logging for API routes
