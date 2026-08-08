@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
 
 import mongoSanitize from "express-mongo-sanitize";
+import cookieParser from "cookie-parser";
 
 import { apiLimiter, authLimiter } from "./middlewares/rateLimit.middleware";
 import { securityMiddleware } from "./middlewares/security.middleware";
@@ -20,6 +21,7 @@ dotenv.config();
 const app: Application = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Security middlewares
 securityMiddleware.forEach((m) => app.use(m));

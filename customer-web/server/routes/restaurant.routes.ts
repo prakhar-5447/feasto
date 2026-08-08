@@ -3,7 +3,7 @@ const router = express.Router();
 
 import * as restaurantController from "../controllers/restaurant.controller";
 
-import { protect } from '../middlewares/auth.middleware';
+import { protect } from "../middlewares/auth.middleware";
 
 import { role } from "../middlewares/role.middleware";
 
@@ -28,6 +28,22 @@ router.get(
     restaurantController.getMyRestaurant
 );
 
+router.get(
+    "/restaurants/nearby",
+    protect,
+    restaurantController.getNearByRestaurant
+);
+
+router.get(
+    "/get-restaurant-list",
+    restaurantController.getRestaurantsList
+);
+
+router.get(
+    "/:id",
+    restaurantController.restaurantInfo
+);
+
 router.patch(
     "/:id",
     protect,
@@ -35,27 +51,11 @@ router.patch(
     restaurantController.updateRestaurant
 );
 
-// router.delete(
-//     "/:id",
-//     protect,
-//     role("restaurant_partner"),
-//     restaurantController.deleteRestaurant
-// );
-
-// router.get(
-//     "/restaurants/nearby",
-//     protect,
-//     restaurantController.getNearByRestaurant
-// );
-
-// router.get(
-//     "/get-restaurant-list",
-//     restaurantController.getRestaurantsList
-// );
-
-// router.get(
-//     "/:id",
-//     restaurantController.restaurantInfo
-// );
+router.delete(
+    "/:id",
+    protect,
+    role("restaurant_partner"),
+    restaurantController.deleteRestaurant
+);
 
 export default router;

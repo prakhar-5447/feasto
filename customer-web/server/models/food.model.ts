@@ -6,7 +6,7 @@ export interface IFood extends Document {
     image?: string;
     description?: string;
     price: number;
-    category?: string;
+    cuisine?: string;
     isAvailable: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -38,7 +38,7 @@ const foodSchema = new Schema<IFood>(
             required: true,
         },
 
-        category: {
+        cuisine: {
             type: String,
         },
 
@@ -49,6 +49,19 @@ const foodSchema = new Schema<IFood>(
     },
     { timestamps: true }
 );
+
+foodSchema.index({
+    name: "text"
+});
+
+foodSchema.index({
+    restaurant: 1
+});
+
+foodSchema.index({
+    restaurant: 1,
+    isAvailable: 1
+});
 
 const Food =
     mongoose.models["Food"] || mongoose.model<IFood>("Food", foodSchema);

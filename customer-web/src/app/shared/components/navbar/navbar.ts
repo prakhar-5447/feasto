@@ -44,6 +44,8 @@ export class Navbar {
 
   restaurantQuery = '';
   restaurantResults: any[] = [];
+  foodResults: any[] = [];
+  cuisineResults: string[] = [];
 
   detectLocationLoader = signal<boolean>(false)
   goToProfile(user: string) {
@@ -58,7 +60,10 @@ export class Navbar {
   closeDropdown() {
     this.showLocationDropdown = false;
     this.showRestaurantDropdown = false;
-    this.restaurantQuery = ''
+    this.restaurantQuery = '';
+    this.restaurantResults = [];
+    this.foodResults = [];
+    this.cuisineResults = [];
   }
 
   toggleLocationDropdown() {
@@ -72,7 +77,6 @@ export class Navbar {
   }
 
   searchLocation() {
-
     if (!this.locationQuery) {
       this.locationResults = [];
       return;
@@ -124,51 +128,76 @@ export class Navbar {
 
   searchRestaurant() {
     if (this.restaurantQuery.length < 2) {
-      debounceTime(300);
-      distinctUntilChanged();
       this.restaurantResults = [];
+      this.foodResults = [];
+      this.cuisineResults = [];
+      this.showRestaurantDropdown = false;
       return;
     }
+
     this.http.get<any>(
-      "/api/v1/search/suggestions",
+      "/api/v1/search/search-items",
       {
         params: {
           keyword: this.restaurantQuery
         }
       }
-    ).subscribe(res => {
-      this.restaurantResults = res.data;
-      this.showLocationDropdown = true;
+    ).subscribe({
+      next: (res) => {
+        // console.log("SEARCH RESPONSE:", res);
+
+        this.restaurantResults = res.data?.restaurants ?? [];
+        this.foodResults = res.data?.foods ?? [];
+        this.cuisineResults = res.data?.cuisines ?? [];
+
+        this.showRestaurantDropdown = true;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.restaurantResults = [];
+        this.foodResults = [];
+        this.cuisineResults = [];
+        this.showRestaurantDropdown = false;
+      }
     });
   }
 
+  selectCuisine(cuisine: string) {
+    this.router.navigate(
+      ['/india', this.city],
+      {
+        queryParams: {
+          cuisine
+        }
+      }
+    );
+
+    this.showRestaurantDropdown = false;
+    this.restaurantQuery = '';
+  }
+
+  selectFood(food: any) {
+    this.router.navigate(
+      ['/india', this.city],
+      {
+        queryParams: {
+          food: food.name
+        }
+      }
+    );
+
+    this.showRestaurantDropdown = false;
+    this.restaurantQuery = '';
+  }
 
   selectRestaurant(res: any) {
-    if (res.type == "restaurant") {
-      this.router.navigate([
-        '/india',
-        this.city,
-        "restaurants"
-      ]);
-    } else if (res.type == "cuisine") {
-      this.router.navigate([
-        '/india',
-        this.city
-      ], {
-        queryParams: {
-          cuisine: res.name
-        }
-      });
-    } else if (res.type == "food") {
-      this.router.navigate([
-        '/india',
-        this.city
-      ], {
-        queryParams: {
-          food: res.name
-        }
-      });
-    }
+    this.router.navigate([
+      '/india',
+      this.city,
+      "restaurants"
+    ]);
+
     this.showRestaurantDropdown = false;
   }
 

@@ -7,7 +7,7 @@ export interface ILocation {
 
 export interface IRestaurant extends Document {
     name: string;
-    owner?: Types.ObjectId;
+    owner: Types.ObjectId;
     description?: string;
     address?: string;
     cuisine: string[];
@@ -30,6 +30,7 @@ const restaurantSchema = new Schema<IRestaurant>(
         owner: {
             type: Schema.Types.ObjectId,
             ref: "User",
+            required: true
         },
 
         description: {
@@ -83,6 +84,10 @@ restaurantSchema.index({
     location: "2dsphere",
     name: "text",
     cuisine: "text",
+});
+
+restaurantSchema.index({
+    owner: 1
 });
 
 const Restaurant =

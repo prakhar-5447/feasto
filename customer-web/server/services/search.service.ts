@@ -1,7 +1,8 @@
-import * as searchRepository from "../repositories/search.repository";
+import * as searchRepo
+from "../repositories/search.repository";
 
-export const searchRestaurants = async (query: any) => {
-
-    return await searchRepository.searchRestaurants(query);
-
+export const searchItems = (
+    keyword: string
+) => {
+    return searchRepo.searchItems(keyword);
 };

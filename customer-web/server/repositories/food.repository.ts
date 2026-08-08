@@ -1,21 +1,55 @@
-import Food from "../models/food.model";
+import Food, { IFood } from "../models/food.model";
 
-export const createFood = async (data: any) => {
-    return await Food.create(data);
+export const findById = (
+    id: string
+): Promise<IFood | null> => {
+    return Food.findById(id);
 };
 
-export const findByRestaurant = async (restaurantId: string) => {
-    return await Food.find({ restaurant: restaurantId });
+export const findByRestaurant = (
+    restaurantId: string
+): Promise<IFood[]> => {
+    return Food.find({
+        restaurant: restaurantId
+    });
 };
 
-export const findById = async (id: string) => {
-    return await Food.findById(id);
+export const createFood = (
+    data: Partial<IFood>
+): Promise<IFood> => {
+    return Food.create(data);
 };
 
-export const updateFood = async (id: string, data: any) => {
-    return await Food.findByIdAndUpdate(id, data, { new: true });
+export const updateFood = (
+    id: string,
+    data: Partial<IFood>
+): Promise<IFood | null> => {
+    return Food.findByIdAndUpdate(
+        id,
+        data,
+        {
+            new: true,
+            runValidators: true
+        }
+    );
 };
 
-export const deleteFood = async (id: string) => {
-    return await Food.findByIdAndDelete(id);
+export const deleteFood = (
+    id: string
+): Promise<IFood | null> => {
+    return Food.findByIdAndDelete(id);
+};
+
+export const updateFoodAvailability = (
+    id: string,
+    isAvailable: boolean
+): Promise<IFood | null> => {
+    return Food.findByIdAndUpdate(
+        id,
+        { isAvailable },
+        {
+            new: true,
+            runValidators: true
+        }
+    );
 };

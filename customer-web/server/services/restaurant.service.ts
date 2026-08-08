@@ -1,29 +1,76 @@
-import *as restaurantRepository from "../repositories/restaurant.repository";
+import * as restaurantRepo from "../repositories/restaurant.repository";
 
-export const createRestaurant = async (data: any, ownerId: any) => {
-
-    const restaurant = await restaurantRepository.createRestaurant({
+export const createRestaurant = (
+userId: string,
+data: any
+) => {
+    return restaurantRepo.createRestaurant({
         ...data,
-        owner: ownerId
+        owner: userId
     });
-
-    return restaurant;
 };
 
-export const getMyRestaurant = async (ownerId: any) => {
-
-    return await restaurantRepository.findByOwner(ownerId);
-
+export const getRestaurant = (
+    restaurantId: string
+) => {
+    return restaurantRepo.findById(
+        restaurantId
+    );
 };
 
-export const getRestaurants = async (query: any) => {
-
-    return await restaurantRepository.getRestaurants(query);
-
+export const getMyRestaurant = (
+userId: string
+) => {
+    return restaurantRepo.findByOwner(userId);
 };
 
-export const updateRestaurant = async (restaurantId: any, data: any) => {
+export const getNearbyRestaurants = (
+longitude: number,
+latitude: number,
+maxDistance?: number
+) => {
+    return restaurantRepo.findNearby(
+        longitude,
+        latitude,
+        maxDistance
+    );
+};
 
-    return await restaurantRepository.updateRestaurant(restaurantId, data);
+export const getNearByRestaurant = (
+userId: string,
+longitude: number,
+latitude: number,
+maxDistance?: number
+) => {
+    return restaurantRepo.findNearby(
+        longitude,
+        latitude,
+        maxDistance
+    );
+};
 
+export const getRestaurantsList = () => {
+    return restaurantRepo.findAll();
+};
+
+export const getRestaurantInfo = (
+id: string
+) => {
+    return restaurantRepo.findById(id);
+};
+
+export const updateRestaurant = (
+id: string,
+data: any
+) => {
+    return restaurantRepo.updateRestaurant(
+        id,
+        data
+    );
+};
+
+export const deleteRestaurant = (
+id: string
+) => {
+    return restaurantRepo.deleteRestaurant(id);
 };

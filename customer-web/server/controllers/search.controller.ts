@@ -1,20 +1,43 @@
-import * as searchService from "../services/search.service";
-import { Request, Response, NextFunction } from "express";
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
 
-export const searchRestaurants = async (
+import * as searchService
+from "../services/search.service";
+
+export const searchItems = async (
     req: Request,
     res: Response,
     next: NextFunction
-) => {
+): Promise<void> => {
     try {
-        const result = await searchService.searchRestaurants(req.query);
+        const keyword =
+            String(req.query['keyword'] || "")
+                .trim();
 
-        res.json({
+        if (!keyword) {
+            res.status(200).json({
+                success: true,
+                data: {
+                    foods: [],
+                    restaurants: [],
+                    cuisines: []
+                }
+            });
+            return;
+        }
+
+        const data =
+            await searchService.searchItems(
+                keyword
+            );
+
+        res.status(200).json({
             success: true,
-            count: result.length,
-            data: result
+            data
         });
-
     } catch (error) {
         next(error);
     }

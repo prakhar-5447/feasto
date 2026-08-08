@@ -1,27 +1,71 @@
-import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/token.utils";
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
+import jwt from "jsonwebtoken";
+import User, { IUser } from "../models/user.model";
 
-interface AuthRequest extends Request {
-    user?: any;
+export interface AuthRequest extends Request {
+    user?: IUser;
 }
-export const protect = (
+
+export const protect = async (
     req: AuthRequest,
     res: Response,
     next: NextFunction
-): void => {
+): Promise<void> => {
+
     try {
-        const token = req.cookies["token"];
+        const token =
+            req.cookies['accessToken'];
+
         if (!token) {
-            res.status(401).json({ message: "Unauthorized" });
+            res.status(401).json({
+                success: false,
+                message: "Authentication required"
+            });
+
             return;
         }
 
-        const decoded = verifyToken(token);
+        const decoded =
+            jwt.verify(
+                token,
+                process.env['ACCESS_TOKEN_SECRET']!
+            ) as {
+                userId: string;
+            };
 
-        req.user = decoded;
+        const user =
+            await User.findById(
+                decoded.userId
+            );
+
+        if (!user) {
+            res.status(401).json({
+                success: false,
+                message: "User not found"
+            });
+            return;
+        }
+
+        if (!user.isActive) {
+            res.status(401).json({
+                success: false,
+                message: "User account is inactive"
+            });
+
+            return;
+        }
+
+        req.user = user;
         next();
-    } catch (err) {
-        console.error(err);
-        res.status(401).json({ message: "Invalid token" });
+    } catch (error) {
+        res.status(401).json({
+            success: false,
+            message: "Access token expired or invalid"
+        });
+
     }
 };

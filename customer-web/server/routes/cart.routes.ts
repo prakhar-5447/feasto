@@ -1,21 +1,41 @@
 import express from "express";
+
 const router = express.Router();
 
-import cartController from "../controllers/cart.controller";
+import { protect }
+from "../middlewares/auth.middleware";
 
-import { protect } from '../middlewares/auth.middleware';
-
-import validate from "../middlewares/validation.middleware";
-
-const {
-    addToCartSchema
-} = require("../validations/cart.validation");
+import * as cartController
+from "../controllers/cart.controller";
 
 router.post(
-    "/add",
+    "/items",
     protect,
-    validate(addToCartSchema),
     cartController.addToCart
 );
+
+// router.get(
+//     "/",
+//     protect,
+//     cartController.getCart
+// );
+
+// router.patch(
+//     "/items/:foodId",
+//     protect,
+//     cartController.updateCartItem
+// );
+
+// router.delete(
+//     "/items/:foodId",
+//     protect,
+//     cartController.removeFromCart
+// );
+
+// router.delete(
+//     "/",
+//     protect,
+//     cartController.clearCart
+// );
 
 export default router;
