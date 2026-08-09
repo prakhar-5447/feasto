@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { selectUser } from '../../../store/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.state'; // ✅ add this
-import { debounceTime, distinctUntilChanged, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import * as AuthActions from '../../../store/auth/auth.actions';
@@ -127,7 +127,7 @@ export class Navbar {
   }
 
   searchRestaurant() {
-    if (this.restaurantQuery.length < 2) {
+    if (this.restaurantQuery.trim().length < 3) {
       this.restaurantResults = [];
       this.foodResults = [];
       this.cuisineResults = [];
@@ -139,22 +139,21 @@ export class Navbar {
       "/api/v1/search/search-items",
       {
         params: {
-          keyword: this.restaurantQuery
+          keyword: this.restaurantQuery.trim()
         }
       }
     ).subscribe({
       next: (res) => {
-        // console.log("SEARCH RESPONSE:", res);
-
         this.restaurantResults = res.data?.restaurants ?? [];
         this.foodResults = res.data?.foods ?? [];
         this.cuisineResults = res.data?.cuisines ?? [];
 
-        this.showRestaurantDropdown = true;
+        this.showRestaurantDropdown =
+          this.restaurantResults.length > 0 ||
+          this.foodResults.length > 0 ||
+          this.cuisineResults.length > 0;
       },
-      error: (error) => {
-        console.error(error);
-
+      error: () => {
         this.restaurantResults = [];
         this.foodResults = [];
         this.cuisineResults = [];
@@ -163,21 +162,42 @@ export class Navbar {
     });
   }
 
+  formatSlug(name: string) {
+    return name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
+
+  selectRestaurant(restaurant: any) {
+    this.showRestaurantDropdown = false;
+    this.restaurantQuery = '';
+
+    this.router.navigate([
+      '/india',
+      this.city,
+      this.formatSlug(restaurant.slug)
+    ]);
+  }
+
   selectCuisine(cuisine: string) {
+    this.showRestaurantDropdown = false;
+    this.restaurantQuery = '';
+
     this.router.navigate(
       ['/india', this.city],
       {
         queryParams: {
-          cuisine
+          cuisine: cuisine
         }
       }
     );
-
-    this.showRestaurantDropdown = false;
-    this.restaurantQuery = '';
   }
 
   selectFood(food: any) {
+    this.showRestaurantDropdown = false;
+    this.restaurantQuery = '';
+
     this.router.navigate(
       ['/india', this.city],
       {
@@ -186,19 +206,6 @@ export class Navbar {
         }
       }
     );
-
-    this.showRestaurantDropdown = false;
-    this.restaurantQuery = '';
-  }
-
-  selectRestaurant(res: any) {
-    this.router.navigate([
-      '/india',
-      this.city,
-      "restaurants"
-    ]);
-
-    this.showRestaurantDropdown = false;
   }
 
   logout() {

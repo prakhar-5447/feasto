@@ -1,13 +1,16 @@
 import * as restaurantRepo from "../repositories/restaurant.repository";
+import { createSlug } from "../utils/slug.utils";
 
-export const createRestaurant = (
-userId: string,
-data: any
+export const createRestaurant = async (
+    userId: string,
+    data: any
 ) => {
-    return restaurantRepo.createRestaurant({
-        ...data,
-        owner: userId
+    const restaurant = await restaurantRepo.createRestaurant({
+        ...data, slug: createSlug(data.name)
     });
+    const uniqueSlug = `${createSlug(data.name)}-${restaurant._id.toString()}`;
+
+    return restaurantRepo.updateRestaurant(restaurant._id.toString(), { slug: uniqueSlug });
 };
 
 export const getRestaurant = (
@@ -19,15 +22,15 @@ export const getRestaurant = (
 };
 
 export const getMyRestaurant = (
-userId: string
+    userId: string
 ) => {
     return restaurantRepo.findByOwner(userId);
 };
 
 export const getNearbyRestaurants = (
-longitude: number,
-latitude: number,
-maxDistance?: number
+    longitude: number,
+    latitude: number,
+    maxDistance?: number
 ) => {
     return restaurantRepo.findNearby(
         longitude,
@@ -37,10 +40,10 @@ maxDistance?: number
 };
 
 export const getNearByRestaurant = (
-userId: string,
-longitude: number,
-latitude: number,
-maxDistance?: number
+    userId: string,
+    longitude: number,
+    latitude: number,
+    maxDistance?: number
 ) => {
     return restaurantRepo.findNearby(
         longitude,
@@ -53,15 +56,21 @@ export const getRestaurantsList = () => {
     return restaurantRepo.findAll();
 };
 
+export const getRestaurantBySlug = (
+    slug: string
+) => {
+    return restaurantRepo.findBySlug(slug);
+};
+
 export const getRestaurantInfo = (
-id: string
+    id: string
 ) => {
     return restaurantRepo.findById(id);
 };
 
 export const updateRestaurant = (
-id: string,
-data: any
+    id: string,
+    data: any
 ) => {
     return restaurantRepo.updateRestaurant(
         id,
@@ -70,7 +79,7 @@ data: any
 };
 
 export const deleteRestaurant = (
-id: string
+    id: string
 ) => {
     return restaurantRepo.deleteRestaurant(id);
 };

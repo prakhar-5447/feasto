@@ -77,3 +77,6 @@ export const findAll = (): Promise<IRestaurant[]> => {
     });
 };
 
+export const findBySlug = (slug: string) => {
+    return Restaurant.findOne({ slug });
+};

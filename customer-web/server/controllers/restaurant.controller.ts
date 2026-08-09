@@ -203,19 +203,19 @@ export const restaurantInfo = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const id =
-            req.params['id'] as string;
+        const slug =
+            req.params['slug'] as string;
 
-        if (!id) {
+        if (!slug) {
             res.status(400).json({
                 success: false,
-                message: "Restaurant ID is required"
+                message: "Restaurant slug is required"
             });
             return;
         }
 
         const restaurant =
-            await restaurantService.getRestaurantInfo(id);
+            await restaurantService.getRestaurantBySlug(slug);
 
         if (!restaurant) {
             res.status(404).json({

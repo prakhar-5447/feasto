@@ -25,7 +25,7 @@ export const searchItems = async (
                 { cuisine: regex }
             ]
         })
-            .select("_id name cuisine")
+            .select("_id name cuisine slug")
             .limit(5)
     ]);
 
@@ -46,4 +46,46 @@ export const searchItems = async (
         restaurants,
         cuisines
     };
+};
+
+export const searchRestaurants = async (query: any) => {
+    const {
+        cuisine,
+        food
+    } = query;
+
+    const filter: Record<string, any> = {};
+
+    if (cuisine) {
+        filter['cuisine'] = {
+            $elemMatch: {
+                $regex: cuisine,
+                $options: "i"
+            }
+        };
+    }
+
+    if (food) {
+        const foods = await Food.find({
+            name: {
+                $regex: food,
+                $options: "i"
+            },
+            isAvailable: true
+        }).select("restaurant");
+
+        const restaurantIds = [
+            ...new Set(
+                foods.map(food =>
+                    food.restaurant.toString()
+                )
+            )
+        ];
+
+        filter['_id'] = {
+            $in: restaurantIds
+        };
+    }
+
+    return Restaurant.find(filter);
 };

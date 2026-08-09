@@ -8,6 +8,7 @@ export interface ILocation {
 export interface IRestaurant extends Document {
     name: string;
     owner: Types.ObjectId;
+    slug: string;
     description?: string;
     address?: string;
     cuisine: string[];
@@ -71,7 +72,12 @@ const restaurantSchema = new Schema<IRestaurant>(
             type: Number,
             default: 0,
         },
-
+        slug: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true,
+        },
         isOpen: {
             type: Boolean,
             default: true,
@@ -88,6 +94,10 @@ restaurantSchema.index({
 
 restaurantSchema.index({
     owner: 1
+});
+
+restaurantSchema.index({
+    slug: 1
 });
 
 const Restaurant =

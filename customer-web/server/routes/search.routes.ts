@@ -8,4 +8,9 @@ router.get(
     searchController.searchItems
 );
 
+router.get(
+    "/restaurants",
+    searchController.searchRestaurants
+);
+
 export default router;

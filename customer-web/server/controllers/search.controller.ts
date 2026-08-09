@@ -42,3 +42,21 @@ export const searchItems = async (
         next(error);
     }
 };
+
+export const searchRestaurants = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const restaurants =
+            await searchService.searchRestaurants(req.query);
+
+        res.status(200).json({
+            success: true,
+            data: restaurants
+        });
+    } catch (error) {
+        next(error);
+    }
+};
