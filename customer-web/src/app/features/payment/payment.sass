@@ -27,7 +27,7 @@
                 .amount
                     font-size: 24px
                     font-weight: 700
-                    color: $color-black
+                    color: $color-text-primary
                     margin: 0
                     line-height: 24px
 
@@ -59,7 +59,7 @@
             box-shadow: 0 12px 35px rgba(0,0,0,.08)
 
             .card-header
-                background: linear-gradient(135deg,#f97316,#ea580c)
+                background: linear-gradient(135deg, #f97316, #ea580c)
                 color: white
                 min-height: 120px
                 padding: 18px
@@ -101,7 +101,7 @@
                                 background: white
 
                                 &.filled
-                                    background: #111827
+                                    background: #111827827
 
                         .qr-logo
                             position: absolute
@@ -199,13 +199,13 @@
                             opacity: 0
 
                 .ring-1
-                    border: 4px solid rgba(249,115,22,.15)
+                    border: 4px solid rgba(249, 115, 22, .15)
                     animation-delay: 0s
                 .ring-2
-                    border: 4px solid rgba(249,115,22,.25)
+                    border: 4px solid rgba(249, 115, 22, .30)
                     animation-delay: 0.5s
                 .ring-3
-                    border: 4px solid rgba(249,115,22,.25)
+                    border: 4px solid rgba(249, 115, 22, .30)
                     animation-delay: 1s
 
                 .loader-circle
@@ -215,9 +215,9 @@
                     justify-content: center
                     align-items: center
                     border-radius: 50%
-                    background: linear-gradient(135deg,#fb923c,$color-primary)
-                    color: $color-white
-                    box-shadow: 0 12px 30px rgba(249,115,22,.35)
+                    background: linear-gradient(135deg, #ea580c, #dc2626)
+                    color: $color-bg-white
+                    box-shadow: 0 12px 30px rgba(249, 115, 22, .30)
 
             .processing-text
                 margin-bottom: 32px
@@ -231,7 +231,7 @@
                     font-size: 16px
 
             .steps-card
-                background: $color-white
+                background: $color-bg-white
                 border-radius: 20px
                 padding: 28px
                 width: 380px
@@ -250,7 +250,7 @@
                         justify-content: center
                         align-items: center
                         flex-shrink: 0
-                        color: #1fcc5e
+                        color: #16a34a
                         width: 30px
                         fa-icon
                             font-size: 18px
@@ -284,14 +284,14 @@
             .success-card
                 flex: 1
                 width: 100%
-                background: linear-gradient(135deg,#22c55e,#0a8c3a)
-                color: $color-white
+                background: linear-gradient(135deg, #22c55e, #0a8c3a)
+                color: $color-bg-white
                 border-radius: 24px
                 display: flex
                 flex-direction: column
                 gap: 4px
                 padding: 24px
-                box-shadow: 0 15px 35px rgba(16,185,129,.3)
+                box-shadow: 0 15px 35px rgba(16, 185, 129, .3)
                 margin-bottom: 24px
                 .card-top
                     flex: 1
@@ -304,7 +304,7 @@
                         width: 70px
                         height: 70px
                         margin: 16px
-                        background: rgba(255,255,255,.18)
+                        background: rgba(255, 255, 255, .20)
                         border-radius: 50%
                         display: flex
                         justify-content: center
@@ -325,7 +325,7 @@
                     width: 100%
                     text-align: center
                     flex-direction: column
-                    background: rgba(255,255,255,.15)
+                    background: rgba(255, 255, 255, .20)
                     padding: 14px 18px
                     border-radius: 12px
 
@@ -334,7 +334,7 @@
                         letter-spacing: 2px
                         text-transform: uppercase
                         font-weight: 500
-                        color: rgba(255,255,255,.8)
+                        color: rgba(255, 255, 255, .80)
 
                     .value
                         font-size: 18px
@@ -396,7 +396,7 @@
 
                         &.active
                             background: $color-primary
-                            box-shadow: 0 0 0 5px rgba(249,115,22,.15)
+                            box-shadow: 0 0 0 5px rgba(249, 115, 22, .15)
 
                     span
                         font-size: 12px
@@ -516,7 +516,7 @@
                 align-items: center
                 gap: 8px
                 transition: .25s
-                box-shadow: 0 10px 25px rgba(249,115,22,.3)
+                box-shadow: 0 10px 25px rgba(249, 115, 22, .30)
 
                 &:hover
                     background: $color-primary-hover
@@ -524,7 +524,7 @@
                 &:active
                     transform: scale(.98)
                 fa-icon
-                    color: $color-white
+                    color: $color-bg-white
                     font-size: 14px
             .support-text
                 margin-top: 18px
@@ -534,7 +534,7 @@
                 font-weight: 500
 
                 span
-                    color: $color-text-dark
+                    color: $color-text-secondary
                     font-weight: 700
                     font-family: monospace
 

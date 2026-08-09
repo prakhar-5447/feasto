@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RestaurantCard } from '../../../shared/components/restaurant-card/restaurant-card';
+import { RestaurantCard } from '../restaurant-card/restaurant-card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 

@@ -6,7 +6,7 @@
     .sidebar
         width: 250px
         border-right: 1px solid #eee
-        background: $color-white
+        background: $color-bg-white
         .sidebar-box
             position: sticky
             top: 340px
@@ -17,7 +17,7 @@
                 text-align: left
                 padding: 16px 12px
                 border: none
-                border-right: 3px solid $color-white
+                border-right: 3px solid transparent
                 background: transparent
                 cursor: pointer
                 transition: 0.2s
@@ -26,7 +26,7 @@
 
                 &.active
                     border-color: $color-primary
-                    background: linear-gradient(90deg,$color-white, $color-primary-light)
+                    background: linear-gradient(90deg, #ffffff, #ffedd5)
                     color: $color-primary
                     font-weight: 600
 
@@ -84,14 +84,14 @@
                                     background: #ea580c
                     p
                         font-size: 14px
-                        color: #666
+                        color: #6b7280
                         margin-bottom: 6px
 
                     span
                         width: 100%
                         text-align: right
                         font-weight: 600
-                        color: #222
+                        color: #111827
 
                 .left
                     width: 120px
@@ -116,7 +116,7 @@
                             color: $color-primary
                             font-size: 14px
                         .qty-box
-                            background: $color-white
+                            background: $color-bg-white
                             border: 1px solid $color-primary
                             border-radius: 6px
                             font-size: 14px
@@ -133,7 +133,7 @@
 
                         .add-btn
                             padding: 4px 12px
-                            background: $color-white
+                            background: $color-bg-white
                             border: 1px solid $color-primary
                             border-radius: 6px
                             color: $color-primary

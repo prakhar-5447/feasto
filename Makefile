@@ -2,7 +2,7 @@
 # Feasto Development Commands
 # ===============================
 
-.PHONY: customer help
+.PHONY: customer customer-tree help
 
 help:
 	@echo "Available Commands:"
@@ -15,6 +15,9 @@ help:
 
 customer:
 	cd customer-web && ng s -o
+
+customer-tree:
+	cd customer-web && tree src/app /F
 
 install-customer:
 	cd customer-web && npm install
