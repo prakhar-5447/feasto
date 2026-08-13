@@ -5,7 +5,7 @@ import {
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faShieldAlt,faCheckCircle,faMotorcycle,faShoppingBasket,faLocationDot,faAngleRight
+  faShieldAlt,faCheckCircle,faMotorcycle,faShoppingBasket,faLocationDot,faAngleRight,faClock
 } from '@fortawesome/free-solid-svg-icons';
 
 export type PaymentStage =
@@ -44,6 +44,7 @@ export class Payment {
   faShieldAlt = faShieldAlt;
   faMotorcycle = faMotorcycle;
   faCheckCircle = faCheckCircle;
+  faClock = faClock;
   faLocationDot = faLocationDot;
   faShoppingBasket = faShoppingBasket;
   faAngleRight = faAngleRight;

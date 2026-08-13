@@ -70,7 +70,7 @@
                     margin-bottom: 2px
 
                 .subtitle
-                    font-size: .82rem
+                    font-size: 14px
                     opacity: .8
                     line-height: 1.5
 
@@ -147,9 +147,11 @@
                     .expiry-left
                         display: flex
                         align-items: center
-                        gap: .45rem
+                        gap: 6px
                         color: $color-text-secondary
-                        font-size: 14px
+                        font-size: 16px
+                        fa-icon
+                            font-size: 14px
 
                     .expiry-time
                         font-weight: 700
@@ -284,7 +286,7 @@
             .success-card
                 flex: 1
                 width: 100%
-                background: linear-gradient(135deg, #22c55e, $color-success-dark)
+                background: $gradient-success
                 color: $color-bg-white
                 border-radius: $radius-24
                 display: flex
@@ -343,7 +345,6 @@
             .eta-card
                 border-radius: $radius-20
                 border: $border-width-1 $border-style-solid $color-border-light
-                margin-bottom: 1rem
                 overflow: hidden
 
             .eta-card
