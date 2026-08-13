@@ -32,7 +32,7 @@
                 padding: 12px 0px
                 border-radius: $radius-6
                 box-shadow: 0 2px 8px rgba(0, 0, 0, .05)
-                border: $border-width-1 $border-style-solid rgba(0, 0, 0, .05)
+                border: $border-width-1 $border-style-solid $color-overlay-black-subtle
                 width: 100%
                 max-width: 720px
                 .box
@@ -76,7 +76,7 @@
                         left: 0
                         max-height: 720px
                         background: $color-bg-white
-                        box-shadow: 0 6px 18px rgba(0, 0, 0, .20)
+                        box-shadow: 0 6px 18px $color-overlay-black-medium
                         z-index: 10
                         border-radius: $radius-8
                         overflow: hidden
@@ -91,7 +91,7 @@
                             &:not(:last-child)
                                 border-bottom: $border-width-1 $border-style-solid $color-border
                             &:hover
-                                background: #f8f8f8
+                                background: $color-bg-gray-soft
 
                         .gps-btn
                             width: 100%
@@ -122,7 +122,7 @@
                                     font-size: 18px
                                     color: $color-primary
                             &:hover
-                                background: #f8f8f8
+                                background: $color-bg-gray-soft
 
         .nav
             width: auto

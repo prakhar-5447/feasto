@@ -1,9 +1,9 @@
 @use '../../../../styles/index' as *
 
 .categories
-    background: #ffffff
-    border-top: $border-width-1 $border-style-solid #e5e7eb
-    border-bottom: $border-width-1 $border-style-solid #e5e7eb
+    background: $color-bg-white
+    border-top: $border-width-1 $border-style-solid $color-border-light
+    border-bottom: $border-width-1 $border-style-solid $color-border-light
 
     padding: 16px
     max-width: 1200px
@@ -13,7 +13,7 @@
         font-size: 24px
         font-weight: 700
         margin-bottom: 20px
-        color: #111827222
+        color: $color-text-primary
 
     .category-grid
         display: grid
@@ -32,12 +32,12 @@
             padding: 16px
             border: $border-style-none
             border-radius: $radius-12
-            background: #ffffff
+            background: $color-bg-white
             cursor: pointer
             transition: all 0.2s ease
 
             &:hover
-                background: #f8f8f8
+                background: $color-bg-gray-soft
 
             .icon
                 font-size: 36px
@@ -46,7 +46,7 @@
                 font-size: 12px
                 font-weight: 500
                 text-align: center
-                color: #6b7280444
+                color: $color-text-secondary
 
             &.active
-                background: #fff7ed
+                background: $color-bg-orange-soft

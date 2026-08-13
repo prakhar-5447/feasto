@@ -38,16 +38,16 @@
                         flex-direction: column
                         justify-content: center
                         padding: 64px
-                        background: linear-gradient(to right, rgba(0, 0, 0, .80), rgba(0, 0, 0, 0))
+                        background: linear-gradient(to right, $color-overlay-black-strong, rgba(0, 0, 0, 0))
 
                         h3
-                            color: #ffffff
+                            color: $color-text-white
                             font-size: 28px
                             font-weight: 700
                             margin-bottom: 6px
 
                         p
-                            color: rgba(255, 255, 255, .90)
+                            color: $color-overlay-white-strong
                             font-size: 16px
         .nav
             position: absolute
@@ -58,7 +58,7 @@
             border-radius: $radius-circle
             border: $border-style-none
             background: white
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .20)
+            box-shadow: 0 4px 12px $color-overlay-black-medium
             font-size: 24px
             cursor: pointer
             display: flex
@@ -83,7 +83,7 @@
             width: 8px
             height: 8px
             border-radius: $radius-round
-            background: #d1d5db
+            background: $color-bg-neutral
             cursor: pointer
             transition: width .2s
 

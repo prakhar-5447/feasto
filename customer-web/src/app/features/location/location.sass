@@ -29,11 +29,11 @@
             overflow: hidden
             cursor: pointer
             transition: all 0.3s ease
-            box-shadow: 0 6px 16px rgba(0, 0, 0, .10)
+            box-shadow: 0 6px 16px $color-overlay-black-light
 
             &:hover
                 transform: translateY(-6px)
-                box-shadow: 0 12px 28px rgba(0, 0, 0, .20)
+                box-shadow: 0 12px 28px $color-overlay-black-medium
 
                 img
                     transform: scale(1.1)
@@ -51,7 +51,7 @@
                 flex-direction: column
                 justify-content: flex-end
                 padding: 16px
-                background: linear-gradient(to top, rgba(0, 0, 0, .80), transparent)
+                background: linear-gradient(to top, $color-overlay-black-strong, transparent)
 
                 h3
                     color: $color-bg-white
@@ -59,12 +59,12 @@
                     font-weight: 700
 
                 p
-                    color: rgba(255, 255, 255, .80)
+                    color: $color-overlay-white-heavy
                     font-size: 13px
 
         .city-list-item
             padding: 16px
-            border: $border-width-1 $border-style-solid #e5e7eb
+            border: $border-width-1 $border-style-solid $color-border-light
             border-radius: $radius-6
             transition: all 0.2s
             display: flex
@@ -76,7 +76,7 @@
                 transition: all 0.2s
             &:hover
                 border-color: $color-primary
-                background: #fff7ed
+                background: $color-bg-orange-soft
                 fa-icon
                     color: $color-primary
             .left

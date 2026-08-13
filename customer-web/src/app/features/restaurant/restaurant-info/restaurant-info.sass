@@ -22,7 +22,7 @@
         color: $color-text-secondary
         .rating
             gap: 4px
-            background: #16a34a
+            background: $color-success
             color: $color-bg-white
             padding: 4px 8px
             border-radius: $radius-4
@@ -51,10 +51,10 @@
                     gap: 8px
                     font-weight: 400
                     .open
-                        color: #16a34a
+                        color: $color-success
                         font-weight: 600
                     .close
-                        color: #d62121
+                        color: $color-error
                         font-weight: 600
         .price
             font-size: 14px
@@ -62,8 +62,8 @@
             display: flex
             align-items: center
             gap: 8px
-            border: $border-width-2 $border-style-solid #ffa58f
-            background: #ffe8cc97
+            border: $border-width-2 $border-style-solid $color-border-primary
+            background: $color-bg-orange-overlay
             padding: 14px 8px
             border-radius: $radius-12
             font-size: 16px

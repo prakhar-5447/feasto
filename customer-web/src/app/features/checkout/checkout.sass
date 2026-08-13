@@ -92,7 +92,7 @@
                     cursor: pointer
                     user-select: none
                     font-size: 14px
-                    color: #6b7280
+                    color: $color-text-secondary
 
                     input
                         display: none
@@ -142,7 +142,7 @@
                 justify-content: space-between
                 align-items: center
                 padding: 16px 18px
-                border: $border-width-1-5 $border-style-solid #e5e7eb
+                border: $border-width-1-5 $border-style-solid $color-border-light
                 border-radius: $radius-14
                 transition: .25s ease
                 background: $color-bg-white
@@ -150,7 +150,7 @@
                     width: 20px
                     height: 20px
                     border-radius: $radius-circle
-                    border: $border-width-2 $border-style-solid #d1d5db
+                    border: $border-width-2 $border-style-solid $color-border
                     position: relative
                     transition: .2s
                 .method-info
@@ -209,7 +209,7 @@
 
             button
                 padding: 10px 18px
-                border: $border-width-1 $border-style-solid #e5e7eb
+                border: $border-width-1 $border-style-solid $color-border-light
                 background: $color-bg-white
                 border-radius: $radius-pill
                 cursor: pointer
@@ -247,7 +247,7 @@
                     font-weight: 600
                     font-size: 16px
             .divider
-                border-bottom: $border-width-1 $border-style-solid #e5e7eb
+                border-bottom: $border-width-1 $border-style-solid $color-border-light
                 margin-bottom: 18px
                 padding-bottom: 18px
 
@@ -259,12 +259,12 @@
                 font-weight: 400
                 color: $color-text-secondary
                 &.divider
-                    border-bottom: $border-width-1 $border-style-solid #e5e7eb
+                    border-bottom: $border-width-1 $border-style-solid $color-border-light
                     margin-bottom: 18px
                     padding-bottom: 18px
 
                 &.discount
-                    color: #16a34a
+                    color: $color-success
                     font-weight: 500
                     font-size: 14px
                     fa-icon
@@ -275,17 +275,17 @@
                     justify-content: space-between
                     width: 100%
 
-                    border-bottom: $border-width-1 $border-style-solid #e5e7eb
+                    border-bottom: $border-width-1 $border-style-solid $color-border-light
                     margin-bottom: 18px
                     padding-bottom: 18px
                     .info
-                        background: #16a34a1d
-                        border: $border-width-1 $border-style-solid #16a34a
+                        background: $color-bg-green-overlay
+                        border: $border-width-1 $border-style-solid $color-success
                         padding: 10px
                         border-radius: $radius-8
                         width: 100%
                         .code
-                            color: #16a34a
+                            color: $color-success
                             font-size: 16px
                             font-weight: 600
 
@@ -300,14 +300,14 @@
                 font-weight: bold
                 font-size: 18px
                 margin-top: 18px
-                border-top: $border-width-1 $border-style-solid #e5e7eb
+                border-top: $border-width-1 $border-style-solid $color-border-light
                 padding-top: 12px
                 font-weight: 600
 
             .savings
                 margin-top: 8px
                 font-size: 14px
-                color: #16a34a
+                color: $color-success
                 font-weight: 500
             .checkout
                 width: 100%
