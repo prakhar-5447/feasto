@@ -5,7 +5,7 @@
     position: relative
     .sidebar
         width: 250px
-        border-right: $border-width-1 solid #eee
+        border-right: $border-width-1 $border-style-solid #eee
         background: $color-bg-white
         .sidebar-box
             position: sticky
@@ -16,8 +16,8 @@
                 width: 100%
                 text-align: left
                 padding: 16px 12px
-                border: none
-                border-right: $border-width-2 solid transparent
+                border: $border-style-none
+                border-right: $border-width-2 $border-style-solid transparent
                 background: transparent
                 cursor: pointer
                 transition: 0.2s
@@ -49,7 +49,7 @@
                 justify-content: space-between
                 gap: 16px
                 background: #fff
-                border-radius: 12px
+                border-radius: $radius-12
 
                 .right
                     flex: 1
@@ -67,13 +67,13 @@
                             height: 100%
                             aspect-ratio: 1/1
                             border-width: $border-width-2
-                            border-style: solid
+                            border-style: $border-style-solid
                             padding: 2px
                             .circle
                                 width: 100%
                                 height: 100%
                                 aspect-ratio: 1/1
-                                border-radius: 100%
+                                border-radius: $radius-pill
                             &.veg
                                 border-color: #16a34a
                                 .circle
@@ -101,7 +101,7 @@
                         width: 100%
                         height: 100px
                         object-fit: cover
-                        border-radius: 10px
+                        border-radius: $radius-10
 
                     .controls
                         position: absolute
@@ -110,15 +110,15 @@
                         transform: translateX(-50%)
 
                         button
-                            border: none
+                            border: $border-style-none
                             background: transparent
                             cursor: pointer
                             color: $color-primary
                             font-size: 14px
                         .qty-box
                             background: $color-bg-white
-                            border: $border-width-1 solid $color-primary
-                            border-radius: 6px
+                            border: $border-width-1 $border-style-solid $color-primary
+                            border-radius: $radius-6
                             font-size: 14px
                             display: flex
                             align-items: center
@@ -126,7 +126,7 @@
                             .btn
                                 width: 28px
                                 height: 28px
-                                border-radius: 6px
+                                border-radius: $radius-6
                                 font-size: 14px
                             span
                                 font-size: 16px
@@ -134,8 +134,8 @@
                         .add-btn
                             padding: 4px 12px
                             background: $color-bg-white
-                            border: $border-width-1 solid $color-primary
-                            border-radius: 6px
+                            border: $border-width-1 $border-style-solid $color-primary
+                            border-radius: $radius-6
                             color: $color-primary
                             cursor: pointer
                             font-weight: 600

@@ -3,7 +3,7 @@
 .restaurant-card
     display: block
     background: $color-bg-white
-    border-radius: 12px
+    border-radius: $radius-12
     overflow: hidden
     text-decoration: none
     transition: all 0.25s ease
@@ -75,7 +75,7 @@
                 background: #16a34a
                 color: $color-bg-white
                 padding: 4px 6px
-                border-radius: 4px
+                border-radius: $radius-4
                 font-size: 12px
                 font-weight: 500
                 fa-icon
@@ -98,4 +98,4 @@
             font-size: 12px
             color: $color-text-muted
             padding: 6px 0px
-            border-top: $border-width-0-5 solid $color-text-muted
+            border-top: $border-width-0-5 $border-style-solid $color-text-muted

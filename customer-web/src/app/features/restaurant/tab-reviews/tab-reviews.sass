@@ -10,10 +10,10 @@
         gap: 8px
         padding-right: 24px
         margin-right: 24px
-        border-right: $border-width-1 solid rgba(0, 0, 0, .05)
+        border-right: $border-width-1 $border-style-solid rgba(0, 0, 0, .05)
         .review-card
             background: #ffffff
-            border-radius: 8px
+            border-radius: $radius-8
             padding: 24px
             box-shadow: 0 1px 3px rgba(0, 0, 0, .05)
 
@@ -61,7 +61,7 @@
             align-items: center
             gap: 6px
             background: none
-            border: none
+            border: $border-style-none
             font-size: 14px
             color: #6b7280
             cursor: pointer
@@ -77,8 +77,8 @@
         .nav-btn
             min-width: 36px
             height: 36px
-            border: none
-            border-radius: 6px
+            border: $border-style-none
+            border-radius: $radius-6
             background: white
             cursor: pointer
             font-size: 14px
@@ -91,8 +91,8 @@
         .page-btn
             min-width: 36px
             height: 36px
-            border: none
-            border-radius: 6px
+            border: $border-style-none
+            border-radius: $radius-6
             background: white
             cursor: pointer
             font-size: 16px
@@ -114,7 +114,7 @@
             align-items: center
             gap: 20px
             background: #ffffff
-            border-radius: 8px
+            border-radius: $radius-8
             padding: 24px
             box-shadow: 0 1px 3px rgba(0, 0, 0, .05)
 
@@ -147,7 +147,7 @@
 
             .rating-info
                 flex: 1
-                border-left: $border-width-1 solid #e5e7eb
+                border-left: $border-width-1 $border-style-solid #e5e7eb
                 padding-left: 16px
                 font-size: 14px
                 color: #6b7280
@@ -158,7 +158,7 @@
                 button
                     font-size: 14px
                     font-weight: 600
-                    border: none
+                    border: $border-style-none
                     background: none
                     cursor: pointer
                     color: $color-primary
@@ -172,11 +172,11 @@
             .review-textarea
                 width: 100%
                 height: 220px
-                border-radius: 8px
+                border-radius: $radius-8
                 padding: 16px
                 resize: none
                 background-color: #f0f0f0
-                border: none
+                border: $border-style-none
                 &:focus
                     outline: none
 
@@ -208,5 +208,5 @@
                         font-size: 16px
                         font-weight: 600
                         background: none
-                        border: none
+                        border: $border-style-none
                         cursor: pointer

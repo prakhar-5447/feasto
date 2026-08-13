@@ -41,9 +41,9 @@
                 gap: 8px
                 background: #ecfdf5
                 color: #16a34a
-                border: $border-width-1 solid #bbf7d0
+                border: $border-width-1 $border-style-solid #bbf7d0
                 padding: 6px 12px
-                border-radius: 999px
+                border-radius: $radius-pill
                 font-size: 12px
                 font-weight: 600
 
@@ -54,7 +54,7 @@
             width: 100%
             max-width: 430px
             background: white
-            border-radius: 22px
+            border-radius: $radius-22
             overflow: hidden
             box-shadow: 0 12px 35px rgba(0,0,0,.08)
 
@@ -83,9 +83,9 @@
 
                 .qr-frame
                     background: white
-                    border-radius: 20px
+                    border-radius: $radius-20
                     padding: 18px
-                    border: $border-width-1 solid #f1f5f9
+                    border: $border-width-1 $border-style-solid #f1f5f9
                     box-shadow: 0 10px 30px rgba(0,0,0,.08)
                     margin-bottom: 24px
 
@@ -115,7 +115,7 @@
                             display: flex
                             justify-content: center
                             align-items: center
-                            border-radius: 8px
+                            border-radius: $radius-8
                             font-weight: 700
                             box-shadow: 0 5px 15px rgba(0,0,0,.2)
 
@@ -128,9 +128,9 @@
 
                     .app-chip
                         background: #f9fafb
-                        border: $border-width-1 solid #e5e7eb
+                        border: $border-width-1 $border-style-solid #e5e7eb
                         padding: 6px 14px
-                        border-radius: 8px
+                        border-radius: $radius-8
                         font-size: 12px
                         font-weight: 600
                         color: #6b7280
@@ -181,7 +181,7 @@
                 .ring
                     position: absolute
                     inset: 0
-                    border-radius: 50%
+                    border-radius: $radius-circle
                     animation: pulse 1.5s infinite linear
 
                     @keyframes pulse
@@ -199,13 +199,13 @@
                             opacity: 0
 
                 .ring-1
-                    border: 4px solid rgba(249, 115, 22, .15)
+                    border: 4px $border-style-solid rgba(249, 115, 22, .15)
                     animation-delay: 0s
                 .ring-2
-                    border: 4px solid rgba(249, 115, 22, .30)
+                    border: 4px $border-style-solid rgba(249, 115, 22, .30)
                     animation-delay: 0.5s
                 .ring-3
-                    border: 4px solid rgba(249, 115, 22, .30)
+                    border: 4px $border-style-solid rgba(249, 115, 22, .30)
                     animation-delay: 1s
 
                 .loader-circle
@@ -214,7 +214,7 @@
                     display: flex
                     justify-content: center
                     align-items: center
-                    border-radius: 50%
+                    border-radius: $radius-circle
                     background: linear-gradient(135deg, #ea580c, #dc2626)
                     color: $color-bg-white
                     box-shadow: 0 12px 30px rgba(249, 115, 22, .30)
@@ -232,10 +232,10 @@
 
             .steps-card
                 background: $color-bg-white
-                border-radius: 20px
+                border-radius: $radius-20
                 padding: 28px
                 width: 380px
-                border: $border-width-1 solid #e5e7eb
+                border: $border-width-1 $border-style-solid #e5e7eb
 
                 .step
                     display: flex
@@ -258,7 +258,7 @@
                             width: 18px
                             height: 18px
                             background: #d1d5db
-                            border-radius: 50%
+                            border-radius: $radius-circle
 
                     p
                         color: $color-text-secondary
@@ -286,7 +286,7 @@
                 width: 100%
                 background: linear-gradient(135deg, #22c55e, #0a8c3a)
                 color: $color-bg-white
-                border-radius: 24px
+                border-radius: $radius-24
                 display: flex
                 flex-direction: column
                 gap: 4px
@@ -305,7 +305,7 @@
                         height: 70px
                         margin: 16px
                         background: rgba(255, 255, 255, .20)
-                        border-radius: 50%
+                        border-radius: $radius-circle
                         display: flex
                         justify-content: center
                         align-items: center
@@ -327,7 +327,7 @@
                     flex-direction: column
                     background: rgba(255, 255, 255, .20)
                     padding: 14px 18px
-                    border-radius: 12px
+                    border-radius: $radius-12
 
                     .label
                         font-size: 12px
@@ -341,8 +341,8 @@
                         font-weight: 600
 
             .eta-card
-                border-radius: 20px
-                border: $border-width-1 solid #e5e7eb
+                border-radius: $radius-20
+                border: $border-width-1 $border-style-solid #e5e7eb
                 margin-bottom: 1rem
                 overflow: hidden
 
@@ -361,7 +361,7 @@
                         height: 48px
                         background: #fff7ed
                         color: #ea580c
-                        border-radius: 50%
+                        border-radius: $radius-circle
                         display: flex
                         justify-content: center
                         align-items: center
@@ -391,7 +391,7 @@
                         width: 14px
                         height: 14px
                         background: #d1d5db
-                        border-radius: 50%
+                        border-radius: $radius-circle
                         margin: 6px auto
 
                         &.active
@@ -405,8 +405,8 @@
         .section-right
             flex: 4
             .summary-card
-                border-radius: 20px
-                border: $border-width-1 solid #e5e7eb
+                border-radius: $radius-20
+                border: $border-width-1 $border-style-solid #e5e7eb
                 margin-bottom: 16px
                 overflow: hidden
                 padding: 16px 24px
@@ -414,7 +414,7 @@
                     display: flex
                     align-items: center
                     gap: 12px
-                    border-bottom: $border-width-1 solid #f3f4f6
+                    border-bottom: $border-width-1 $border-style-solid #f3f4f6
                     font-weight: 500
                     margin-bottom: 14px
                     fa-icon
@@ -437,8 +437,8 @@
 
                             .qty
                                 background: #f9fafb
-                                border: $border-width-1 solid #e5e7eb
-                                border-radius: 6px
+                                border: $border-width-1 $border-style-solid #e5e7eb
+                                border-radius: $radius-6
                                 padding: 2px 8px
                                 font-size: 12px
                                 font-weight: 600
@@ -454,7 +454,7 @@
 
                 .bill
                     background: #f9fafb
-                    border-top: $border-width-1 solid #e5e7eb
+                    border-top: $border-width-1 $border-style-solid #e5e7eb
                     padding-top: 16px
 
                     .bill-row
@@ -471,14 +471,14 @@
                         &.total
                             margin-top: 16px
                             padding-top: 16px
-                            border-top: $border-width-1 solid #d1d5db
+                            border-top: $border-width-1 $border-style-solid #d1d5db
                             color: $color-text-primary
                             font-weight: 700
                             font-size: 16px
 
             .address-card
-                border-radius: 20px
-                border: $border-width-1 solid #e5e7eb
+                border-radius: $radius-20
+                border: $border-width-1 $border-style-solid #e5e7eb
                 margin-bottom: 16px
                 overflow: hidden
                 padding: 16px 24px
@@ -504,8 +504,8 @@
             .home-button
                 width: 100%
                 height: 56px
-                border: none
-                border-radius: 14px
+                border: $border-style-none
+                border-radius: $radius-14
                 background: $color-primary
                 color: white
                 font-size: 16px

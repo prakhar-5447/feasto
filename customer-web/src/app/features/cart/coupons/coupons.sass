@@ -3,7 +3,7 @@
 .coupon
     background: $color-bg-white
     padding: 20px
-    border-radius: 8px
+    border-radius: $radius-8
     box-shadow: 0 4px 10px rgba(0,0,0,0.05)
     .header
         font-weight: 600
@@ -16,9 +16,9 @@
         display: flex
         justify-content: space-between
         background: #16a34a1d
-        border: $border-width-1 solid #16a34a
+        border: $border-width-1 $border-style-solid #16a34a
         padding: 10px
-        border-radius: 8px
+        border-radius: $radius-8
 
         .code
             color: #16a34a
@@ -34,7 +34,7 @@
             color: #d62121
             font-size: 14px
             font-weight: 600
-            border: none
+            border: $border-style-none
             background: transparent
             cursor: pointer
 
@@ -46,8 +46,8 @@
         input
             flex: 1
             padding: 8px
-            border-radius: 6px
-            border: $border-width-1 solid $color-border
+            border-radius: $radius-6
+            border: $border-width-1 $border-style-solid $color-border
             font-size: 14px
             background-color: #f0f0f0
             &:focus
@@ -59,14 +59,14 @@
             background: $color-primary
             color: $color-bg-white
             padding: 8px 12px
-            border: none
-            border-radius: 6px
+            border: $border-style-none
+            border-radius: $radius-6
 
     .toggle
         color: $color-primary
         font-size: 14px
         font-weight: 600
-        border: none
+        border: $border-style-none
         background: transparent
         cursor: pointer
 
@@ -80,9 +80,9 @@
         .item
             display: flex
             justify-content: space-between
-            border: $border-width-1 solid #eee
+            border: $border-width-1 $border-style-solid #eee
             padding: 10px
-            border-radius: 8px
+            border-radius: $radius-8
 
             &.disabled
                 opacity: 0.5
@@ -103,6 +103,6 @@
                 color: $color-primary
                 font-size: 14px
                 font-weight: 600
-                border: none
+                border: $border-style-none
                 background: transparent
                 cursor: pointer

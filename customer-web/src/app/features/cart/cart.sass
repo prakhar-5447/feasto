@@ -15,7 +15,7 @@
         background: $color-bg-white
         padding: 20px
         box-shadow: 0 4px 10px rgba(0,0,0,0.05)
-        border-radius: 10px
+        border-radius: $radius-10
 
         h2
             font-weight: 600
@@ -27,13 +27,13 @@
             &:not(:last-child)
                 padding-bottom: 20px
                 margin-bottom: 20px
-                border-bottom: $border-width-1 solid #eee
+                border-bottom: $border-width-1 $border-style-solid #eee
 
             img
                 width: 80px
                 height: 80px
                 object-fit: cover
-                border-radius: 8px
+                border-radius: $radius-8
 
             .details
                 flex: 1
@@ -52,7 +52,7 @@
                 align-items: flex-end
                 gap: 8px
                 button
-                    border: none
+                    border: $border-style-none
                     background: transparent
                     cursor: pointer
                     color: $color-primary
@@ -60,8 +60,8 @@
 
                 .qty-box
                     background: $color-bg-white
-                    border: $border-width-1 solid $color-primary
-                    border-radius: 6px
+                    border: $border-width-1 $border-style-solid $color-primary
+                    border-radius: $radius-6
                     font-size: 14px
                     display: flex
                     align-items: center
@@ -70,7 +70,7 @@
                     .btn
                         width: 28px
                         height: 28px
-                        border-radius: 6px
+                        border-radius: $radius-6
                         font-size: 14px
                     span
                         font-size: 16px
@@ -82,7 +82,7 @@
             height: auto
             background: $color-bg-white
             padding: 20px
-            border-radius: 8px
+            border-radius: $radius-8
             box-shadow: 0 4px 10px rgba(0,0,0,0.05)
             margin-bottom: 24px
 
@@ -110,7 +110,7 @@
                 font-weight: bold
                 font-size: 18px
                 margin-top: 18px
-                border-top: $border-width-1 solid #e5e7eb
+                border-top: $border-width-1 $border-style-solid #e5e7eb
                 padding-top: 12px
                 font-weight: 600
 
@@ -125,9 +125,9 @@
                 padding: 12px
                 background: $color-primary
                 color: $color-bg-white
-                border-radius: 6px
+                border-radius: $radius-6
                 font-size: 18px
-                border: none
+                border: $border-style-none
                 font-weight: 600
                 cursor: pointer
 
@@ -143,4 +143,4 @@
             background: $color-primary
             color: $color-bg-white
             padding: 10px 20px
-            border-radius: 6px
+            border-radius: $radius-6

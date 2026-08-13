@@ -13,9 +13,9 @@
     .auth-card
         width: 100%
         max-width: 480px
-        border-radius: 16px
+        border-radius: $radius-16
         background: $color-bg-white
-        border-radius: 16px
+        border-radius: $radius-16
         padding: 32px
         box-shadow: 0 10px 30px rgba(0, 0, 0, .05)
 
@@ -30,7 +30,7 @@
                 align-items: center
                 justify-content: center
                 background: $color-primary-light
-                border-radius: 999px
+                border-radius: $radius-pill
 
                 fa-icon
                     color: $color-primary
@@ -46,7 +46,7 @@
                 font-size: 15px
                 button
                     background: none
-                    border: none
+                    border: $border-style-none
                     color: $color-primary
                     font-weight: 500
                     cursor: pointer
@@ -75,8 +75,8 @@
                     display: flex
                     align-items: center
                     justify-content: center
-                    border: $border-width-1 solid $color-border
-                    border-radius: 8px
+                    border: $border-width-1 $border-style-solid $color-border
+                    border-radius: $radius-8
                     background: $color-bg-white
                     font-weight: 500
                     color: $color-text-secondary
@@ -84,8 +84,8 @@
                 input
                     width: 100%
                     padding: 10px 12px
-                    border-radius: 8px
-                    border: $border-width-1 solid $color-border
+                    border-radius: $radius-8
+                    border: $border-width-1 $border-style-solid $color-border
                     font-size: 14px
                     background-color: #f0f0f0
                     &:focus
@@ -97,8 +97,8 @@
                 input
                     width: 100%
                     padding: 10px 12px
-                    border-radius: 8px
-                    border: $border-width-1 solid $color-border
+                    border-radius: $radius-8
+                    border: $border-width-1 $border-style-solid $color-border
                     font-size: 14px
                     background-color: #f0f0f0
                     &:focus
@@ -117,8 +117,8 @@
                     height: 52px
                     text-align: center
                     font-size: 20px
-                    border-radius: 6px
-                    border: $border-width-1 solid $color-border
+                    border-radius: $radius-6
+                    border: $border-width-1 $border-style-solid $color-border
                     &:focus
                         outline: none
                         border-color: $color-text-muted
@@ -128,8 +128,8 @@
                         border-color: #16a34a
             button
                 width: 100%
-                border: none
-                border-radius: 10px
+                border: $border-style-none
+                border-radius: $radius-10
                 padding: 14px
                 font-weight: 600
                 cursor: pointer
@@ -154,7 +154,7 @@
                 button
                     width: auto
                     background: none
-                    border: none
+                    border: $border-style-none
                     font-size: 14px
                     font-weight: 600
                     color: $color-primary
