@@ -2,11 +2,11 @@
 
 .cart-page
     min-height: 100vh
-    padding: 8px 16px
+    padding:$space-8$space-16
     max-width: 1200px
     margin: 0 auto
     display: flex
-    gap: 20px
+    gap:$space-20
 
     .left
         display: flex
@@ -15,12 +15,12 @@
 
         .card
             background: white
-            padding: 16px
+            padding:$space-16
             border-radius: $radius-8
             h2
                 font-size: $font-size-18
                 font-weight: $font-weight-semibold
-                margin-bottom: 12px
+                margin-bottom:$space-12
                 fa-icon
                     font-size: $font-size-18
 
@@ -30,18 +30,18 @@
             .address-list
                 display: flex
                 flex-direction: column
-                gap: 10px
+                gap:$space-8
 
                 .address-card
                     border: $border-width-1 $border-style-solid #ddd
                     border-radius: $radius-8
-                    padding: 12px
+                    padding:$space-12
                     cursor: pointer
                     font-weight: $font-weight-medium
                     h4
                         font-weight: $font-weight-semibold
                         font-size: $font-size-16
-                        margin-bottom: 4px
+                        margin-bottom:$space-4
                     p
                         font-size: $font-size-14
                         line-height: $line-height-tight
@@ -56,7 +56,7 @@
                     &.new
                         font-weight: $font-weight-medium
                         fa-icon
-                            margin-right: 8px
+                            margin-right:$space-8
                             color: $color-primary
 
                         &:hover
@@ -71,24 +71,24 @@
                                 color: $color-bg-white
             .form
                 border-radius: $radius-8
-                padding: 8px 0px
+                padding:$space-8 0px
                 .field
                     font-weight: $font-weight-regular
                     border: $border-width-2 $border-style-solid $color-primary
                     outline: none
                     border-radius: $radius-8
-                    padding: 12px 12px
+                    padding:$space-12$space-12
                     width: 100%
-                    margin-bottom: 10px
+                    margin-bottom:$space-8
                 .row
                     display: flex
-                    gap: 10px
+                    gap:$space-8
                 input::placeholder
                     color: $color-text-secondary
                 .checkbox
                     display: inline-flex
                     align-items: center
-                    gap: 10px
+                    gap:$space-8
                     cursor: pointer
                     user-select: none
                     font-size: $font-size-14
@@ -98,8 +98,8 @@
                         display: none
 
                     .checkmark
-                        width: 18px
-                        height: 18px
+                        width:$space-16
+                        height:$space-16
                         border: $border-width-2 $border-style-solid $color-border
                         border-radius: $radius-4
                         background: $color-bg-white
@@ -115,7 +115,7 @@
                         position: absolute
                         left: 5px
                         top: $border-width-1
-                        width: 4px
+                        width:$space-4
                         height: 9px
                         border: $border-style-solid $color-bg-white
                         border-width: 0 $border-width-2 $border-width-2 0
@@ -127,7 +127,7 @@
     .payment-card
         display: flex
         flex-direction: column
-        gap: 18px
+        gap:$space-16
 
         .payment-method
             cursor: pointer
@@ -141,14 +141,14 @@
                 display: flex
                 justify-content: space-between
                 align-items: center
-                padding: 16px 18px
+                padding:$space-16$space-16
                 border: $border-width-1-5 $border-style-solid $color-border-light
                 border-radius: $radius-12
                 transition: .25s ease
                 background: $color-bg-white
                 .radio
-                    width: 20px
-                    height: 20px
+                    width:$space-20
+                    height:$space-20
                     border-radius: $radius-circle
                     border: $border-width-2 $border-style-solid $color-border
                     position: relative
@@ -156,7 +156,7 @@
                 .method-info
                     display: flex
                     flex-direction: column
-                    gap: 4px
+                    gap:$space-4
 
                     .method-title
                         font-size: $font-size-16
@@ -168,11 +168,11 @@
                     .payment-icons
                         display: none
                         align-items: center
-                        gap: 12px
-                        margin-top: 8px
+                        gap:$space-12
+                        margin-top:$space-8
 
                         img
-                            height: 24px
+                            height:$space-24
                             width: auto
                             object-fit: contain
                             background: none
@@ -193,8 +193,8 @@
         .payment-method input:checked + .method-content .radio::after
             content: ''
             position: absolute
-            width: 10px
-            height: 10px
+            width:$space-8
+            height:$space-8
             border-radius: $radius-circle
             background: $color-primary
             top: 50%
@@ -203,12 +203,12 @@
 
         .payment-options
             display: flex
-            gap: 10px
-            margin: -4px 0 8px 0
+            gap:$space-8
+            margin: -4px 0$space-8 0
             flex-wrap: wrap
 
             button
-                padding: 10px 18px
+                padding:$space-8$space-16
                 border: $border-width-1 $border-style-solid $color-border-light
                 background: $color-bg-white
                 border-radius: $radius-pill
@@ -232,36 +232,36 @@
         .bill
             height: auto
             background: $color-bg-white
-            padding: 20px
+            padding:$space-20
             border-radius: $radius-8
             box-shadow: $shadow-sm
-            margin-bottom: 24px
+            margin-bottom:$space-24
 
             h3
                 font-weight: $font-weight-semibold
-                margin-bottom: 10px
+                margin-bottom:$space-8
                 font-size: $font-size-24
             .header
-                margin-bottom: 12px
+                margin-bottom:$space-12
                 span
                     font-weight: $font-weight-semibold
                     font-size: $font-size-16
             .divider
                 border-bottom: $border-width-1 $border-style-solid $color-border-light
-                margin-bottom: 18px
-                padding-bottom: 18px
+                margin-bottom:$space-16
+                padding-bottom:$space-16
 
             .row
                 display: flex
                 justify-content: space-between
-                margin-bottom: 2px
+                margin-bottom:$space-2
                 font-size: $font-size-14
                 font-weight: $font-weight-regular
                 color: $color-text-secondary
                 &.divider
                     border-bottom: $border-width-1 $border-style-solid $color-border-light
-                    margin-bottom: 18px
-                    padding-bottom: 18px
+                    margin-bottom:$space-16
+                    padding-bottom:$space-16
 
                 &.discount
                     color: $color-success
@@ -276,12 +276,12 @@
                     width: 100%
 
                     border-bottom: $border-width-1 $border-style-solid $color-border-light
-                    margin-bottom: 18px
-                    padding-bottom: 18px
+                    margin-bottom:$space-16
+                    padding-bottom:$space-16
                     .info
                         background: $color-bg-green-overlay
                         border: $border-width-1 $border-style-solid $color-success
-                        padding: 10px
+                        padding:$space-8
                         border-radius: $radius-8
                         width: 100%
                         .code
@@ -299,20 +299,20 @@
                 justify-content: space-between
                 font-weight: bold
                 font-size: $font-size-18
-                margin-top: 18px
+                margin-top:$space-16
                 border-top: $border-width-1 $border-style-solid $color-border-light
-                padding-top: 12px
+                padding-top:$space-12
                 font-weight: $font-weight-semibold
 
             .savings
-                margin-top: 8px
+                margin-top:$space-8
                 font-size: $font-size-14
                 color: $color-success
                 font-weight: $font-weight-medium
             .checkout
                 width: 100%
-                margin-top: 20px
-                padding: 12px
+                margin-top:$space-20
+                padding:$space-12
                 background: $color-primary
                 color: $color-bg-white
                 border-radius: $radius-4

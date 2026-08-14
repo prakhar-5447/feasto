@@ -1,23 +1,23 @@
 @use '../../../../styles/index' as *
 
 .features
-    padding: 80px 0
+    padding: $space-80 0
     background: $color-bg-white
 
     .container
         max-width: 1200px
         margin: 0 auto
-        padding: 0 16px
+        padding: 0$space-16
 
         .features-header
             text-align: center
-            margin-bottom: 48px
+            margin-bottom: $space-48
 
             h3
                 font-size: $font-size-32
                 font-weight: $font-weight-bold
                 color: $color-text-primary
-                margin-bottom: 12px
+                margin-bottom:$space-12
 
             p
                 color: $color-text-secondary
@@ -27,11 +27,11 @@
         .features-grid
             display: grid
             grid-template-columns: 1fr
-            gap: 32px
+            gap:$space-32
 
             .feature-card
                 text-align: center
-                padding: 24px
+                padding:$space-24
                 border-radius: $radius-12
                 transition: background .2s
 
@@ -42,7 +42,7 @@
                 h4
                     font-size: $font-size-20
                     font-weight: $font-weight-semibold
-                    margin: 12px 0
+                    margin:$space-12 0
                     color: $color-text-primary
 
                 p
@@ -50,8 +50,8 @@
                     line-height: $line-height-normal
 
                 .icon-wrapper
-                    width: 64px
-                    height: 64px
+                    width: $space-64
+                    height: $space-64
                     margin: 0 auto
                     display: flex
                     align-items: center

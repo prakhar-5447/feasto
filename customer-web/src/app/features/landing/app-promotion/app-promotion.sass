@@ -1,18 +1,18 @@
 @use '../../../../styles/index' as *
 
 .app-promotion
-    padding: 80px 0
+    padding: $space-80 0
     background: $gradient-primary-red
 
     .container
         max-width: 1200px
         margin: auto
-        padding: 0 16px
+        padding: 0$space-16
 
     .promotion-grid
         display: grid
         grid-template-columns: 1fr
-        gap: 32px
+        gap:$space-32
         align-items: center
 
         @media (min-width: 768px)
@@ -22,7 +22,7 @@
         color: white
         display: flex
         flex-direction: column
-        gap: 24px
+        gap:$space-24
 
         h3
             font-size: $font-size-40
@@ -36,18 +36,18 @@
         display: flex
         align-items: center
         justify-content: flex-start
-        gap: 8px
+        gap:$space-8
         background: $color-overlay-white-light
-        padding: 8px 16px
+        padding:$space-8$space-16
         border-radius: $radius-pill
         font-size: $font-size-14
 
     .download-buttons
         display: flex
         flex-direction: column
-        gap: 16px
+        gap:$space-16
 
-        @media (min-width: 640px)
+        @media (min-width: 6$space-40)
             flex-direction: row
 
     .store-btn
@@ -56,8 +56,8 @@
         border: $border-style-none
         display: flex
         align-items: center
-        gap: 12px
-        padding: 16px 24px
+        gap:$space-12
+        padding:$space-16$space-24
         font-size: $font-size-18
         border-radius: $radius-8
         cursor: pointer

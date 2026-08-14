@@ -2,36 +2,36 @@
 
 .cart-page
     min-height: 100vh
-    padding: 8px 16px
+    padding:$space-8$space-16
     max-width: 1200px
     margin: 0 auto
     display: flex
-    gap: 20px
+    gap:$space-20
 
 
     .items
         height: 100%
         flex: 3
         background: $color-bg-white
-        padding: 20px
+        padding:$space-20
         box-shadow: $shadow-sm
         border-radius: $radius-8
 
         h2
             font-weight: $font-weight-semibold
-            margin-bottom: 16px
+            margin-bottom:$space-16
 
         .item
             display: flex
-            gap: 16px
+            gap:$space-16
             &:not(:last-child)
-                padding-bottom: 20px
-                margin-bottom: 20px
+                padding-bottom:$space-20
+                margin-bottom:$space-20
                 border-bottom: $border-width-1 $border-style-solid #eee
 
             img
-                width: 80px
-                height: 80px
+                width: $space-80
+                height: $space-80
                 object-fit: cover
                 border-radius: $radius-8
 
@@ -50,7 +50,7 @@
                 display: flex
                 flex-direction: column
                 align-items: flex-end
-                gap: 8px
+                gap:$space-8
                 button
                     border: $border-style-none
                     background: transparent
@@ -65,11 +65,11 @@
                     font-size: $font-size-14
                     display: flex
                     align-items: center
-                    gap: 4px
-                    margin-bottom: 8px
+                    gap:$space-4
+                    margin-bottom:$space-8
                     .btn
-                        width: 28px
-                        height: 28px
+                        width:$space-24
+                        height:$space-24
                         border-radius: $radius-4
                         font-size: $font-size-14
                     span
@@ -81,19 +81,19 @@
         .bill
             height: auto
             background: $color-bg-white
-            padding: 20px
+            padding:$space-20
             border-radius: $radius-8
             box-shadow: $shadow-sm
-            margin-bottom: 24px
+            margin-bottom:$space-24
 
             h3
                 font-weight: $font-weight-semibold
-                margin-bottom: 10px
+                margin-bottom:$space-8
                 font-size: $font-size-24
             .row
                 display: flex
                 justify-content: space-between
-                margin-bottom: 6px
+                margin-bottom:$space-4
                 font-size: $font-size-16
                 font-weight: $font-weight-regular
                 color: $color-text-secondary
@@ -109,20 +109,20 @@
                 justify-content: space-between
                 font-weight: bold
                 font-size: $font-size-18
-                margin-top: 18px
+                margin-top:$space-16
                 border-top: $border-width-1 $border-style-solid $color-border-light
-                padding-top: 12px
+                padding-top:$space-12
                 font-weight: $font-weight-semibold
 
             .savings
-                margin-top: 8px
+                margin-top:$space-8
                 font-size: $font-size-14
                 color: $color-success
                 font-weight: $font-weight-medium
             .checkout
                 width: 100%
-                margin-top: 20px
-                padding: 12px
+                margin-top:$space-20
+                padding:$space-12
                 background: $color-primary
                 color: $color-bg-white
                 border-radius: $radius-4
@@ -133,14 +133,14 @@
 
     .empty-cart
         text-align: center
-        padding: 100px 20px
+        padding: $space-100$space-20
 
         h2
             font-size: $font-size-24
 
         button
-            margin-top: 20px
+            margin-top:$space-20
             background: $color-primary
             color: $color-bg-white
-            padding: 10px 20px
+            padding:$space-8$space-20
             border-radius: $radius-4

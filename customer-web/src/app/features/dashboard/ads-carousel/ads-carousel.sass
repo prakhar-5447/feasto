@@ -3,7 +3,7 @@
 .ads-section
     max-width: 1200px
     margin: 0 auto
-    padding: 16px
+    padding:$space-16
 
     .carousel-wrapper
         position: relative
@@ -14,7 +14,7 @@
             transition: transform 0.45s ease
             .carousel-slide
                 min-width: 100%
-                padding: 4px
+                padding:$space-4
                 background: $color-bg-white
 
                 .ad-card
@@ -37,14 +37,14 @@
                         display: flex
                         flex-direction: column
                         justify-content: center
-                        padding: 64px
+                        padding: $space-64
                         background: linear-gradient(to right, $color-overlay-black-strong, rgba(0, 0, 0, 0))
 
                         h3
                             color: $color-text-white
                             font-size: $font-size-28
                             font-weight: $font-weight-bold
-                            margin-bottom: 6px
+                            margin-bottom:$space-4
 
                         p
                             color: $color-overlay-white-strong
@@ -66,22 +66,22 @@
             justify-content: center
 
             &.prev
-                left: 12px
+                left:$space-12
                 font-size: $font-size-16
 
             &.next
-                right: 12px
+                right:$space-12
                 font-size: $font-size-16
 
     .dots
         display: flex
         justify-content: center
-        margin-top: 14px
-        gap: 8px
+        margin-top:$space-12
+        gap:$space-8
 
         .dot
-            width: 8px
-            height: 8px
+            width:$space-8
+            height:$space-8
             border-radius: $radius-pill
             background: $color-bg-neutral
             cursor: pointer
@@ -89,4 +89,4 @@
 
             &.active
                 background: $color-bg-primary
-                width: 16px
+                width:$space-16

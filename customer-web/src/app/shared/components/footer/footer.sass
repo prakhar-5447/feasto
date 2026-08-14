@@ -3,18 +3,18 @@
 .footer
     background: $color-text-primary
     color: $color-border
-    padding: 60px 0
+    padding: $space-64 0
 
     .container
         max-width: 1200px
         margin: auto
-        padding: 0 16px
+        padding: 0$space-16
 
     .footer-grid
         display: grid
         grid-template-columns: 1fr
-        gap: 32px
-        margin-bottom: 40px
+        gap:$space-32
+        margin-bottom: $space-40
 
         @media (min-width: 768px)
             grid-template-columns: repeat(4,1fr)
@@ -23,12 +23,12 @@
         color: white
         font-size: $font-size-24
         font-weight: $font-weight-bold
-        margin-bottom: 12px
+        margin-bottom:$space-12
 
     h5
         color: white
         font-weight: $font-weight-semibold
-        margin-bottom: 14px
+        margin-bottom:$space-12
 
     p
         font-size: $font-size-14
@@ -39,7 +39,7 @@
         padding: 0
 
         li
-            margin-bottom: 8px
+            margin-bottom:$space-8
 
             a
                 font-size: $font-size-14
@@ -52,11 +52,11 @@
 
     .social-icons
         display: flex
-        gap: 12px
+        gap:$space-12
 
         a
-            width: 40px
-            height: 40px
+            width: $space-40
+            height: $space-40
             background: $color-bg-black
             border-radius: $radius-circle
             display: flex
@@ -72,6 +72,6 @@
 
     .footer-bottom
         border-top: $border-width-1 $border-style-solid $color-border
-        padding-top: 24px
+        padding-top:$space-24
         text-align: center
         font-size: $font-size-14

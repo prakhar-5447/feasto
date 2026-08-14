@@ -7,17 +7,17 @@
     .container
         max-width: 1200px
         margin: 0 auto
-        padding: 0 16px
+        padding: 0$space-16
         height: 86px
         display: flex
         align-items: center
         justify-content: space-between
-        gap: 16px
+        gap:$space-16
 
         .left
             display: flex
             align-items: center
-            gap: 32px
+            gap:$space-32
             flex: 1
             .logo
                 font-size: $font-size-24
@@ -26,10 +26,10 @@
 
             .search
                 display: flex
-                gap: 16px
+                gap:$space-16
                 align-items: center
                 background: $color-bg-white
-                padding: 12px 0px
+                padding:$space-12 0px
                 border-radius: $radius-4
                 box-shadow: $shadow-md
                 border: $border-width-1 $border-style-solid $color-overlay-black-subtle
@@ -37,11 +37,11 @@
                 max-width: 720px
                 .box
                     position: relative
-                    padding: 0px 8px
+                    padding: 0px$space-8
                     width: 100%
                     &:first-child
                         border-right: $border-width-1 $border-style-solid $color-border
-                        max-width: 280px
+                        max-width: 2$space-80
                         .dropdown
                             width: 320px
 
@@ -61,8 +61,8 @@
                             color: $color-text-muted
                             width: 100%
                             font-size: $font-size-16
-                            height: 28px
-                            padding: 0 8px
+                            height:$space-24
+                            padding: 0$space-8
                             border: $border-style-none
                             border-radius: $radius-4
                             font-weight: $font-weight-medium
@@ -76,7 +76,7 @@
                         left: 0
                         max-height: 720px
                         background: $color-bg-white
-                        box-shadow: 0 6px 18px $color-overlay-black-medium
+                        box-shadow: 0$space-4$space-16 $color-overlay-black-medium
                         z-index: $z-10
                         border-radius: $radius-8
                         overflow: hidden
@@ -87,7 +87,7 @@
                             font-size: $font-size-16
                             color: $color-text-secondary
                             cursor: pointer
-                            padding: 18px 16px
+                            padding:$space-16$space-16
                             &:not(:last-child)
                                 border-bottom: $border-width-1 $border-style-solid $color-border
                             &:hover
@@ -102,13 +102,13 @@
                             background: none
                             cursor: pointer
                             font-size: $font-size-14
-                            gap: 12px
-                            padding: 16px 16px
+                            gap:$space-12
+                            padding:$space-16$space-16
 
                             .gps-text
                                 display: flex
                                 flex-direction: column
-                                gap: 8px
+                                gap:$space-8
                                 align-items: flex-start
                                 font-size: $font-size-16
                                 color: $color-primary
@@ -116,8 +116,8 @@
                                     color: $color-text-muted
                                     font-size: $font-size-14
                             .loader-area
-                                width: 20px
-                                height: 20px
+                                width:$space-20
+                                height:$space-20
                                 fa-icon
                                     font-size: $font-size-18
                                     color: $color-primary
@@ -128,14 +128,14 @@
             width: auto
             display: flex
             align-items: center
-            gap: 16px
+            gap:$space-16
 
             .btn
                 width: auto
                 display: flex
                 align-items: center
-                gap: 8px
-                padding: 12px 16px
+                gap:$space-8
+                padding:$space-12$space-16
                 border-radius: $radius-4
                 cursor: pointer
                 border: $border-style-none
@@ -153,13 +153,13 @@
             .navbar-user
                 display: flex
                 align-items: center
-                gap: 12px
+                gap:$space-12
                 cursor: pointer
-                padding: 6px 10px
+                padding:$space-4$space-8
 
                 .avatar
-                    width: 36px
-                    height: 36px
+                    width:$space-32
+                    height:$space-32
                     border-radius: $radius-circle
                     background: $color-primary
                     font-size: $font-size-14

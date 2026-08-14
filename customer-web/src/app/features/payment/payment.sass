@@ -2,7 +2,7 @@
 
 .payment
     min-height: 60vh
-    padding: 52px 18px
+    padding: $space-48$space-16
     display: flex
     align-items: center
     justify-content: center
@@ -13,7 +13,7 @@
             display: flex
             justify-content: space-between
             align-items: flex-start
-            margin-bottom: 12px
+            margin-bottom:$space-12
 
             .amount-section
                 .payment-type
@@ -22,7 +22,7 @@
                     text-transform: uppercase
                     letter-spacing: $letter-spacing-payment
                     color: $color-text-secondary
-                    margin-bottom: 8px
+                    margin-bottom:$space-8
 
                 .amount
                     font-size: $font-size-24
@@ -38,11 +38,11 @@
             .secured-badge
                 display: flex
                 align-items: center
-                gap: 8px
+                gap:$space-8
                 background: $color-success-bg
                 color: $color-success
                 border: $border-width-1 $border-style-solid $color-success-border
-                padding: 6px 12px
+                padding:$space-4$space-12
                 border-radius: $radius-pill
                 font-size: $font-size-12
                 font-weight: $font-weight-semibold
@@ -62,12 +62,12 @@
                 background: $gradient-primary
                 color: white
                 min-height: 120px
-                padding: 18px
+                padding:$space-16
 
                 .title
                     font-size: $font-size-18
                     font-weight: $font-weight-bold
-                    margin-bottom: 2px
+                    margin-bottom:$space-2
 
                 .subtitle
                     font-size: $font-size-14
@@ -76,7 +76,7 @@
 
             .card-body
                 margin-top: -36px
-                padding: 0 24px
+                padding: 0$space-24
                 display: flex
                 flex-direction: column
                 align-items: center
@@ -84,10 +84,10 @@
                 .qr-frame
                     background: white
                     border-radius: $radius-16
-                    padding: 18px
+                    padding:$space-16
                     border: $border-width-1 $border-style-solid $color-border-subtle
                     box-shadow: $shadow-lg
-                    margin-bottom: 24px
+                    margin-bottom:$space-24
 
                     .qr-wrapper
                         position: relative
@@ -108,8 +108,8 @@
                             top: 50%
                             left: 50%
                             transform: translate(-50%,-50%)
-                            width: 32px
-                            height: 32px
+                            width:$space-32
+                            height:$space-32
                             background: $color-primary
                             color: white
                             display: flex
@@ -123,31 +123,31 @@
                     display: flex
                     flex-wrap: wrap
                     justify-content: center
-                    gap: 10px
-                    margin-bottom: 24px
+                    gap:$space-8
+                    margin-bottom:$space-24
 
                     .app-chip
                         background: $color-bg-light
                         border: $border-width-1 $border-style-solid $color-border-light
-                        padding: 6px 14px
+                        padding:$space-4$space-12
                         border-radius: $radius-8
                         font-size: $font-size-12
                         font-weight: $font-weight-semibold
                         color: $color-text-secondary
 
             .card-footer
-                padding: 24px
+                padding:$space-24
 
                 .expiry-row
                     display: flex
                     justify-content: space-between
                     align-items: center
-                    margin-bottom: 18px
+                    margin-bottom:$space-16
 
                     .expiry-left
                         display: flex
                         align-items: center
-                        gap: 6px
+                        gap:$space-4
                         color: $color-text-secondary
                         font-size: $font-size-16
                         fa-icon
@@ -176,9 +176,9 @@
 
             .loader-wrapper
                 position: relative
-                width: 100px
-                height: 100px
-                margin: 0 auto 24px
+                width: $space-100
+                height: $space-100
+                margin: 0 auto$space-24
 
                 .ring
                     position: absolute
@@ -201,18 +201,18 @@
                             opacity: 0
 
                 .ring-1
-                    border: 4px $border-style-solid $color-overlay-orange-light
+                    border:$space-4 $border-style-solid $color-overlay-orange-light
                     animation-delay: 0s
                 .ring-2
-                    border: 4px $border-style-solid $color-overlay-orange-medium
+                    border:$space-4 $border-style-solid $color-overlay-orange-medium
                     animation-delay: 0.5s
                 .ring-3
-                    border: 4px $border-style-solid $color-overlay-orange-medium
+                    border:$space-4 $border-style-solid $color-overlay-orange-medium
                     animation-delay: 1s
 
                 .loader-circle
                     position: absolute
-                    inset: 24px
+                    inset:$space-24
                     display: flex
                     justify-content: center
                     align-items: center
@@ -222,7 +222,7 @@
                     box-shadow: $shadow-primary-strong
 
             .processing-text
-                margin-bottom: 32px
+                margin-bottom:$space-32
                 h2
                     font-size: $font-size-28
                     font-weight: $font-weight-semibold
@@ -235,17 +235,17 @@
             .steps-card
                 background: $color-bg-white
                 border-radius: $radius-16
-                padding: 28px
-                width: 380px
+                padding:$space-24
+                width: 3$space-80
                 border: $border-width-1 $border-style-solid $color-border-light
 
                 .step
                     display: flex
                     align-items: center
-                    gap: 16px
+                    gap:$space-16
 
                     &:not(:last-child)
-                        margin-bottom: 16px
+                        margin-bottom:$space-16
 
                     .step-icon
                         display: flex
@@ -257,8 +257,8 @@
                         fa-icon
                             font-size: $font-size-18
                         span
-                            width: 18px
-                            height: 18px
+                            width:$space-16
+                            height:$space-16
                             background: $color-bg-neutral
                             border-radius: $radius-circle
 
@@ -276,7 +276,7 @@
         width: 100%
         display: flex
         justify-content: center
-        gap: 32px
+        gap:$space-32
         max-width: 992px
 
         .section-left
@@ -291,10 +291,10 @@
                 border-radius: $radius-24
                 display: flex
                 flex-direction: column
-                gap: 4px
-                padding: 24px
+                gap:$space-4
+                padding:$space-24
                 box-shadow: $shadow-success
-                margin-bottom: 24px
+                margin-bottom:$space-24
                 .card-top
                     flex: 1
                     text-align: center
@@ -305,7 +305,7 @@
                     .success-icon
                         width: 70px
                         height: 70px
-                        margin: 16px
+                        margin:$space-16
                         background: $color-overlay-white-light
                         border-radius: $radius-circle
                         display: flex
@@ -322,13 +322,13 @@
                         font-size: $font-size-16
 
                 .order-id
-                    margin-top: 24px
+                    margin-top:$space-24
                     display: inline-flex
                     width: 100%
                     text-align: center
                     flex-direction: column
                     background: $color-overlay-white-light
-                    padding: 14px 18px
+                    padding:$space-12$space-16
                     border-radius: $radius-12
 
                     .label
@@ -349,17 +349,17 @@
 
             .eta-card
                 margin: 0
-                padding: 24px
+                padding:$space-24
 
                 .eta-header
                     display: flex
                     align-items: center
-                    gap: 16px
-                    margin-bottom: 24px
+                    gap:$space-16
+                    margin-bottom:$space-24
 
                     .bike
-                        width: 48px
-                        height: 48px
+                        width: $space-48
+                        height: $space-48
                         background: $color-bg-orange-soft
                         color: $color-primary
                         border-radius: $radius-circle
@@ -382,18 +382,18 @@
             .delivery-progress
                 display: flex
                 justify-content: space-between
-                gap: 8px
+                gap:$space-8
 
                 .progress-step
                     flex: 1
                     text-align: center
 
                     .dot
-                        width: 14px
-                        height: 14px
+                        width:$space-12
+                        height:$space-12
                         background: $color-bg-neutral
                         border-radius: $radius-circle
-                        margin: 6px auto
+                        margin:$space-4 auto
 
                         &.active
                             background: $color-primary
@@ -408,39 +408,39 @@
             .summary-card
                 border-radius: $radius-16
                 border: $border-width-1 $border-style-solid $color-border-light
-                margin-bottom: 16px
+                margin-bottom:$space-16
                 overflow: hidden
-                padding: 16px 24px
+                padding:$space-16$space-24
                 .summary-header
                     display: flex
                     align-items: center
-                    gap: 12px
+                    gap:$space-12
                     border-bottom: $border-width-1 $border-style-solid #f3f4f6
                     font-weight: $font-weight-medium
-                    margin-bottom: 14px
+                    margin-bottom:$space-12
                     fa-icon
                         font-size: $font-size-16
 
                 .items
-                    margin-bottom: 14px
+                    margin-bottom:$space-12
                     .item-row
                         display: flex
                         justify-content: space-between
                         align-items: center
 
                         &:not(:last-child)
-                            margin-bottom: 12px
+                            margin-bottom:$space-12
 
                         .left
                             display: flex
                             align-items: center
-                            gap: 12px
+                            gap:$space-12
 
                             .qty
                                 background: $color-bg-light
                                 border: $border-width-1 $border-style-solid $color-border-light
                                 border-radius: $radius-4
-                                padding: 2px 8px
+                                padding:$space-2$space-8
                                 font-size: $font-size-12
                                 font-weight: $font-weight-semibold
 
@@ -456,12 +456,12 @@
                 .bill
                     background: $color-bg-light
                     border-top: $border-width-1 $border-style-solid $color-border-light
-                    padding-top: 16px
+                    padding-top:$space-16
 
                     .bill-row
                         display: flex
                         justify-content: space-between
-                        margin-bottom: 8px
+                        margin-bottom:$space-8
                         font-size: $font-size-14
                         color: $color-text-secondary
 
@@ -470,8 +470,8 @@
                             font-weight: $font-weight-semibold
 
                         &.total
-                            margin-top: 16px
-                            padding-top: 16px
+                            margin-top:$space-16
+                            padding-top:$space-16
                             border-top: $border-width-1 $border-style-solid $color-border
                             color: $color-text-primary
                             font-weight: $font-weight-bold
@@ -480,12 +480,12 @@
             .address-card
                 border-radius: $radius-16
                 border: $border-width-1 $border-style-solid $color-border-light
-                margin-bottom: 16px
+                margin-bottom:$space-16
                 overflow: hidden
-                padding: 16px 24px
+                padding:$space-16$space-24
                 display: flex
                 align-items: flex-start
-                gap: 12px
+                gap:$space-12
 
                 fa-icon 
                     font-size: $font-size-16
@@ -515,7 +515,7 @@
                 display: flex
                 justify-content: center
                 align-items: center
-                gap: 8px
+                gap:$space-8
                 transition: .25s
                 box-shadow: $shadow-primary
 
@@ -528,7 +528,7 @@
                     color: $color-bg-white
                     font-size: $font-size-14
             .support-text
-                margin-top: 18px
+                margin-top:$space-16
                 text-align: center
                 color: $color-text-secondary
                 font-size: $font-size-12
@@ -539,7 +539,7 @@
                     font-weight: $font-weight-bold
                     font-family: $font-family-monospace
 
-// @media (max-width: 480px)
+// @media (max-width: 4$space-80)
 
 // .payment-page,
 // .success-page

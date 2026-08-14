@@ -2,12 +2,12 @@
 
 .coupon
     background: $color-bg-white
-    padding: 20px
+    padding:$space-20
     border-radius: $radius-8
     box-shadow: $shadow-sm
     .header
         font-weight: $font-weight-semibold
-        margin-bottom: 10px
+        margin-bottom:$space-8
         h3
             font-size: $font-size-18
             fa-icon
@@ -17,7 +17,7 @@
         justify-content: space-between
         background: $color-bg-green-overlay
         border: $border-width-1 $border-style-solid $color-success
-        padding: 10px
+        padding:$space-8
         border-radius: $radius-8
 
         .code
@@ -40,12 +40,12 @@
 
     .input
         display: flex
-        gap: 10px
-        margin-bottom: 10px
+        gap:$space-8
+        margin-bottom:$space-8
 
         input
             flex: 1
-            padding: 8px
+            padding:$space-8
             border-radius: $radius-4
             border: $border-width-1 $border-style-solid $color-border
             font-size: $font-size-14
@@ -58,7 +58,7 @@
             cursor: pointer
             background: $color-primary
             color: $color-bg-white
-            padding: 8px 12px
+            padding:$space-8$space-12
             border: $border-style-none
             border-radius: $radius-4
 
@@ -71,17 +71,17 @@
         cursor: pointer
 
     .list
-        max-height: 380px
+        max-height: 3$space-80
         overflow-y: scroll
-        margin-top: 10px
+        margin-top:$space-8
         display: flex
         flex-direction: column
-        gap: 10px
+        gap:$space-8
         .item
             display: flex
             justify-content: space-between
             border: $border-width-1 $border-style-solid #eee
-            padding: 10px
+            padding:$space-8
             border-radius: $radius-8
 
             &.disabled

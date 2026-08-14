@@ -3,7 +3,7 @@
 .info
     display: flex
     flex-direction: column
-    gap: 4px
+    gap:$space-4
     background: $color-bg-white
     height: 290px
     h1
@@ -17,38 +17,38 @@
     .rating-container
         display: flex
         align-items: center
-        gap: 8px
+        gap:$space-8
         font-size: $font-size-16
         color: $color-text-secondary
         .rating
-            gap: 4px
+            gap:$space-4
             background: $color-success
             color: $color-bg-white
-            padding: 4px 8px
+            padding:$space-4$space-8
             border-radius: $radius-4
 
     .meta
         display: flex
         flex-direction: column
-        gap: 12px
+        gap:$space-12
         color: $color-text-secondary
         font-weight: $font-weight-medium
         font-size: $font-size-16
         .address
             display: flex
-            gap: 8px
+            gap:$space-8
             font-weight: $font-weight-regular
 
         .time
             display: flex
-            gap: 8px
+            gap:$space-8
             .container
                 display: flex
-                gap: 18px
+                gap:$space-16
                 font-weight: $font-weight-regular
                 .status
                     display: flex
-                    gap: 8px
+                    gap:$space-8
                     font-weight: $font-weight-regular
                     .open
                         color: $color-success
@@ -61,10 +61,10 @@
         .offer
             display: flex
             align-items: center
-            gap: 8px
+            gap:$space-8
             border: $border-width-2 $border-style-solid $color-border-primary
             background: $color-bg-orange-overlay
-            padding: 14px 8px
+            padding:$space-12$space-8
             border-radius: $radius-12
             font-size: $font-size-16
             color: $color-primary

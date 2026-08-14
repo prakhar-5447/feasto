@@ -19,7 +19,7 @@
 
     .image
         position: relative
-        height: 180px
+        height: 1$space-80
         overflow: hidden
         .gradient
             z-index: $z-10
@@ -37,44 +37,44 @@
         .offer
             z-index: $z-30
             position: absolute
-            bottom: 4px
-            left: 4px
+            bottom:$space-4
+            left:$space-4
             right: 0
-            padding: 10px 12px
+            padding:$space-8$space-12
             font-size: $font-size-12
             font-weight: $font-weight-semibold
             color: $color-bg-white
 
     .info
-        padding: 16px
+        padding:$space-16
 
         h3
             font-size: $font-size-18
             font-weight: $font-weight-bold
             color: $color-text-primary
-            margin-bottom: 4px
+            margin-bottom:$space-4
 
         p
             font-size: $font-size-14
             color: $color-text-secondary
-            margin-bottom: 10px
+            margin-bottom:$space-8
 
         .meta
             display: flex
             justify-content: space-between
             align-items: center
-            gap: 6px
+            gap:$space-4
             font-size: $font-size-14
             color: $color-text-muted
-            margin-bottom: 8px
+            margin-bottom:$space-8
 
             .rating
                 display: flex
                 align-items: center
-                gap: 4px
+                gap:$space-4
                 background: $color-success
                 color: $color-bg-white
-                padding: 4px 6px
+                padding:$space-4$space-4
                 border-radius: $radius-4
                 font-size: $font-size-12
                 font-weight: $font-weight-medium
@@ -84,7 +84,7 @@
             .time
                 display: flex
                 align-items: center
-                gap: 2px
+                gap:$space-2
                 font-size: $font-size-12
                 font-weight: $font-weight-medium
                 fa-icon
@@ -94,8 +94,8 @@
             display: flex
             justify-content: space-between
             align-items: center
-            gap: 6px
+            gap:$space-4
             font-size: $font-size-12
             color: $color-text-muted
-            padding: 6px 0px
+            padding:$space-4 0px
             border-top: $border-width-0-5 $border-style-solid $color-text-muted

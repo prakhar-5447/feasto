@@ -3,18 +3,18 @@
 .cities
     max-width: 1200px
     margin: 0 auto
-    padding: 40px 16px
+    padding: $space-40$space-16
     .title
         font-size: $font-size-20
         font-weight: $font-weight-bold
-        margin-bottom: 20px
+        margin-bottom:$space-20
         fa-icon
             color: $color-primary
             font-size: $font-size-20
     .grid
         display: grid
         grid-template-columns: 1fr
-        gap: 16px
+        gap:$space-16
 
         @media (min-width: 768px)
             grid-template-columns: repeat(2, 1fr)
@@ -50,7 +50,7 @@
                 display: flex
                 flex-direction: column
                 justify-content: flex-end
-                padding: 16px
+                padding:$space-16
                 background: linear-gradient(to top, $color-overlay-black-strong, transparent)
 
                 h3
@@ -63,7 +63,7 @@
                     font-size: $font-size-14
 
         .city-list-item
-            padding: 16px
+            padding:$space-16
             border: $border-width-1 $border-style-solid $color-border-light
             border-radius: $radius-4
             transition: all 0.2s
@@ -82,4 +82,4 @@
             .left
                 display: flex
                 align-items: center
-                gap: 6px
+                gap:$space-4

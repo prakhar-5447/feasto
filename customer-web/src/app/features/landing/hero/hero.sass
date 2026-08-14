@@ -1,23 +1,23 @@
 @use '../../../../styles/index' as *
 
 .hero
-    padding: 40px 0
+    padding: $space-40 0
     background: $color-bg-white
     .container
         max-width: 1200px
         margin: 0 auto
-        padding: 0 16px
+        padding: 0$space-16
 
         .hero-grid
             display: grid
             grid-template-columns: 1fr
-            gap: 32px
+            gap:$space-32
             align-items: center
 
             .hero-content
                 display: flex
                 flex-direction: column
-                gap: 24px
+                gap:$space-24
 
                 .hero-title
                     font-size: $font-size-40
@@ -36,28 +36,28 @@
                     display: flex
                     flex-direction: column
                     align-items: flex-start
-                    gap: 16px
+                    gap:$space-16
                     width: 100%
                     .search-box
                         display: flex
                         flex-direction: column
                         background: $color-bg-white
-                        padding: 12px 14px
+                        padding:$space-12$space-12
                         border-radius: $radius-8
                         box-shadow: $shadow-lg
-                        gap: 12px
+                        gap:$space-12
                         width: 100%
                         .search-field
                             display: flex
                             align-items: center
-                            gap: 8px
+                            gap:$space-8
                             flex: 1
 
                             input
                                 border: $border-style-none
                                 outline: none
                                 background-color: #f0f0f0
-                                padding: 12px
+                                padding:$space-12
                                 border-radius: $radius-4
                                 width: 100%
                                 font-size: $font-size-14
@@ -71,7 +71,7 @@
                         background: $color-primary
                         color: $color-bg-white
                         border: $border-style-none
-                        padding: 14px 28px
+                        padding:$space-12$space-24
                         font-size: $font-size-18
                         border-radius: $radius-8
                         cursor: pointer
@@ -94,7 +94,7 @@
                 grid-template-columns: 1fr 1fr
                 .hero-content
                     .hero-title
-                        font-size: 48px
+                        font-size: $space-48
                     .hero-search
                         .search-box
                             flex-direction: row
@@ -102,7 +102,7 @@
 
                             .search-field.location
                                 border-right: $border-width-1 $border-style-solid $color-border
-                                padding-right: 12px
+                                padding-right:$space-12
 
                 .hero-image
                     display: block
