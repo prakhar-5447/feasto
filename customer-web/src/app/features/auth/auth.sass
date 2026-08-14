@@ -17,7 +17,7 @@
         background: $color-bg-white
         border-radius: $radius-16
         padding: 32px
-        box-shadow: 0 10px 30px rgba(0, 0, 0, .05)
+        box-shadow: $shadow-lg
 
         .header
             text-align: center
@@ -91,7 +91,7 @@
                     &:focus
                         outline: none
                         border-color: $color-text-muted
-                        box-shadow: 0 0 0 2px rgba(0,0,0, 0.1)
+                        box-shadow: $shadow-focus
             .input
                 margin-bottom: 8px
                 input
@@ -104,7 +104,7 @@
                     &:focus
                         outline: none
                         border-color: $color-text-muted
-                        box-shadow: 0 0 0 2px rgba(0,0,0, 0.1)
+                        box-shadow: $shadow-focus
 
             .otp-container
                 display: flex
@@ -122,7 +122,7 @@
                     &:focus
                         outline: none
                         border-color: $color-text-muted
-                        box-shadow: 0 0 0 2px rgba(0,0,0, 0.1)
+                        box-shadow: $shadow-focus
                     &.filled
                         border-width: $border-width-2
                         border-color: $color-success
