@@ -23,7 +23,7 @@
             margin-bottom: 10px
 
             .user-name
-                font-weight: 600
+                font-weight: $font-weight-semibold
                 color: $color-text-primary
 
             .review-meta
@@ -33,7 +33,7 @@
                 margin-top: 4px
 
                 .review-date
-                    font-size: 13px
+                    font-size: $font-size-14
                     color: $color-text-secondary
 
                 .stars
@@ -42,7 +42,7 @@
                     gap: 4px
                     margin: 6px 0
                     .star
-                        font-size: 12px
+                        font-size: $font-size-12
                         color: $color-neutral-300
 
                         &.filled
@@ -54,7 +54,7 @@
         .review-comment
             margin-bottom: 12px
             color: $color-text-primary
-            line-height: 1.5
+            line-height: $line-height-normal
 
         .helpful-btn
             display: flex
@@ -62,7 +62,7 @@
             gap: 6px
             background: none
             border: $border-style-none
-            font-size: 14px
+            font-size: $font-size-14
             color: $color-text-secondary
             cursor: pointer
 
@@ -81,7 +81,7 @@
             border-radius: $radius-6
             background: white
             cursor: pointer
-            font-size: 14px
+            font-size: $font-size-14
             &:hover
                 background: $color-bg-gray
         .nav-btn:not(:disabled)
@@ -95,7 +95,7 @@
             border-radius: $radius-6
             background: white
             cursor: pointer
-            font-size: 16px
+            font-size: $font-size-16
             transition: all .2s
 
             &:hover
@@ -122,12 +122,12 @@
                 text-align: center
 
                 .rating-number
-                    font-size: 36px
-                    font-weight: 700
+                    font-size: $font-size-40
+                    font-weight: $font-weight-bold
                     color: $color-text-primary
 
                 .rating-count
-                    font-size: 14px
+                    font-size: $font-size-14
                     color: $color-text-secondary
 
                 .stars
@@ -136,7 +136,7 @@
                     gap: 4px
                     margin: 6px 0
                     .star
-                        font-size: 12px
+                        font-size: $font-size-12
                         color: $color-neutral-300
 
                         &.filled
@@ -149,15 +149,15 @@
                 flex: 1
                 border-left: $border-width-1 $border-style-solid $color-border-light
                 padding-left: 16px
-                font-size: 14px
+                font-size: $font-size-14
                 color: $color-text-secondary
         .ai-container
             padding: 16px 0px
             .btn
                 text-align: center
                 button
-                    font-size: 14px
-                    font-weight: 600
+                    font-size: $font-size-14
+                    font-weight: $font-weight-semibold
                     border: $border-style-none
                     background: none
                     cursor: pointer
@@ -165,8 +165,8 @@
 
         .form-area
             .form-title
-                font-size: 18px
-                font-weight: 500
+                font-size: $font-size-18
+                font-weight: $font-weight-medium
                 margin-bottom: 10px
 
             .review-textarea
@@ -192,7 +192,7 @@
                     gap: 4px
                     margin: 6px 0
                     .star
-                        font-size: 16px
+                        font-size: $font-size-16
                         color: $color-neutral-300
                         cursor: pointer
 
@@ -205,8 +205,8 @@
                 .form-button
                     .save-btn
                         color: $color-primary
-                        font-size: 16px
-                        font-weight: 600
+                        font-size: $font-size-16
+                        font-weight: $font-weight-semibold
                         background: none
                         border: $border-style-none
                         cursor: pointer

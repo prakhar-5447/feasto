@@ -18,15 +18,15 @@
             padding: 16px
             border-radius: $radius-10
             h2
-                font-size: 18px
-                font-weight: 600
+                font-size: $font-size-18
+                font-weight: $font-weight-semibold
                 margin-bottom: 12px
                 fa-icon
-                    font-size: 18px
+                    font-size: $font-size-18
 
             h4
-                font-size: 16px
-                font-weight: 400
+                font-size: $font-size-16
+                font-weight: $font-weight-regular
             .address-list
                 display: flex
                 flex-direction: column
@@ -37,14 +37,14 @@
                     border-radius: $radius-8
                     padding: 12px
                     cursor: pointer
-                    font-weight: 500
+                    font-weight: $font-weight-medium
                     h4
-                        font-weight: 600
-                        font-size: 16px
+                        font-weight: $font-weight-semibold
+                        font-size: $font-size-16
                         margin-bottom: 4px
                     p
-                        font-size: 14px
-                        line-height: 18px
+                        font-size: $font-size-14
+                        line-height: $line-height-tight
                         color: $color-text-secondary
                     &.active
                         border-color: $color-primary
@@ -54,7 +54,7 @@
                             color: $color-bg-white
 
                     &.new
-                        font-weight: 500
+                        font-weight: $font-weight-medium
                         fa-icon
                             margin-right: 8px
                             color: $color-primary
@@ -73,7 +73,7 @@
                 border-radius: $radius-8
                 padding: 8px 0px
                 .field
-                    font-weight: 400
+                    font-weight: $font-weight-regular
                     border: $border-width-2 $border-style-solid $color-primary
                     outline: none
                     border-radius: $radius-8
@@ -91,7 +91,7 @@
                     gap: 10px
                     cursor: pointer
                     user-select: none
-                    font-size: 14px
+                    font-size: $font-size-14
                     color: $color-text-secondary
 
                     input
@@ -159,11 +159,11 @@
                     gap: 4px
 
                     .method-title
-                        font-size: 16px
-                        font-weight: 500
+                        font-size: $font-size-16
+                        font-weight: $font-weight-medium
                         color: $color-text-primary
                     .method-subtitle
-                        font-size: 14px
+                        font-size: $font-size-14
                         color: $color-text-secondary
                     .payment-icons
                         display: none
@@ -214,8 +214,8 @@
                 border-radius: $radius-pill
                 cursor: pointer
                 transition: .25s
-                font-size: 14px
-                font-weight: 500
+                font-size: $font-size-14
+                font-weight: $font-weight-medium
 
                 &:hover
                     border-color: $color-primary
@@ -238,14 +238,14 @@
             margin-bottom: 24px
 
             h3
-                font-weight: 600
+                font-weight: $font-weight-semibold
                 margin-bottom: 10px
-                font-size: 24px
+                font-size: $font-size-24
             .header
                 margin-bottom: 12px
                 span
-                    font-weight: 600
-                    font-size: 16px
+                    font-weight: $font-weight-semibold
+                    font-size: $font-size-16
             .divider
                 border-bottom: $border-width-1 $border-style-solid $color-border-light
                 margin-bottom: 18px
@@ -255,8 +255,8 @@
                 display: flex
                 justify-content: space-between
                 margin-bottom: 2px
-                font-size: 14px
-                font-weight: 400
+                font-size: $font-size-14
+                font-weight: $font-weight-regular
                 color: $color-text-secondary
                 &.divider
                     border-bottom: $border-width-1 $border-style-solid $color-border-light
@@ -265,10 +265,10 @@
 
                 &.discount
                     color: $color-success
-                    font-weight: 500
-                    font-size: 14px
+                    font-weight: $font-weight-medium
+                    font-size: $font-size-14
                     fa-icon
-                        font-size: 14px
+                        font-size: $font-size-14
 
                 .applied
                     display: flex
@@ -286,29 +286,29 @@
                         width: 100%
                         .code
                             color: $color-success
-                            font-size: 16px
-                            font-weight: 600
+                            font-size: $font-size-16
+                            font-weight: $font-weight-semibold
 
                         .desc
-                            font-size: 12px
-                            font-weight: 500
+                            font-size: $font-size-12
+                            font-weight: $font-weight-medium
                             color: $color-text-secondary
 
             .total
                 display: flex
                 justify-content: space-between
                 font-weight: bold
-                font-size: 18px
+                font-size: $font-size-18
                 margin-top: 18px
                 border-top: $border-width-1 $border-style-solid $color-border-light
                 padding-top: 12px
-                font-weight: 600
+                font-weight: $font-weight-semibold
 
             .savings
                 margin-top: 8px
-                font-size: 14px
+                font-size: $font-size-14
                 color: $color-success
-                font-weight: 500
+                font-weight: $font-weight-medium
             .checkout
                 width: 100%
                 margin-top: 20px
@@ -316,9 +316,9 @@
                 background: $color-primary
                 color: $color-bg-white
                 border-radius: $radius-6
-                font-size: 18px
+                font-size: $font-size-18
                 border: $border-style-none
-                font-weight: 600
+                font-weight: $font-weight-semibold
                 cursor: pointer
                 span
-                    font-size: 16px
+                    font-size: $font-size-16

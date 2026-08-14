@@ -18,7 +18,7 @@
         border-radius: $radius-10
 
         h2
-            font-weight: 600
+            font-weight: $font-weight-semibold
             margin-bottom: 16px
 
         .item
@@ -39,11 +39,11 @@
                 flex: 1
 
                 h3
-                    font-weight: 600
-                    font-size: 18px
+                    font-weight: $font-weight-semibold
+                    font-size: $font-size-18
                 p
-                    font-weight: 500
-                    font-size: 16px
+                    font-weight: $font-weight-medium
+                    font-size: $font-size-16
                     color: $color-text-secondary
 
             .actions
@@ -56,13 +56,13 @@
                     background: transparent
                     cursor: pointer
                     color: $color-primary
-                    font-size: 14px
+                    font-size: $font-size-14
 
                 .qty-box
                     background: $color-bg-white
                     border: $border-width-1 $border-style-solid $color-primary
                     border-radius: $radius-6
-                    font-size: 14px
+                    font-size: $font-size-14
                     display: flex
                     align-items: center
                     gap: 4px
@@ -71,9 +71,9 @@
                         width: 28px
                         height: 28px
                         border-radius: $radius-6
-                        font-size: 14px
+                        font-size: $font-size-14
                     span
-                        font-size: 16px
+                        font-size: $font-size-16
 
     .billing-section
         flex: 2
@@ -87,38 +87,38 @@
             margin-bottom: 24px
 
             h3
-                font-weight: 600
+                font-weight: $font-weight-semibold
                 margin-bottom: 10px
-                font-size: 24px
+                font-size: $font-size-24
             .row
                 display: flex
                 justify-content: space-between
                 margin-bottom: 6px
-                font-size: 16px
-                font-weight: 400
+                font-size: $font-size-16
+                font-weight: $font-weight-regular
                 color: $color-text-secondary
                 &.discount
                     color: $color-success
-                    font-weight: 500
-                    font-size: 14px
+                    font-weight: $font-weight-medium
+                    font-size: $font-size-14
                     fa-icon
-                        font-size: 14px
+                        font-size: $font-size-14
 
             .total
                 display: flex
                 justify-content: space-between
                 font-weight: bold
-                font-size: 18px
+                font-size: $font-size-18
                 margin-top: 18px
                 border-top: $border-width-1 $border-style-solid $color-border-light
                 padding-top: 12px
-                font-weight: 600
+                font-weight: $font-weight-semibold
 
             .savings
                 margin-top: 8px
-                font-size: 14px
+                font-size: $font-size-14
                 color: $color-success
-                font-weight: 500
+                font-weight: $font-weight-medium
             .checkout
                 width: 100%
                 margin-top: 20px
@@ -126,9 +126,9 @@
                 background: $color-primary
                 color: $color-bg-white
                 border-radius: $radius-6
-                font-size: 18px
+                font-size: $font-size-18
                 border: $border-style-none
-                font-weight: 600
+                font-weight: $font-weight-semibold
                 cursor: pointer
 
     .empty-cart
@@ -136,7 +136,7 @@
         padding: 100px 20px
 
         h2
-            font-size: 24px
+            font-size: $font-size-24
 
         button
             margin-top: 20px

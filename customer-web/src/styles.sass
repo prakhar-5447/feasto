@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@use './styles/index' as *
+
 *
     margin: 0
     padding: 0
@@ -10,34 +12,34 @@ html,body
 @font-face
     font-family: 'Poppins'
     src: url('/src/assets/fonts/poppins/Poppins-Light.ttf') format('truetype')
-    font-weight: 300
+    font-weight: $font-weight-light
     font-style: normal
     font-display: swap
 
 @font-face
     font-family: 'Poppins'
     src: url('/src/assets/fonts/poppins/Poppins-Regular.ttf') format('truetype')
-    font-weight: 400
+    font-weight: $font-weight-regular
     font-style: normal
     font-display: swap
 
 @font-face
     font-family: 'Poppins'
     src: url('/src/assets/fonts/poppins/Poppins-Medium.ttf') format('truetype')
-    font-weight: 500
+    font-weight: $font-weight-medium
     font-style: normal
     font-display: swap
 
 @font-face
     font-family: 'Poppins'
     src: url('/src/assets/fonts/poppins/Poppins-SemiBold.ttf') format('truetype')
-    font-weight: 600
+    font-weight: $font-weight-semibold
     font-style: normal
     font-display: swap
 
 @font-face
     font-family: 'Poppins'
     src: url('/src/assets/fonts/poppins/Poppins-Bold.ttf') format('truetype')
-    font-weight: 700
+    font-weight: $font-weight-bold
     font-style: normal
     font-display: swap

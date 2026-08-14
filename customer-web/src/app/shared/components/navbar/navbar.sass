@@ -20,8 +20,8 @@
             gap: 32px
             flex: 1
             .logo
-                font-size: 24px
-                font-weight: 700
+                font-size: $font-size-24
+                font-weight: $font-weight-bold
                 color: $color-primary
 
             .search
@@ -54,18 +54,18 @@
                         width: 100%
 
                         fa-icon
-                            font-size: 18px
+                            font-size: $font-size-18
                             color: $color-primary
 
                         input
                             color: $color-text-muted
                             width: 100%
-                            font-size: 16px
+                            font-size: $font-size-16
                             height: 28px
                             padding: 0 8px
                             border: $border-style-none
                             border-radius: $radius-6
-                            font-weight: 500
+                            font-weight: $font-weight-medium
                             &:focus
                                 outline: none
                                 border-color: $color-text-muted
@@ -84,7 +84,7 @@
 
                         .suggestion
                             width: 100%
-                            font-size: 16px
+                            font-size: $font-size-16
                             color: $color-text-secondary
                             cursor: pointer
                             padding: 18px 16px
@@ -101,7 +101,7 @@
                             border: $border-style-none
                             background: none
                             cursor: pointer
-                            font-size: 14px
+                            font-size: $font-size-14
                             gap: 12px
                             padding: 16px 16px
 
@@ -110,16 +110,16 @@
                                 flex-direction: column
                                 gap: 8px
                                 align-items: flex-start
-                                font-size: 16px
+                                font-size: $font-size-16
                                 color: $color-primary
                                 p
                                     color: $color-text-muted
-                                    font-size: 14px
+                                    font-size: $font-size-14
                             .loader-area
                                 width: 20px
                                 height: 20px
                                 fa-icon
-                                    font-size: 18px
+                                    font-size: $font-size-18
                                     color: $color-primary
                             &:hover
                                 background: $color-bg-gray-soft
@@ -139,17 +139,17 @@
                 border-radius: $radius-6
                 cursor: pointer
                 border: $border-style-none
-                font-size: 14px
+                font-size: $font-size-14
                 &:first-child
-                    font-weight: 500
+                    font-weight: $font-weight-medium
                     background: $color-bg-white
                 fa-icon
-                    font-size: 18px
+                    font-size: $font-size-18
 
             .auth
                 background: $color-primary
                 color: $color-bg-white
-                font-weight: 600
+                font-weight: $font-weight-semibold
             .navbar-user
                 display: flex
                 align-items: center
@@ -162,8 +162,8 @@
                     height: 36px
                     border-radius: $radius-circle
                     background: $color-primary
-                    font-size: 14px
-                    font-weight: 600
+                    font-size: $font-size-14
+                    font-weight: $font-weight-semibold
                     display: flex
                     align-items: center
                     justify-content: center
@@ -172,8 +172,8 @@
                 .info
                     .name
                         color: $color-text-primary
-                        font-size: 16px
-                        font-weight: 600
+                        font-size: $font-size-16
+                        font-weight: $font-weight-semibold
 
 @media (max-width: 968px)
     .header

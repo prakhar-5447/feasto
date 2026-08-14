@@ -7,8 +7,8 @@
     background: $color-bg-white
     height: 290px
     h1
-        font-size: 32px
-        font-weight: 700
+        font-size: $font-size-32
+        font-weight: $font-weight-bold
         color: $color-text-primary
 
     p
@@ -18,7 +18,7 @@
         display: flex
         align-items: center
         gap: 8px
-        font-size: 16px
+        font-size: $font-size-16
         color: $color-text-secondary
         .rating
             gap: 4px
@@ -32,12 +32,12 @@
         flex-direction: column
         gap: 12px
         color: $color-text-secondary
-        font-weight: 500
-        font-size: 16px
+        font-weight: $font-weight-medium
+        font-size: $font-size-16
         .address
             display: flex
             gap: 8px
-            font-weight: 400
+            font-weight: $font-weight-regular
 
         .time
             display: flex
@@ -45,19 +45,19 @@
             .container
                 display: flex
                 gap: 18px
-                font-weight: 400
+                font-weight: $font-weight-regular
                 .status
                     display: flex
                     gap: 8px
-                    font-weight: 400
+                    font-weight: $font-weight-regular
                     .open
                         color: $color-success
-                        font-weight: 600
+                        font-weight: $font-weight-semibold
                     .close
                         color: $color-error
-                        font-weight: 600
+                        font-weight: $font-weight-semibold
         .price
-            font-size: 14px
+            font-size: $font-size-14
         .offer
             display: flex
             align-items: center
@@ -66,6 +66,6 @@
             background: $color-bg-orange-overlay
             padding: 14px 8px
             border-radius: $radius-12
-            font-size: 16px
+            font-size: $font-size-16
             color: $color-primary
-            font-weight: 600
+            font-weight: $font-weight-semibold

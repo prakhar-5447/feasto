@@ -21,14 +21,14 @@
                 background: transparent
                 cursor: pointer
                 transition: 0.2s
-                font-size: 16px
-                font-weight: 300
+                font-size: $font-size-16
+                font-weight: $font-weight-light
 
                 &.active
                     border-color: $color-primary
                     background: $gradient-menu-active
                     color: $color-primary
-                    font-weight: 600
+                    font-weight: $font-weight-semibold
 
     .content
         flex: 1
@@ -40,8 +40,8 @@
             margin-bottom: 20px
 
             h2
-                font-size: 16px
-                font-weight: 500
+                font-size: $font-size-16
+                font-weight: $font-weight-medium
                 margin-bottom: 12px
 
             .item
@@ -60,8 +60,8 @@
                         align-items: center
                         gap: 8px
                         h3
-                            font-size: 18px
-                            font-weight: 600
+                            font-size: $font-size-18
+                            font-weight: $font-weight-semibold
                         .type
                             width: 16px
                             height: 100%
@@ -83,14 +83,14 @@
                                 .circle
                                     background: #ea580c
                     p
-                        font-size: 14px
+                        font-size: $font-size-14
                         color: $color-text-secondary
                         margin-bottom: 6px
 
                     span
                         width: 100%
                         text-align: right
-                        font-weight: 600
+                        font-weight: $font-weight-semibold
                         color: $color-text-primary
 
                 .left
@@ -114,12 +114,12 @@
                             background: transparent
                             cursor: pointer
                             color: $color-primary
-                            font-size: 14px
+                            font-size: $font-size-14
                         .qty-box
                             background: $color-bg-white
                             border: $border-width-1 $border-style-solid $color-primary
                             border-radius: $radius-6
-                            font-size: 14px
+                            font-size: $font-size-14
                             display: flex
                             align-items: center
                             gap: 4px
@@ -127,9 +127,9 @@
                                 width: 28px
                                 height: 28px
                                 border-radius: $radius-6
-                                font-size: 14px
+                                font-size: $font-size-14
                             span
-                                font-size: 16px
+                                font-size: $font-size-16
 
                         .add-btn
                             padding: 4px 12px
@@ -138,5 +138,5 @@
                             border-radius: $radius-6
                             color: $color-primary
                             cursor: pointer
-                            font-weight: 600
-                            font-size: 16px
+                            font-weight: $font-weight-semibold
+                            font-size: $font-size-16
