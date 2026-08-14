@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { apiLimiter, authLimiter } from "./middlewares/rateLimit.middleware";
 import { securityMiddleware } from "./middlewares/security.middleware";
 
+import logRoutes from "./routes/log.routes";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import restaurantRoutes from "./routes/restaurant.routes";
@@ -41,6 +42,7 @@ app.post("/logs", (req: Request, res: Response) => {
 
 // Rate limiting
 app.use("/v1/auth", authLimiter);
+app.use("/v1/logs", logRoutes);
 app.use("/v1", apiLimiter);
 
 // Routes

@@ -1,13 +1,37 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import {
+  Inject,
+  Injectable,
+  Optional,
+  PLATFORM_ID
+} from '@angular/core';
+
+import {
+  isPlatformBrowser
+} from '@angular/common';
+
 import { HttpClient } from '@angular/common/http';
 import { REQUEST_ID } from '../tokens/request-id.token';
+
 @Injectable({
   providedIn: 'root'
 })
 export class LoggerService {
-  constructor(private http: HttpClient, @Optional() @Inject(REQUEST_ID) private requestId?: string) { }
-  // logger.service.ts
+
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID)
+    private platformId: Object,
+    @Optional()
+    @Inject(REQUEST_ID)
+    private requestId?: string
+  ) { }
+
   logClientRoute(url: string) {
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const payload = {
       type: 'CLIENT',
       method: 'GET',
@@ -19,10 +43,14 @@ export class LoggerService {
       timestamp: new Date().toISOString()
     };
 
-    // optional console
-    // console.log('[CLIENT]', payload);
-
-    // send to backend
-    this.http.post('/api/logs', payload, { headers: { 'x-client-log': 'true'} }).subscribe();
+    this.http.post(
+      '/api/logs',
+      payload,
+      {
+        headers: {
+          'x-client-log': 'true'
+        }
+      }
+    ).subscribe();
   }
 }

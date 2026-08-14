@@ -10,6 +10,7 @@ import { role } from "../middlewares/role.middleware";
 import validate from "../middlewares/validation.middleware";
 
 import { createRestaurantSchema } from "../validations/restaurant.validation";
+import upload from "../middlewares/upload.middleware";
 
 router.get("/nearby", restaurantController.getNearbyRestaurants);
 
@@ -17,6 +18,7 @@ router.post(
     "/",
     protect,
     role("restaurant_partner"),
+    upload.array("images", 5),
     validate(createRestaurantSchema),
     restaurantController.createRestaurant
 );
@@ -40,7 +42,7 @@ router.get(
 );
 
 router.get(
-    "/:slug",
+    "/slug/:slug",
     restaurantController.restaurantInfo
 );
 

@@ -47,3 +47,9 @@ export const updateFoodAvailability = (
         isAvailable
     );
 };
+
+export const filterFoods = (
+    query: any
+) => {
+    return foodRepo.filterFoods(query);
+};

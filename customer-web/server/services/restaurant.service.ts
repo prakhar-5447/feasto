@@ -3,10 +3,11 @@ import { createSlug } from "../utils/slug.utils";
 
 export const createRestaurant = async (
     userId: string,
-    data: any
+    data: any,
+    imagesUrl: any
 ) => {
     const restaurant = await restaurantRepo.createRestaurant({
-        ...data, slug: createSlug(data.name)
+        ...data, owner: userId, slug: createSlug(data.name), images: imagesUrl
     });
     const uniqueSlug = `${createSlug(data.name)}-${restaurant._id.toString()}`;
 

@@ -1,6 +1,7 @@
 import {
     Response,
-    NextFunction
+    NextFunction,
+    Request
 } from "express";
 
 import {
@@ -341,6 +342,27 @@ export const updateFoodAvailability = async (
             success: true,
             data: updatedFood
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const filterFoods = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const foods =
+            await foodService.filterFoods(
+                req.query
+            );
+
+        res.status(200).json({
+            success: true,
+            data: foods
+        });
+
     } catch (error) {
         next(error);
     }

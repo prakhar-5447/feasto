@@ -10,6 +10,7 @@ export interface IRestaurant extends Document {
     owner: Types.ObjectId;
     slug: string;
     description?: string;
+    images?: string[];
     address?: string;
     cuisine: string[];
     priceRange?: number;
@@ -19,6 +20,11 @@ export interface IRestaurant extends Document {
     isOpen: boolean;
     createdAt: Date;
     updatedAt: Date;
+    openTime: number;
+    closeTime: number;
+    offer?: string[];
+    priceForTwo?: number;
+    estimatedDeliveryTime?: number;
 }
 
 const restaurantSchema = new Schema<IRestaurant>(
@@ -36,6 +42,11 @@ const restaurantSchema = new Schema<IRestaurant>(
 
         description: {
             type: String,
+        },
+
+        images: {
+            type: [String],
+            default: []
         },
 
         address: {
@@ -72,15 +83,44 @@ const restaurantSchema = new Schema<IRestaurant>(
             type: Number,
             default: 0,
         },
+
         slug: {
             type: String,
             required: true,
             unique: true,
-            index: true,
+            index: true
         },
+
         isOpen: {
             type: Boolean,
             default: true,
+        },
+
+        openTime: {
+            type: Number,
+            required: true,
+            default: 9
+        },
+
+        closeTime: {
+            type: Number,
+            required: true,
+            default: 22
+        },
+
+        offer: {
+            type: [String],
+            default: []
+        },
+
+        priceForTwo: {
+            type: Number,
+            default: 0
+        },
+
+        estimatedDeliveryTime: {
+            type: Number,
+            default: 0
         },
     },
     { timestamps: true }
@@ -94,10 +134,6 @@ restaurantSchema.index({
 
 restaurantSchema.index({
     owner: 1
-});
-
-restaurantSchema.index({
-    slug: 1
 });
 
 const Restaurant =

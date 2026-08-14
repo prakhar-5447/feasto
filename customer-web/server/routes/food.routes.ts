@@ -28,6 +28,11 @@ router.get(
 );
 
 router.get(
+    "/filter",
+    foodController.filterFoods
+);
+
+router.get(
     "/:id",
     foodController.getFood
 );

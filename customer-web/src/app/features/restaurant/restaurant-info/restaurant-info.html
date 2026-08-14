@@ -3,9 +3,9 @@
     <p>{{ this.restaurantService.restaurant?.cuisine }}</p>
     <div class="rating-container">
         <div class="rating">
-            <fa-icon [icon]="faStar"></fa-icon> {{ this.restaurantService.restaurant?.rating }}
+            <fa-icon [icon]="faStar"></fa-icon> {{ this.restaurantService.restaurant?.avgRating }}
         </div>
-        <span>{{ this.restaurantService.restaurant?.reviewCount }} reviews</span>
+        <span>{{ this.restaurantService.restaurant?.totalReviews }} reviews</span>
     </div>
 
     <div class="meta">
@@ -26,7 +26,7 @@
                     }
                 </div>
                 <span class="dot">&#x2022;</span>
-                {{this.restaurantService.restaurant?.time}}
+                {{this.restaurantService.restaurant?.estimatedDeliveryTime}}
                 <span class="dot">&#x2022;</span>
                 {{this.restaurantService.restaurant?.distance}}
             </div>

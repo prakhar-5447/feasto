@@ -26,8 +26,8 @@ export const updateRestaurant = (
     id: string,
     data: Partial<IRestaurant>
 ): Promise<IRestaurant | null> => {
-    return Restaurant.findByIdAndUpdate(
-        id,
+    return Restaurant.findOneAndUpdate(
+        { _id: id },
         data,
         {
             new: true,

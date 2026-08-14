@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RestaurantCard } from '../../../shared/components/restaurant-card/restaurant-card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -19,7 +20,8 @@ export class RestaurantList implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -40,6 +42,9 @@ export class RestaurantList implements OnInit {
     food: string | null
   ) {
     const params: any = {};
+    if (!cuisine && !food) {
+      return;
+    }
 
     if (cuisine) {
       params.cuisine = cuisine;
@@ -50,15 +55,17 @@ export class RestaurantList implements OnInit {
     }
 
     this.http.get<any>(
-      '/api/v1/search/restaurants',
+      '/api/v1/foods/filter',
       { params }
     ).subscribe({
       next: (res) => {
         this.restaurants = res.data;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error(error);
         this.restaurants = [];
+        this.cdr.detectChanges();
       }
     });
   }

@@ -27,10 +27,17 @@ export const createRestaurant = async (
             return;
         }
 
+        const imageUrls = req.files
+            ? (req.files as Express.Multer.File[]).map(
+                (file: any) => file.path
+            )
+            : [];
+
         const restaurant =
             await restaurantService.createRestaurant(
                 user._id.toString(),
-                req.body
+                req.body,
+                imageUrls
             );
 
         res.status(201).json({

@@ -53,3 +53,34 @@ export const updateFoodAvailability = (
         }
     );
 };
+
+export const filterFoods = async (
+    query: any
+) => {
+
+    const filter: any = {
+        isAvailable: true
+    };
+
+    if (query.cuisine) {
+
+        filter.cuisine = {
+            $regex: query.cuisine,
+            $options: "i"
+        };
+    }
+
+    if (query.food) {
+
+        filter.name = {
+            $regex: query.food,
+            $options: "i"
+        };
+    }
+
+    return Food.find(filter)
+        .populate(
+            "restaurant",
+            "name slug"
+        );
+};
