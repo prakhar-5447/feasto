@@ -1,0 +1,20 @@
+<button [type]="type" [disabled]="disabled || loading" [class]="'button button-' + variant + ' button-' + size"
+    (click)="onClick($event)">
+
+    @if (loading) {
+    <span class="button-loader" aria-hidden="true"></span>
+    }
+
+    @if (!loading && icon && iconPosition === 'left') {
+    <fa-icon [icon]="icon" aria-hidden="true"></fa-icon>
+    }
+
+    <span class="button-content">
+        <ng-content></ng-content>
+    </span>
+
+    @if (!loading && icon && iconPosition === 'right') {
+    <fa-icon [icon]="icon" aria-hidden="true"></fa-icon>
+    }
+
+</button>
