@@ -1,8 +1,17 @@
 <div class="breadcrumb">
-    @for(crumb of breadcrumbs;track crumb.url){
-    @if($index < breadcrumbs.length -1 ){ <a [routerLink]="crumb.url">{{ crumb.label }}</a>
-        }
-        @if($index === breadcrumbs.length -1 ){ <span>{{ crumb.label }}</span>}
-            @if($index < breadcrumbs.length -1 ){ <span> / </span>}
-                }
+    @for (crumb of breadcrumbs; track crumb.url; let last = $last) {
+
+    @if (!last) {
+    <a [routerLink]="crumb.url">
+        {{ crumb.label }}
+    </a>
+
+    <span class="separator">/</span>
+    } @else {
+    <span class="current">
+        {{ crumb.label }}
+    </span>
+    }
+
+    }
 </div>

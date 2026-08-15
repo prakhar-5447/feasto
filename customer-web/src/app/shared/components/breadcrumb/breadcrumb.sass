@@ -3,13 +3,40 @@
 .breadcrumb
     max-width: 1200px
     margin: 0 auto
+    padding: $space-16
+
     font-size: $font-size-14
     color: $color-text-muted
-    padding:$space-16$space-16
 
     a
-        color: $color-error-bright
+        color: $color-primary
         text-decoration: none
 
         &:hover
+            color: $color-primary-hover
             text-decoration: underline
+
+    .separator
+        margin: 0 $space-8
+        color: $color-text-muted
+
+    .current
+        color: $color-text-primary
+
+    @media (max-width: $breakpoint-md)
+        padding: $space-12 $space-16
+        font-size: $font-size-12
+
+    @media (max-width: $breakpoint-xs)
+        padding: $space-8 $space-12
+        font-size: $font-size-12
+
+        white-space: nowrap
+        overflow-x: auto
+        scrollbar-width: none
+
+        &::-webkit-scrollbar
+            display: none
+
+        .separator
+            margin: 0 $space-4
