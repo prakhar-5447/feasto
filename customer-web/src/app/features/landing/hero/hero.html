@@ -1,34 +1,72 @@
 <section class="hero">
     <div class="container">
         <div class="hero-grid">
+
             <div class="hero-content">
-                <h2 class="hero-title">
+
+                <h1 class="hero-title">
                     Order Food from Your Favorite
                     <span class="highlight">Restaurants</span>
-                </h2>
+                </h1>
+
                 <p class="hero-description">
-                    Discover the best restaurants near you. Fast delivery, fresh food, and amazing deals!
+                    Discover the best restaurants near you.
+                    Fast delivery, fresh food, and amazing deals!
                 </p>
-                <div class="hero-search">
+
+                <form class="hero-search" aria-label="Find food" (ngSubmit)="findFood()">
+
                     <div class="search-box">
+
                         <div class="search-field location">
-                            <fa-icon [icon]="faLocationDot"></fa-icon>
-                            <input type="text" placeholder="Enter your delivery location" />
+
+                            <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>
+
+                            <label class="sr-only" for="delivery-location">
+                                Delivery location
+                            </label>
+
+                            <input id="delivery-location" name="deliveryLocation" type="text"
+                                placeholder="Enter your delivery location" autocomplete="address-level2" />
+
                         </div>
+
                         <div class="search-field">
-                            <fa-icon [icon]="faMagnifyingGlass"></fa-icon> <input type="text"
-                                placeholder="Search for restaurant or cuisine" />
+
+                            <fa-icon [icon]="faMagnifyingGlass" aria-hidden="true"></fa-icon>
+
+                            <label class="sr-only" for="restaurant-search">
+                                Search restaurant or cuisine
+                            </label>
+
+                            <input id="restaurant-search" name="search" type="search"
+                                placeholder="Search for restaurant or cuisine" autocomplete="off" />
+
                         </div>
+
                     </div>
-                    <button class="search-button" routerLink="/india" routerLinkActive="active">
+
+                    <app-button type="submit" variant="primary" size="lg" (clicked)="findFood()"
+                        aria-label="Delete item" data-testid="delete-button">
                         Find Food
-                    </button>
-                </div>
+                    </app-button>
+
+                </form>
+
             </div>
+
             <div class="hero-image">
-                <img loading="lazy" src="https://images.unsplash.com/photo-1617194191528-9a50cf609304?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                    alt="Food Delivery" />
+
+                <img src="https://images.unsplash.com/photo-1617194191528-9a50cf609304?crop=entropy&cs=tinysrgb&fit=crop&q=80&w=1080"
+                    srcset="
+                        https://images.unsplash.com/photo-1617194191528-9a50cf609304?crop=entropy&cs=tinysrgb&fit=crop&q=80&w=480 480w,
+                        https://images.unsplash.com/photo-1617194191528-9a50cf609304?crop=entropy&cs=tinysrgb&fit=crop&q=80&w=768 768w,
+                        https://images.unsplash.com/photo-1617194191528-9a50cf609304?crop=entropy&cs=tinysrgb&fit=crop&q=80&w=1080 1080w
+                    " sizes="(max-width: 767px) 0px, 50vw" width="1080" height="720" fetchpriority="high"
+                    decoding="async" alt="Delicious food ready for delivery" />
+
             </div>
+
         </div>
     </div>
 </section>

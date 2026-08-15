@@ -3,106 +3,129 @@
 .hero
     padding: $space-40 0
     background: $color-bg-white
-    .container
-        max-width: 1200px
-        margin: 0 auto
-        padding: 0$space-16
 
+    .container
+        max-width: $breakpoint-lg
+        margin: 0 auto
+        padding: 0 $space-16
+
+    .hero-grid
+        display: grid
+        grid-template-columns: 1fr
+        gap: $space-32
+        align-items: center
+
+    .hero-content
+        display: flex
+        flex-direction: column
+        gap: $space-24
+
+    .hero-title
+        font-size: $font-size-40
+        font-weight: $font-weight-bold
+        line-height: $line-height-tight
+        color: $color-text-primary
+
+        .highlight
+            color: $color-primary
+
+    .hero-description
+        font-size: $font-size-18
+        line-height: $line-height-normal
+        color: $color-text-secondary
+
+    .hero-search
+        display: flex
+        flex-direction: column
+        align-items: flex-start
+        gap: $space-16
+        width: 100%
+
+    .search-box
+        display: flex
+        flex-direction: column
+        gap: $space-12
+        width: 100%
+        padding: $space-12
+        background: $color-bg-white
+        border-radius: $radius-8
+        box-shadow: $shadow-lg
+
+    .search-field
+        display: flex
+        flex: 1
+        align-items: center
+        gap: $space-8
+
+        fa-icon
+            flex-shrink: 0
+            color: $color-primary
+            font-size: $font-size-18
+
+        label
+            display: none
+
+        input
+            width: 100%
+            padding: $space-12
+            background: $color-bg-gray
+            border: $border-style-none
+            border-radius: $radius-4
+            outline: none
+            font-size: $font-size-14
+            color: $color-text-primary
+
+            &::placeholder
+                color: $color-text-muted
+
+            &:focus
+                box-shadow: $shadow-focus
+
+    .hero-image
+        display: none
+
+        img
+            display: block
+            width: 100%
+            height: auto
+            border-radius: $radius-8
+            box-shadow: $shadow-lg
+
+@media (min-width: $breakpoint-md)
+    .hero
         .hero-grid
-            display: grid
-            grid-template-columns: 1fr
-            gap:$space-32
+            grid-template-columns: 1fr 1fr
+
+        .hero-title
+            font-size: $font-size-40
+
+        .search-box
+            flex-direction: row
             align-items: center
 
-            .hero-content
-                display: flex
-                flex-direction: column
-                gap:$space-24
+        .search-field.location
+            padding-right: $space-12
+            border-right: $border-width-1 $border-style-solid $color-border
 
-                .hero-title
-                    font-size: $font-size-40
-                    font-weight: $font-weight-bold
-                    color: $color-text-primary
-                    line-height: $line-height-tight
+        .hero-image
+            display: block
 
-                    .highlight
-                        color: $color-primary
-
-                .hero-description
-                    font-size: $font-size-18
-                    color: $color-text-secondary
-
-                .hero-search
-                    display: flex
-                    flex-direction: column
-                    align-items: flex-start
-                    gap:$space-16
-                    width: 100%
-                    .search-box
-                        display: flex
-                        flex-direction: column
-                        background: $color-bg-white
-                        padding:$space-12$space-12
-                        border-radius: $radius-8
-                        box-shadow: $shadow-lg
-                        gap:$space-12
-                        width: 100%
-                        .search-field
-                            display: flex
-                            align-items: center
-                            gap:$space-8
-                            flex: 1
-
-                            input
-                                border: $border-style-none
-                                outline: none
-                                background-color: #f0f0f0
-                                padding:$space-12
-                                border-radius: $radius-4
-                                width: 100%
-                                font-size: $font-size-14
-
-                            fa-icon
-                                color: $color-primary
-                                font-size: $font-size-18
-
-                    .search-button
-                        width: auto
-                        background: $color-primary
-                        color: $color-bg-white
-                        border: $border-style-none
-                        padding:$space-12$space-24
-                        font-size: $font-size-18
-                        border-radius: $radius-8
-                        cursor: pointer
-                        transition: background .2s
-                        &:hover
-                            background: $color-primary-hover
-
-            .hero-image
-                display: none
-
-                img
-                    width: 100%
-                    border-radius: $radius-8
-                    box-shadow: $shadow-2xl
-
-@media (min-width: 768px)
+@media (max-width: $breakpoint-xs)
     .hero
+        padding: $space-32 0
+
         .container
-            .hero-grid
-                grid-template-columns: 1fr 1fr
-                .hero-content
-                    .hero-title
-                        font-size: $space-48
-                    .hero-search
-                        .search-box
-                            flex-direction: row
-                            align-items: center
+            padding: 0 $space-12
 
-                            .search-field.location
-                                border-right: $border-width-1 $border-style-solid $color-border
-                                padding-right:$space-12
+        .hero-title
+            font-size: $font-size-32
 
-                .hero-image
-                    display: block
+        .hero-description
+            font-size: $font-size-16
+
+        .hero-search
+            gap: $space-12
+
+        .search-button
+            width: 100%
+            text-align: center
