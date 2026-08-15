@@ -1,26 +1,24 @@
 import { Component } from '@angular/core';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faClock,
-  faUtensils,
   faMotorcycle,
-  faStar
+  faStar,
+  faUtensils
 } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-why-choose-feasto',
-   standalone: true,
+  standalone: true,
   imports: [FontAwesomeModule],
   templateUrl: './why-choose-feasto.html',
-  styleUrl: './why-choose-feasto.sass',
+  styleUrl: './why-choose-feasto.sass'
 })
 export class WhyChooseFeasto {
-  faClock = faClock;
-  faUtensils = faUtensils;
-  faMotorcycle = faMotorcycle;
-  faStar = faStar;
 
-  features = [
+  readonly features = [
     {
       icon: faClock,
       title: 'Fast Delivery',

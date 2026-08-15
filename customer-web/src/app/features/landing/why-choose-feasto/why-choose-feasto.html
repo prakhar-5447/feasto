@@ -1,26 +1,35 @@
-<section class="features">
+<section class="features" aria-labelledby="features-title">
     <div class="container">
-        <div class="features-header">
-            <h3>Why Choose Feasto?</h3>
+
+        <header class="features-header">
+            <h2 id="features-title">
+                Why Choose Feasto?
+            </h2>
+
             <p>
-                We make food ordering simple, fast, and enjoyable
+                We make food ordering simple, fast, and enjoyable.
             </p>
-        </div>
-        <div class="features-grid">
-            @for(feature of features;track $index){
-            <div class="feature-card">
-                <div class="icon-wrapper">
+        </header>
+
+        <ul class="features-grid">
+            @for (feature of features; track feature.title) {
+            <li class="feature-card">
+
+                <div class="icon-wrapper" aria-hidden="true">
                     <fa-icon [icon]="feature.icon"></fa-icon>
                 </div>
-                <h4>
+
+                <h3>
                     {{ feature.title }}
-                </h4>
+                </h3>
+
                 <p>
                     {{ feature.description }}
                 </p>
-            </div>
-            }
 
-        </div>
+            </li>
+            }
+        </ul>
+
     </div>
 </section>
