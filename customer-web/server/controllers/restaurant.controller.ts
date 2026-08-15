@@ -7,9 +7,248 @@ import {
 import {
     AuthRequest
 } from "../middlewares/auth.middleware";
+import * as authService from "../services/auth.service";
 
 import * as restaurantService
     from "../services/restaurant.service";
+
+
+import {
+    generateToken,
+    generateRefreshToken,
+    verifyRefreshToken
+} from "../utils/token.utils";
+
+const otpStore = new Map<
+    string,
+    {
+        otp: string;
+        expiresAt: number;
+    }
+>();
+
+const generateOtp = (): string => {
+    return Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
+};
+
+const accessTokenCookieOptions = {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env['NODE_ENV'] === "production",
+    path: "/",
+    maxAge: 15 * 60 * 1000 // 15 minutes
+};
+
+
+const refreshTokenCookieOptions = {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env['NODE_ENV'] === "production",
+    path: "/api/v1/auth",
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+};
+
+export const restaurantPhoneAuth = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { phone } = req.body;
+
+        const { user } = await authService.phoneAuth(phone);
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                message: "Restaurant account not found"
+            });
+            return;
+        }
+
+        if (user.role !== "restaurant_partner") {
+            res.status(403).json({
+                success: false,
+                message: "Only restaurant partners can login here"
+            });
+            return;
+        }
+
+        const otp = generateOtp();
+
+        otpStore.set(phone, {
+            otp,
+            expiresAt: Date.now() + 5 * 60 * 1000
+        });
+
+        res.json({
+            success: true,
+            otp
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const restaurantCompleteSignup = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+
+    try {
+
+        const { phone } = req.body;
+        const { user } =
+            await authService.phoneAuth(phone);
+
+        if (user) {
+
+            res.status(400).json({
+                success: false,
+                message: "User already exists"
+            });
+
+            return;
+        }
+
+        req.body.role = "restaurant_partner"
+        const newUser =
+            await authService.completeSignup(
+                req.body
+            );
+
+        const accessToken =
+            generateToken(newUser);
+
+        const refreshToken =
+            generateRefreshToken(newUser);
+
+        res.cookie(
+            "accessToken",
+            accessToken,
+            accessTokenCookieOptions
+        );
+
+        res.cookie(
+            "refreshToken",
+            refreshToken,
+            refreshTokenCookieOptions
+        );
+
+
+        res.status(201).json({
+            success: true,
+            data: newUser
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+};
+
+export const restaurantVerifyOtp = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+
+    try {
+
+        const { phone, otp } = req.body;
+        const record = otpStore.get(phone);
+
+        if (!record) {
+
+            res.status(400).json({
+                success: false,
+                message: "OTP not found or expired"
+            });
+
+            return;
+        }
+
+        if (record.expiresAt < Date.now()) {
+
+            otpStore.delete(phone);
+
+            res.status(400).json({
+                success: false,
+                message: "OTP expired"
+            });
+
+            return;
+        }
+
+        if (record.otp !== otp) {
+
+            res.status(400).json({
+                success: false,
+                message: "Invalid OTP"
+            });
+
+            return;
+        }
+
+        otpStore.delete(phone);
+
+        const { user } =
+            await authService.phoneAuth(phone);
+
+        if (!user) {
+
+            res.json({
+                success: true,
+                isNewUser: true
+            });
+
+            return;
+        }
+
+        if (user.role !== "restaurant_partner") {
+            res.status(403).json({
+                success: false,
+                message: "Only restaurant partners can login here"
+            });
+            return;
+        }
+
+        const accessToken =
+            generateToken(user);
+
+        const refreshToken =
+            generateRefreshToken(user);
+
+        res.cookie(
+            "accessToken",
+            accessToken,
+            accessTokenCookieOptions
+        );
+
+        res.cookie(
+            "refreshToken",
+            refreshToken,
+            refreshTokenCookieOptions
+        );
+
+
+        res.json({
+            success: true,
+            isNewUser: false,
+            data: user
+        });
+
+    } catch (err) {
+
+        next(err);
+
+    }
+};
 
 export const createRestaurant = async (
     req: AuthRequest,
@@ -18,7 +257,6 @@ export const createRestaurant = async (
 ): Promise<void> => {
     try {
         const user = req.user;
-
         if (!user) {
             res.status(401).json({
                 success: false,
@@ -32,6 +270,19 @@ export const createRestaurant = async (
                 (file: any) => file.path
             )
             : [];
+
+        const existingRestaurant =
+            await restaurantService.getMyRestaurant(
+                user._id.toString()
+            );
+
+        if (existingRestaurant) {
+            res.status(400).json({
+                success: false,
+                message: "Restaurant already exists"
+            });
+            return;
+        }
 
         const restaurant =
             await restaurantService.createRestaurant(
@@ -257,19 +508,10 @@ export const updateRestaurant = async (
             return;
         }
 
-        const id =
-            req.params['id'] as string;
-
-        if (!id) {
-            res.status(400).json({
-                success: false,
-                message: "Restaurant ID is required"
-            });
-            return;
-        }
-
         const restaurant =
-            await restaurantService.getRestaurantInfo(id);
+            await restaurantService.getMyRestaurant(
+                user._id.toString()
+            );
 
         if (!restaurant) {
             res.status(404).json({
@@ -279,35 +521,17 @@ export const updateRestaurant = async (
             return;
         }
 
-        if (
-            restaurant.owner.toString() !==
-            user._id.toString()
-        ) {
-            res.status(403).json({
-                success: false,
-                message: "You can only update your own restaurant"
-            });
-            return;
-        }
-
         const updatedRestaurant =
             await restaurantService.updateRestaurant(
-                id,
+                restaurant._id.toString(),
                 req.body
             );
-
-        if (!updatedRestaurant) {
-            res.status(404).json({
-                success: false,
-                message: "Restaurant not found"
-            });
-            return;
-        }
 
         res.status(200).json({
             success: true,
             data: updatedRestaurant
         });
+
     } catch (error) {
         next(error);
     }
@@ -329,19 +553,10 @@ export const deleteRestaurant = async (
             return;
         }
 
-        const id =
-            req.params['id'] as string;
-
-        if (!id) {
-            res.status(400).json({
-                success: false,
-                message: "Restaurant ID is required"
-            });
-            return;
-        }
-
         const restaurant =
-            await restaurantService.getRestaurantInfo(id);
+            await restaurantService.getMyRestaurant(
+                user._id.toString()
+            );
 
         if (!restaurant) {
             res.status(404).json({
@@ -351,32 +566,15 @@ export const deleteRestaurant = async (
             return;
         }
 
-        if (
-            restaurant.owner.toString() !==
-            user._id.toString()
-        ) {
-            res.status(403).json({
-                success: false,
-                message: "You can only delete your own restaurant"
-            });
-            return;
-        }
-
-        const deletedRestaurant =
-            await restaurantService.deleteRestaurant(id);
-
-        if (!deletedRestaurant) {
-            res.status(404).json({
-                success: false,
-                message: "Restaurant not found"
-            });
-            return;
-        }
+        await restaurantService.deleteRestaurant(
+            restaurant._id.toString()
+        );
 
         res.status(200).json({
             success: true,
             message: "Restaurant deleted successfully"
         });
+
     } catch (error) {
         next(error);
     }

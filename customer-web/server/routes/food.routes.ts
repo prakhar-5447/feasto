@@ -14,16 +14,16 @@ import validate from "../middlewares/validation.middleware";
 import { createFoodSchema } from "../validations/food.validation";
 
 router.post(
-    "/restaurant/:restaurantId/foods",
+    "/restaurant/menu",
     protect,
     role("restaurant_partner"),
-    validate(createFoodSchema),
     upload.single("image"),
+    validate(createFoodSchema),
     foodController.addFood
 );
 
 router.get(
-    "/restaurant/:restaurantId/foods",
+    "/restaurant/:restaurantSlug/foods",
     foodController.getRestaurantMenu
 );
 

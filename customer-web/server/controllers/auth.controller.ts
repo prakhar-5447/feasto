@@ -48,35 +48,28 @@ export const phoneAuth = async (
 
     const { phone } = req.body;
 
-    const { user } =
-      await authService.phoneAuth(phone);
-    const otp = generateOtp();
+    const { user } = await authService.phoneAuth(phone);
 
-
-    otpStore.set(phone, {
-      otp,
-      expiresAt:
-        Date.now() +
-        5 * 60 * 1000
-    });
-
-    if (user) {
-
-      res.json({
-        success: true,
-        isNewUser: false,
-        otp
+    if (user && user.role !== "customer") {
+      res.status(403).json({
+        success: false,
+        message: "Only customers can login here"
       });
-
       return;
     }
 
-    res.json({
-      success: true,
-      isNewUser: true,
-      otp
+    const otp = generateOtp();
+
+    otpStore.set(phone, {
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000
     });
 
+    res.json({
+      success: true,
+      isNewUser: !user,
+      otp
+    });
   } catch (err) {
 
     next(err);
@@ -142,6 +135,14 @@ export const verifyOtp = async (
       return;
     }
 
+    if (user.role !== "customer") {
+      res.status(403).json({
+        success: false,
+        message: "Only Customer can login here"
+      });
+      return;
+    }
+
     const accessToken =
       generateToken(user);
 
@@ -196,6 +197,7 @@ export const completeSignup = async (
       return;
     }
 
+    req.body.role = "customer"
     const newUser =
       await authService.completeSignup(
         req.body

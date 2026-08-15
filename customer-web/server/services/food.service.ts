@@ -15,9 +15,10 @@ export const getRestaurantMenu = (
 };
 
 export const addFood = (
-    data: any
-) => {
-    return foodRepo.createFood(data);
+    data: any,
+    restaurantId: string,
+    imageUrl: any) => {
+    return foodRepo.createFood({ ...data, restaurant: restaurantId, image: imageUrl });
 };
 
 export const updateFood = (

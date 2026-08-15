@@ -140,12 +140,14 @@ export class Auth {
 
     this.loading = true;
 
-    this.http.post('/api/v1/auth/phone-auth', {
-      phone: this.phoneNumber
-    }, { withCredentials: true })
-      .subscribe((res: any) => {
-
+    this.http.post(
+      '/api/v1/auth/phone-auth',
+      { phone: this.phoneNumber },
+      { withCredentials: true }
+    ).subscribe({
+      next: (res: any) => {
         this.loading = false;
+
         if (res.isNewUser) {
           this.step.set('details');
           this.startResendTimer();
@@ -153,7 +155,19 @@ export class Auth {
           console.log("OTP:", res.otp);
           this.step.set('otp');
         }
-      });
+      },
+
+      error: (err) => {
+        this.loading = false;
+
+        if (err.status === 403) {
+          //show alert
+          setTimeout(() => {
+            this.closeAuth.emit();
+          }, 500);
+        }
+      }
+    });
   }
 
   onPhoneChange(value: string) {

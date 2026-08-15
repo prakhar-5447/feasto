@@ -14,6 +14,9 @@ import * as foodService
 import * as restaurantService
     from "../services/restaurant.service";
 
+import { validateFoodOwnership } from "../utils/food.helper";
+
+
 export const addFood = async (
     req: AuthRequest,
     res: Response,
@@ -31,8 +34,8 @@ export const addFood = async (
         }
 
         const restaurant =
-            await restaurantService.getRestaurant(
-                req.params['restaurantId'] as string
+            await restaurantService.getMyRestaurant(
+                user._id.toString()
             );
 
         if (!restaurant) {
@@ -43,28 +46,25 @@ export const addFood = async (
             return;
         }
 
-        if (
-            restaurant.owner.toString() !==
-            user._id.toString()
-        ) {
-            res.status(403).json({
+        if (!req.file?.path) {
+            res.status(400).json({
                 success: false,
-                message: "You do not own this restaurant"
+                message: "Food image is required"
             });
             return;
         }
 
-        const food =
-            await foodService.addFood({
-                ...req.body,
-                restaurant: restaurant._id,
-                image: req.file?.path
-            });
+        const food = await foodService.addFood(
+            req.body,
+            restaurant._id.toString(),
+            req.file?.path
+        );
 
         res.status(201).json({
             success: true,
             data: food
         });
+
     } catch (error) {
         next(error);
     }
@@ -78,7 +78,7 @@ export const getRestaurantMenu = async (
     try {
         const restaurant =
             await restaurantService.getRestaurant(
-                req.params['restaurantId'] as string
+                req.params['restaurantSlug'] as string
             );
 
         if (!restaurant) {
@@ -91,7 +91,7 @@ export const getRestaurantMenu = async (
 
         const foods =
             await foodService.getRestaurantMenu(
-                req.params['restaurantId'] as string
+                restaurant._id as string
             );
 
         res.status(200).json({
@@ -137,6 +137,7 @@ export const updateFood = async (
     next: NextFunction
 ): Promise<void> => {
     try {
+
         const user = req.user;
 
         if (!user) {
@@ -147,46 +148,16 @@ export const updateFood = async (
             return;
         }
 
-        const food =
-            await foodService.getFood(
-                req.params['id'] as string
-            );
+        const foodId = req.params["id"] as string;
 
-        if (!food) {
-            res.status(404).json({
-                success: false,
-                message: "Food not found"
-            });
-            return;
-        }
-
-        const restaurant =
-            await restaurantService.getRestaurant(
-                food.restaurant.toString()
-            );
-
-        if (!restaurant) {
-            res.status(404).json({
-                success: false,
-                message: "Restaurant not found"
-            });
-            return;
-        }
-
-        if (
-            restaurant.owner.toString() !==
+        await validateFoodOwnership(
+            foodId,
             user._id.toString()
-        ) {
-            res.status(403).json({
-                success: false,
-                message: "You do not own this restaurant"
-            });
-            return;
-        }
+        );
 
         const updatedFood =
             await foodService.updateFood(
-                req.params['id'] as string,
+                foodId,
                 req.body
             );
 
@@ -194,7 +165,38 @@ export const updateFood = async (
             success: true,
             data: updatedFood
         });
-    } catch (error) {
+
+    } catch (error: any) {
+
+        if (error.message === "Food not found") {
+            res.status(404).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
+        if (
+            error.message === "Restaurant not found"
+        ) {
+            res.status(404).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
+        if (
+            error.message ===
+            "You do not own this restaurant"
+        ) {
+            res.status(403).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
         next(error);
     }
 };
@@ -205,6 +207,7 @@ export const deleteFood = async (
     next: NextFunction
 ): Promise<void> => {
     try {
+
         const user = req.user;
 
         if (!user) {
@@ -215,52 +218,43 @@ export const deleteFood = async (
             return;
         }
 
-        const food =
-            await foodService.getFood(
-                req.params['id'] as string
-            );
+        const foodId = req.params["id"] as string;
 
-        if (!food) {
-            res.status(404).json({
-                success: false,
-                message: "Food not found"
-            });
-            return;
-        }
-
-        const restaurant =
-            await restaurantService.getRestaurant(
-                food.restaurant.toString()
-            );
-
-        if (!restaurant) {
-            res.status(404).json({
-                success: false,
-                message: "Restaurant not found"
-            });
-            return;
-        }
-
-        if (
-            restaurant.owner.toString() !==
+        await validateFoodOwnership(
+            foodId,
             user._id.toString()
-        ) {
-            res.status(403).json({
-                success: false,
-                message: "You do not own this restaurant"
-            });
-            return;
-        }
+        );
 
         await foodService.deleteFood(
-            req.params['id'] as string
+            foodId
         );
 
         res.status(200).json({
             success: true,
             message: "Food deleted successfully"
         });
-    } catch (error) {
+
+    } catch (error: any) {
+
+        if (error.message === "Food not found") {
+            res.status(404).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
+        if (
+            error.message ===
+            "You do not own this restaurant"
+        ) {
+            res.status(403).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
         next(error);
     }
 };
@@ -271,6 +265,7 @@ export const updateFoodAvailability = async (
     next: NextFunction
 ): Promise<void> => {
     try {
+
         const user = req.user;
 
         if (!user) {
@@ -281,60 +276,30 @@ export const updateFoodAvailability = async (
             return;
         }
 
-        const food =
-            await foodService.getFood(
-                req.params['id'] as string
-            );
+        const foodId = req.params["id"] as string;
 
-        if (!food) {
-            res.status(404).json({
-                success: false,
-                message: "Food not found"
-            });
-            return;
-        }
-
-        const restaurant =
-            await restaurantService.getRestaurant(
-                food.restaurant.toString()
-            );
-
-        if (!restaurant) {
-            res.status(404).json({
-                success: false,
-                message: "Restaurant not found"
-            });
-            return;
-        }
-
-        if (
-            restaurant.owner.toString() !==
+        await validateFoodOwnership(
+            foodId,
             user._id.toString()
-        ) {
-            res.status(403).json({
-                success: false,
-                message: "You do not own this restaurant"
-            });
-            return;
-        }
+        );
 
-        const {
-            isAvailable
-        } = req.body;
+        const { isAvailable } = req.body;
 
         if (
-            typeof isAvailable !== "boolean"
+            typeof isAvailable !==
+            "boolean"
         ) {
             res.status(400).json({
                 success: false,
-                message: "isAvailable must be boolean"
+                message:
+                    "isAvailable must be boolean"
             });
             return;
         }
 
         const updatedFood =
             await foodService.updateFoodAvailability(
-                req.params['id'] as string,
+                foodId,
                 isAvailable
             );
 
@@ -342,7 +307,28 @@ export const updateFoodAvailability = async (
             success: true,
             data: updatedFood
         });
-    } catch (error) {
+
+    } catch (error: any) {
+
+        if (error.message === "Food not found") {
+            res.status(404).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
+        if (
+            error.message ===
+            "You do not own this restaurant"
+        ) {
+            res.status(403).json({
+                success: false,
+                message: error.message
+            });
+            return;
+        }
+
         next(error);
     }
 };

@@ -46,10 +46,16 @@ export class Breadcrumb {
       label = child.snapshot.params['city'];
     }
     if (label === 'restaurant') {
-      label = child.snapshot.params['restaurant'];
+      label = child.snapshot.params['restaurant']
+        ?.split('-')
+        .slice(0, -1) // remove mongo id if slug contains id
+        .join(' ');
     }
     if (label === 'cart' || label === 'checkout') {
-      const restaurantParam = child.snapshot.params['restaurant'];
+      const restaurantParam = child.snapshot.params['restaurant']
+        ?.split('-')
+        .slice(0, -1) // remove mongo id if slug contains id
+        .join(' ');
 
       if (restaurantParam) {
         const formattedRestaurant = restaurantParam
@@ -66,7 +72,7 @@ export class Breadcrumb {
         });
       }
     }
-  
+
     if (label) {
       label = label.split('-')
         .filter(Boolean)

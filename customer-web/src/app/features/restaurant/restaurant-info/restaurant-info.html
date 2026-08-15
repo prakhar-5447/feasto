@@ -18,17 +18,17 @@
                 <div class="status">
                     @if(isOpenNow()){
                     <span class="open">Open Now</span>
-                    - Closes at{{this.restaurantService.restaurant?.closeTime}}
+                    - Closes at {{this.restaurantService.restaurant?.closeTime}} : 00
                     }
                     @if(!isOpenNow()){
                     <span class="close">Closed</span>
-                    - Opens at {{this.restaurantService.restaurant?.openTime}}
+                    - Opens at {{this.restaurantService.restaurant?.openTime}} : 00
                     }
                 </div>
                 <span class="dot">&#x2022;</span>
-                {{this.restaurantService.restaurant?.estimatedDeliveryTime}}
+                {{this.restaurantService.restaurant?.estimatedDeliveryTime}} min
                 <span class="dot">&#x2022;</span>
-                {{this.restaurantService.restaurant?.distance}}
+                {{this.distance}}
             </div>
         </span>
         <span class="price">&#x20B9;{{this.restaurantService.restaurant?.priceForTwo}} for Two</span>

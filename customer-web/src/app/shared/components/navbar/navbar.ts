@@ -105,6 +105,10 @@ export class Navbar {
       navigator.geolocation.getCurrentPosition(
         position => {
           const { latitude, longitude } = position.coords;
+          this.locationServicePersistence.setLocation(
+            latitude,
+            longitude
+          );
           this.locationService
             .reverseGeocode(latitude, longitude)
             .subscribe((data: any) => {

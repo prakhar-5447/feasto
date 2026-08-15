@@ -8,6 +8,7 @@ import { protect } from "../middlewares/auth.middleware";
 import { role } from "../middlewares/role.middleware";
 
 import validate from "../middlewares/validation.middleware";
+import phoneValidation from '../validations/auth.validation';
 
 import { createRestaurantSchema } from "../validations/restaurant.validation";
 import upload from "../middlewares/upload.middleware";
@@ -21,6 +22,22 @@ router.post(
     upload.array("images", 5),
     validate(createRestaurantSchema),
     restaurantController.createRestaurant
+);
+
+router.post(
+    "/phone-auth",
+    phoneValidation,
+    restaurantController.restaurantPhoneAuth
+);
+
+router.post(
+    "/verify-otp",
+    restaurantController.restaurantVerifyOtp
+);
+
+router.post(
+    "/complete-profile",
+    restaurantController.restaurantCompleteSignup
 );
 
 router.get(
@@ -47,14 +64,14 @@ router.get(
 );
 
 router.patch(
-    "/:id",
+    "/update",
     protect,
     role("restaurant_partner"),
     restaurantController.updateRestaurant
 );
 
 router.delete(
-    "/:id",
+    "/delete",
     protect,
     role("restaurant_partner"),
     restaurantController.deleteRestaurant

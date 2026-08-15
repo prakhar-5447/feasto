@@ -15,10 +15,18 @@ export const createRestaurant = async (
 };
 
 export const getRestaurant = (
-    restaurantId: string
+    restaurantSLug: string
+) => {
+    return restaurantRepo.findBySlug(
+        restaurantSLug
+    );
+};
+
+export const getRestaurantById = (
+    id: string
 ) => {
     return restaurantRepo.findById(
-        restaurantId
+        id
     );
 };
 

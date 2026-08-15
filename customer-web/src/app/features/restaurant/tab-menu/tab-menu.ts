@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChildren, HostListener } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CartService } from '../../../core/services/cart.service';
 import { RestaurantService } from '../../../core/services/restaurent.service';
 import { NgClass } from '@angular/common';
@@ -7,6 +7,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faPlus, faMinus
 } from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-tab-menu',
   standalone: true,
@@ -25,7 +27,65 @@ export class TabMenu {
   constructor(
     public cartService: CartService,
     public restaurantService: RestaurantService,
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient,
+    public route: ActivatedRoute,
+    private router: Router
   ) { }
+
+  ngOnInit() {
+    this.route.parent?.paramMap.subscribe(params => {
+
+      const slug = params.get('restaurant');
+
+      if (!slug) {
+        this.router.navigate(["/"]);
+        return;
+      }
+      this.loadFoods(slug);
+    });
+  }
+
+
+  loadFoods(slug: string) {
+    this.http.get(
+      `/api/v1/foods/restaurant/${slug}/foods`
+    ).subscribe({
+      next: (res: any) => {
+
+        const foods = res.data;
+
+        this.restaurantService.menu = {
+          categories: this.groupByCuisine(foods)
+        };
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+
+  groupByCuisine(foods: any[]) {
+    const grouped: any = {};
+
+    foods.forEach(food => {
+      const cuisine = food.cuisine || 'Others';
+
+      if (!grouped[cuisine]) {
+        grouped[cuisine] = [];
+      }
+
+      grouped[cuisine].push(food);
+    });
+
+    return Object.keys(grouped).map(key => ({
+      name: key,
+      items: grouped[key]
+    }));
+  }
 
   @HostListener('window:scroll', [])
   onScroll() {
@@ -40,8 +100,6 @@ export class TabMenu {
     })
 
     this.activeCategory = activeIndex;
-    console.log(this.activeCategory);
-
   }
 
   scrollToCategory(index: number) {

@@ -8,6 +8,12 @@ export const findById = (
     return Restaurant.findById(id);
 };
 
+export const findBySLug = (
+    restaurantSLug: string
+): Promise<IRestaurant | null> => {
+    return Restaurant.findOne({ slug: restaurantSLug });
+};
+
 export const findByOwner = (
     ownerId: string
 ): Promise<IRestaurant | null> => {
