@@ -14,7 +14,8 @@
     white-space: nowrap
 
     cursor: pointer
-    transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease
+
+    transition: $transition-background, $transition-color, $transition-border, $transition-shadow, $transition-transform
 
     &:disabled
         opacity: .6
@@ -27,16 +28,19 @@
 .button-sm
     min-height: 32px
     padding: $space-4 $space-12
+
     font-size: $font-size-14
 
 .button-md
     min-height: 40px
     padding: $space-8 $space-16
+
     font-size: $font-size-16
 
 .button-lg
     min-height: 48px
     padding: $space-12 $space-24
+
     font-size: $font-size-18
 
 .button-primary
@@ -79,9 +83,10 @@
     width: 40px
     height: 40px
     padding: 0
-    border-radius: $radius-circle
 
+    border-radius: $radius-circle
     background: transparent
+
     color: $color-text-primary
 
     &:hover:not(:disabled)
