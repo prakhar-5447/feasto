@@ -2,7 +2,6 @@
 
 .how-it-works
     padding: $space-80 0
-
     background: $color-bg-white
 
     .container
@@ -12,14 +11,12 @@
 
     .section-header
         margin-bottom: $space-48
-
         text-align: center
 
         h2
             margin-bottom: $space-12
 
             color: $color-text-primary
-
             font-size: $font-size-32
             font-weight: $font-weight-bold
             line-height: $line-height-tight
@@ -34,7 +31,7 @@
     .steps-grid
         display: grid
         grid-template-columns: 1fr
-        gap: $space-32
+        gap: $space-24
 
         margin: 0
         padding: 0
@@ -43,7 +40,6 @@
 
     .step-card
         position: relative
-
         text-align: center
 
     .content
@@ -53,7 +49,6 @@
 
     .icon-wrapper
         position: relative
-
         margin: 0 auto
 
     .icon-circle
@@ -98,8 +93,10 @@
         line-height: $line-height-tight
 
     p
-        color: $color-text-secondary
+        max-width: $container-xs
+        margin: 0 auto
 
+        color: $color-text-secondary
         font-size: $font-size-14
         line-height: $line-height-normal
 
@@ -119,11 +116,49 @@
     .how-it-works
         .steps-grid
             grid-template-columns: repeat(2, 1fr)
+            gap: $space-32
+
+        .step-card
+            p
+                max-width: $container-sm
 
 @media (min-width: $breakpoint-lg)
     .how-it-works
         .steps-grid
             grid-template-columns: repeat(4, 1fr)
+            gap: $space-24
+
+        .step-card
+            p
+                max-width: $container-xs
 
         .connector
             display: block
+
+@media (max-width: $breakpoint-xs)
+    .how-it-works
+        padding: $space-48 0
+
+        .container
+            padding: 0 $space-12
+
+        .section-header
+            margin-bottom: $space-32
+
+            h2
+                font-size: $font-size-28
+
+        .steps-grid
+            gap: $space-24
+
+        .icon-circle
+            width: $space-64
+            height: $space-64
+            font-size: $font-size-24
+
+        .step-number
+            width: $space-24
+            height: $space-24
+
+        .content
+            gap: $space-12

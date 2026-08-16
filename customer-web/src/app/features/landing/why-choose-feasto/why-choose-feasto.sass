@@ -22,7 +22,7 @@
             line-height: $line-height-tight
 
         p
-            max-width: 600px
+            max-width: $container-md
             margin: 0 auto
 
             color: $color-text-secondary
@@ -31,7 +31,7 @@
     .features-grid
         display: grid
         grid-template-columns: 1fr
-        gap: $space-32
+        gap: $space-24
 
         margin: 0
         padding: 0
@@ -85,8 +85,10 @@
     .features
         .features-grid
             grid-template-columns: repeat(2, 1fr)
+            gap: $space-32
 
 @media (min-width: $breakpoint-lg)
     .features
         .features-grid
             grid-template-columns: repeat(4, 1fr)
+            gap: $space-24
