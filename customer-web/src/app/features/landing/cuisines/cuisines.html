@@ -1,21 +1,33 @@
-<section class="popular-cuisines">
+<section class="popular-cuisines" aria-labelledby="cuisines-title">
   <div class="container">
-    <div class="section-header">
-      <h3>Popular Cuisines</h3>
-      <p>Explore food from different cuisines</p>
-    </div>
-    <div class="cuisine-grid">
-      @for( cuisine of cuisines;track $index){
-      <div class="cuisine-card">
-        <div class="image-wrapper">
-          <img loading="lazy" [src]="cuisine.image" [alt]="cuisine.name" />
-          <div class="overlay">
-            <h4>{{ cuisine.name }}</h4>
-            <p>{{ cuisine.restaurants }}</p>
+    <header class="section-header">
+      <h2 id="cuisines-title">Popular Cuisines</h2>
+
+      <p>
+        Explore food from different cuisines
+      </p>
+    </header>
+
+    <ul class="cuisine-grid">
+      @for (cuisine of cuisines; track cuisine.name) {
+      <li class="cuisine-card">
+        <a class="cuisine-link" [routerLink]="['/india']" [queryParams]="{ cuisine: cuisine.name }"
+          [attr.aria-label]="'Explore ' + cuisine.name + ' cuisine'">
+          <div class="image-wrapper">
+            <img [src]="cuisine.image" [alt]="cuisine.name + ' cuisine'" width="400" height="250" loading="lazy"
+              decoding="async" />
+
+            <div class="overlay">
+              <h3>{{ cuisine.name }}</h3>
+
+              <p>
+                {{ cuisine.restaurants }}
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </a>
+      </li>
       }
-    </div>
+    </ul>
   </div>
 </section>

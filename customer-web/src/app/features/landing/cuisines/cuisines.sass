@@ -5,70 +5,111 @@
     background: $color-bg-light
 
     .container
-        max-width: 1200px
+        max-width: $container-lg
         margin: 0 auto
-        padding: 0$space-16
+        padding: 0 $space-16
 
     .section-header
-        text-align: center
         margin-bottom: $space-48
+        text-align: center
 
-        h3
+        h2
+            margin-bottom: $space-8
+
+            color: $color-text-primary
             font-size: $font-size-32
             font-weight: $font-weight-bold
-            margin-bottom:$space-8
-            color: $color-text-primary
+            line-height: $line-height-tight
 
         p
             color: $color-text-secondary
+            line-height: $line-height-normal
 
     .cuisine-grid
         display: grid
         grid-template-columns: repeat(2, 1fr)
-        gap:$space-24
+        gap: $space-24
 
-        @media (min-width: 768px)
-            grid-template-columns: repeat(3, 1fr)
+        margin: 0
+        padding: 0
 
-        @media (min-width: 1024px)
-            grid-template-columns: repeat(5, 1fr)
+        list-style: none
 
     .cuisine-card
-        cursor: pointer
+        min-width: 0
 
-        .image-wrapper
-            position: relative
-            overflow: hidden
+    .cuisine-link
+        display: block
+
+        color: inherit
+        text-decoration: none
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
             border-radius: $radius-8
-            box-shadow: $shadow-md
-            transition: box-shadow .3s
 
-            &:hover
+        &:hover
+            .image-wrapper
                 box-shadow: $shadow-xl
 
-                img
-                    transform: scale(1.1)
-
             img
-                width: 100%
-                height: 190px
-                object-fit: cover
-                transition: transform .3s
+                transform: scale(1.05)
 
-            .overlay
-                position: absolute
-                inset: 0
-                display: flex
-                flex-direction: column
-                justify-content: flex-end
-                padding:$space-16
-                background: $gradient-dark-top
+    .image-wrapper
+        position: relative
+        overflow: hidden
 
-                h4
-                    color: white
-                    font-size: $font-size-20
-                    font-weight: $font-weight-semibold
+        border-radius: $radius-8
+        box-shadow: $shadow-md
 
-                p
-                    color: rgba(255,255,255,.9)
-                    font-size: $font-size-14
+        transition: box-shadow .2s ease
+
+    img
+        display: block
+
+        width: 100%
+        height: 180px
+
+        object-fit: cover
+
+        transition: transform .3s ease
+
+    .overlay
+        position: absolute
+        inset: 0
+
+        display: flex
+        flex-direction: column
+        justify-content: flex-end
+
+        padding: $space-16
+
+        background: $gradient-dark-image
+
+        pointer-events: none
+
+        h3
+            margin: 0
+
+            color: $color-text-white
+            font-size: $font-size-20
+            font-weight: $font-weight-semibold
+            line-height: $line-height-tight
+
+        p
+            margin-top: $space-4
+
+            color: $color-text-white
+            font-size: $font-size-14
+            line-height: $line-height-normal
+
+@media (min-width: $breakpoint-md)
+    .popular-cuisines
+        .cuisine-grid
+            grid-template-columns: repeat(3, 1fr)
+
+@media (min-width: $breakpoint-lg)
+    .popular-cuisines
+        .cuisine-grid
+            grid-template-columns: repeat(5, 1fr)
