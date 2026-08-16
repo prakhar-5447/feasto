@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faMobileScreen,
-  faDownload
+  faDownload,
+  faMobileScreen
 } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-app-promotion',
@@ -13,6 +15,7 @@ import {
   styleUrl: './app-promotion.sass',
 })
 export class AppPromotion {
-  faMobile = faMobileScreen;
-  faDownload = faDownload;
+
+  readonly faMobile = faMobileScreen;
+  readonly faDownload = faDownload;
 }

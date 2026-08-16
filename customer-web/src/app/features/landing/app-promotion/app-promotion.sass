@@ -5,84 +5,132 @@
     background: $gradient-primary-red
 
     .container
-        max-width: 1200px
-        margin: auto
-        padding: 0$space-16
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
 
     .promotion-grid
         display: grid
         grid-template-columns: 1fr
-        gap:$space-32
+        gap: $space-32
         align-items: center
-
-        @media (min-width: 768px)
-            grid-template-columns: repeat(2, 1fr)
 
     .content
-        color: white
         display: flex
         flex-direction: column
-        gap:$space-24
+        gap: $space-24
 
-        h3
+        color: $color-text-white
+
+        h2
+            color: $color-text-white
             font-size: $font-size-40
             font-weight: $font-weight-bold
+            line-height: $line-height-tight
 
         p
-            font-size: $font-size-18
             color: $color-primary-light
+            font-size: $font-size-18
+            line-height: $line-height-normal
 
     .badge
-        display: flex
+        display: inline-flex
         align-items: center
-        justify-content: flex-start
-        gap:$space-8
-        background: $color-overlay-white-light
-        padding:$space-8$space-16
+        align-self: flex-start
+        gap: $space-8
+
+        width: fit-content
+        padding: $space-8 $space-16
+
         border-radius: $radius-pill
+        background: $color-overlay-white-light
+
+        color: $color-text-white
         font-size: $font-size-14
 
     .download-buttons
         display: flex
         flex-direction: column
-        gap:$space-16
-
-        @media (min-width: 6$space-40)
-            flex-direction: row
+        gap: $space-16
 
     .store-btn
-        background: $color-bg-black
-        color: white
-        border: $border-style-none
-        display: flex
+        display: inline-flex
         align-items: center
-        gap:$space-12
-        padding:$space-16$space-24
-        font-size: $font-size-18
+        gap: $space-12
+
+        width: fit-content
+        padding: $space-16 $space-24
+
+        border: $border-style-none
         border-radius: $radius-8
-        cursor: pointer
-        transition: background .2s
+        background: $color-bg-black
+
+        color: $color-text-white
+        text-decoration: none
+
+        transition: background .2s ease
 
         &:hover
             background: $color-bg-black-hover
 
-        .text
-            display: flex
-            flex-direction: column
-            text-align: left
+        &:focus-visible
+            outline: none
+            box-shadow: $shadow-focus
 
-        .small
-            font-size: $font-size-12
+        fa-icon
+            flex-shrink: 0
+            font-size: $font-size-20
 
-        .big
-            font-weight: $font-weight-semibold
+    .store-text
+        display: flex
+        flex-direction: column
+        text-align: left
+
+    .small
+        font-size: $font-size-12
+        line-height: $line-height-tight
+
+    .big
+        font-size: $font-size-16
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
 
     .image
         display: none
 
-        @media (min-width: 768px)
+        img
+            display: block
+            width: 100%
+            height: auto
+            border-radius: $radius-8
+
+@media (min-width: $breakpoint-md)
+    .app-promotion
+        .promotion-grid
+            grid-template-columns: repeat(2, 1fr)
+
+        .download-buttons
+            flex-direction: row
+
+        .image
             display: block
 
-        img
+@media (max-width: $breakpoint-xs)
+    .app-promotion
+        padding: $space-64 0
+
+        .content
+            h2
+                font-size: $font-size-32
+
+            p
+                font-size: $font-size-16
+
+        .download-buttons
+            align-items: flex-start
+
+        .store-btn
             width: 100%
-            border-radius: $radius-8
+            max-width: 280px
+            justify-content: flex-start
+            padding: $space-12 $space-16
