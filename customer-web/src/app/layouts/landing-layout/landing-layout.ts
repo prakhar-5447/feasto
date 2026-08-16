@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { Footer } from "../../shared/components/footer/footer";
 import { Landing } from "../../features/landing/landing";
 

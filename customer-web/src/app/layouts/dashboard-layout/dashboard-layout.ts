@@ -1,39 +1,102 @@
-import { Component } from '@angular/core';
-import { Navbar } from "../../shared/components/navbar/navbar";
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { Footer } from "../../shared/components/footer/footer";
-import { Auth } from '../../features/auth/auth';
-import { Modal } from '../../shared/components/modal/modal';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject
+} from '@angular/core';
+
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet
+} from '@angular/router';
+
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { LocationServicePersistence } from '../../core/services/location.service';
+import { Auth } from '../../features/auth/auth';
 import { Breadcrumb } from '../../shared/components/breadcrumb/breadcrumb';
+import { Footer } from '../../shared/components/footer/footer';
+import { Navbar } from '../../shared/components/navbar/navbar';
+
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [Navbar, RouterOutlet, Footer, Auth, Breadcrumb],
+  imports: [
+    Navbar,
+    Breadcrumb,
+    RouterOutlet,
+    Auth,
+    Footer
+  ],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardLayout {
 
-  constructor(private route: ActivatedRoute, private locationService: LocationServicePersistence) { }
+  showAuthModal = false;
+  showBreadcrumb = true;
 
-  ngOnInit() {
-    this.route.firstChild?.paramMap.subscribe(params => {
-      const city = params.get('city')
-      if (city) {
-        this.locationService.setCity(city)
-      }
-    })
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly locationService = inject(
+    LocationServicePersistence
+  );
+
+
+  ngOnInit(): void {
+
+    this.updateRouteState();
+
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.updateRouteState();
+      });
   }
 
-  showAuthModal = false;
 
-  openAuth() {
+  private updateRouteState(): void {
+
+    const activeRoute = this.getActiveRoute();
+
+    const city = activeRoute.snapshot.paramMap.get('city');
+
+    if (city) {
+      this.locationService.setCity(city);
+    }
+
+    this.showBreadcrumb =
+      activeRoute.snapshot.data['hideBreadcrumb'] !== true;
+  }
+
+
+  private getActiveRoute(): ActivatedRoute {
+
+    let activeRoute = this.route;
+
+    while (activeRoute.firstChild) {
+      activeRoute = activeRoute.firstChild;
+    }
+
+    return activeRoute;
+  }
+
+
+  openAuth(): void {
     this.showAuthModal = true;
   }
 
-  closeAuth() {
+
+  closeAuth(): void {
     this.showAuthModal = false;
   }
 }

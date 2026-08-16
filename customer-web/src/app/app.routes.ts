@@ -18,20 +18,11 @@ import { RestaurantResolver } from './shared/pipes/resolver'
 
 export const routes: Routes = [
 
-    // ============================================================
-    // Landing
-    // ============================================================
-
     {
         path: '',
         // canActivate: [authGuard],
         loadComponent: () => LandingLayout,
     },
-
-
-    // ============================================================
-    // Dashboard Layout
-    // ============================================================
 
     {
         path: 'india',
@@ -44,21 +35,14 @@ export const routes: Routes = [
 
         children: [
 
-            // --------------------------------------------------------
-            // Location
-            // /india
-            // --------------------------------------------------------
-
             {
                 path: '',
-                loadComponent: () => Location
+                loadComponent: () => Location,
+
+                data: {
+                    hideBreadcrumb: true
+                }
             },
-
-
-            // --------------------------------------------------------
-            // City
-            // /india/:city
-            // --------------------------------------------------------
 
             {
                 path: ':city',
@@ -69,21 +53,10 @@ export const routes: Routes = [
 
                 children: [
 
-                    // ------------------------------------------------
-                    // Dashboard
-                    // /india/:city
-                    // ------------------------------------------------
-
                     {
                         path: '',
                         loadComponent: () => Dashboard
                     },
-
-
-                    // ------------------------------------------------
-                    // Restaurant
-                    // /india/:city/:restaurant
-                    // ------------------------------------------------
 
                     {
                         path: ':restaurant',
@@ -96,21 +69,11 @@ export const routes: Routes = [
 
                         children: [
 
-                            // ----------------------------------------
-                            // Default restaurant tab
-                            // ----------------------------------------
-
                             {
                                 path: '',
                                 redirectTo: 'order',
                                 pathMatch: 'full'
                             },
-
-
-                            // ----------------------------------------
-                            // Order
-                            // /india/:city/:restaurant/order
-                            // ----------------------------------------
 
                             {
                                 path: 'order',
@@ -121,12 +84,6 @@ export const routes: Routes = [
                                     breadcrumb: 'Order'
                                 }
                             },
-
-
-                            // ----------------------------------------
-                            // Reviews
-                            // /india/:city/:restaurant/reviews
-                            // ----------------------------------------
 
                             {
                                 path: 'reviews',
@@ -139,12 +96,6 @@ export const routes: Routes = [
                             }
                         ]
                     },
-
-
-                    // ------------------------------------------------
-                    // Cart
-                    // /india/:city/:restaurant/cart
-                    // ------------------------------------------------
 
                     {
                         path: ':restaurant/cart',
@@ -160,12 +111,6 @@ export const routes: Routes = [
                         }
                     },
 
-
-                    // ------------------------------------------------
-                    // Checkout
-                    // /india/:city/:restaurant/checkout
-                    // ------------------------------------------------
-
                     {
                         path: ':restaurant/checkout',
 
@@ -176,15 +121,10 @@ export const routes: Routes = [
                         },
 
                         data: {
-                            breadcrumb: 'Checkout'
+                            breadcrumb: 'Checkout',
+                            hideBreadcrumb: true
                         }
                     },
-
-
-                    // ------------------------------------------------
-                    // Payment
-                    // /india/:city/:restaurant/payment
-                    // ------------------------------------------------
 
                     {
                         path: ':restaurant/payment',
@@ -196,18 +136,14 @@ export const routes: Routes = [
                         },
 
                         data: {
-                            breadcrumb: 'Payment'
+                            breadcrumb: 'Payment',
+                            hideBreadcrumb: true
                         }
                     }
                 ]
             }
         ]
     },
-
-
-    // ============================================================
-    // Fallback
-    // ============================================================
 
     {
         path: '**',
