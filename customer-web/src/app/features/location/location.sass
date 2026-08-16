@@ -1,85 +1,230 @@
 @use '../../../styles/index' as *
 
-.cities
-    max-width: 1200px
-    margin: 0 auto
-    padding: $space-40$space-16
-    .title
-        font-size: $font-size-20
-        font-weight: $font-weight-bold
-        margin-bottom:$space-20
-        fa-icon
+.location
+    padding: $space-40 0 $space-64
+
+    .container
+        width: 100%
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
+
+    .page-header
+        margin-bottom: $space-40
+
+        text-align: center
+
+        h1
+            margin: 0 0 $space-12
+
+            color: $color-text-primary
+            font-size: $font-size-32
+            font-weight: $font-weight-bold
+            line-height: $line-height-tight
+
+        p
+            max-width: $container-md
+            margin: 0 auto
+
+            color: $color-text-secondary
+            line-height: $line-height-normal
+
+    .cities
+        & + .cities
+            margin-top: $space-48
+
+    .section-header
+        display: flex
+        align-items: center
+        gap: $space-8
+
+        margin-bottom: $space-20
+
+        h2
+            margin: 0
+
+            color: $color-text-primary
+            font-size: $font-size-20
+            font-weight: $font-weight-bold
+            line-height: $line-height-tight
+
+        .title-icon
+            display: inline-flex
+            align-items: center
+            justify-content: center
+
             color: $color-primary
             font-size: $font-size-20
-    .grid
+
+    .popular-grid
         display: grid
         grid-template-columns: 1fr
-        gap:$space-16
+        gap: $space-16
 
-        @media (min-width: 768px)
-            grid-template-columns: repeat(2, 1fr)
+        margin: 0
+        padding: 0
 
-        @media (min-width: 1024px)
-            grid-template-columns: repeat(3, 1fr)
+        list-style: none
 
-        .city-card
-            position: relative
-            height: 200px
+    .city-card
+        min-width: 0
+
+    .city-card a
+        display: block
+
+        color: inherit
+        text-decoration: none
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
             border-radius: $radius-12
-            overflow: hidden
-            cursor: pointer
-            transition: all 0.3s ease
-            box-shadow: $shadow-lg
 
-            &:hover
-                transform: translateY(-6px)
+        &:hover
+            .image-wrapper
                 box-shadow: $shadow-xl
 
-                img
-                    transform: scale(1.1)
-
             img
-                width: 100%
-                height: 100%
-                object-fit: cover
-                transition: transform 0.4s ease
+                transform: scale(1.05)
 
-            .overlay
-                position: absolute
-                inset: 0
-                display: flex
-                flex-direction: column
-                justify-content: flex-end
-                padding:$space-16
-                background: linear-gradient(to top, $color-overlay-black-strong, transparent)
+    .image-wrapper
+        position: relative
+        overflow: hidden
 
-                h3
-                    color: $color-bg-white
-                    font-size: $font-size-20
-                    font-weight: $font-weight-bold
+        border-radius: $radius-12
+        box-shadow: $shadow-lg
 
-                p
-                    color: $color-overlay-white-heavy
-                    font-size: $font-size-14
+        transition: $transition-transform, $transition-shadow
 
-        .city-list-item
-            padding:$space-16
-            border: $border-width-1 $border-style-solid $color-border-light
-            border-radius: $radius-4
-            transition: all 0.2s
+    .image-wrapper img
+        display: block
+
+        width: 100%
+        height: 200px
+
+        object-fit: cover
+
+        transition: $transition-transform
+
+    .overlay
+        position: absolute
+        inset: 0
+
+        display: flex
+        flex-direction: column
+        justify-content: flex-end
+
+        padding: $space-16
+
+        background: $gradient-dark-top-strong
+
+        pointer-events: none
+
+        h3
+            margin: 0
+
+            color: $color-text-white
+            font-size: $font-size-20
+            font-weight: $font-weight-bold
+            line-height: $line-height-tight
+
+        p
+            margin-top: $space-4
+
+            color: $color-overlay-white-heavy
+            font-size: $font-size-14
+            line-height: $line-height-normal
+
+    .city-list
+        display: grid
+        grid-template-columns: 1fr
+        gap: $space-16
+
+        margin: 0
+        padding: 0
+
+        list-style: none
+
+    .city-list-item
+        display: flex
+        align-items: center
+        justify-content: space-between
+        gap: $space-12
+
+        width: 100%
+        padding: $space-16
+
+        border: $border-width-1 $border-style-solid $color-border-light
+        border-radius: $radius-4
+
+        color: $color-text-primary
+        font-size: $font-size-16
+        text-decoration: none
+
+        transition: $transition-background, $transition-border, $transition-color
+
+        &:hover
+            border-color: $color-primary
+            background: $color-bg-orange-soft
+            color: $color-primary
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
+
+        .city-name
             display: flex
-            justify-content: space-between
             align-items: center
-            font-size: $font-size-16
-            fa-icon
-                color: $color-text-muted
-                transition: all 0.2s
-            &:hover
-                border-color: $color-primary
-                background: $color-bg-orange-soft
-                fa-icon
-                    color: $color-primary
-            .left
-                display: flex
-                align-items: center
-                gap:$space-4
+            gap: $space-8
+
+        .city-name fa-icon
+            flex-shrink: 0
+
+            color: $color-primary
+
+        .arrow
+            flex-shrink: 0
+
+            color: $color-text-muted
+
+            transition: $transition-transform, $transition-color
+
+    .city-list-item:hover .arrow
+        color: $color-primary
+        transform: translateX($space-4)
+
+@media (min-width: $breakpoint-md)
+    .location
+        .popular-grid
+            grid-template-columns: repeat(2, 1fr)
+
+        .city-list
+            grid-template-columns: repeat(2, 1fr)
+
+@media (min-width: $breakpoint-lg)
+    .location
+        .popular-grid
+            grid-template-columns: repeat(3, 1fr)
+
+        .city-list
+            grid-template-columns: repeat(3, 1fr)
+
+@media (max-width: $breakpoint-xs)
+    .location
+        padding: $space-32 0 $space-48
+
+        .container
+            padding: 0 $space-12
+
+        .page-header
+            margin-bottom: $space-32
+
+            h1
+                font-size: $font-size-28
+
+        .cities
+            & + .cities
+                margin-top: $space-32
+
+        .image-wrapper img
+            height: 180px

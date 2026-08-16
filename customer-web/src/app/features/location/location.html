@@ -1,33 +1,80 @@
-<section class="cities">
-    <div class="title">
-        <fa-icon [icon]="faLineChart"></fa-icon>
-        Popular Cities
+<main class="location">
+    <div class="container">
+
+        <header class="page-header">
+            <h1>
+                Choose Your City
+            </h1>
+
+            <p>
+                Discover restaurants and food delivery in your city.
+            </p>
+        </header>
+
+        <section class="cities" aria-labelledby="popular-cities-title">
+            <header class="section-header">
+                <h2 id="popular-cities-title">
+                    Popular Cities
+                </h2>
+
+                <div class="title-icon" aria-hidden="true">
+                    <fa-icon [icon]="faLineChart"></fa-icon>
+                </div>
+            </header>
+
+            <ul class="popular-grid">
+                @for (city of popularCities; track city.id) {
+                <li class="city-card">
+                    <a [routerLink]="['/india', city.slug]" (click)="selectCity(city.slug)"
+                        [attr.aria-label]="'Explore restaurants in ' + city.name">
+                        <div class="image-wrapper">
+
+                            <img [src]="city.image" [srcset]="city.imageSrcSet" [sizes]="city.imageSizes"
+                                [alt]="city.name + ' city'" width="640" height="360" loading="lazy" decoding="async" />
+
+                            <div class="overlay">
+                                <h3>
+                                    {{ city.name }}
+                                </h3>
+
+                                <p>
+                                    {{ city.subtitle }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </a>
+                </li>
+                }
+            </ul>
+        </section>
+
+        <section class="cities" aria-labelledby="all-cities-title">
+            <header class="section-header">
+                <h2 id="all-cities-title">
+                    All Cities
+                </h2>
+            </header>
+
+            <ul class="city-list">
+                @for (city of allCities; track city) {
+                <li>
+                    <a class="city-list-item" [routerLink]="['/india', city.slug]" (click)="selectCity(city.slug)"
+                        [attr.aria-label]="'Explore restaurants in ' + city.name">
+                        <span class="city-name">
+                            <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>
+
+                            <span>
+                                {{ city.name }}
+                            </span>
+                        </span>
+
+                        <fa-icon class="arrow" [icon]="faArrowRight" aria-hidden="true"></fa-icon>
+                    </a>
+                </li>
+                }
+            </ul>
+        </section>
+
     </div>
-    <div class="grid">
-        @for(city of popularCities; track city.id){
-        <div class="city-card" (click)="handleCityClick(city.name.toLowerCase())">
-            <img loading="lazy" loading="lazy" [src]="city.image" />
-            <div class="overlay">
-                <h3>{{city.name}}</h3>
-                <p>{{city.subtitle}}</p>
-            </div>
-        </div>
-        }
-    </div>
-</section>
-<section class="cities">
-    <div class="title">
-        All Cities
-    </div>
-    <div class="grid">
-        @for(city of allCities; track city){
-        <div class="city-list-item" (click)="handleCityClick(city.toLowerCase())">
-            <div class="left">
-                <fa-icon [icon]="faLocationDot"></fa-icon>
-                {{city}}
-            </div>
-            <fa-icon [icon]="faArrowRight"></fa-icon>
-        </div>
-        }
-    </div>
-</section>
+</main>
