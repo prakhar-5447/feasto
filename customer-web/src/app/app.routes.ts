@@ -1,146 +1,126 @@
 import { Routes } from '@angular/router';
 
-import { LandingLayout } from './layouts/landing-layout/landing-layout';
-import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
-
-import { Location } from './features/location/location';
+import { Cart } from './features/cart/cart';
+import { Checkout } from './features/checkout/checkout';
 import { Dashboard } from './features/dashboard/dashboard';
-
+import { Landing } from './features/landing/landing';
+import { Location } from './features/location/location';
+import { Payment } from './features/payment/payment';
 import { Restaurant } from './features/restaurant/restaurant';
 import { TabMenu } from './features/restaurant/tab-menu/tab-menu';
 import { TabReviews } from './features/restaurant/tab-reviews/tab-reviews';
 
-import { Cart } from './features/cart/cart';
-import { Checkout } from './features/checkout/checkout';
-import { Payment } from './features/payment/payment';
+import { RestaurantResolver } from './shared/pipes/resolver';
 
-import { RestaurantResolver } from './shared/pipes/resolver'
+import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
+import { LandingLayout } from './layouts/landing-layout/landing-layout';
+
 
 export const routes: Routes = [
 
     {
         path: '',
-        // canActivate: [authGuard],
         loadComponent: () => LandingLayout,
+
+        children: [
+            {
+                path: '',
+                loadComponent: () => Landing,
+            },
+            {
+                path: 'india',
+                loadComponent: () => Location,
+            }
+        ]
     },
 
     {
-        path: 'india',
-
+        path: 'india/:city',
         data: {
-            breadcrumb: 'india'
+            breadcrumb: 'city'
         },
-
         loadComponent: () => DashboardLayout,
 
         children: [
 
             {
                 path: '',
-                loadComponent: () => Location,
-
-                data: {
-                    hideBreadcrumb: true
-                }
+                loadComponent: () => Dashboard
             },
 
             {
-                path: ':city',
+                path: ':restaurant',
+                loadComponent: () => Restaurant,
 
                 data: {
-                    breadcrumb: 'city'
+                    breadcrumb: 'restaurant'
                 },
 
                 children: [
 
                     {
                         path: '',
-                        loadComponent: () => Dashboard
+                        redirectTo: 'order',
+                        pathMatch: 'full'
                     },
 
                     {
-                        path: ':restaurant',
-
-                        loadComponent: () => Restaurant,
-
+                        path: 'order',
+                        loadComponent: () => TabMenu,
                         data: {
-                            breadcrumb: 'restaurant'
-                        },
-
-                        children: [
-
-                            {
-                                path: '',
-                                redirectTo: 'order',
-                                pathMatch: 'full'
-                            },
-
-                            {
-                                path: 'order',
-
-                                loadComponent: () => TabMenu,
-
-                                data: {
-                                    breadcrumb: 'Order'
-                                }
-                            },
-
-                            {
-                                path: 'reviews',
-
-                                loadComponent: () => TabReviews,
-
-                                data: {
-                                    breadcrumb: 'Reviews'
-                                }
-                            }
-                        ]
-                    },
-
-                    {
-                        path: ':restaurant/cart',
-
-                        loadComponent: () => Cart,
-
-                        resolve: {
-                            restaurant: RestaurantResolver
-                        },
-
-                        data: {
-                            breadcrumb: 'Cart'
+                            breadcrumb: 'Order'
                         }
                     },
 
                     {
-                        path: ':restaurant/checkout',
-
-                        loadComponent: () => Checkout,
-
-                        resolve: {
-                            restaurant: RestaurantResolver
-                        },
-
+                        path: 'reviews',
+                        loadComponent: () => TabReviews,
                         data: {
-                            breadcrumb: 'Checkout',
-                            hideBreadcrumb: true
-                        }
-                    },
-
-                    {
-                        path: ':restaurant/payment',
-
-                        loadComponent: () => Payment,
-
-                        resolve: {
-                            restaurant: RestaurantResolver
-                        },
-
-                        data: {
-                            breadcrumb: 'Payment',
-                            hideBreadcrumb: true
+                            breadcrumb: 'Reviews'
                         }
                     }
                 ]
+            },
+
+            {
+                path: ':restaurant/cart',
+                loadComponent: () => Cart,
+
+                resolve: {
+                    restaurant: RestaurantResolver
+                },
+
+                data: {
+                    breadcrumb: 'Cart'
+                }
+            },
+
+            {
+                path: ':restaurant/checkout',
+                loadComponent: () => Checkout,
+
+                resolve: {
+                    restaurant: RestaurantResolver
+                },
+
+                data: {
+                    breadcrumb: 'Checkout',
+                    hideBreadcrumb: true
+                }
+            },
+
+            {
+                path: ':restaurant/payment',
+                loadComponent: () => Payment,
+
+                resolve: {
+                    restaurant: RestaurantResolver
+                },
+
+                data: {
+                    breadcrumb: 'Payment',
+                    hideBreadcrumb: true
+                }
             }
         ]
     },
