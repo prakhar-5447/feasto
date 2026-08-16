@@ -1,50 +1,113 @@
 <footer class="footer">
     <div class="container">
+
         <div class="footer-grid">
+
             <div class="footer-brand">
-                <h4>Feasto</h4>
+                <a class="footer-logo" routerLink="/" aria-label="Feasto home">
+                    Feasto
+                </a>
+
                 <p>
                     Your favorite food delivered fast and fresh to your doorstep.
                 </p>
             </div>
-            <div class="footer-links">
-                <h5>Company</h5>
+
+            <nav class="footer-links" aria-labelledby="company-links-title">
+                <h2 id="company-links-title">
+                    Company
+                </h2>
+
                 <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Team</a></li>
-                    <li><a href="#">Press</a></li>
+                    <li>
+                        <a routerLink="/about">
+                            About Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a routerLink="/careers">
+                            Careers
+                        </a>
+                    </li>
+
+                    <li>
+                        <a routerLink="/team">
+                            Team
+                        </a>
+                    </li>
+
+                    <li>
+                        <a routerLink="/press">
+                            Press
+                        </a>
+                    </li>
                 </ul>
-            </div>
-            <div class="footer-links">
-                <h5>Support</h5>
+            </nav>
+
+            <nav class="footer-links" aria-labelledby="support-links-title">
+                <h2 id="support-links-title">
+                    Support
+                </h2>
+
                 <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Terms of Service</a></li>
+                    <li>
+                        <a routerLink="/help">
+                            Help Center
+                        </a>
+                    </li>
+
+                    <li>
+                        <a routerLink="/contact">
+                            Contact Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a routerLink="/faqs">
+                            FAQs
+                        </a>
+                    </li>
+
+                    <li>
+                        <a routerLink="/terms">
+                            Terms of Service
+                        </a>
+                    </li>
                 </ul>
-            </div>
+            </nav>
+
             <div class="footer-social">
-                <h5>Follow Us</h5>
+                <h2>
+                    Follow Us
+                </h2>
+
                 <div class="social-icons">
-                    <a href="#">
-                        <fa-icon [icon]="faFacebook"></fa-icon>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <fa-icon [icon]="faFacebook" aria-hidden="true"></fa-icon>
                     </a>
-                    <a href="#">
-                        <fa-icon [icon]="faTwitter"></fa-icon>
+
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                        <fa-icon [icon]="faTwitter" aria-hidden="true"></fa-icon>
                     </a>
-                    <a href="#">
-                        <fa-icon [icon]="faInstagram"></fa-icon>
+
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <fa-icon [icon]="faInstagram" aria-hidden="true"></fa-icon>
                     </a>
-                    <a href="#">
-                        <fa-icon [icon]="faYoutube"></fa-icon>
+
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <fa-icon [icon]="faYoutube" aria-hidden="true"></fa-icon>
                     </a>
                 </div>
             </div>
+
         </div>
+
         <div class="footer-bottom">
-            <p>© 2026 Feasto. All rights reserved.</p>
+            <p>
+                © {{ currentYear }} Feasto. All rights reserved.
+            </p>
         </div>
+
     </div>
 </footer>

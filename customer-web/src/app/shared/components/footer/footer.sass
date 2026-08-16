@@ -1,77 +1,144 @@
 @use '../../../../styles/index' as *
 
 .footer
-    background: $color-text-primary
-    color: $color-border
     padding: $space-64 0
 
+    background: $color-bg-black
+    color: $color-text-muted
+
     .container
-        max-width: 1200px
-        margin: auto
-        padding: 0$space-16
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
 
     .footer-grid
         display: grid
         grid-template-columns: 1fr
-        gap:$space-32
+        gap: $space-32
+
         margin-bottom: $space-40
 
-        @media (min-width: 768px)
-            grid-template-columns: repeat(4,1fr)
+    .footer-brand
+        .footer-logo
+            display: inline-block
 
-    h4
-        color: white
-        font-size: $font-size-24
-        font-weight: $font-weight-bold
-        margin-bottom:$space-12
+            color: $color-text-white
+            font-size: $font-size-24
+            font-weight: $font-weight-bold
+            text-decoration: none
 
-    h5
-        color: white
-        font-weight: $font-weight-semibold
-        margin-bottom:$space-12
+            &:focus-visible
+                outline: 2px solid $color-primary
+                outline-offset: $space-4
+                border-radius: $radius-4
 
-    p
-        font-size: $font-size-14
-        line-height: $line-height-normal
+        p
+            max-width: $container-md
+            margin-top: $space-12
 
-    ul
-        list-style: none
-        padding: 0
+            color: $color-text-muted
+            font-size: $font-size-14
+            line-height: $line-height-normal
 
-        li
-            margin-bottom:$space-8
+    .footer-links
+        h2,
+        .footer-social h2
+            margin: 0 0 $space-12
 
-            a
-                font-size: $font-size-14
-                color: $color-border
-                text-decoration: none
-                transition: color .2s
+            color: $color-text-white
+            font-size: $font-size-16
+            font-weight: $font-weight-semibold
+            line-height: $line-height-tight
 
-                &:hover
-                    color: $color-primary
+        ul
+            display: flex
+            flex-direction: column
+            gap: $space-8
+
+            margin: 0
+            padding: 0
+
+            list-style: none
+
+        a
+            color: $color-text-muted
+            font-size: $font-size-14
+            text-decoration: none
+
+            transition: color .2s ease
+
+            &:hover
+                color: $color-primary
+
+            &:focus-visible
+                outline: 2px solid $color-primary
+                outline-offset: $space-4
+                border-radius: $radius-4
+
+    .footer-social
+        h2
+            margin: 0 0 $space-12
+
+            color: $color-text-white
+            font-size: $font-size-16
+            font-weight: $font-weight-semibold
+            line-height: $line-height-tight
 
     .social-icons
         display: flex
-        gap:$space-12
+        gap: $space-12
 
-        a
-            width: $space-40
-            height: $space-40
-            background: $color-bg-black
-            border-radius: $radius-circle
-            display: flex
-            align-items: center
-            justify-content: center
-            color: $color-border
-            font-size: $font-size-18
-            transition: background .2s
+    .social-icons a
+        display: flex
+        align-items: center
+        justify-content: center
 
-            &:hover
-                background: $color-primary
-                color: white
+        width: $space-40
+        height: $space-40
+
+        border-radius: $radius-circle
+        background: $color-bg-black-hover
+
+        color: $color-text-muted
+
+        transition: background .2s ease, color .2s ease
+
+        &:hover
+            background: $color-primary
+            color: $color-text-white
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
 
     .footer-bottom
-        border-top: $border-width-1 $border-style-solid $color-border
-        padding-top:$space-24
+        padding-top: $space-24
+
+        border-top: $border-width-1 $border-style-solid $color-border-light
+
         text-align: center
-        font-size: $font-size-14
+
+        p
+            margin: 0
+
+            color: $color-text-muted
+            font-size: $font-size-14
+            line-height: $line-height-normal
+
+@media (min-width: $breakpoint-md)
+    .footer
+        .footer-grid
+            grid-template-columns: repeat(4, 1fr)
+
+@media (max-width: $breakpoint-xs)
+    .footer
+        padding: $space-48 0
+
+        .container
+            padding: 0 $space-12
+
+        .footer-grid
+            gap: $space-24
+
+        .social-icons
+            gap: $space-8
