@@ -1,18 +1,16 @@
 // ============================================================
 // FEASTO DESIGN TOKENS — TRANSITIONS / ANIMATION
-// Exact timing values observed in the source.
 // ============================================================
 
-$transition-200ms: .2s ease
-$transition-250ms: .25s ease
-$transition-300ms: .3s ease
-$transition-400ms: .4s ease
-$transition-450ms: .45s ease
+$transition-fast: .15s ease
+$transition-normal: .25s ease
+$transition-slow: .4s ease
 
-$transition-background-200ms: background .2s
-$transition-color-200ms: color .2s
-$transition-transform-300ms: transform .3s
-$transition-transform-400ms: transform .4s
+$transition-color: color $transition-normal
+$transition-background: background $transition-normal
+$transition-border: border-color $transition-normal
+$transition-transform: transform $transition-normal
+$transition-shadow: box-shadow $transition-normal
 
 $animation-spin: .8s linear infinite
-$animation-pulse: 1.5s infinite linear
+$animation-pulse: 1.5s linear infinite
