@@ -1,30 +1,49 @@
-<section class="how-it-works">
+<section class="how-it-works" aria-labelledby="how-it-works-title">
   <div class="container">
-    <div class="section-header">
-      <h3>How It Works</h3>
-      <p>Order your favorite food in just 4 simple steps</p>
-    </div>
-    <div class="steps-grid">
-      @for(step of steps;track step.step;let i = $index){
-      <div class="step-card">
+
+    <header class="section-header">
+      <h2 id="how-it-works-title">
+        How It Works
+      </h2>
+
+      <p>
+        Order your favorite food in just 4 simple steps
+      </p>
+    </header>
+
+    <ol class="steps-grid">
+      @for (step of steps; track step.step; let last = $last) {
+      <li class="step-card">
+
         <div class="content">
+
           <div class="icon-wrapper">
-            <div class="icon-circle">
+            <div class="icon-circle" aria-hidden="true">
               <fa-icon [icon]="step.icon"></fa-icon>
             </div>
-            <div class="step-number">
-              {{ step.step }}
-            </div>
-          </div>
-          <h4>{{ step.title }}</h4>
-          <p>{{ step.description }}</p>
-        </div>
-        @if(i<steps.length-1){ <div class="connector">
-      </div>
-      }
-    </div>
 
-    }
-  </div>
+            <span class="step-number" aria-hidden="true">
+              {{ step.step }}
+            </span>
+          </div>
+
+          <h3>
+            {{ step.title }}
+          </h3>
+
+          <p>
+            {{ step.description }}
+          </p>
+
+        </div>
+
+        @if (!last) {
+        <div class="connector" aria-hidden="true"></div>
+        }
+
+      </li>
+      }
+    </ol>
+
   </div>
 </section>

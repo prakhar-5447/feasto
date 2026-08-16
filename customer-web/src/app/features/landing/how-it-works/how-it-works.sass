@@ -2,97 +2,128 @@
 
 .how-it-works
     padding: $space-80 0
-    background: white
+
+    background: $color-bg-white
 
     .container
-        max-width: 1200px
-        margin: auto
-        padding: 0$space-16
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
 
     .section-header
-        text-align: center
         margin-bottom: $space-48
 
-        h3
-            font-size: $font-size-32
-            font-weight: $font-weight-bold
-            margin-bottom:$space-12
+        text-align: center
+
+        h2
+            margin-bottom: $space-12
+
             color: $color-text-primary
 
+            font-size: $font-size-32
+            font-weight: $font-weight-bold
+            line-height: $line-height-tight
+
         p
+            max-width: $container-md
+            margin: 0 auto
+
             color: $color-text-secondary
-            max-width: 600px
-            margin: auto
+            line-height: $line-height-normal
 
     .steps-grid
         display: grid
         grid-template-columns: 1fr
-        gap:$space-32
+        gap: $space-32
 
-        @media (min-width: 768px)
-            grid-template-columns: repeat(2,1fr)
+        margin: 0
+        padding: 0
 
-        @media (min-width: 1024px)
-            grid-template-columns: repeat(4,1fr)
+        list-style: none
 
     .step-card
         position: relative
+
         text-align: center
 
-        .content
-            display: flex
-            flex-direction: column
-            gap:$space-16
+    .content
+        display: flex
+        flex-direction: column
+        gap: $space-16
 
-        .icon-wrapper
-            position: relative
-            display: inline-block
-            margin: auto
+    .icon-wrapper
+        position: relative
 
-        .icon-circle
-            width: $space-80
-            height: $space-80
-            background: $color-primary
-            border-radius: $radius-circle
-            display: flex
-            align-items: center
-            justify-content: center
-            color: white
-            font-size: $font-size-32
+        margin: 0 auto
 
-        .step-number
-            position: absolute
-            top: -8px
-            right: -8px
-            width:$space-32
-            height:$space-32
-            border-radius: $radius-circle
-            background: #fed7aa
-            display: flex
-            align-items: center
-            justify-content: center
-            font-size: $font-size-14
-            font-weight: $font-weight-bold
-            color: $color-primary
+    .icon-circle
+        display: flex
+        align-items: center
+        justify-content: center
 
-        h4
-            font-size: $font-size-20
-            font-weight: $font-weight-semibold
-            color: $color-text-primary
+        width: $space-80
+        height: $space-80
 
-        p
-            color: $color-text-secondary
-            font-size: $font-size-14
-            line-height: $line-height-normal
+        border-radius: $radius-circle
+        background: $color-primary
+
+        color: $color-text-white
+        font-size: $font-size-32
+
+    .step-number
+        position: absolute
+        top: -$space-8
+        right: -$space-8
+
+        display: flex
+        align-items: center
+        justify-content: center
+
+        width: $space-32
+        height: $space-32
+
+        border-radius: $radius-circle
+        background: $color-primary-light
+
+        color: $color-primary
+
+        font-size: $font-size-14
+        font-weight: $font-weight-bold
+
+    h3
+        color: $color-text-primary
+
+        font-size: $font-size-20
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+
+    p
+        color: $color-text-secondary
+
+        font-size: $font-size-14
+        line-height: $line-height-normal
+
+    .connector
+        display: none
+
+        position: absolute
+        top: $space-40
+        left: 60%
+
+        width: 80%
+        height: $space-2
+
+        background: $color-primary-light
+
+@media (min-width: $breakpoint-md)
+    .how-it-works
+        .steps-grid
+            grid-template-columns: repeat(2, 1fr)
+
+@media (min-width: $breakpoint-lg)
+    .how-it-works
+        .steps-grid
+            grid-template-columns: repeat(4, 1fr)
 
         .connector
-            position: absolute
-            top: $space-40
-            left: 60%
-            width: 80%
-            height:$space-2
-            background: #fed7aa
-            display: none
-
-            @media (min-width: 1024px)
-                display: block
+            display: block
