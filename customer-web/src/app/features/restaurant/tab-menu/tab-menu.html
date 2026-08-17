@@ -16,29 +16,31 @@
             <h2>{{ category.name }}</h2>
 
             @for(item of category.items;track item._id){
+            @if(item.isAvailable){
             <div class="item">
                 <div class="left">
                     <img [src]="item.image" />
 
                     <div class="controls">
-                        @if(getItemQuantity(item.id) > 0){
+                        @if(getItemQuantity(item._id) > 0){
                         <div class="qty-box">
-                            <button (click)="updateQuantity(item.id, getItemQuantity(item.id), false)"
+                            <button (click)="updateQuantity(item._id, getItemQuantity(item._id), false)"
                                 class="btn"><fa-icon [icon]="faMinus"></fa-icon></button>
-                            <span>{{ getItemQuantity(item.id) }}</span>
-                            <button (click)="updateQuantity(item.id, getItemQuantity(item.id), true)"
+                            <span>{{ getItemQuantity(item._id) }}</span>
+                            <button (click)="updateQuantity(item._id, getItemQuantity(item._id), true)"
                                 class="btn"><fa-icon [icon]="faPlus"></fa-icon></button>
                         </div>
                         }
 
-                        @if(getItemQuantity(item.id) <= 0){ <button (click)="addToCart(item)" class="add-btn">
+                        @if(getItemQuantity(item._id) <= 0){ <button (click)="addToCart(item)" class="add-btn">
                             ADD</button>
                             }
                     </div>
                 </div>
                 <div class="right">
                     <div class="header">
-                        <div class="type" [ngClass]="{'veg' : item?.isVeg ,'non-veg': !item?.isVeg}">
+                        <div class="type"
+                            [ngClass]="{'veg': item?.foodType === 'veg','egg': item?.foodType === 'egg','non-veg': item?.foodType === 'non-veg'}">
                             <div class="circle"></div>
                         </div>
                         <h3>
@@ -49,7 +51,7 @@
                     <span>₹{{ item.price }}</span>
                 </div>
 
-            </div>
+            </div>}
             }
         </div>
         }

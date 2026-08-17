@@ -9,22 +9,8 @@ export interface ICart extends Document {
   user: Types.ObjectId;
   restaurant: Types.ObjectId;
   items: ICartItem[];
-  totalPrice: number;
-  createdAt: Date;
-  updatedAt: Date;
+  couponCode?: string;
 }
-
-const cartItemSchema = new Schema<ICartItem>({
-  food: {
-    type: Schema.Types.ObjectId,
-    ref: "Food",
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    default: 1,
-  },
-});
 
 const cartSchema = new Schema<ICart>(
   {
@@ -32,25 +18,40 @@ const cartSchema = new Schema<ICart>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true
     },
 
     restaurant: {
       type: Schema.Types.ObjectId,
-      ref: "Restaurant",
-      required: true,
+      ref: "Restaurant"
     },
 
-    items: [cartItemSchema],
+    items: [
+      {
+        food: {
+          type: Schema.Types.ObjectId,
+          ref: "Food",
+          required: true
+        },
 
-    totalPrice: {
-      type: Number,
-      default: 0,
-    },
+        quantity: {
+          type: Number,
+          default: 1
+        }
+      }
+    ],
+
+    couponCode: String
   },
   { timestamps: true }
 );
 
+
 const Cart =
-  mongoose.models["Cart"] || mongoose.model<ICart>("Cart", cartSchema);
+  mongoose.models['Cart'] ||
+  mongoose.model<ICart>(
+    "Cart",
+    cartSchema
+  );
 
 export default Cart;

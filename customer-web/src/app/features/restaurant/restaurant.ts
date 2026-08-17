@@ -11,6 +11,7 @@ import { RestaurantInfo } from './restaurant-info/restaurant-info';
 import { RestaurantService } from '../../core/services/restaurent.service';
 import { LocationServicePersistence } from '../../core/services/location.service';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-restaurant',
@@ -22,7 +23,6 @@ import { HttpClient } from '@angular/common/http';
 export class Restaurant {
   faArrowLeft = faArrowLeft;
   restaurant = signal<any>(null);
-
   id!: string;
   menu: any;
   reviews: any[] = [];
@@ -33,9 +33,9 @@ export class Restaurant {
     private http: HttpClient,
     private route: ActivatedRoute,
     public cartService: CartService,
+    private cdr: ChangeDetectorRef,
     public restaurantService: RestaurantService,
     public locationServicePersistence: LocationServicePersistence,
-    private cdr: ChangeDetectorRef
   ) { }
 
   showCarousel() {
@@ -74,30 +74,15 @@ export class Restaurant {
         }
       });
     });
+
+    this.cartService.refreshCartCount();
   }
 
+  get getCartCount() {
+  return this.cartService.cartCount();
+}
 
   setTab(tab: string) {
     this.activeTab = tab;
-  }
-
-  get cartItems() {
-    return this.restaurantService.cart.filter(
-      (i: any) => i.restaurantId === this.id
-    );
-  }
-
-  get cartTotal() {
-    return this.cartItems.reduce(
-      (sum: number, i: any) => sum + i.price * i.quantity,
-      0
-    );
-  }
-
-  get cartCount() {
-    return this.cartItems.reduce(
-      (sum: number, i: any) => sum + i.quantity,
-      0
-    );
   }
 }

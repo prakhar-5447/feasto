@@ -1,91 +1,156 @@
-import { Component } from '@angular/core';
-import { CartService } from '../../core/services/cart.service';
-import { RestaurantService } from '../../core/services/restaurent.service';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import {
-  faTrashCan
-} from '@fortawesome/free-regular-svg-icons';
-import {
-  faMinus, faPlus, faTag
+  faMinus,
+  faPlus,
+  faTag
 } from '@fortawesome/free-solid-svg-icons';
-import { Coupons } from './coupons/coupons';
+
+import { CartService } from '../../core/services/cart.service';
+import { RestaurantService } from '../../core/services/restaurent.service';
 import { LocationServicePersistence } from '../../core/services/location.service';
+import { Coupons } from './coupons/coupons';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [FontAwesomeModule, Coupons],
+  imports: [
+    FontAwesomeModule,
+    Coupons
+  ],
   templateUrl: './cart.html',
   styleUrl: './cart.sass',
 })
 export class Cart {
-  faTrashCan = faTrashCan
-  deliveryFee = 40;
-  platformFee = 5;
-  faMinus = faMinus
-  faPlus = faPlus
-  faTag = faTag
-  gstPrecentage = 0.05
+
+  faTrashCan = faTrashCan;
+  faMinus = faMinus;
+  faPlus = faPlus;
+  faTag = faTag;
 
   constructor(
     public cartService: CartService,
+    private cdr: ChangeDetectorRef,
     public restaurantService: RestaurantService,
     public locationService: LocationServicePersistence,
     private router: Router
   ) { }
 
-  get cart() {
-    return this.restaurantService.cart;
+  cart: any[] = [];
+  summary: any = {
+    itemTotal: 0,
+    discount: 0,
+    deliveryFee: 0,
+    platformFee: 0,
+    gst: 0,
+    grandTotal: 0
+  };
+
+  ngOnInit() {
+    this.loadCart();
   }
 
-  getTotal() {
-    return this.cartService.getTotal();
+  loadCart() {
+    this.cartService.getCart().subscribe({
+      next: (res: any) => {
+        this.cart = [...(res.data?.items || [])];
+        this.loadSummary();
+      }
+    });
   }
 
-  getDiscount() {
-    return this.cartService.getDiscount(); // implement in service
+  loadSummary() {
+    this.cartService.getCartSummary().subscribe({
+      next: (res: any) => {
+        this.summary = res.data;
+        this.cdr.detectChanges()
+      }
+    });
   }
 
-  getItemCount() {
-    return this.cartService.getItemCount();
+  get restaurantName() {
+    return this.summary?.restaurant?.name || '';
   }
-  // 🔥 Replace existing getters
+
   get itemTotal() {
-    return this.getTotal();
+    return this.summary?.itemTotal || 0;
   }
 
   get discount() {
-    return this.getDiscount();
+    return this.summary?.discount || 0;
+  }
+
+  get deliveryFee() {
+    return this.summary?.deliveryFee || 0;
+  }
+
+  get platformFee() {
+    return this.summary?.platformFee || 0;
   }
 
   get gst() {
-    return Math.round((this.itemTotal - this.discount) * this.gstPrecentage);
+    return this.summary?.gst || 0;
+  }
+
+  get gstRate() {
+    return this.summary?.gstRate || 0.05;
   }
 
   get finalTotal() {
-    return this.itemTotal + this.deliveryFee + this.platformFee + this.gst - this.discount;
+    return this.summary?.grandTotal || 0;
   }
 
-  updateQuantity(itemId: string, qty: number) {
-    this.cartService.updateQuantity(itemId, qty);
+  get appliedCoupon() {
+    return this.summary?.coupon || null;
   }
 
-  removeItem(itemId: string) {
-    this.cartService.removeFromCart(itemId);
+  get itemCount() {
+    return this.summary?.itemCount || 0;
+  }
+
+  updateQuantity(foodId: string, quantity: number) {
+    this.cartService.updateQuantity(foodId, quantity)
+      .subscribe(() => {
+        this.loadCart();
+      });
+  }
+
+  removeItem(foodId: string) {
+    this.cartService.removeFromCart(foodId)
+      .subscribe(() => {
+        this.loadCart();
+      });
+  }
+
+  clearCart() {
+
+    this.cartService
+      .clearCart()
+      .subscribe({
+        next: () => {
+          this.loadCart();
+        },
+        error: (err) => {
+          console.error(
+            'Clear cart error:',
+            err
+          );
+        }
+      });
   }
 
   goBack() {
     this.router.navigate(['/india']);
   }
- formatSlug(name: string) {
-    return name.
-      toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '')
-  }
+
   checkout() {
-    this.router.navigate(['/india', this.locationService.getCity(), this.formatSlug(this.restaurantService.restaurant.name), 'checkout'
+    this.router.navigate([
+      '/india',
+      this.locationService.getCity(),
+      this.restaurantService.restaurant.slug,
+      'checkout'
     ]);
   }
 }

@@ -1,95 +1,103 @@
 import { Component } from '@angular/core';
-import { CartService, Coupon } from '../../../core/services/cart.service';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-coupons',
   standalone: true,
-  imports: [FormsModule, FontAwesomeModule],
+  imports: [
+    FormsModule,
+    FontAwesomeModule
+  ],
   templateUrl: './coupons.html',
   styleUrl: './coupons.sass',
 })
 export class Coupons {
-  faTags = faTags
+
+  faTags = faTags;
+
   showCoupons = false;
   couponCode = '';
 
-  constructor(public cartService: CartService) { }
+  availableCoupons: any[] = [];
 
-  availableCoupons: Coupon[] = [
-    {
-      id: 1,
-      code: "FEAST50",
-      description: "50% off up to ₹100 on orders above ₹199",
-      discount: 50,
-      discountType: "percentage",
-      minOrder: 199,
-      maxDiscount: 100,
-    },
-    {
-      id: 2,
-      code: "FLAT100",
-      description: "Flat ₹100 off on orders above ₹299",
-      discount: 100,
-      discountType: "flat",
-      minOrder: 299,
-    },
-    {
-      id: 3,
-      code: "WELCOME30",
-      description: "30% off up to ₹150 on orders above ₹149",
-      discount: 30,
-      discountType: "percentage",
-      minOrder: 149,
-      maxDiscount: 150,
-    },
-    {
-      id: 4,
-      code: "SAVE60",
-      description: "Flat ₹60 off on orders above ₹199",
-      discount: 60,
-      discountType: "flat",
-      minOrder: 199,
-    },
-    {
-      id: 5,
-      code: "MEGA200",
-      description: "Flat ₹200 off on orders above ₹499",
-      discount: 200,
-      discountType: "flat",
-      minOrder: 499,
-    },
-  ];
+  appliedCoupon: any = null;
 
-  get appliedCoupon() {
-    return this.cartService.getAppliedCoupon();
+  itemTotal = 0;
+
+  constructor(
+    private cartService: CartService
+  ) { }
+
+  ngOnInit() {
+    this.loadCoupons();
+    this.loadSummary();
   }
 
-  get itemTotal() {
-    return this.cartService.getTotal();
+  loadCoupons() {
+    this.cartService
+      .getCoupons()
+      .subscribe({
+        next: (res: any) => {
+          this.availableCoupons =
+            res.data || [];
+        }
+      });
   }
 
-  handleApplyCoupon(coupon: Coupon) {
-    const res = this.cartService.applyCoupon(coupon.code);
+  loadSummary() {
+    this.cartService
+      .getCartSummary()
+      .subscribe({
+        next: (res: any) => {
 
-    if (res.success) {
-      this.showCoupons = false;
-      this.couponCode = '';
-      console.log(`Coupon ${coupon.code} applied`);
-    } else {
-      console.log(res.message);
-    }
+          this.itemTotal =
+            res.data.itemTotal || 0;
+
+          this.appliedCoupon =
+            res.data.coupon || null;
+        }
+      });
+  }
+
+  handleApplyCoupon(coupon: any) {
+
+    this.cartService
+      .applyCoupon(coupon.code)
+      .subscribe({
+        next: () => {
+
+          this.appliedCoupon = coupon;
+
+          this.couponCode = '';
+
+          this.showCoupons = false;
+
+          this.loadSummary();
+        },
+        error: (err) => {
+
+          alert(
+            err.error?.message ||
+            'Failed to apply coupon'
+          );
+        }
+      });
   }
 
   handleApplyCouponCode() {
-    const coupon = this.availableCoupons.find(
-      c => c.code.toLowerCase() === this.couponCode.toLowerCase()
-    );
+
+    const coupon =
+      this.availableCoupons.find(
+        c =>
+          c.code.trim().toLowerCase() ===
+          this.couponCode.trim().toLowerCase()
+      );
 
     if (!coupon) {
-      alert('Invalid coupon code');
+      alert('Invalid coupon');
       return;
     }
 
@@ -97,6 +105,16 @@ export class Coupons {
   }
 
   removeCoupon() {
-    this.cartService.removeCoupon();
+
+    this.cartService
+      .removeCoupon()
+      .subscribe({
+        next: () => {
+
+          this.appliedCoupon = null;
+
+          this.loadSummary();
+        }
+      });
   }
 }
