@@ -1,96 +1,91 @@
 import Restaurant from "../models/restaurant.model";
 import Food from "../models/food.model";
 
-export const searchRestaurants = async (query: any) => {
+export const searchItems = async (
+    keyword: string
+) => {
+    const regex = {
+        $regex: keyword,
+        $options: "i"
+    };
 
+    const [
+        foods,
+        restaurants
+    ] = await Promise.all([
+        Food.find({
+            name: regex
+        })
+            .select("_id name restaurant image price")
+            .limit(5),
+
+        Restaurant.find({
+            $or: [
+                { name: regex },
+                { cuisine: regex }
+            ]
+        })
+            .select("_id name cuisine slug")
+            .limit(5)
+    ]);
+
+    const cuisines = [
+        ...new Set(
+            restaurants
+                .flatMap(restaurant => restaurant.cuisine)
+                .filter(cuisine =>
+                    cuisine
+                        .toLowerCase()
+                        .includes(keyword.toLowerCase())
+                )
+        )
+    ].slice(0, 5);
+
+    return {
+        foods,
+        restaurants,
+        cuisines
+    };
+};
+
+export const searchRestaurants = async (query: any) => {
     const {
-        keyword,
-        minRating,
-        priceRange,
-        lat,
-        lng,
-        radius,
         cuisine,
         food
     } = query;
 
     const filter: Record<string, any> = {};
 
-    // Search by restaurant name or cuisine
-    if (keyword) {
-        filter["$or"] = [
-            {
-                name: {
-                    $regex: keyword,
-                    $options: "i"
-                }
-            },
-            {
-                category: {
-                    $regex: keyword,
-                    $options: "i"
-                }
-            }
-        ];
-    }
-
-    // Cuisine filter
     if (cuisine) {
-        filter["category"] = {
-            $regex: cuisine,
-            $options: "i"
-        };
-    }
-
-    // Rating filter
-    if (minRating) {
-        filter["avgRating"] = {
-            $gte: Number(minRating)
-        };
-    }
-
-    // Price filter
-    if (priceRange) {
-        filter["priceRange"] = Number(priceRange);
-    }
-
-    // Nearby restaurants
-    if (lat && lng) {
-        filter["location"] = {
-            $near: {
-                $geometry: {
-                    type: "Point",
-                    coordinates: [
-                        Number(lng),
-                        Number(lat)
-                    ]
-                },
-                $maxDistance: Number(radius) || 5000
+        filter['cuisine'] = {
+            $elemMatch: {
+                $regex: cuisine,
+                $options: "i"
             }
         };
     }
 
-    // Food filter
     if (food) {
-
         const foods = await Food.find({
             name: {
                 $regex: food,
                 $options: "i"
-            }
+            },
+            isAvailable: true
         }).select("restaurant");
 
         const restaurantIds = [
             ...new Set(
-                foods.map(item => item.restaurant.toString())
+                foods.map(food =>
+                    food.restaurant.toString()
+                )
             )
         ];
 
-        filter["_id"] = {
+        filter['_id'] = {
             $in: restaurantIds
         };
     }
 
-    return await Restaurant.find(filter)
-        .limit(20);
+    return Restaurant.find(filter);
 };

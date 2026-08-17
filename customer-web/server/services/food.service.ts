@@ -1,29 +1,56 @@
-import * as foodRepository from "../repositories/food.repository";
+import * as foodRepo from "../repositories/food.repository";
 
-export const createFood = async (data: any, restaurantId: any) => {
-
-    const food = await foodRepository.createFood({
-        ...data,
-        restaurant: restaurantId
-    });
-
-    return food;
+export const getFood = (
+    foodId: string
+) => {
+    return foodRepo.findById(foodId);
 };
 
-export const getRestaurantMenu = async (restaurantId: any) => {
-
-    return await foodRepository.findByRestaurant(restaurantId);
-
+export const getRestaurantMenu = (
+    restaurantId: string
+) => {
+    return foodRepo.findByRestaurant(
+        restaurantId
+    );
 };
 
-export const updateFood = async (foodId: any, data: any) => {
-
-    return await foodRepository.updateFood(foodId, data);
-
+export const addFood = (
+    data: any,
+    restaurantId: string,
+    imageUrl: any) => {
+    return foodRepo.createFood({ ...data, restaurant: restaurantId, image: imageUrl });
 };
 
-export const deleteFood = async (foodId: any) => {
+export const updateFood = (
+    foodId: string,
+    data: any
+) => {
+    return foodRepo.updateFood(
+        foodId,
+        data
+    );
+};
 
-    return await foodRepository.deleteFood(foodId);
+export const deleteFood = (
+    foodId: string
+) => {
+    return foodRepo.deleteFood(
+        foodId
+    );
+};
 
+export const updateFoodAvailability = (
+    foodId: string,
+    isAvailable: boolean
+) => {
+    return foodRepo.updateFoodAvailability(
+        foodId,
+        isAvailable
+    );
+};
+
+export const filterFoods = (
+    query: any
+) => {
+    return foodRepo.filterFoods(query);
 };

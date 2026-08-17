@@ -5,32 +5,28 @@ import orderController from "../controllers/order.controller";
 
 import { protect } from '../middlewares/auth.middleware';
 
-import role from "../middlewares/role.middleware";
-
 router.post(
-    "/place",
+    "/",
     protect,
     orderController.placeOrder
 );
 
 router.get(
-    "/my-orders",
+    "/",
     protect,
-    orderController.getUserOrders
+    orderController.getMyOrders
 );
 
-router.get(
-    "/restaurant/:restaurantId",
-    protect,
-    role("restaurant"),
-    orderController.getRestaurantOrders
-);
+// router.get(
+//     "/:id",
+//     protect,
+//     orderController.getOrder
+// );
 
-router.put(
-    "/:id/status",
-    protect,
-    role("restaurant"),
-    orderController.updateOrderStatus
-);
+// router.patch(
+//     "/:id/cancel",
+//     protect,
+//     orderController.cancelOrder
+// );
 
 export default router;

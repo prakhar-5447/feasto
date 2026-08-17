@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChildren, HostListener } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CartService } from '../../../core/services/cart.service';
 import { RestaurantService } from '../../../core/services/restaurent.service';
 import { NgClass } from '@angular/common';
@@ -7,6 +7,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faPlus, faMinus
 } from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-tab-menu',
   standalone: true,
@@ -17,6 +19,7 @@ import {
 export class TabMenu {
   faMinus = faMinus
   faPlus = faPlus
+  cartItems: any[] = [];
   activeCategory = 0;
   OFFSET = 290 + 50
   observer!: IntersectionObserver
@@ -25,7 +28,101 @@ export class TabMenu {
   constructor(
     public cartService: CartService,
     public restaurantService: RestaurantService,
-  ) { }
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient,
+    public route: ActivatedRoute,
+    private router: Router
+  ) {
+
+  }
+
+  ngOnInit() {
+
+    this.loadCart();
+
+    this.route.parent?.paramMap.subscribe(
+      params => {
+
+        const slug =
+          params.get('restaurant');
+
+        if (!slug) {
+          this.router.navigate(['/']);
+          return;
+        }
+
+        this.loadFoods(slug);
+      }
+    );
+  }
+
+
+  loadFoods(slug: string) {
+    this.http.get(
+      `/api/v1/foods/restaurant/${slug}/foods`
+    ).subscribe({
+      next: (res: any) => {
+
+        const foods = res.data;
+
+        this.restaurantService.menu = {
+          categories: this.groupByCuisine(foods)
+        };
+      },
+
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+  addToCart(item: any) {
+
+    console.log('Adding:', item);
+
+    this.cartService
+      .addToCart(item._id, 1)
+      .subscribe({
+
+        next: (res) => {
+
+          console.log('Success', res);
+
+          this.loadCart();
+          this.cartService.refreshCartCount();
+          this.cdr.detectChanges()
+        },
+
+        error: (err) => {
+
+          console.log('Error', err);
+
+          alert(
+            err.error?.message ||
+            'Unable to add item'
+          );
+        }
+      });
+  }
+
+  groupByCuisine(foods: any[]) {
+    const grouped: any = {};
+
+    foods.forEach(food => {
+      const cuisine = food.cuisine || 'Others';
+
+      if (!grouped[cuisine]) {
+        grouped[cuisine] = [];
+      }
+
+      grouped[cuisine].push(food);
+    });
+
+    return Object.keys(grouped).map(key => ({
+      name: key,
+      items: grouped[key]
+    }));
+  }
 
   @HostListener('window:scroll', [])
   onScroll() {
@@ -40,8 +137,6 @@ export class TabMenu {
     })
 
     this.activeCategory = activeIndex;
-    console.log(this.activeCategory);
-
   }
 
   scrollToCategory(index: number) {
@@ -58,22 +153,54 @@ export class TabMenu {
     });
   }
 
-  getItemQuantity(itemId: string): number {
-    const item = this.restaurantService.cart.find((i: any) => i.id === itemId);
+  getItemQuantity(
+    itemId: string
+  ): number {
+
+    const item =
+      this.cartItems.find(
+        (i: any) =>
+          i.food._id === itemId
+      );
+
     return item?.quantity || 0;
   }
 
-  addToCart(item: any) {
-    this.cartService.addToCart({
-      ...item,
-      restaurantId: this.restaurantService.restaurant.id,
-      restaurantName: this.restaurantService.restaurant.name,
+  updateQuantity(
+    itemId: string,
+    qty: number,
+    inc: boolean
+  ) {
+
+    const newQty =
+      inc ? qty + 1 : qty - 1;
+
+    this.cartService
+      .updateQuantity(
+        itemId,
+        newQty
+      )
+      .subscribe({
+
+        next: () => {
+
+          this.loadCart();
+
+          this.cartService
+            .refreshCartCount();
+        }
+      });
+  }
+
+  loadCart() {
+    this.cartService.getCart().subscribe({
+      next: (res: any) => {
+
+        this.cartItems = res.data?.items || [];
+
+        // force new reference
+        this.cartItems = [...this.cartItems];
+      }
     });
   }
-
-  updateQuantity(itemId: string, qty: number, inc: boolean) {
-    const newQty = inc ? qty + 1 : qty - 1;
-    this.cartService.updateQuantity(itemId, newQty);
-  }
-
 }

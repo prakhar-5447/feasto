@@ -25,6 +25,30 @@ export class LocationServicePersistence {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
+  setLocation(lat: number, lng: number) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(
+        'location',
+        JSON.stringify({
+          lat: lat,
+          lng: lng
+        })
+      );
+    }
+  }
+
+  getLocation() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
+    const location = localStorage.getItem('location');
+
+    return location
+      ? JSON.parse(location)
+      : null;
+  }
+
   setCity(city: string) {
     const cleanCity = city.toLowerCase();
 

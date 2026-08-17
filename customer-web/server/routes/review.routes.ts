@@ -1,28 +1,25 @@
 import express from "express";
+
 const router = express.Router();
 
-import reviewController from "../controllers/review.controller";
+import { protect }
+from "../middlewares/auth.middleware";
 
-import { protect } from '../middlewares/auth.middleware';
-
-import validate from "../middlewares/validation.middleware";
-
-const { reviewSchema } =
-    require("../validations/review.validation");
-
-router.post(
-    "/:restaurantId",
-    protect,
-    validate(reviewSchema),
-    reviewController.createReview
-);
+import * as reviewController
+from "../controllers/review.controller";
 
 router.get(
     "/restaurant/:restaurantId",
     reviewController.getRestaurantReviews
 );
 
-router.put(
+router.post(
+    "/restaurant/:restaurantId",
+    protect,
+    reviewController.createReview
+);
+
+router.patch(
     "/:id",
     protect,
     reviewController.updateReview

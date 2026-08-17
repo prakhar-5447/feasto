@@ -31,8 +31,6 @@ interface BreadcrumbData {
     styleUrl: './breadcrumb.sass',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-
 export class Breadcrumb {
 
     breadcrumbs: BreadcrumbData[] = [];
@@ -64,13 +62,11 @@ export class Breadcrumb {
                 this.cd.markForCheck();
             });
 
-
         // Build breadcrumbs for the initial page load.
         this.breadcrumbs = this.buildBreadcrumb(
             this.router.routerState.snapshot.root
         );
     }
-
 
     // ============================================================
     // Build breadcrumb hierarchy
@@ -88,7 +84,6 @@ export class Breadcrumb {
             return breadcrumbs;
         }
 
-
         // --------------------------------------------------------
         // Get URL segment
         // --------------------------------------------------------
@@ -97,15 +92,8 @@ export class Breadcrumb {
             .map(segment => segment.path)
             .join('/');
 
-
         // --------------------------------------------------------
         // Empty route
-        //
-        // Example:
-        // /india
-        //     └── ''
-        //
-        // Continue traversing instead of stopping.
         // --------------------------------------------------------
 
         if (routeURL === '') {
@@ -116,13 +104,11 @@ export class Breadcrumb {
             );
         }
 
-
         // --------------------------------------------------------
         // Build URL
         // --------------------------------------------------------
 
         url += `/${routeURL}`;
-
 
         // --------------------------------------------------------
         // Resolve breadcrumb label
@@ -130,20 +116,16 @@ export class Breadcrumb {
 
         const label = this.resolveLabel(child);
 
-
         // --------------------------------------------------------
         // Add breadcrumb
         // --------------------------------------------------------
 
         if (label) {
-
             breadcrumbs.push({
                 label: this.formatLabel(label),
                 url
             });
-
         }
-
 
         // --------------------------------------------------------
         // Continue through child routes
@@ -155,7 +137,6 @@ export class Breadcrumb {
             breadcrumbs
         );
     }
-
 
     // ============================================================
     // Resolve breadcrumb label
@@ -171,50 +152,21 @@ export class Breadcrumb {
             return undefined;
         }
 
-
         // --------------------------------------------------------
         // Dynamic city
-        //
-        // route:
-        // :city
-        //
-        // breadcrumb:
-        // city
-        //
-        // URL:
-        // /india/dhanbad
-        //
-        // Result:
-        // Dhanbad
         // --------------------------------------------------------
 
         if (breadcrumb === 'city') {
-
             return route.params['city'];
         }
 
-
         // --------------------------------------------------------
         // Dynamic restaurant
-        //
-        // route:
-        // :restaurant
-        //
-        // breadcrumb:
-        // restaurant
-        //
-        // URL:
-        // /india/dhanbad/dominos-pizza
-        //
-        // Result:
-        // Dominos Pizza
         // --------------------------------------------------------
 
         if (breadcrumb === 'restaurant') {
-
             return route.params['restaurant'];
         }
-
 
         // --------------------------------------------------------
         // Static breadcrumb
@@ -222,7 +174,6 @@ export class Breadcrumb {
 
         return breadcrumb;
     }
-
 
     // ============================================================
     // Format breadcrumb label

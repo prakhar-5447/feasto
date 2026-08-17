@@ -79,11 +79,11 @@
             <h3>Order Summary</h3>
             <div class="header">
                 <span>
-                    {{restaurantService.cart[0].restaurantName || ''}}
+                    {{ restaurantService.restaurant?.name }}
                 </span>
             </div>
             <div class="divider">
-                @for( item of cart;track item.id){
+                @for(item of cart; track item.food._id){
                 <div class="row">
                     <span>{{ item.name }} x {{ item.quantity }}</span>
                     <span>₹{{ item.price * item.quantity }}</span>
@@ -101,42 +101,42 @@
             </div>}
             <div class="row">
                 <span>Item Total</span>
-                <span>₹{{ getTotal() }}</span>
+                <span>₹{{ summary.itemTotal }}</span>
             </div>
             <div class="row">
                 <span>Delivery Fee</span>
-                <span>₹{{ deliveryFee }}</span>
+                <span>₹{{ summary.deliveryFee }}</span>
             </div>
             <div class="row">
                 <span>Platform Fee</span>
-                <span>₹{{ platformFee }}</span>
+                <span>₹{{ summary.platformFee }}</span>
             </div>
             <div class="row">
-                <span>GST ({{gstPrecentage*100}}%)</span>
-                <span>₹{{ gst }}</span>
+                <span>GST ({{summary.gstRate}}%)</span>
+                <span>₹{{ summary.gst }}</span>
             </div>
             <!-- ✅ Discount -->
-            @if(discount>0){
+            @if(summary.discount>0){
             <div class="row discount">
                 <span><fa-icon [icon]="faTag"></fa-icon> Discount</span>
-                <span>-₹{{ discount }}</span>
+                <span>-₹{{ summary.discount }}</span>
             </div>
             }
 
             <div class="total">
                 <span>Total</span>
-                <span>₹{{ finalTotal }}</span>
+                <span>₹{{ summary.grandTotal }}</span>
             </div>
 
             <!-- ✅ Savings Message -->
-            @if(discount>0){
+            @if(summary.discount>0){
             <div class="savings">
-                You saved ₹{{ discount }} on this order!
+                You saved ₹{{ summary.discount }} on this order!
             </div>
             }
             <button class="checkout" (click)="payment()">
                 Place Order<span>
-                    (₹{{ finalTotal }})
+                    (₹{{ summary.grandTotal }})
                 </span>
             </button>
         </div>

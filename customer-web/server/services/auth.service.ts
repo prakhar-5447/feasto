@@ -15,3 +15,13 @@ export const phoneAuth = async (phone: string) => {
 export const completeSignup = async (data: any) => {
     return userRepo.createUser(data);
 };
+
+export const getUserById = async (
+    userId: string
+) => {
+    const user =
+        await userRepo.findById(userId);
+    return {
+        user
+    };
+};

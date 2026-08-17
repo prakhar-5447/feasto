@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
 
-import { phoneAuth, completeSignup, logout, verifyOtp } from '../controllers/auth.controller';
+import * as authController from "../controllers/auth.controller";
 import phoneValidation from '../validations/auth.validation';
+import { protect } from "../middlewares/auth.middleware";
 
-router.post('/phone-auth', phoneValidation, phoneAuth);
-router.post('/complete-profile', completeSignup);
-router.post('/logout', logout);
-router.post("/verify-otp", verifyOtp);
-// router.get("/refresh-token", refreshToken);
+router.post('/phone-auth', phoneValidation, authController.phoneAuth);
+router.post('/complete-profile', authController.completeSignup);
+router.post('/logout', authController.logout);
+router.post("/verify-otp", authController.verifyOtp);
+router.get("/refresh-token", protect, authController.refreshToken);
 
 export default router;

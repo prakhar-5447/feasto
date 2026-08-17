@@ -1,10 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type UserRole = "customer" | "restaurant_partner";
-
 export interface IUser extends Document {
     name?: string;
-    role: UserRole;
+    role: "customer" | "restaurant_partner";
     phone: string;
     email?: string;
     avatar?: string | null;

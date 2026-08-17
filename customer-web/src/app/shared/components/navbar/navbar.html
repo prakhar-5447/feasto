@@ -47,9 +47,22 @@
           @if(showRestaurantDropdown){
           <div class="dropdown">
             <div class="suggestions">
-              @for(res of restaurantResults; track $index){
+              @for(res of restaurantResults; track res._id){
               <div class="suggestion" (click)="selectRestaurant(res)">
-                {{ res.name }}
+                <span>{{ res.name }}</span>
+                <small>Restaurant</small>
+              </div>
+              }
+              @for(food of foodResults; track food._id){
+              <div class="suggestion" (click)="selectFood(food)">
+                <span>{{ food.name }}</span>
+                <small>Food</small>
+              </div>
+              }
+              @for(cuisine of cuisineResults; track cuisine){
+              <div class="suggestion" (click)="selectCuisine(cuisine)">
+                <span>{{ cuisine }}</span>
+                <small>Cuisine</small>
               </div>
               }
             </div>
@@ -65,7 +78,7 @@
       @if(user){
       <div class="navbar-user" (click)="goToProfile(user.name)">
         <div class="avatar">
-          {{ user.name.charAt(0) }}
+          {{ user.name?.charAt(0) }}
         </div>
         <div class="info">
           <span class="name">{{ user.name }}</span>

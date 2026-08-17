@@ -21,7 +21,7 @@ exports.placeOrder = async (req, res, next) => {
 
 };
 
-exports.getUserOrders = async (req, res, next) => {
+exports.getMyOrders = async (req, res, next) => {
 
     try {
 
