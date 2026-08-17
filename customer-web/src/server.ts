@@ -130,7 +130,7 @@ app.use(async (req, res, next) => {
 // ================== SERVER START ==================
 
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 4000;
+  const port = process.env['PORT'] || 4200;
 
   app.listen(port, (error) => {
     if (error) throw error;

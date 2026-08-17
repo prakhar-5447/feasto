@@ -1,13 +1,38 @@
-const jwt = require('jsonwebtoken');
+import *as jwt from "jsonwebtoken";
 
-export const generateToken = (user: any) => {
+interface TokenPayload {
+    userId: string;
+}
+
+export const generateToken = (user: any): string => {
     return jwt.sign(
-        { id: user._id, role: user.role },
-        process.env["JWT_SECRET"],
-        { expiresIn: '7d' }
+        {
+            userId: user._id.toString()
+        },
+        process.env['ACCESS_TOKEN_SECRET']!,
+        {
+            expiresIn: "15m"
+        }
     );
 };
 
-export const verifyToken = (token: any) => {
-    return jwt.verify(token, process.env["JWT_SECRET"]);
+export const generateRefreshToken = (user: any): string => {
+    return jwt.sign(
+        {
+            userId: user._id.toString()
+        },
+        process.env['REFRESH_TOKEN_SECRET']!,
+        {
+            expiresIn: "7d"
+        }
+    );
+};
+
+export const verifyRefreshToken = (
+    token: string
+): TokenPayload => {
+    return jwt.verify(
+        token,
+        process.env['REFRESH_TOKEN_SECRET']!
+    ) as TokenPayload;
 };

@@ -1,11 +1,25 @@
 <div class="restaurant-section">
+
     <h2>
-        {{ selectedCategory ? selectedCategory + ' Restaurants' : 'Top Restaurants Near You' }}
+        {{ selectedCategory
+        ? selectedCategory + ' Restaurants'
+        : 'Top Restaurants Near You'
+        }}
     </h2>
+
     <div class="restaurant-grid">
-        @for(restaurant of restaurants; track restaurant.id){
-        <app-restaurant-card [restaurant]="restaurant" [routerLink]="['/india',currentCity,formatSlug(restaurant.name)]">
+
+        @for(restaurant of restaurants; track restaurant._id) {
+
+        <app-restaurant-card [restaurant]="restaurant" [routerLink]="[
+                    '/india',
+                    currentCity,
+                    formatSlug(restaurant.name) 
+                ]">
         </app-restaurant-card>
+
         }
+
     </div>
+
 </div>

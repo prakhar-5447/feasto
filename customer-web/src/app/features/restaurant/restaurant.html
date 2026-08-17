@@ -1,10 +1,12 @@
 <div class="page">
+    @if(restaurantService.restaurant){
     @if(showCarousel()){
     <app-image-carousel></app-image-carousel>
     }
     <div class="details">
         <app-restaurant-info></app-restaurant-info>
     </div>
+    }
     <!-- Tabs -->
     <div class="tabs">
         <button routerLink="order" (click)="setTab('order')" [class.active]="activeTab==='order'">
@@ -16,7 +18,7 @@
         </button>
 
         <button routerLink="cart">
-            Cart ({{ cartCount }})
+            Cart ({{ getCartCount }})
         </button>
     </div>
     <router-outlet></router-outlet>

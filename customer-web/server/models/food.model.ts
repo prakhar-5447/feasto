@@ -1,4 +1,8 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, {
+    Schema,
+    Document,
+    Types
+} from "mongoose";
 
 export interface IFood extends Document {
     restaurant: Types.ObjectId;
@@ -6,8 +10,18 @@ export interface IFood extends Document {
     image?: string;
     description?: string;
     price: number;
-    category?: string;
+    cuisine?: string;
+
+    foodType: "veg" | "non-veg" | "egg";
+
+    preparationTime: number;
+
     isAvailable: boolean;
+    isFeatured: boolean;
+
+    rating: number;
+    totalReviews: number;
+
     createdAt: Date;
     updatedAt: Date;
 }
@@ -23,34 +37,99 @@ const foodSchema = new Schema<IFood>(
         name: {
             type: String,
             required: true,
+            trim: true,
         },
 
         image: {
             type: String,
+            default: "",
         },
 
         description: {
             type: String,
+            default: "",
         },
 
         price: {
             type: Number,
             required: true,
+            min: 0,
         },
 
-        category: {
+        cuisine: {
             type: String,
+            default: "",
+        },
+
+        foodType: {
+            type: String,
+            enum: ["veg", "non-veg", "egg"],
+            required: true,
+            default: "veg",
+        },
+
+        preparationTime: {
+            type: Number,
+            default: 15,
         },
 
         isAvailable: {
             type: Boolean,
             default: true,
         },
+
+        isFeatured: {
+            type: Boolean,
+            default: false,
+        },
+
+        rating: {
+            type: Number,
+            default: 0,
+            min: 0,
+            max: 5,
+        },
+
+        totalReviews: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+    }
 );
 
+foodSchema.index({
+    name: "text",
+    cuisine: "text"
+});
+
+foodSchema.index({
+    restaurant: 1
+});
+
+foodSchema.index({
+    restaurant: 1,
+    isAvailable: 1
+});
+
+foodSchema.index({
+    restaurant: 1,
+    cuisine: 1
+});
+
+foodSchema.index({
+    restaurant: 1,
+    foodType: 1
+});
+
 const Food =
-    mongoose.models["Food"] || mongoose.model<IFood>("Food", foodSchema);
+    mongoose.models['Food'] ||
+    mongoose.model<IFood>(
+        "Food",
+        foodSchema
+    );
 
 export default Food;
