@@ -18,10 +18,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { LoggerService } from '../../../core/services/logger.service';
 
+
 interface BreadcrumbData {
     label: string;
     url: string;
 }
+
 
 @Component({
     selector: 'app-breadcrumb',
@@ -40,20 +42,19 @@ export class Breadcrumb {
     private readonly destroyRef = inject(DestroyRef);
     private readonly logger = inject(LoggerService);
 
+
     ngOnInit(): void {
+
+        this.buildCurrentBreadcrumb();
 
         this.router.events
             .pipe(
-                filter(
-                    event => event instanceof NavigationEnd
-                ),
+                filter(event => event instanceof NavigationEnd),
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe(event => {
 
-                this.breadcrumbs = this.buildBreadcrumb(
-                    this.router.routerState.snapshot.root
-                );
+                this.buildCurrentBreadcrumb();
 
                 this.logger.logClientRoute(
                     event.urlAfterRedirects
@@ -61,127 +62,200 @@ export class Breadcrumb {
 
                 this.cd.markForCheck();
             });
+    }
 
-        // Build breadcrumbs for the initial page load.
+
+    private buildCurrentBreadcrumb(): void {
         this.breadcrumbs = this.buildBreadcrumb(
             this.router.routerState.snapshot.root
         );
     }
 
-    // ============================================================
-    // Build breadcrumb hierarchy
-    // ============================================================
 
     private buildBreadcrumb(
-        route: ActivatedRouteSnapshot,
-        url: string = '',
-        breadcrumbs: BreadcrumbData[] = []
+        root: ActivatedRouteSnapshot
     ): BreadcrumbData[] {
 
-        const child = route.firstChild;
+        const breadcrumbs: BreadcrumbData[] = [];
 
-        if (!child) {
-            return breadcrumbs;
+        let route: ActivatedRouteSnapshot =
+            root;
+
+        let url = '';
+
+        while (route.firstChild) {
+
+            route = route.firstChild;
+
+            const segments = route.url;
+
+            if (!segments.length) {
+                continue;
+            }
+
+
+            // ----------------------------------------------------
+            // Normal route segment processing
+            // ----------------------------------------------------
+
+            for (const segment of segments) {
+
+                const path = segment.path;
+
+                if (!path) {
+                    continue;
+                }
+
+                url += `/${path}`;
+
+
+                // ------------------------------------------------
+                // India
+                // ------------------------------------------------
+
+                if (path === 'india') {
+                    this.addBreadcrumb(
+                        breadcrumbs,
+                        'India',
+                        url
+                    );
+
+                    continue;
+                }
+
+
+                // ------------------------------------------------
+                // Dynamic city
+                // /india/:city
+                // ------------------------------------------------
+
+                if (
+                    route.data['breadcrumb'] === 'city' &&
+                    route.params['city']
+                ) {
+
+                    this.addBreadcrumb(
+                        breadcrumbs,
+                        this.formatLabel(
+                            route.params['city']
+                        ),
+                        url
+                    );
+
+                    continue;
+                }
+
+
+                // ------------------------------------------------
+                // Dynamic restaurant
+                // /india/:city/:restaurant
+                // ------------------------------------------------
+
+                if (
+                    route.data['breadcrumb'] === 'restaurant' &&
+                    route.params['restaurant']
+                ) {
+
+                    this.addBreadcrumb(
+                        breadcrumbs,
+                        this.formatLabel(
+                            route.params['restaurant']
+                        ),
+                        url
+                    );
+
+                    continue;
+                }
+
+
+                // ------------------------------------------------
+                // Static breadcrumb
+                // Order / Reviews
+                // ------------------------------------------------
+
+                const label =
+                    route.data['breadcrumb'] as
+                    string | undefined;
+
+                if (label) {
+
+                    this.addBreadcrumb(
+                        breadcrumbs,
+                        this.formatLabel(label),
+                        url
+                    );
+                }
+            }
+
+
+            // ----------------------------------------------------
+            // Special routes:
+            //
+            // :restaurant/cart
+            // :restaurant/checkout
+            // :restaurant/payment
+            //
+            // Restaurant component is NOT loaded for these routes,
+            // so restore the restaurant breadcrumb manually.
+            // ----------------------------------------------------
+
+            const restaurant =
+                route.params['restaurant'];
+
+            const label =
+                route.data['breadcrumb'] as
+                string | undefined;
+
+            if (
+                restaurant &&
+                label &&
+                label !== 'restaurant'
+            ) {
+
+                const restaurantUrl =
+                    url.substring(
+                        0,
+                        url.lastIndexOf('/')
+                    );
+
+                this.addBreadcrumb(
+                    breadcrumbs,
+                    this.formatLabel(restaurant),
+                    restaurantUrl
+                );
+
+                this.addBreadcrumb(
+                    breadcrumbs,
+                    this.formatLabel(label),
+                    url
+                );
+            }
         }
 
-        // --------------------------------------------------------
-        // Get URL segment
-        // --------------------------------------------------------
+        return breadcrumbs;
+    }
 
-        const routeURL = child.url
-            .map(segment => segment.path)
-            .join('/');
 
-        // --------------------------------------------------------
-        // Empty route
-        // --------------------------------------------------------
+    private addBreadcrumb(
+        breadcrumbs: BreadcrumbData[],
+        label: string,
+        url: string
+    ): void {
 
-        if (routeURL === '') {
-            return this.buildBreadcrumb(
-                child,
-                url,
-                breadcrumbs
-            );
-        }
+        const exists = breadcrumbs.some(
+            breadcrumb => breadcrumb.url === url
+        );
 
-        // --------------------------------------------------------
-        // Build URL
-        // --------------------------------------------------------
-
-        url += `/${routeURL}`;
-
-        // --------------------------------------------------------
-        // Resolve breadcrumb label
-        // --------------------------------------------------------
-
-        const label = this.resolveLabel(child);
-
-        // --------------------------------------------------------
-        // Add breadcrumb
-        // --------------------------------------------------------
-
-        if (label) {
+        if (!exists) {
             breadcrumbs.push({
-                label: this.formatLabel(label),
+                label,
                 url
             });
         }
-
-        // --------------------------------------------------------
-        // Continue through child routes
-        // --------------------------------------------------------
-
-        return this.buildBreadcrumb(
-            child,
-            url,
-            breadcrumbs
-        );
     }
 
-    // ============================================================
-    // Resolve breadcrumb label
-    // ============================================================
 
-    private resolveLabel(
-        route: ActivatedRouteSnapshot
-    ): string | undefined {
-
-        const breadcrumb = route.data['breadcrumb'];
-
-        if (!breadcrumb) {
-            return undefined;
-        }
-
-        // --------------------------------------------------------
-        // Dynamic city
-        // --------------------------------------------------------
-
-        if (breadcrumb === 'city') {
-            return route.params['city'];
-        }
-
-        // --------------------------------------------------------
-        // Dynamic restaurant
-        // --------------------------------------------------------
-
-        if (breadcrumb === 'restaurant') {
-            return route.params['restaurant'];
-        }
-
-        // --------------------------------------------------------
-        // Static breadcrumb
-        // --------------------------------------------------------
-
-        return breadcrumb;
-    }
-
-    // ============================================================
-    // Format breadcrumb label
-    // ============================================================
-
-    private formatLabel(
-        value: string
-    ): string {
+    private formatLabel(value: string): string {
 
         return value
             .split('-')
