@@ -5,6 +5,7 @@ import {
   Input,
   Output
 } from '@angular/core';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
@@ -19,35 +20,59 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 })
 export class Button {
 
-  @Input() variant:
+  @Input()
+  variant:
     | 'primary'
     | 'secondary'
     | 'outline'
     | 'ghost'
+    | 'text'
     | 'danger'
     | 'icon' = 'primary';
 
-  @Input() size:
+  @Input()
+  size:
     | 'sm'
     | 'md'
     | 'lg' = 'md';
 
-  @Input() type:
+  @Input()
+  weight:
+    | 'regular'
+    | 'medium'
+    | 'semibold'
+    | 'bold' = 'semibold';
+
+  @Input()
+  textColor:
+    | 'default'
+    | 'muted' = 'default';
+
+  @Input()
+  type:
     | 'button'
     | 'submit'
     | 'reset' = 'button';
 
-  @Input() icon?: IconDefinition;
+  @Input()
+  icon?: IconDefinition;
 
-  @Input() iconPosition:
+  @Input()
+  iconPosition:
     | 'left'
     | 'right' = 'left';
 
-  @Input() disabled = false;
+  @Input()
+  disabled = false;
 
-  @Input() loading = false;
+  @Input()
+  loading = false;
 
-  @Output() clicked = new EventEmitter<MouseEvent>();
+  @Input()
+  disableHover = false;
+
+  @Output()
+  clicked = new EventEmitter<MouseEvent>();
 
 
   onClick(event: MouseEvent): void {

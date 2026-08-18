@@ -6,6 +6,8 @@
     justify-content: center
     gap: $space-8
 
+    min-width: fit-content
+
     border: $border-style-none
     border-radius: $radius-8
 
@@ -15,7 +17,7 @@
 
     cursor: pointer
 
-    transition: $transition-background, $transition-color, $transition-border, $transition-shadow, $transition-transform
+    transition: $transition-background,$transition-color,$transition-border,$transition-shadow,$transition-transform
 
     &:disabled
         opacity: .6
@@ -28,20 +30,29 @@
 .button-sm
     min-height: 32px
     padding: $space-4 $space-12
-
     font-size: $font-size-14
 
 .button-md
     min-height: 40px
     padding: $space-8 $space-16
-
     font-size: $font-size-16
 
 .button-lg
     min-height: 48px
     padding: $space-12 $space-24
-
     font-size: $font-size-18
+
+.button-weight-regular
+    font-weight: $font-weight-regular
+
+.button-weight-medium
+    font-weight: $font-weight-medium
+
+.button-weight-semibold
+    font-weight: $font-weight-semibold
+
+.button-weight-bold
+    font-weight: $font-weight-bold
 
 .button-primary
     background: $color-primary
@@ -72,6 +83,13 @@
     &:hover:not(:disabled)
         background: $color-bg-gray
 
+.button-text
+    background: transparent
+    color: $color-text-primary
+
+.button-text-muted
+    color: $color-text-muted
+
 .button-danger
     background: $color-error
     color: $color-text-white
@@ -86,8 +104,15 @@
 
     border-radius: $radius-circle
     background: transparent
-
     color: $color-text-primary
 
     &:hover:not(:disabled)
         background: $color-bg-gray
+
+.button-no-hover
+    &:hover:not(:disabled)
+        background: revert
+        color: revert
+        border-color: revert
+        box-shadow: revert
+        transform: revert
