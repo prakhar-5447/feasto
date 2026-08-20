@@ -97,10 +97,9 @@ app.use(
  * Handle all other requests by rendering the Angular application.
  */
 
-
 app.use(async (req, res, next) => {
 
-  // 🚫 Skip SSR for API routes
+  // Skip SSR for API routes
   if (req.path.startsWith('/api')) {
     return next();
   }
@@ -110,14 +109,24 @@ app.use(async (req, res, next) => {
     const isRoot = req.path === '/';
 
     if (isRoot && city) {
-      return res.redirect(`/india/${city}`);
+      const params = new URLSearchParams();
+
+      params.set('city', city);
+
+      return res.redirect(
+        `/india/${encodeURIComponent(city)}`
+      );
     }
 
-    (globalThis as any).REQUEST_ID = req.requestId
+    (globalThis as any).REQUEST_ID = req.requestId;
+
     const response = await angularApp.handle(req);
 
     if (response) {
-      return writeResponseToNodeResponse(response, res);
+      return writeResponseToNodeResponse(
+        response,
+        res
+      );
     }
 
     next();

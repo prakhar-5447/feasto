@@ -25,7 +25,7 @@
             <ul class="popular-grid">
                 @for (city of popularCities; track city.id) {
                 <li class="city-card">
-                    <a [routerLink]="['/india', city.slug]" (click)="selectCity(city.slug)"
+                    <a [routerLink]="['/india',city.slug]" (click)="selectCity(city.slug)"
                         [attr.aria-label]="'Explore restaurants in ' + city.name">
                         <div class="image-wrapper">
 
@@ -59,7 +59,7 @@
             <ul class="city-list">
                 @for (city of allCities; track city) {
                 <li>
-                    <a class="city-list-item" [routerLink]="['/india', city.slug]" (click)="selectCity(city.slug)"
+                    <a class="city-list-item" [routerLink]="['/india',city.slug]" (click)="selectCity(city.slug)"
                         [attr.aria-label]="'Explore restaurants in ' + city.name">
                         <span class="city-name">
                             <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>

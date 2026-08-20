@@ -5,179 +5,289 @@
     background: $color-bg-white
 
     .container
-        max-width: 1200px
-        margin: 0 auto
-        padding: 0$space-16
-        height: 86px
         display: flex
         align-items: center
         justify-content: space-between
-        gap:$space-16
+        gap: $space-16
 
-        .left
-            display: flex
-            align-items: center
-            gap:$space-32
-            flex: 1
-            .logo
-                font-size: $font-size-24
-                font-weight: $font-weight-bold
-                color: $color-primary
+        width: 100%
+        max-width: $container-xl
+        height: 86px
+        margin: 0 auto
+        padding: 0 $space-16
 
-            .search
-                display: flex
-                gap:$space-16
-                align-items: center
-                background: $color-bg-white
-                padding:$space-12 0px
-                border-radius: $radius-4
-                box-shadow: $shadow-md
-                border: $border-width-1 $border-style-solid $color-overlay-black-subtle
-                width: 100%
-                max-width: 720px
-                .box
-                    position: relative
-                    padding: 0px$space-8
-                    width: 100%
-                    &:first-child
-                        border-right: $border-width-1 $border-style-solid $color-border
-                        max-width: 2$space-80
-                        .dropdown
-                            width: 320px
+    .left
+        display: flex
+        align-items: center
+        gap: $space-32
 
-                    .display
-                        width: 100%
-                        display: flex
-                        align-items: center
-                        gap: 0px
-                        cursor: pointer
-                        width: 100%
+        min-width: 0
+        flex: 1
 
-                        fa-icon
-                            font-size: $font-size-18
-                            color: $color-primary
+    .logo
+        flex-shrink: 0
 
-                        input
-                            color: $color-text-muted
-                            width: 100%
-                            font-size: $font-size-16
-                            height:$space-24
-                            padding: 0$space-8
-                            border: $border-style-none
-                            border-radius: $radius-4
-                            font-weight: $font-weight-medium
-                            &:focus
-                                outline: none
-                                border-color: $color-text-muted
+        color: $color-primary
+        font-size: $font-size-24
+        font-weight: $font-weight-bold
+        text-decoration: none
 
-                    .dropdown
-                        position: absolute
-                        top: 54px
-                        left: 0
-                        max-height: 720px
-                        background: $color-bg-white
-                        box-shadow: 0$space-4$space-16 $color-overlay-black-medium
-                        z-index: $z-10
-                        border-radius: $radius-8
-                        overflow: hidden
-                        width: 100%
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
+            border-radius: $radius-4
 
-                        .suggestion
-                            width: 100%
-                            font-size: $font-size-16
-                            color: $color-text-secondary
-                            cursor: pointer
-                            padding:$space-16$space-16
-                            &:not(:last-child)
-                                border-bottom: $border-width-1 $border-style-solid $color-border
-                            &:hover
-                                background: $color-bg-gray-soft
+    .search
+        display: flex
+        align-items: center
+        gap: $space-16
 
-                        .gps-btn
-                            width: 100%
-                            display: flex
-                            align-items: flex-start
-                            justify-content: flex-start
-                            border: $border-style-none
-                            background: none
-                            cursor: pointer
-                            font-size: $font-size-14
-                            gap:$space-12
-                            padding:$space-16$space-16
+        width: 100%
+        max-width: 720px
+        padding: $space-12 0
 
-                            .gps-text
-                                display: flex
-                                flex-direction: column
-                                gap:$space-8
-                                align-items: flex-start
-                                font-size: $font-size-16
-                                color: $color-primary
-                                p
-                                    color: $color-text-muted
-                                    font-size: $font-size-14
-                            .loader-area
-                                width:$space-20
-                                height:$space-20
-                                fa-icon
-                                    font-size: $font-size-18
-                                    color: $color-primary
-                            &:hover
-                                background: $color-bg-gray-soft
+        border: $border-width-1 $border-style-solid $color-border-light
+        border-radius: $radius-4
+        background: $color-bg-white
+        box-shadow: $shadow-md
 
-        .nav
-            width: auto
-            display: flex
-            align-items: center
-            gap:$space-16
+    .box
+        position: relative
 
-            .btn
-                width: auto
-                display: flex
-                align-items: center
-                gap:$space-8
-                padding:$space-12$space-16
-                border-radius: $radius-4
-                cursor: pointer
-                border: $border-style-none
-                font-size: $font-size-14
-                &:first-child
-                    font-weight: $font-weight-medium
-                    background: $color-bg-white
-                fa-icon
-                    font-size: $font-size-18
+        width: 100%
+        padding: 0 $space-8
 
-            .auth
-                background: $color-primary
-                color: $color-bg-white
-                font-weight: $font-weight-semibold
-            .navbar-user
-                display: flex
-                align-items: center
-                gap:$space-12
-                cursor: pointer
-                padding:$space-4$space-8
+        &:first-child
+            max-width: 280px
+            border-right: $border-width-1 $border-style-solid $color-border
 
-                .avatar
-                    width:$space-32
-                    height:$space-32
-                    border-radius: $radius-circle
-                    background: $color-primary
-                    font-size: $font-size-14
-                    font-weight: $font-weight-semibold
-                    display: flex
-                    align-items: center
-                    justify-content: center
-                    color: $color-bg-white
+            .dropdown
+                width: 320px
 
-                .info
-                    .name
-                        color: $color-text-primary
-                        font-size: $font-size-16
-                        font-weight: $font-weight-semibold
+    .display
+        display: flex
+        align-items: center
+        gap: $space-8
 
-@media (max-width: 968px)
+        width: 100%
+
+        fa-icon
+            flex-shrink: 0
+
+            color: $color-primary
+            font-size: $font-size-18
+
+        input
+            width: 100%
+            height: $space-24
+            padding: 0
+
+            border: $border-style-none
+            border-radius: $radius-4
+            outline: none
+
+            color: $color-text-primary
+            font-size: $font-size-16
+            font-weight: $font-weight-medium
+
+            &::placeholder
+                color: $color-text-muted
+
+            &:focus
+                outline: none
+
+    .dropdown
+        position: absolute
+        top: calc(100% + $space-20)
+        left: 0
+        z-index: $z-10
+
+        width: 100%
+        max-height: 720px
+        overflow-y: auto
+
+        border-radius: $radius-8
+        background: $color-bg-white
+        box-shadow: $shadow-xl
+
+    .suggestions
+        display: flex
+        flex-direction: column
+
+    .suggestion
+        display: flex
+        align-items: center
+        justify-content: space-between
+        gap: $space-12
+
+        width: 100%
+        padding: $space-16
+
+        border: $border-style-none
+        border-bottom: $border-width-1 $border-style-solid $color-border
+
+        background: transparent
+
+        color: $color-text-secondary
+        font-size: $font-size-16
+        text-align: left
+
+        cursor: pointer
+        transition: $transition-background
+
+        &:last-child
+            border-bottom: $border-style-none
+
+        &:hover,
+        &:focus-visible
+            background: $color-bg-gray-soft
+
+        &:focus-visible
+            outline: none
+
+    .suggestion-result
+        span
+            color: $color-text-primary
+            font-weight: $font-weight-medium
+
+        small
+            flex-shrink: 0
+
+            color: $color-text-muted
+            font-size: $font-size-12
+
+    .gps-btn
+        display: flex
+        align-items: flex-start
+        gap: $space-12
+
+        width: 100%
+        padding: $space-16
+
+        border: $border-style-none
+        background: transparent
+
+        text-align: left
+        cursor: pointer
+
+        transition: $transition-background
+
+        &:hover,
+        &:focus-visible
+            background: $color-bg-gray-soft
+
+        &:focus-visible
+            outline: none
+
+    .loader-area
+        display: flex
+        align-items: center
+        justify-content: center
+
+        width: $space-20
+        min-width: $space-20
+        height: $space-20
+
+        color: $color-primary
+
+        fa-icon
+            font-size: $font-size-18
+
+    .gps-text
+        display: flex
+        flex-direction: column
+        gap: $space-4
+        align-items: flex-start
+
+        color: $color-primary
+        font-size: $font-size-16
+
+        small
+            color: $color-text-muted
+            font-size: $font-size-14
+
+    .nav
+        display: flex
+        align-items: center
+        gap: $space-16
+
+        flex-shrink: 0
+
+    .nav-button
+        display: inline-flex
+        align-items: center
+        justify-content: center
+
+        min-height: $space-40
+        padding: $space-8 $space-16
+
+        border: $border-style-none
+        border-radius: $radius-4
+        background: $color-bg-white
+
+        color: $color-text-primary
+        font-size: $font-size-14
+        font-weight: $font-weight-medium
+
+        cursor: pointer
+
+        transition: $transition-background, $transition-color
+
+        &:hover
+            background: $color-bg-gray
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
+
+    .nav-button.auth
+        background: $color-primary
+        color: $color-text-white
+        font-weight: $font-weight-semibold
+
+        &:hover
+            background: $color-primary-hover
+
+    .navbar-user
+        display: flex
+        align-items: center
+        gap: $space-12
+
+        padding: $space-4 $space-8
+
+        border: $border-style-none
+        background: transparent
+
+        cursor: pointer
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
+            border-radius: $radius-4
+
+    .avatar
+        display: flex
+        align-items: center
+        justify-content: center
+
+        width: $space-32
+        height: $space-32
+
+        border-radius: $radius-circle
+        background: $color-primary
+
+        color: $color-text-white
+        font-size: $font-size-14
+        font-weight: $font-weight-semibold
+
+    .info
+        .name
+            color: $color-text-primary
+            font-size: $font-size-16
+            font-weight: $font-weight-semibold
+
+@media (max-width: $breakpoint-md)
     .header
-        .container
-            .left
-                .search
-                    display: none
+        .left
+            .search
+                display: none

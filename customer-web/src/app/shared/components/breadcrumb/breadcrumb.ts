@@ -45,7 +45,7 @@ export class Breadcrumb {
 
     ngOnInit(): void {
 
-        this.buildCurrentBreadcrumb();
+        this.buildBreadcrumbs();
 
         this.router.events
             .pipe(
@@ -54,7 +54,7 @@ export class Breadcrumb {
             )
             .subscribe(event => {
 
-                this.buildCurrentBreadcrumb();
+                this.buildBreadcrumbs();
 
                 this.logger.logClientRoute(
                     event.urlAfterRedirects
@@ -65,197 +65,150 @@ export class Breadcrumb {
     }
 
 
-    private buildCurrentBreadcrumb(): void {
-        this.breadcrumbs = this.buildBreadcrumb(
-            this.router.routerState.snapshot.root
-        );
-    }
+    private buildBreadcrumbs(): void {
 
-
-    private buildBreadcrumb(
-        root: ActivatedRouteSnapshot
-    ): BreadcrumbData[] {
+        const urlTree =
+            this.router.parseUrl(this.router.url);
 
         const breadcrumbs: BreadcrumbData[] = [];
 
-        let route: ActivatedRouteSnapshot =
-            root;
-
-        let url = '';
-
-        while (route.firstChild) {
-
-            route = route.firstChild;
-
-            const segments = route.url;
-
-            if (!segments.length) {
-                continue;
-            }
+        const pathSegments =
+            this.getPathSegments(urlTree);
 
 
-            // ----------------------------------------------------
-            // Normal route segment processing
-            // ----------------------------------------------------
+        // --------------------------------------------------------
+        // India
+        // --------------------------------------------------------
 
-            for (const segment of segments) {
+        if (pathSegments[0] === 'india') {
 
-                const path = segment.path;
-
-                if (!path) {
-                    continue;
-                }
-
-                url += `/${path}`;
-
-
-                // ------------------------------------------------
-                // India
-                // ------------------------------------------------
-
-                if (path === 'india') {
-                    this.addBreadcrumb(
-                        breadcrumbs,
-                        'India',
-                        url
-                    );
-
-                    continue;
-                }
-
-
-                // ------------------------------------------------
-                // Dynamic city
-                // /india/:city
-                // ------------------------------------------------
-
-                if (
-                    route.data['breadcrumb'] === 'city' &&
-                    route.params['city']
-                ) {
-
-                    this.addBreadcrumb(
-                        breadcrumbs,
-                        this.formatLabel(
-                            route.params['city']
-                        ),
-                        url
-                    );
-
-                    continue;
-                }
-
-
-                // ------------------------------------------------
-                // Dynamic restaurant
-                // /india/:city/:restaurant
-                // ------------------------------------------------
-
-                if (
-                    route.data['breadcrumb'] === 'restaurant' &&
-                    route.params['restaurant']
-                ) {
-
-                    this.addBreadcrumb(
-                        breadcrumbs,
-                        this.formatLabel(
-                            route.params['restaurant']
-                        ),
-                        url
-                    );
-
-                    continue;
-                }
-
-
-                // ------------------------------------------------
-                // Static breadcrumb
-                // Order / Reviews
-                // ------------------------------------------------
-
-                const label =
-                    route.data['breadcrumb'] as
-                    string | undefined;
-
-                if (label) {
-
-                    this.addBreadcrumb(
-                        breadcrumbs,
-                        this.formatLabel(label),
-                        url
-                    );
-                }
-            }
-
-
-            // ----------------------------------------------------
-            // Special routes:
-            //
-            // :restaurant/cart
-            // :restaurant/checkout
-            // :restaurant/payment
-            //
-            // Restaurant component is NOT loaded for these routes,
-            // so restore the restaurant breadcrumb manually.
-            // ----------------------------------------------------
-
-            const restaurant =
-                route.params['restaurant'];
-
-            const label =
-                route.data['breadcrumb'] as
-                string | undefined;
-
-            if (
-                restaurant &&
-                label &&
-                label !== 'restaurant'
-            ) {
-
-                const restaurantUrl =
-                    url.substring(
-                        0,
-                        url.lastIndexOf('/')
-                    );
-
-                this.addBreadcrumb(
-                    breadcrumbs,
-                    this.formatLabel(restaurant),
-                    restaurantUrl
-                );
-
-                this.addBreadcrumb(
-                    breadcrumbs,
-                    this.formatLabel(label),
-                    url
-                );
-            }
-        }
-
-        return breadcrumbs;
-    }
-
-
-    private addBreadcrumb(
-        breadcrumbs: BreadcrumbData[],
-        label: string,
-        url: string
-    ): void {
-
-        const exists = breadcrumbs.some(
-            breadcrumb => breadcrumb.url === url
-        );
-
-        if (!exists) {
             breadcrumbs.push({
-                label,
-                url
+                label: 'India',
+                url: '/india'
             });
         }
+
+
+        // --------------------------------------------------------
+        // City
+        //
+        // /india/:city
+        // --------------------------------------------------------
+
+        const city =
+            pathSegments[0] === 'india'
+                ? pathSegments[1]
+                : undefined;
+
+        if (city) {
+
+            breadcrumbs.push({
+                label: this.formatLabel(city),
+                url: `/india/${city}`
+            });
+        }
+
+
+        // --------------------------------------------------------
+        // Restaurant
+        //
+        // /india/:city/r/:restaurant
+        // --------------------------------------------------------
+
+        const restaurantIndex =
+            pathSegments.indexOf('r');
+
+        const restaurant =
+            restaurantIndex >= 0
+                ? pathSegments[restaurantIndex + 1]
+                : undefined;
+
+        if (restaurant && city) {
+
+            breadcrumbs.push({
+                label: this.formatLabel(restaurant),
+                url: `/india/${city}/r/${restaurant}`
+            });
+        }
+
+
+        // --------------------------------------------------------
+        // Current page
+        //
+        // Order / Reviews / Cart / Checkout / Payment
+        // --------------------------------------------------------
+
+        const page =
+            this.getCurrentPage(pathSegments);
+
+        if (page) {
+
+            breadcrumbs.push({
+                label: page.label,
+                url: page.path
+            });
+        }
+
+
+        this.breadcrumbs = breadcrumbs;
+    }
+
+    private getPathSegments(
+        urlTree: ReturnType<Router['parseUrl']>
+    ): string[] {
+
+        const primary =
+            urlTree.root.children['primary'];
+
+        if (!primary) {
+            return [];
+        }
+
+        return primary.segments
+            .map(segment => segment.path)
+            .filter(Boolean);
     }
 
 
-    private formatLabel(value: string): string {
+    private getCurrentPage(
+        segments: string[]
+    ): {
+        label: string;
+        path: string;
+    } | null {
+
+        const pages: Record<string, string> = {
+            order: 'Order',
+            reviews: 'Reviews',
+            cart: 'Cart',
+            checkout: 'Checkout',
+            payment: 'Payment'
+        };
+
+
+        const page =
+            [...segments]
+                .reverse()
+                .find(
+                    segment => pages[segment]
+                );
+
+
+        if (!page) {
+            return null;
+        }
+
+
+        return {
+            label: pages[page],
+            path: '/' + segments.join('/')
+        };
+    }
+
+
+    private formatLabel(
+        value: string
+    ): string {
 
         return value
             .split('-')

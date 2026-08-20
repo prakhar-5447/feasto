@@ -27,27 +27,14 @@
                             </label>
 
                             <input id="delivery-location" name="deliveryLocation" type="text"
-                                placeholder="Enter your delivery location" autocomplete="address-level2" />
+                                placeholder="Enter your delivery location" autocomplete="off"
+                                [(ngModel)]="locationQuery" />
 
                         </div>
-
-                        <div class="search-field">
-
-                            <fa-icon [icon]="faMagnifyingGlass" aria-hidden="true"></fa-icon>
-
-                            <label class="sr-only" for="restaurant-search">
-                                Search restaurant or cuisine
-                            </label>
-
-                            <input id="restaurant-search" name="search" type="search"
-                                placeholder="Search for restaurant or cuisine" autocomplete="off" />
-
-                        </div>
-
                     </div>
 
-                    <app-button type="submit" variant="primary" size="lg" (clicked)="findFood()"
-                        aria-label="Delete item" data-testid="delete-button">
+                    <app-button type="submit" variant="primary" size="lg" aria-label="find food"
+                        data-testid="find-button">
                         Find Food
                     </app-button>
 

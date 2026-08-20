@@ -49,14 +49,26 @@ export class LocationServicePersistence {
       : null;
   }
 
-  setCity(city: string) {
-    const cleanCity = city.toLowerCase();
+  setCity(city: string): void {
+
+    const cleanCity = city
+      .toLowerCase()
+      .trim();
 
     this.citySubject.next(cleanCity);
 
     if (isPlatformBrowser(this.platformId)) {
-      document.cookie = `city=${cleanCity}; path=/; max-age=31536000`;
-      localStorage.setItem('city', cleanCity);
+
+      document.cookie =
+        `city=${encodeURIComponent(cleanCity)}; ` +
+        `path=/; ` +
+        `max-age=31536000; ` +
+        `SameSite=Lax`;
+
+      localStorage.setItem(
+        'city',
+        cleanCity
+      );
     }
   }
 

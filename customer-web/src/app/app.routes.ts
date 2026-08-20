@@ -10,13 +10,16 @@ import { Restaurant } from './features/restaurant/restaurant';
 import { TabMenu } from './features/restaurant/tab-menu/tab-menu';
 import { TabReviews } from './features/restaurant/tab-reviews/tab-reviews';
 
-import { RestaurantResolver } from './shared/pipes/resolver';
-
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 import { LandingLayout } from './layouts/landing-layout/landing-layout';
 
+import { RestaurantResolver } from './shared/pipes/resolver';
 
 export const routes: Routes = [
+
+    // ============================================================
+    // Landing
+    // ============================================================
 
     {
         path: '',
@@ -25,31 +28,41 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => Landing,
+                loadComponent: () => Landing
             },
+
+
+            // ============================================================
+            // Location selection
+            // ============================================================
             {
                 path: 'india',
-                loadComponent: () => Location,
+                loadComponent: () => Location
             }
         ]
     },
 
+
+    // ============================================================
+    // City dashboard
+    // ============================================================
+
     {
         path: 'india/:city',
-        data: {
-            breadcrumb: 'city'
-        },
         loadComponent: () => DashboardLayout,
 
         children: [
 
+            // /india/dhanbad
             {
                 path: '',
                 loadComponent: () => Dashboard
             },
 
+            // /india/dhanbad/r/dominos-pizza
             {
-                path: ':restaurant',
+                path: 'r/:restaurant',
+
                 loadComponent: () => Restaurant,
 
                 data: {
@@ -64,17 +77,21 @@ export const routes: Routes = [
                         pathMatch: 'full'
                     },
 
+                    // /india/dhanbad/r/dominos-pizza/order
                     {
                         path: 'order',
                         loadComponent: () => TabMenu,
+
                         data: {
                             breadcrumb: 'Order'
                         }
                     },
 
+                    // /india/dhanbad/r/dominos-pizza/reviews
                     {
                         path: 'reviews',
                         loadComponent: () => TabReviews,
+
                         data: {
                             breadcrumb: 'Reviews'
                         }
@@ -82,8 +99,11 @@ export const routes: Routes = [
                 ]
             },
 
+
+            // /india/dhanbad/r/dominos-pizza/cart
             {
-                path: ':restaurant/cart',
+                path: 'r/:restaurant/cart',
+
                 loadComponent: () => Cart,
 
                 resolve: {
@@ -95,8 +115,11 @@ export const routes: Routes = [
                 }
             },
 
+
+            // /india/dhanbad/r/dominos-pizza/checkout
             {
-                path: ':restaurant/checkout',
+                path: 'r/:restaurant/checkout',
+
                 loadComponent: () => Checkout,
 
                 resolve: {
@@ -109,8 +132,11 @@ export const routes: Routes = [
                 }
             },
 
+
+            // /india/dhanbad/r/dominos-pizza/payment
             {
-                path: ':restaurant/payment',
+                path: 'r/:restaurant/payment',
+
                 loadComponent: () => Payment,
 
                 resolve: {
@@ -124,6 +150,11 @@ export const routes: Routes = [
             }
         ]
     },
+
+
+    // ============================================================
+    // 404
+    // ============================================================
 
     {
         path: '**',

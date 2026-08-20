@@ -1,206 +1,530 @@
-import { Component, Output, EventEmitter, Inject, inject, signal } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faLocationDot, faLocationCrosshairs, faMagnifyingGlass
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Output,
+  inject,
+  signal
+} from '@angular/core';
+
+import {
+  AsyncPipe
+} from '@angular/common';
+
+import {
+  HttpClient,
+  HttpParams
+} from '@angular/common/http';
+
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink
+} from '@angular/router';
+
+import {
+  debounceTime,
+  filter,
+  map,
+  distinctUntilChanged,
+  of,
+  Subject,
+  switchMap,
+  catchError
+} from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import {
+  faLocationCrosshairs,
+  faLocationDot,
+  faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons';
-import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { LocationService, LocationServicePersistence } from '../../../core/services/location.service';
-import { ClickOutsideDirective } from "../../directive/clickOutside.directive";
-import { Router } from '@angular/router';
-import { selectUser } from '../../../store/auth/auth.selectors';
+
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.state'; // ✅ add this
-import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
+
+import { LocationService, LocationServicePersistence } from '../../../core/services/location.service';
 import { AuthService } from '../../../core/services/auth.service';
-import * as AuthActions from '../../../store/auth/auth.actions';
+import { ClickOutsideDirective } from '../../directive/clickOutside.directive';
 import { Loader } from '../loader/loader';
+
+import { AppState } from '../../../store/app.state';
+import * as AuthActions from '../../../store/auth/auth.actions';
+import { selectUser } from '../../../store/auth/auth.selectors';
+import { FormsModule } from '@angular/forms';
+import { Button } from '../button/button';
+
+
+interface LocationResult {
+  text: string;
+  place_name: string;
+  context?: {
+    text?: string;
+  }[];
+}
+
+
+interface RestaurantResult {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+
+interface FoodResult {
+  _id: string;
+  name: string;
+}
+
+
+interface SearchResponse {
+  data?: {
+    restaurants?: RestaurantResult[];
+    foods?: FoodResult[];
+    cuisines?: string[];
+  };
+}
+
+interface ReverseGeocodeResponse {
+  context?: {
+    text?: string;
+  }[];
+}
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [FontAwesomeModule, FormsModule, ClickOutsideDirective, CommonModule, Loader],
+  imports: [
+    AsyncPipe,
+    FontAwesomeModule,
+    FormsModule,
+    ClickOutsideDirective,
+    Button,
+    Loader,
+    RouterLink
+  ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Navbar {
-  private store = inject(Store<AppState>);
 
-  user$: Observable<any> = this.store.select(selectUser);
-  constructor(private http: HttpClient, private router: Router, private locationService: LocationService, private locationServicePersistence: LocationServicePersistence, private authService: AuthService
-  ) { }
+  @Output() readonly openAuth = new EventEmitter<void>();
 
-  @Output() openAuth = new EventEmitter<void>();
-  faLocationDot = faLocationDot;
-  faLocationCrosshairs = faLocationCrosshairs;
-  faMagnifyingGlass = faMagnifyingGlass;
+  readonly faLocationDot = faLocationDot;
+  readonly faLocationCrosshairs = faLocationCrosshairs;
+  readonly faMagnifyingGlass = faMagnifyingGlass;
 
-  selectedLocation = signal('Select Location');
+
+  readonly selectedLocation = signal('Select Location');
+  readonly detectLocationLoader = signal(false);
+
   locationQuery = '';
-  locationResults: any[] = [];
+  restaurantQuery = '';
+
+  locationResults: LocationResult[] = [];
+  restaurantResults: RestaurantResult[] = [];
+  foodResults: FoodResult[] = [];
+  cuisineResults: string[] = [];
+
   showLocationDropdown = false;
   showRestaurantDropdown = false;
 
-  restaurantQuery = '';
-  restaurantResults: any[] = [];
-  foodResults: any[] = [];
-  cuisineResults: string[] = [];
+  private city = '';
 
-  detectLocationLoader = signal<boolean>(false)
-  goToProfile(user: string) {
-    this.router.navigate(['/users', user])
+  private readonly store = inject(Store<AppState>);
+  private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+  private readonly locationService = inject(LocationService);
+  private readonly locationServicePersistence = inject(
+    LocationServicePersistence
+  );
+  private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly locationSearch$ = new Subject<string>();
+  private readonly restaurantSearch$ = new Subject<string>();
+
+  readonly user$ = this.store.select(selectUser);
+
+  constructor() {
+    this.initializeUrlCity();
+    this.setupLocationSearch();
+    this.setupRestaurantSearch();
   }
 
-  toTitleCase(value: string | null): string {
-    if (!value) return ""
-    return value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-  }
+  private initializeUrlCity(): void {
 
-  closeDropdown() {
-    this.showLocationDropdown = false;
-    this.showRestaurantDropdown = false;
-    this.restaurantQuery = '';
-    this.restaurantResults = [];
-    this.foodResults = [];
-    this.cuisineResults = [];
-  }
+    const updateCityFromUrl = (): void => {
 
-  toggleLocationDropdown() {
-    this.showRestaurantDropdown = false;
-    this.showLocationDropdown = !this.showLocationDropdown;
-  }
+      let route = this.router.routerState.root;
 
-  toggleRestaurantDropdown() {
-    this.showLocationDropdown = false;
-    this.showRestaurantDropdown = !this.showRestaurantDropdown;
-  }
+      let city: string | null = null;
 
-  searchLocation() {
-    if (!this.locationQuery) {
-      this.locationResults = [];
-      return;
-    }
+      while (route) {
 
-    this.locationService.search(this.locationQuery)
-      .subscribe((data: any) => {
-        this.locationResults = data;
+        const routeCity =
+          route.snapshot?.paramMap?.get('city');
+
+        if (routeCity) {
+          city = routeCity;
+          break;
+        }
+
+        const child = route.firstChild;
+
+        if (!child) {
+          break;
+        }
+
+        route = child;
+      }
+
+      if (!city) {
+
+        this.city = '';
+
+        this.selectedLocation.set(
+          'Select Location'
+        );
+
+        return;
+      }
+
+      this.city =
+        this.formatSlug(city);
+
+      this.locationServicePersistence.setCity(
+        this.city
+      );
+
+      this.selectedLocation.set(
+        this.toTitleCase(this.city)
+      );
+    };
+
+    // Initial state
+    updateCityFromUrl();
+
+    // Update whenever navigation changes
+    this.router.events
+      .pipe(
+        filter(
+          event => event instanceof NavigationEnd
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+
+        updateCityFromUrl();
+
       });
   }
 
-  selectLocation(item: any) {
-    this.locationServicePersistence.setCity(item.text)
-    this.router.navigate(['india', item.text.toLowerCase()], {
-      replaceUrl: true
-    })
-    this.locationResults = [];
-    this.showLocationDropdown = false;
-    this.locationQuery = '';
+  
+  private setupLocationSearch(): void {
+
+    this.locationSearch$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(query => {
+
+          if (!query) {
+            return of([]);
+          }
+
+          return this.locationService
+            .search(query)
+            .pipe(
+              map(data =>
+                Array.isArray(data)
+                  ? data as LocationResult[]
+                  : []
+              ),
+              catchError(() => of([]))
+            );
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(results => {
+        this.locationResults = results;
+      });
   }
 
-  city = "";
-  detectLocation() {
-    if (!this.detectLocationLoader()) {
-      this.detectLocationLoader.set(true)
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const { latitude, longitude } = position.coords;
-          this.locationServicePersistence.setLocation(
-            latitude,
-            longitude
-          );
-          this.locationService
-            .reverseGeocode(latitude, longitude)
-            .subscribe((data: any) => {
-              this.selectedLocation.set(data['context'][1]['text'])
-              this.detectLocationLoader.set(false)
-              this.locationServicePersistence.setCity(data['context'][2]['text'])
-              this.showLocationDropdown = false
-              this.city = data['context'][2]['text'].toLowerCase();
-              this.router.navigate(['/india', data['context'][2]['text'].toLowerCase()]);
-            })
-        },
-        error => {
-          console.error(error);
-          this.detectLocationLoader.set(false)
-          alert('Location permission denied');
-          this.showLocationDropdown = false
-        }
-      );
-    }
-  }
 
-  searchRestaurant() {
-    if (this.restaurantQuery.trim().length < 3) {
-      this.restaurantResults = [];
-      this.foodResults = [];
-      this.cuisineResults = [];
-      this.showRestaurantDropdown = false;
-      return;
-    }
+  private setupRestaurantSearch(): void {
 
-    this.http.get<any>(
-      "/api/v1/search/search-items",
-      {
-        params: {
-          keyword: this.restaurantQuery.trim()
-        }
-      }
-    ).subscribe({
-      next: (res) => {
-        this.restaurantResults = res.data?.restaurants ?? [];
-        this.foodResults = res.data?.foods ?? [];
-        this.cuisineResults = res.data?.cuisines ?? [];
+    this.restaurantSearch$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(query => {
+
+          if (query.length < 3) {
+            return of<SearchResponse>({
+              data: {
+                restaurants: [],
+                foods: [],
+                cuisines: []
+              }
+            });
+          }
+
+          const params = new HttpParams()
+            .set('keyword', query);
+
+          return this.http
+            .get<SearchResponse>(
+              '/api/v1/search/search-items',
+              { params }
+            )
+            .pipe(
+              catchError(() =>
+                of<SearchResponse>({
+                  data: {
+                    restaurants: [],
+                    foods: [],
+                    cuisines: []
+                  }
+                })
+              )
+            );
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(response => {
+
+        this.restaurantResults =
+          response.data?.restaurants ?? [];
+
+        this.foodResults =
+          response.data?.foods ?? [];
+
+        this.cuisineResults =
+          response.data?.cuisines ?? [];
 
         this.showRestaurantDropdown =
           this.restaurantResults.length > 0 ||
           this.foodResults.length > 0 ||
           this.cuisineResults.length > 0;
-      },
-      error: () => {
-        this.restaurantResults = [];
-        this.foodResults = [];
-        this.cuisineResults = [];
-        this.showRestaurantDropdown = false;
-      }
-    });
+      });
   }
 
-  formatSlug(name: string) {
-    return name
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '');
-  }
 
-  selectRestaurant(restaurant: any) {
+  toggleLocationDropdown(): void {
+    this.showLocationDropdown =
+      !this.showLocationDropdown;
+
     this.showRestaurantDropdown = false;
+  }
+
+
+  toggleRestaurantDropdown(): void {
+    this.showRestaurantDropdown =
+      !this.showRestaurantDropdown;
+
+    this.showLocationDropdown = false;
+  }
+
+
+  closeDropdown(): void {
+    this.showLocationDropdown = false;
+    this.showRestaurantDropdown = false;
+
+    this.locationResults = [];
+    this.restaurantResults = [];
+    this.foodResults = [];
+    this.cuisineResults = [];
+
     this.restaurantQuery = '';
+  }
+
+
+  onLocationQueryChange(value: string): void {
+    this.locationQuery = value;
+
+    this.showLocationDropdown = true;
+    this.showRestaurantDropdown = false;
+
+    this.locationSearch$.next(
+      value.trim()
+    );
+  }
+
+
+  onRestaurantQueryChange(value: string): void {
+    this.restaurantQuery = value;
+
+    this.showRestaurantDropdown = true;
+    this.showLocationDropdown = false;
+
+    this.restaurantSearch$.next(
+      value.trim()
+    );
+  }
+
+
+  selectLocation(item: LocationResult): void {
+
+    const city = this.formatSlug(
+      item.text
+    );
+
+    this.city = city;
+
+    this.locationServicePersistence.setCity(
+      city
+    );
+
+    this.selectedLocation.set(
+      this.toTitleCase(city)
+    );
+
+    this.locationResults = [];
+    this.locationQuery = '';
+    this.showLocationDropdown = false;
+
+    this.router.navigate(
+      ['/india', city],
+      {
+        replaceUrl: true
+      }
+    );
+  }
+
+
+  detectLocation(): void {
+
+    if (this.detectLocationLoader()) {
+      return;
+    }
+
+    if (
+      typeof navigator === 'undefined' ||
+      !navigator.geolocation
+    ) {
+      return;
+    }
+
+    this.detectLocationLoader.set(true);
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.handleDetectedLocation(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+      },
+      () => {
+        this.detectLocationLoader.set(false);
+        this.showLocationDropdown = false;
+      }
+    );
+  }
+
+
+  private handleDetectedLocation(
+    latitude: number,
+    longitude: number
+  ): void {
+
+    this.locationService
+      .reverseGeocode(latitude, longitude)
+      .pipe(
+        map(data => data as ReverseGeocodeResponse),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: data => {
+
+          const city =
+            data?.context?.[2]?.text;
+
+          const location =
+            data?.context?.[1]?.text;
+
+          if (!city) {
+            this.detectLocationLoader.set(false);
+            return;
+          }
+
+          this.locationServicePersistence.setLocation(
+            latitude,
+            longitude
+          );
+
+          this.locationServicePersistence.setCity(
+            city
+          );
+
+          this.city =
+            this.formatSlug(city);
+
+          this.selectedLocation.set(
+            location
+              ? this.toTitleCase(location)
+              : this.toTitleCase(city)
+          );
+
+          this.showLocationDropdown = false;
+
+          this.router.navigate(
+            ['/india', this.city],
+            {
+              replaceUrl: true
+            }
+          );
+
+          this.detectLocationLoader.set(false);
+        },
+        error: () => {
+          this.detectLocationLoader.set(false);
+          this.showLocationDropdown = false;
+        }
+      });
+  }
+
+
+  selectRestaurant(
+    restaurant: RestaurantResult
+  ): void {
+
+    this.closeSearchDropdown();
+
+    const restaurantSlug =
+      this.formatSlug(restaurant.slug);
 
     this.router.navigate([
       '/india',
       this.city,
-      this.formatSlug(restaurant.slug)
+      'r',
+      restaurantSlug
     ]);
   }
 
-  selectCuisine(cuisine: string) {
-    this.showRestaurantDropdown = false;
-    this.restaurantQuery = '';
+
+  selectCuisine(cuisine: string): void {
+
+    this.closeSearchDropdown();
 
     this.router.navigate(
       ['/india', this.city],
       {
         queryParams: {
-          cuisine: cuisine
+          cuisine
         }
       }
     );
   }
 
-  selectFood(food: any) {
-    this.showRestaurantDropdown = false;
-    this.restaurantQuery = '';
+
+  selectFood(food: FoodResult): void {
+
+    this.closeSearchDropdown();
 
     this.router.navigate(
       ['/india', this.city],
@@ -212,19 +536,69 @@ export class Navbar {
     );
   }
 
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => {
 
-        // 🔥 clear ngrx state
-        this.store.dispatch(AuthActions.logout());
+  goToProfile(user: string): void {
+    this.router.navigate([
+      '/users',
+      user
+    ]);
+  }
 
-        // 🔥 reload AFTER cookie cleared
-        window.location.href = '/';
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+
+  logout(): void {
+
+    this.authService
+      .logout()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+
+          this.store.dispatch(
+            AuthActions.logout()
+          );
+
+          this.router.navigate(
+            ['/'],
+            {
+              replaceUrl: true
+            }
+          );
+        }
+      });
+  }
+
+
+  toTitleCase(value: string | null): string {
+
+    if (!value) {
+      return '';
+    }
+
+    return value
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(word =>
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+      )
+      .join(' ');
+  }
+
+
+  formatSlug(value: string): string {
+
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
+
+
+  private closeSearchDropdown(): void {
+    this.showRestaurantDropdown = false;
+    this.restaurantQuery = '';
   }
 }

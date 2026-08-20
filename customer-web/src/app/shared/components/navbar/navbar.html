@@ -1,100 +1,179 @@
 <header class="header">
   <div class="container">
+
     <div class="left">
-      <h1 class="logo">Feasto</h1>
+
+      <a class="logo" routerLink="/" aria-label="Feasto home">
+        Feasto
+      </a>
+
       <div class="search" appClickOutside (appClickOutside)="closeDropdown()">
-        <div class="box">
-          <div class="display" (click)="toggleLocationDropdown()">
-            <fa-icon [icon]="faLocationDot"></fa-icon>
-            <input type="text" [placeholder]="selectedLocation()" [(ngModel)]="locationQuery"
-              (input)="searchLocation()" />
+
+        <div class="box location-box">
+
+          <div class="display">
+            <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>
+
+            <label class="sr-only" for="location-search">
+              Delivery location
+            </label>
+
+            <input id="location-search" name="location" type="text" [placeholder]="selectedLocation()"
+              [(ngModel)]="locationQuery" (ngModelChange)="onLocationQueryChange($event)" autocomplete="off"
+              spellcheck="false" (focus)="toggleLocationDropdown()" />
           </div>
-          @if(showLocationDropdown){
+
+          @if (showLocationDropdown) {
           <div class="dropdown">
-            @if(locationResults.length === 0){
-            <button class="gps-btn" (click)="detectLocation()">
-              <div class="loader-area">
-                @if(detectLocationLoader()){
+
+            @if (locationResults.length === 0) {
+            <button type="button" class="gps-btn" (click)="detectLocation()">
+              <span class="loader-area" aria-hidden="true">
+                @if (detectLocationLoader()) {
                 <app-loader [size]="18"></app-loader>
-                }@else{
-                <fa-icon loading="lazy" [icon]="faLocationCrosshairs"></fa-icon>
+                } @else {
+                <fa-icon [icon]="faLocationCrosshairs"></fa-icon>
                 }
-              </div>
-              <div class="gps-text">
-                Detect current location
-                <p>
+              </span>
+
+              <span class="gps-text">
+                <span>
+                  Detect current location
+                </span>
+
+                <small>
                   Using GPS
-                </p>
-              </div>
+                </small>
+              </span>
             </button>
             }
+
             <div class="suggestions">
-              @for(item of locationResults; track $index){
-              <div class="suggestion" (click)="selectLocation(item)">
+              @for (
+              item of locationResults;
+              track item.place_name
+              ) {
+              <button type="button" class="suggestion" (click)="selectLocation(item)">
                 {{ item.place_name }}
-              </div>
+              </button>
               }
             </div>
+
           </div>
           }
+
         </div>
-        <div class="box">
-          <div class="display" (click)="toggleRestaurantDropdown()">
-            <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
-            <input type="text" placeholder="Search for restaurant, cuisine or a dish" [(ngModel)]="restaurantQuery"
-              (input)="searchRestaurant()" />
+
+        <div class="box restaurant-box">
+
+          <div class="display">
+            <fa-icon [icon]="faMagnifyingGlass" aria-hidden="true"></fa-icon>
+
+            <label class="sr-only" for="restaurant-search">
+              Search restaurants, cuisines or dishes
+            </label>
+
+            <input id="restaurant-search" name="restaurantSearch" type="search"
+              placeholder="Search for restaurant, cuisine or a dish" [(ngModel)]="restaurantQuery"
+              (ngModelChange)="onRestaurantQueryChange($event)" autocomplete="off" spellcheck="false"
+              (focus)="toggleRestaurantDropdown()" />
           </div>
-          @if(showRestaurantDropdown){
+
+          @if (showRestaurantDropdown) {
           <div class="dropdown">
+
             <div class="suggestions">
-              @for(res of restaurantResults; track res._id){
-              <div class="suggestion" (click)="selectRestaurant(res)">
-                <span>{{ res.name }}</span>
-                <small>Restaurant</small>
-              </div>
+
+              @for (
+              restaurant of restaurantResults;
+              track restaurant._id
+              ) {
+              <button type="button" class="suggestion suggestion-result" (click)="selectRestaurant(restaurant)">
+                <span>
+                  {{ restaurant.name }}
+                </span>
+
+                <small>
+                  Restaurant
+                </small>
+              </button>
               }
-              @for(food of foodResults; track food._id){
-              <div class="suggestion" (click)="selectFood(food)">
-                <span>{{ food.name }}</span>
-                <small>Food</small>
-              </div>
+
+              @for (
+              food of foodResults;
+              track food._id
+              ) {
+              <button type="button" class="suggestion suggestion-result" (click)="selectFood(food)">
+                <span>
+                  {{ food.name }}
+                </span>
+
+                <small>
+                  Food
+                </small>
+              </button>
               }
-              @for(cuisine of cuisineResults; track cuisine){
-              <div class="suggestion" (click)="selectCuisine(cuisine)">
-                <span>{{ cuisine }}</span>
-                <small>Cuisine</small>
-              </div>
+
+              @for (
+              cuisine of cuisineResults;
+              track cuisine
+              ) {
+              <button type="button" class="suggestion suggestion-result" (click)="selectCuisine(cuisine)">
+                <span>
+                  {{ cuisine }}
+                </span>
+
+                <small>
+                  Cuisine
+                </small>
+              </button>
               }
+
             </div>
+
           </div>
           }
+
         </div>
+
       </div>
+
     </div>
 
-    <nav class="nav">
-      @let user = (user$ | async);
 
-      @if(user){
-      <div class="navbar-user" (click)="goToProfile(user.name)">
-        <div class="avatar">
+    <nav class="nav" aria-label="Main navigation">
+      @let user = user$ | async;
+
+      @if (user) {
+
+      <button type="button" class="navbar-user" (click)="goToProfile(user.name)">
+        <span class="avatar" aria-hidden="true">
           {{ user.name?.charAt(0) }}
-        </div>
-        <div class="info">
-          <span class="name">{{ user.name }}</span>
-        </div>
-      </div>
-      <button class="btn auth" (click)="logout()">
-        <span>Log out</span>
+        </span>
+
+        <span class="info">
+          <span class="name">
+            {{ user.name }}
+          </span>
+        </span>
       </button>
+
+      <app-button variant="primary" size="md" (clicked)="logout()">
+        Log out
+      </app-button>
+
       } @else {
-      <button class="btn">
-        <span>Support</span>
-      </button>
-      <button class="btn auth" (click)="openAuth.emit()">
-        <span>Log in</span>
-      </button>
+
+      <app-button variant="text" size="md" weight="semibold" textColor="muted">
+        Support
+      </app-button>
+
+      <app-button variant="primary" size="md" weight="semibold" (clicked)="openAuth.emit()">
+        Log in
+      </app-button>
+
       }
     </nav>
+
   </div>
 </header>
