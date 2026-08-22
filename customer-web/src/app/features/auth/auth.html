@@ -46,26 +46,9 @@
 
             <form class="form" (ngSubmit)="continueWithPhone()">
 
-                <div class="field-group">
-
-                    <label for="phone-number">
-                        Mobile Number
-                    </label>
-
-                    <div class="phone-input">
-
-                        <span class="country-code">
-                            +91
-                        </span>
-
-                        <input id="phone-number" name="phone" type="tel" inputmode="numeric" autocomplete="tel"
-                            spellcheck="false" placeholder="Enter 10-digit mobile number" maxlength="10"
-                            pattern="[0-9]{10}" required [value]="phoneNumber" [disabled]="loading"
-                            (input)="onPhoneChange($event)" />
-
-                    </div>
-
-                </div>
+                <app-input id="phone-number" name="phone" label="Mobile Number" type="tel" inputmode="numeric"
+                    autocomplete="tel" [spellcheck]="false" placeholder="Enter 10-digit mobile number" prefix="+91"
+                    [(value)]="phoneNumber" [digitsOnly]="true" [maxlength]="10" [required]="true" />
 
                 <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
                     [loading]="loading" [disabled]="loading || !isPhoneValid">
@@ -141,37 +124,13 @@
 
             <form class="form" (ngSubmit)="completeSignup()">
 
-                <div class="field-group">
+                <app-input id="name" name="name" label="Name" type="text" autocomplete="name" [spellcheck]="false"
+                    placeholder="Enter your name" [(value)]="name" [minlength]="2" [maxlength]="50"
+                    pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" [disabled]="loading" [required]="true" />
 
-                    <label for="name">
-                        Name
-                    </label>
-
-                    <input id="name" name="name" type="text" autocomplete="name" placeholder="Enter your name"
-                        [(ngModel)]="name" minlength="2" maxlength="50" pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+"
-                        [disabled]="loading" required />
-
-                </div>
-
-
-                <div class="field-group">
-
-                    <label for="email">
-                        Email
-                        <span class="optional">
-                            (optional)
-                        </span>
-                    </label>
-
-                    <div class="email-input">
-                        <input id="email" name="email" type="email" autocomplete="email"
-                            placeholder="Enter email address" [(ngModel)]="email" maxlength="254"
-                            pattern="[A-Za-z0-9._%+-]+@gmail\.com" [disabled]="loading" />
-                        <span class="email-suffix" aria-hidden="true">
-                            @gmail.com
-                        </span>
-                    </div>
-                </div>
+                <app-input id="email" name="email" label="Email" type="text" autocomplete="email"
+                    placeholder="Enter your email" suffix="@gmail.com" [(value)]="email" [maxlength]="64"
+                    [pattern]="'[A-Za-z0-9._%+-]+'" [sanitizePattern]="/[A-Za-z0-9._%+-]/" [disabled]="loading" />
 
 
                 <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
@@ -182,7 +141,6 @@
             </form>
 
             }
-
 
             <p class="terms">
                 By continuing you agree to our

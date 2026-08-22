@@ -118,40 +118,6 @@
 
     margin-bottom: $space-8
 
-.field-group
-    display: flex
-    flex-direction: column
-    gap: $space-8
-
-    label
-        color: $color-text-secondary
-        font-size: $font-size-16
-        font-weight: $font-weight-medium
-        line-height: $line-height-tight
-
-    .optional
-        color: $color-text-muted
-        font-weight: $font-weight-regular
-
-.phone-input
-    display: flex
-    gap: $space-8
-
-    .country-code
-        display: flex
-        align-items: center
-        justify-content: center
-
-        width: $space-64
-        flex-shrink: 0
-
-        border: $border-width-1 $border-style-solid $color-border
-        border-radius: $radius-8
-        background: $color-bg-white
-
-        color: $color-text-secondary
-        font-weight: $font-weight-medium
-
 input
     width: 100%
     min-width: 0
@@ -232,37 +198,6 @@ input
     color: $color-text-secondary
     font-size: $font-size-14
     font-weight: $font-weight-regular
-
-.email-input
-    display: flex
-    align-items: center
-
-    border: $border-width-1 $border-style-solid $color-border
-    border-radius: $radius-8
-    background: $color-bg-gray
-
-    &:focus-within
-        border-color: $color-primary
-        box-shadow: $shadow-focus
-
-    input
-        flex: 1
-        min-width: 0
-
-        border: 0
-        background: transparent
-
-        &:focus
-            border: 0
-            box-shadow: none
-
-    .email-suffix
-        flex-shrink: 0
-
-        padding-right: $space-16
-
-        color: $color-text-muted
-        white-space: nowrap
 
 .terms
     margin-top: $space-24

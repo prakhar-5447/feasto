@@ -23,7 +23,6 @@ import {
   finalize,
   interval,
   map,
-  of,
   take,
 } from 'rxjs';
 
@@ -38,6 +37,7 @@ import { AppState } from '../../store/app.state';
 import { selectUser } from '../../store/auth/auth.selectors';
 
 import { Button } from '../../shared/components/button/button';
+import { Input } from '../../shared/components/input/input';
 
 
 type AuthStep =
@@ -68,7 +68,8 @@ interface CompleteProfileResponse {
   imports: [
     FormsModule,
     FontAwesomeModule,
-    Button
+    Button,
+    Input
   ],
   templateUrl: './auth.html',
   styleUrl: './auth.sass'
@@ -373,17 +374,6 @@ export class Auth {
     this.resendDisabled.set(true);
   }
 
-
-  onPhoneChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-
-    const cleaned = input.value
-      .replace(/\D/g, '')
-      .slice(0, 10);
-
-    input.value = cleaned;
-    this.phoneNumber = cleaned;
-  }
 
 
   onOtpInput(
