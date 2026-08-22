@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ImageCarousel } from './image-carousel/image-carousel';
 import { RestaurantInfo } from './restaurant-info/restaurant-info';
-import { RestaurantService } from '../../core/services/restaurent.service';
+import { RestaurantService } from '../../core/services/restaurant.service';
 import { LocationServicePersistence } from '../../core/services/location.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

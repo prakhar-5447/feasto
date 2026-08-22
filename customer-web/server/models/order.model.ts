@@ -1,85 +1,162 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, {
+    Schema,
+    Document
+} from "mongoose";
 
-export interface IOrderItem {
-    food: Types.ObjectId;
-    quantity: number;
-    price: number;
+export interface IOrder
+    extends Document {
+
+    orderId: string;
+
+    customer: mongoose.Types.ObjectId;
+
+    restaurant:
+    mongoose.Types.ObjectId;
+
+    restaurantSnapshot: {
+        name: string;
+        address: string;
+    };
+
+    items: {
+        food: mongoose.Types.ObjectId;
+        name: string;
+        image: string;
+        price: number;
+        quantity: number;
+        total: number;
+    }[];
+
+    billing: {
+        itemTotal: number;
+        discount: number;
+        deliveryFee: number;
+        platformFee: number;
+        gst: number;
+        grandTotal: number;
+    };
+
+    deliveryAddress: {
+        fullAddress: string;
+        lat: number;
+        lng: number;
+    };
+
+    payment: {
+        method: string;
+        transactionId?: string;
+        paidAt: Date
+    };
+
+    orderStatus: string;
+    paymentStatus: string;
 }
 
-export type OrderStatus =
-    | "PLACED"
-    | "ACCEPTED"
-    | "PREPARING"
-    | "OUT_FOR_DELIVERY"
-    | "DELIVERED"
-    | "CANCELLED";
+const orderSchema =
+    new Schema<IOrder>(
+        {
+            orderId: String,
 
-export interface IOrder extends Document {
-    user: Types.ObjectId;
-    restaurant: Types.ObjectId;
-    items: IOrderItem[];
-    totalPrice: number;
-    status: OrderStatus;
-    createdAt: Date;
-    updatedAt: Date;
-}
+            customer: {
+                type: Schema.Types.ObjectId,
+                ref: "User"
+            },
 
-const orderItemSchema = new Schema<IOrderItem>({
-    food: {
-        type: Schema.Types.ObjectId,
-        ref: "Food",
-        required: true,
-    },
+            restaurant: {
+                type: Schema.Types.ObjectId,
+                ref: "Restaurant"
+            },
 
-    quantity: {
-        type: Number,
-        required: true,
-    },
+            restaurantSnapshot: {
+                name: String,
+                address: String
+            },
 
-    price: {
-        type: Number,
-        required: true,
-    },
-});
+            items: [
+                {
+                    food: {
+                        type: Schema.Types.ObjectId,
+                        ref: "Food"
+                    },
 
-const orderSchema = new Schema<IOrder>(
-    {
-        user: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
-
-        restaurant: {
-            type: Schema.Types.ObjectId,
-            ref: "Restaurant",
-            required: true,
-        },
-
-        items: [orderItemSchema],
-
-        totalPrice: {
-            type: Number,
-            required: true,
-        },
-
-        status: {
-            type: String,
-            enum: [
-                "PLACED",
-                "ACCEPTED",
-                "PREPARING",
-                "OUT_FOR_DELIVERY",
-                "DELIVERED",
-                "CANCELLED",
+                    name: String,
+                    image: String,
+                    price: Number,
+                    quantity: Number,
+                    total: Number
+                }
             ],
-            default: "PLACED",
+
+            billing: {
+                itemTotal: Number,
+                discount: Number,
+                deliveryFee: Number,
+                platformFee: Number,
+                gst: Number,
+                grandTotal: Number
+            },
+
+            deliveryAddress: {
+                fullAddress: String,
+                lat: Number,
+                lng: Number
+            },
+
+            payment: {
+                method: {
+                    type: String,
+                    enum: [
+                        'UPI',
+                        'FAKEUPI',
+                        'RAZORPAY',
+                        'COD'
+                    ],
+                    required: true
+                },
+
+                transactionId: {
+                    type: String,
+                    default: null
+                },
+
+                paidAt: {
+                    type: Date,
+                    default: null
+                }
+            },
+
+            paymentStatus: {
+                type: String,
+                enum: [
+                    'pending',
+                    'paid',
+                    'failed',
+                    'refunded'
+                ],
+                default: 'pending'
+            },
+
+            orderStatus: {
+                type: String,
+                enum: [
+                    "pending_payment",
+                    "placed",
+                    "accepted",
+                    "preparing",
+                    "picked_up",
+                    "delivered",
+                    "cancelled"
+                ],
+                default:
+                    "pending_payment"
+            }
         },
-    },
-    { timestamps: true }
+        {
+            timestamps: true
+        }
+    );
+
+export default mongoose.model(
+    "Order",
+    orderSchema
 );
-
-const Order =
-    mongoose.models["Order"] || mongoose.model<IOrder>("Order", orderSchema);
-
-export default Order;

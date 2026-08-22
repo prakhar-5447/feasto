@@ -1,32 +1,31 @@
-import express from "express";
-const router = express.Router();
+import express
+    from "express";
 
-import orderController from "../controllers/order.controller";
+import { protect }
+    from "../middlewares/auth.middleware";
 
-import { protect } from '../middlewares/auth.middleware';
+import * as orderController
+    from "../controllers/order.controller";
+
+const router =
+    express.Router();
 
 router.post(
     "/",
     protect,
-    orderController.placeOrder
+    orderController.createOrder
 );
 
 router.get(
-    "/",
+    "/my-orders",
     protect,
     orderController.getMyOrders
 );
 
-// router.get(
-//     "/:id",
-//     protect,
-//     orderController.getOrder
-// );
-
-// router.patch(
-//     "/:id/cancel",
-//     protect,
-//     orderController.cancelOrder
-// );
+router.get(
+    "/:id",
+    protect,
+    orderController.getOrder
+);
 
 export default router;

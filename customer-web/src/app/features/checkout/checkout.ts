@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RestaurantService } from '../../core/services/restaurent.service';
+import { RestaurantService } from '../../core/services/restaurant.service';
 import { CartService } from '../../core/services/cart.service';
 import { LocationServicePersistence } from '../../core/services/location.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -16,6 +16,7 @@ import {
   faTag,
   faLocationDot
 } from '@fortawesome/free-solid-svg-icons';
+import { HttpClient } from '@angular/common/http';
 
 interface Address {
   id: string;
@@ -75,22 +76,13 @@ export class Checkout {
     public cartService: CartService,
     public restaurantService: RestaurantService,
     public locationService: LocationServicePersistence,
-    private router: Router
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
-    this.loadCart();
     this.loadSummary();
-  }
-
-  loadCart() {
-    this.cartService
-      .getCart()
-      .subscribe({
-        next: (res: any) => {
-          this.cart = res.data?.items || [];
-        }
-      });
   }
 
   loadSummary() {
@@ -99,6 +91,7 @@ export class Checkout {
       .subscribe({
         next: (res: any) => {
           this.summary = res.data;
+          this.cdr.detectChanges()
         }
       });
   }
@@ -170,11 +163,29 @@ export class Checkout {
       return;
     }
 
-    this.router.navigate([
-      '/india',
-      this.locationService.getCity(),
-      this.restaurantService.restaurant.slug,
-      'payment'
-    ]);
+    this.http.post(
+      '/api/v1/orders',
+      {
+        deliveryAddress: {
+          fullAddress:
+            `${this.address.street}, ${this.address.landmark}, ${this.address.city} - ${this.address.pincode}`,
+          lat: null,
+          lng: null
+        }
+      }
+    ).subscribe({
+      next: (res: any) => {
+        this.router.navigate([
+          '/india',
+          this.locationService.getCity(),
+          this.restaurantService.restaurant.slug,
+          'payment'
+        ], {
+          queryParams: {
+            orderId: res.data._id
+          }
+        });
+      }
+    });
   }
 }

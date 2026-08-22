@@ -153,6 +153,11 @@ export class Auth {
           this.startResendTimer();
         } else {
           console.log("OTP:", res.otp);
+          this.otpValues = res.otp
+            .toString()
+            .padStart(6, '0')
+            .slice(0, 6)
+            .split('');
           this.step.set('otp');
         }
       },

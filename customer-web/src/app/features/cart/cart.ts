@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CartService } from '../../core/services/cart.service';
-import { RestaurantService } from '../../core/services/restaurent.service';
+import { RestaurantService } from '../../core/services/restaurant.service';
 import { LocationServicePersistence } from '../../core/services/location.service';
 import { Coupons } from './coupons/coupons';
 
@@ -47,6 +47,7 @@ export class Cart {
     gst: 0,
     grandTotal: 0
   };
+  loading = true;
 
   ngOnInit() {
     this.loadCart();
@@ -65,6 +66,7 @@ export class Cart {
     this.cartService.getCartSummary().subscribe({
       next: (res: any) => {
         this.summary = res.data;
+        this.loading = false;
         this.cdr.detectChanges()
       }
     });
@@ -142,7 +144,7 @@ export class Cart {
   }
 
   goBack() {
-    this.router.navigate(['/india']);
+    this.router.navigate(['/']);
   }
 
   checkout() {
