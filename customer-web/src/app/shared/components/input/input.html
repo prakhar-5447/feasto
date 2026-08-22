@@ -1,0 +1,43 @@
+<div class="input-field">
+
+    @if (label()) {
+    <label [for]="id()">
+        {{ label() }}
+    </label>
+    }
+
+    <div class="input-wrapper" [class.has-prefix]="prefix()" [class.has-suffix]="suffix()" [class.has-error]="error()"
+        [class.is-disabled]="disabled()">
+
+        @if (prefix()) {
+        <span class="input-prefix">
+            {{ prefix() }}
+        </span>
+        }
+        <input [id]="id()" [name]="name()" [type]="type()" [attr.inputmode]="inputmode()"
+            [autocomplete]="autocomplete()" [spellcheck]="spellcheck()" [placeholder]="placeholder()"
+            [attr.minlength]="minlength()" [attr.maxlength]="maxlength()" [pattern]="pattern()" [required]="required()"
+            [disabled]="disabled()" [value]="value()" [attr.aria-invalid]="error() ? 'true' : null"
+            (beforeinput)="onBeforeInput($event)" (input)="onInput($event)" />
+
+        @if (suffix()) {
+        <span class="input-suffix" aria-hidden="true">
+            {{ suffix() }}
+        </span>
+        }
+
+    </div>
+
+    @if (error()) {
+    <span class="error-message" [id]="'error-' + id()" role="alert">
+        {{ error() }}
+    </span>
+    }
+
+    @if (hint() && !error()) {
+    <span class="hint-message" [id]="'hint-' + id()">
+        {{ hint() }}
+    </span>
+    }
+
+</div>

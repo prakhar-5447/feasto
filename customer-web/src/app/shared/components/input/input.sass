@@ -1,0 +1,87 @@
+@use '../../../../styles/index' as *
+
+.input-field
+    display: flex
+    flex-direction: column
+    gap: $space-4
+
+    label
+        color: $color-text-secondary
+        font-size: $font-size-14
+        font-weight: $font-weight-medium
+        line-height: $line-height-tight
+
+.input-wrapper
+    display: flex
+    align-items: center
+    gap: $space-8
+
+    min-height: $space-40
+    padding: 0 $space-12
+
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-8
+
+    background: $color-bg-gray
+
+    transition: $transition-border,$transition-shadow,$transition-background
+
+    &:focus-within
+        border-color: $color-primary
+        box-shadow: $shadow-focus
+
+    &.has-error
+        border-color: $color-error
+
+        &:focus-within
+            border-color: $color-error
+            box-shadow: $shadow-error-focus
+
+    &.is-disabled
+        cursor: not-allowed
+        background: $color-bg-gray
+
+.input-wrapper input
+    flex: 1
+    min-width: 0
+    height: 100%
+    padding: 0
+
+    border: $border-style-none
+    outline: none
+
+    background: transparent
+
+    color: $color-text-primary
+    font: inherit
+
+    &::placeholder
+        color: $color-text-muted
+
+    &:disabled
+        color: $color-text-muted
+        cursor: not-allowed
+
+.input-prefix,
+.input-suffix
+    flex-shrink: 0
+
+    color: $color-text-muted
+    font-size: $font-size-16
+
+.input-prefix
+    margin-right: $space-4
+
+.input-suffix
+    margin-left: $space-4
+
+.error-message,
+.hint-message
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+.error-message
+    color: $color-error
+
+.hint-message
+    color: $color-text-muted
