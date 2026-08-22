@@ -8,9 +8,7 @@
       </a>
 
       <div class="search" appClickOutside (appClickOutside)="closeDropdown()">
-
-        <div class="box location-box">
-
+        <div class="box">
           <div class="display">
             <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>
 
@@ -26,13 +24,34 @@
           @if (showLocationDropdown) {
           <div class="dropdown">
 
+            @if (locationLoading()) {
+
+            <!-- Location skeleton -->
+            <div class="suggestions">
+
+              @for (item of [1, 2, 3, 4]; track item) {
+              <div class="skeleton-layout">
+                <span class="skeleton skeleton-title">
+                </span>
+              </div>
+              }
+
+            </div>
+            } @else {
+
+            <!-- GPS button -->
             @if (locationResults.length === 0) {
+
             <button type="button" class="gps-btn" (click)="detectLocation()">
               <span class="loader-area" aria-hidden="true">
+
                 @if (detectLocationLoader()) {
                 <app-loader [size]="18"></app-loader>
+
                 } @else {
-                <fa-icon [icon]="faLocationCrosshairs"></fa-icon>
+                <fa-icon [icon]="faLocationCrosshairs">
+                </fa-icon>
+
                 }
               </span>
 
@@ -40,14 +59,15 @@
                 <span>
                   Detect current location
                 </span>
-
                 <small>
                   Using GPS
                 </small>
               </span>
             </button>
+
             }
 
+            <!-- Location results -->
             <div class="suggestions">
               @for (
               item of locationResults;
@@ -57,14 +77,16 @@
                 {{ item.place_name }}
               </button>
               }
+
             </div>
+            }
 
           </div>
           }
 
         </div>
 
-        <div class="box restaurant-box">
+        <div class="box">
 
           <div class="display">
             <fa-icon [icon]="faMagnifyingGlass" aria-hidden="true"></fa-icon>
@@ -82,37 +104,57 @@
           @if (showRestaurantDropdown) {
           <div class="dropdown">
 
+            @if (restaurantLoading()) {
+
+            <!-- Restaurant search skeleton -->
             <div class="suggestions">
+
+              @for (item of [1, 2, 3, 4, 5]; track item) {
+
+              <div class="skeleton-layout">
+                <span class="skeleton skeleton-title">
+                </span>
+              </div>
+
+              }
+
+            </div>
+
+            } @else {
+
+            <div class="suggestions">
+
+              <!-- Restaurants -->
 
               @for (
               restaurant of restaurantResults;
               track restaurant._id
               ) {
               <button type="button" class="suggestion suggestion-result" (click)="selectRestaurant(restaurant)">
-                <span>
-                  {{ restaurant.name }}
-                </span>
-
+                <span>{{ restaurant.name }}</span>
                 <small>
                   Restaurant
                 </small>
               </button>
+
               }
+
+              <!-- Food -->
 
               @for (
               food of foodResults;
               track food._id
               ) {
               <button type="button" class="suggestion suggestion-result" (click)="selectFood(food)">
-                <span>
-                  {{ food.name }}
-                </span>
-
+                <span>{{ food.name }}</span>
                 <small>
                   Food
                 </small>
               </button>
+
               }
+
+              <!-- Cuisine -->
 
               @for (
               cuisine of cuisineResults;
@@ -122,7 +164,6 @@
                 <span>
                   {{ cuisine }}
                 </span>
-
                 <small>
                   Cuisine
                 </small>
@@ -130,14 +171,13 @@
               }
 
             </div>
+            }
 
           </div>
           }
 
         </div>
-
       </div>
-
     </div>
 
 
@@ -158,13 +198,13 @@
         </span>
       </button>
 
-      <app-button variant="primary" size="md" (clicked)="logout()">
+      <app-button variant="primary" size="md" weight="semibold" (clicked)="logout()">
         Log out
       </app-button>
 
       } @else {
 
-      <app-button variant="text" size="md" weight="semibold" textColor="muted">
+      <app-button variant="text" size="md" weight="semibold" tone="muted">
         Support
       </app-button>
 

@@ -1,89 +1,200 @@
-<div class="modal-overlay">
-    <div class="auth-card">
-        <div class="header">
-            <div class="icon-wrapper">
-                <fa-icon [icon]="faMobileScreen"></fa-icon>
-            </div>
-            <h1 class="title">Welcome to Feasto</h1>
-            @if(step() === 'phone'){
-            <p class="subtitle">
-                Enter your mobile number to continue
-            </p>
-            }
-            @if(step() === 'otp'){
-            <p class="subtitle">
-                Enter the OTP sent to {{ phoneNumber }} <button type="button" (click)="step.set('phone')">
-                    Change
-                </button>
-            </p>
-            }
-        </div>
-        @if(step() === 'phone'){
-        <form (ngSubmit)="continueWithPhone(); $event.preventDefault()" class="form">
-            <label>Mobile Number</label>
-            <div class="phone-input">
-                <div class="country-code">
-                    +91
-                </div>
-                <input type="tel" placeholder="Enter 10-digit mobile number" [value]="phoneNumber" maxlength="10"
-                    inputmode="numeric" (input)="onPhoneChange($any($event.target).value)" />
-            </div>
-            <button type="submit" [disabled]="loading || !isPhoneValid">
-                {{ loading ? 'Processing...' : 'Continue' }}
-            </button>
-        </form>
-        }
-        @if(step() === 'otp'){
-        <form (ngSubmit)="verifyOTP()" class="form">
-            <label>Enter OTP</label>
-            <div class="otp-container">
-                @for(box of otpArray; track $index){
-                <input [ngClass]="{'filled':otpValues[$index]!==''}" #otpInput type="text" maxlength="1"
-                    [value]="otpValues[$index]" inputmode="numeric" (input)="onOtpInput($event,$index)"
-                    (keydown)="onOtpKeydown($event,$index)" />
-                }
-            </div>
-            <button type="submit" [disabled]="loading || otp.length !== 6">
-                {{ loading ? 'Verifying...' : 'Verify & Continue' }}
-            </button>
-            <p class="resend">
-                Didn't receive OTP?
-                <button [disabled]="resendDisabled()" type="button" (click)="resendOtp()">
-                    @if(resendDisabled()){
-                    Resend OTP in {{timer()}}s
-                    } @else {
-                    Resend
-                    }
-                </button>
-            </p>
-        </form>
-        }
-        @if(step() === 'details'){
-        <form (ngSubmit)="completeSignup()" class="form">
-            <label>Name</label>
-            <div class="input">
-                <input type="text" [(ngModel)]="name" name="name" placeholder="Enter your name" />
-            </div>
+<div class="modal-overlay" role="presentation">
 
-            <label>Email (optional)</label>
-            <div class="input">
-                <input type="email" [(ngModel)]="email" name="email" placeholder="Enter email" />
-            </div>
-            <button type="submit" [disabled]="!name">
-                {{ loading ? 'Processing...' : 'Complete Signup' }}
-            </button>
-            <!-- 
-            <label>Your Name</label>
-            <input type="text" [(ngModel)]="name" name="name" placeholder="Enter your name" />
-            <label>Email (optional)</label>
-            <input type="email" [(ngModel)]="email" name="email" placeholder="Enter email" />
-            <button type="submit">
-                Complete Signup
-            </button> -->
-        </form>
-        }
-        <p class="terms">
-            By continuing you agree to our Terms & Privacy Policy
-        </p>
+    <div class="auth-card-wrapper">
+        <button type="button" class="close-button" aria-label="Close" (click)="closeAuth.emit()">
+            Close <fa-icon [icon]="faXmark"></fa-icon>
+        </button>
+        <section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title"
+            aria-describedby="auth-subtitle">
+
+            <header class="header">
+
+                <div class="icon-wrapper" aria-hidden="true">
+                    <fa-icon [icon]="faMobileScreen"></fa-icon>
+                </div>
+
+                <h1 id="auth-title" class="title">
+                    Welcome to Feasto
+                </h1>
+
+                @if (step() === 'phone') {
+                <p id="auth-subtitle" class="subtitle">
+                    Enter your mobile number to continue
+                </p>
+                }
+
+                @if (step() === 'otp') {
+                <p id="auth-subtitle" class="subtitle">
+                    Enter the OTP sent to {{ phoneNumber }}
+
+                    <button type="button" class="inline-action" [disabled]="loading" (click)="changePhone()">
+                        Change
+                    </button>
+                </p>
+                }
+
+                @if (step() === 'details') {
+                <p id="auth-subtitle" class="subtitle">
+                    Complete your profile to continue
+                </p>
+                }
+
+            </header>
+
+
+            @if (step() === 'phone') {
+
+            <form class="form" (ngSubmit)="continueWithPhone()">
+
+                <div class="field-group">
+
+                    <label for="phone-number">
+                        Mobile Number
+                    </label>
+
+                    <div class="phone-input">
+
+                        <span class="country-code">
+                            +91
+                        </span>
+
+                        <input id="phone-number" name="phone" type="tel" inputmode="numeric" autocomplete="tel"
+                            spellcheck="false" placeholder="Enter 10-digit mobile number" maxlength="10"
+                            pattern="[0-9]{10}" required [value]="phoneNumber" [disabled]="loading"
+                            (input)="onPhoneChange($event)" />
+
+                    </div>
+
+                </div>
+
+                <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
+                    [loading]="loading" [disabled]="loading || !isPhoneValid">
+                    {{ loading ? '' : 'Continue' }}
+                </app-button>
+
+            </form>
+
+            }
+
+
+            @if (step() === 'otp') {
+
+            <form class="form" (ngSubmit)="verifyOTP()">
+
+                <div class="field-group">
+
+                    <label for="otp-0">
+                        Enter OTP
+                    </label>
+
+                    <div class="otp-container" role="group" aria-label="Enter 6-digit OTP">
+
+                        @for (
+                        _ of otpArray;
+                        track $index
+                        ) {
+
+                        <input #otpInput [id]="'otp-' + $index" [name]="'otp-' + $index" type="text" inputmode="numeric"
+                            autocomplete="one-time-code" maxlength="1" pattern="[0-9]" [value]="otpValues[$index]"
+                            [class.filled]="otpValues[$index] !== ''" [attr.aria-label]="'OTP digit ' + ($index + 1)"
+                            [disabled]="loading" (input)="onOtpInput(
+                                    $event,
+                                    $index
+                                )" (keydown)="onOtpKeydown(
+                                    $event,
+                                    $index
+                                )" />
+
+                        }
+
+                    </div>
+
+                </div>
+
+                <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
+                    [loading]="loading" [disabled]="loading || otp.length !== 6">
+                    {{ loading ? '' : 'Verify & Continue' }}
+                </app-button>
+
+                <p class="resend">
+
+                    <span>
+                        Didn't receive OTP?
+                    </span>
+
+                    <button type="button" class="inline-action" [disabled]="resendDisabled()" (click)="resendOtp()">
+                        @if (resendDisabled()) {
+                        Resend OTP in {{ timer() }}s
+                        } @else {
+                        Resend
+                        }
+                    </button>
+
+                </p>
+
+            </form>
+
+            }
+
+
+            @if (step() === 'details') {
+
+            <form class="form" (ngSubmit)="completeSignup()">
+
+                <div class="field-group">
+
+                    <label for="name">
+                        Name
+                    </label>
+
+                    <input id="name" name="name" type="text" autocomplete="name" placeholder="Enter your name"
+                        [(ngModel)]="name" minlength="2" maxlength="50" pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+"
+                        [disabled]="loading" required />
+
+                </div>
+
+
+                <div class="field-group">
+
+                    <label for="email">
+                        Email
+                        <span class="optional">
+                            (optional)
+                        </span>
+                    </label>
+
+                    <div class="email-input">
+                        <input id="email" name="email" type="email" autocomplete="email"
+                            placeholder="Enter email address" [(ngModel)]="email" maxlength="254"
+                            pattern="[A-Za-z0-9._%+-]+@gmail\.com" [disabled]="loading" />
+                        <span class="email-suffix" aria-hidden="true">
+                            @gmail.com
+                        </span>
+                    </div>
+                </div>
+
+
+                <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
+                    [loading]="loading" [disabled]="loading || !isNameValid || !isEmailValid">
+                    {{ loading ? 'Processing...' : 'Complete Signup' }}
+                </app-button>
+
+            </form>
+
+            }
+
+
+            <p class="terms">
+                By continuing you agree to our
+                <a href="#">
+                    Terms
+                </a>
+                &
+                <a href="#">
+                    Privacy Policy
+                </a>
+            </p>
+
+        </section>
     </div>
 </div>

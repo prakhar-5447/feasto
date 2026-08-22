@@ -44,7 +44,7 @@ export class Button {
     | 'bold' = 'semibold';
 
   @Input()
-  textColor:
+  tone:
     | 'default'
     | 'muted' = 'default';
 
@@ -69,7 +69,13 @@ export class Button {
   loading = false;
 
   @Input()
+  fullWidth = false;
+
+  @Input()
   disableHover = false;
+
+  @Input()
+  ariaLabel?: string;
 
   @Output()
   clicked = new EventEmitter<MouseEvent>();
@@ -83,5 +89,20 @@ export class Button {
     }
 
     this.clicked.emit(event);
+  }
+
+  get buttonClasses(): string {
+    return [
+      'button',
+      `button-${this.variant}`,
+      `button-${this.size}`,
+      `button-weight-${this.weight}`,
+      `button-tone-${this.tone}`,
+      this.fullWidth ? 'button-full-width' : '',
+      this.disableHover ? 'button-no-hover' : '',
+      this.loading ? 'button-loading' : ''
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
 }

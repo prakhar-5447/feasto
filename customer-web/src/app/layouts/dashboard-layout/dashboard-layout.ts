@@ -4,6 +4,7 @@ import {
   DestroyRef,
   inject
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import {
   ActivatedRoute,
@@ -43,6 +44,7 @@ export class DashboardLayout {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
   private readonly locationService = inject(
     LocationServicePersistence
@@ -92,11 +94,15 @@ export class DashboardLayout {
 
 
   openAuth(): void {
+    this.document.body.style.overflow = 'hidden';
+
     this.showAuthModal = true;
   }
 
 
   closeAuth(): void {
+    this.document.body.style.overflow = '';
+
     this.showAuthModal = false;
   }
 }

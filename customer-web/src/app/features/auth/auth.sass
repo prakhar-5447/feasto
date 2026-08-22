@@ -3,168 +3,279 @@
 .modal-overlay
     position: fixed
     inset: 0
-    background: $color-overlay-black-subtle
-    display: flex
-    justify-content: center
-    align-items: center
     z-index: $z-modal
+
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+
+    width: 100%
+    min-height: 100%
+
+    padding: $space-16
+
+    background: $color-overlay-black-heavy
+
+.auth-card-wrapper
+    position: relative
+
+    width: 100%
+    max-width: $container-sm
+    animation: modal-bounce-in $animation-modal
+
+    @keyframes modal-bounce-in
+        0%
+            opacity: 0
+            transform: scale(.9) translateY(12px)
+
+        60%
+            opacity: 1
+            transform: scale(1.03) translateY(0)
+
+        100%
+            opacity: 1
+            transform: scale(1) translateY(0)
+
+.close-button
+    z-index: 10
+
+    position: absolute
+    top: -$space-24
+    right: $space-4
+
+    display: flex
+    align-items: center
+    gap: $space-4
+
+    padding: 0
+
+    border: 0
+    background: transparent
+
+    color: $color-text-white
+
+    font-size: $font-size-16
+    font-weight: $font-weight-medium
+
+    cursor: pointer
+
+    &:hover
+        color: $color-neutral-300
+
+    &:focus-visible
+        outline: 2px solid currentColor
+        outline-offset: 4px
+
+.auth-card
     width: 100%
 
-    .auth-card
-        width: 100%
-        max-width: 4$space-80
-        border-radius: $radius-16
+    padding: $space-32
+
+    border-radius: $radius-16
+    background: $color-bg-white
+    box-shadow: $shadow-lg
+
+.header
+    margin-bottom: $space-32
+
+    text-align: center
+
+    .icon-wrapper
+        display: flex
+        align-items: center
+        justify-content: center
+
+        width: $space-64
+        height: $space-64
+        margin: 0 auto $space-16
+
+        border-radius: $radius-circle
+        background: $color-primary-light
+
+        color: $color-primary
+        font-size: $font-size-28
+
+    .title
+        margin: 0
+
+        color: $color-text-primary
+        font-size: $font-size-28
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+
+    .subtitle
+        margin-top: $space-8
+
+        color: $color-text-secondary
+        font-size: $font-size-16
+        line-height: $line-height-normal
+
+.form
+    display: flex
+    flex-direction: column
+    gap: $space-16
+
+    margin-bottom: $space-8
+
+.field-group
+    display: flex
+    flex-direction: column
+    gap: $space-8
+
+    label
+        color: $color-text-secondary
+        font-size: $font-size-16
+        font-weight: $font-weight-medium
+        line-height: $line-height-tight
+
+    .optional
+        color: $color-text-muted
+        font-weight: $font-weight-regular
+
+.phone-input
+    display: flex
+    gap: $space-8
+
+    .country-code
+        display: flex
+        align-items: center
+        justify-content: center
+
+        width: $space-64
+        flex-shrink: 0
+
+        border: $border-width-1 $border-style-solid $color-border
+        border-radius: $radius-8
         background: $color-bg-white
-        border-radius: $radius-16
-        padding:$space-32
-        box-shadow: $shadow-lg
 
-        .header
-            text-align: center
-            margin-bottom:$space-32
-            .icon-wrapper
-                width: $space-64
-                height: $space-64
-                margin: 0 auto$space-16
-                display: flex
-                align-items: center
-                justify-content: center
-                background: $color-primary-light
-                border-radius: $radius-pill
+        color: $color-text-secondary
+        font-weight: $font-weight-medium
 
-                fa-icon
-                    color: $color-primary
-                    font-size: $font-size-28
+input
+    width: 100%
+    min-width: 0
 
-            .title
-                font-size: $font-size-28
-                font-weight: $font-weight-semibold
-                color: $color-text-primary
+    padding: $space-12 $space-16
 
-            .subtitle
-                color: $color-text-secondary
-                font-size: $font-size-16
-                button
-                    background: none
-                    border: $border-style-none
-                    color: $color-primary
-                    font-weight: $font-weight-medium
-                    cursor: pointer
-                    padding: 0
-                    width: auto
-                    margin-left:$space-4
-        .form
-            display: flex
-            flex-direction: column
-            margin-bottom:$space-8
-            gap:$space-8
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-8
+    background: $color-bg-gray
 
-            label
-                font-size: $font-size-14
-                font-weight: $font-weight-medium
-                color: $color-text-secondary
-                display: block
+    color: $color-text-primary
+    font-size: $font-size-16
+    letter-spacing: $letter-spacing-normal
 
-            .phone-input
-                display: flex
-                gap:$space-8
-                margin-bottom:$space-12
+    transition: $transition-border,$transition-shadow
 
-                .country-code
-                    width: $space-64
-                    display: flex
-                    align-items: center
-                    justify-content: center
-                    border: $border-width-1 $border-style-solid $color-border
-                    border-radius: $radius-8
-                    background: $color-bg-white
-                    font-weight: $font-weight-medium
-                    color: $color-text-secondary
+    &::placeholder
+        color: $color-text-muted
 
-                input
-                    width: 100%
-                    padding:$space-8$space-12
-                    border-radius: $radius-8
-                    border: $border-width-1 $border-style-solid $color-border
-                    font-size: $font-size-14
-                    background-color: #f0f0f0
-                    &:focus
-                        outline: none
-                        border-color: $color-text-muted
-                        box-shadow: $shadow-focus
-            .input
-                margin-bottom:$space-8
-                input
-                    width: 100%
-                    padding:$space-8$space-12
-                    border-radius: $radius-8
-                    border: $border-width-1 $border-style-solid $color-border
-                    font-size: $font-size-14
-                    background-color: #f0f0f0
-                    &:focus
-                        outline: none
-                        border-color: $color-text-muted
-                        box-shadow: $shadow-focus
+    &:focus
+        outline: none
+        border-color: $color-primary
+        box-shadow: $shadow-focus
 
-            .otp-container
-                display: flex
-                justify-content: space-between
-                gap:$space-8
-                margin-bottom:$space-8
+.otp-container
+    display: flex
+    justify-content: space-between
+    gap: $space-8
 
-                input
-                    width: $space-48
-                    height: $space-48
-                    text-align: center
-                    font-size: $font-size-20
-                    border-radius: $radius-4
-                    border: $border-width-1 $border-style-solid $color-border
-                    &:focus
-                        outline: none
-                        border-color: $color-text-muted
-                        box-shadow: $shadow-focus
-                    &.filled
-                        border-width: $border-width-2
-                        border-color: $color-success
-            button
-                width: 100%
-                border: $border-style-none
-                border-radius: $radius-8
-                padding:$space-12
-                font-weight: $font-weight-semibold
-                cursor: pointer
-                background: $color-primary
-                color: $color-bg-white
-                transition: background 0.2s ease
-                &:hover
-                    background: $color-primary-hover
+    input
+        width: $space-52
+        height: $space-64
 
-                &:disabled
-                    background: $color-border
-                    cursor: default
+        padding: 0
 
-            .resend
-                display: flex
-                align-items: center
-                justify-content: center
-                font-size: $font-size-14
-                color: $color-text-secondary
-                font-weight: $font-weight-regular
-                gap:$space-8
-                button
-                    width: auto
-                    background: none
-                    border: $border-style-none
-                    font-size: $font-size-14
-                    font-weight: $font-weight-semibold
-                    color: $color-primary
-                    cursor: pointer
-                    padding: 0
-                    &:disabled
-                        color: $color-text-muted
+        text-align: center
 
-        .terms
-            text-align: center
-            font-size: $font-size-14
-            font-weight: $font-weight-regular
-            color: $color-text-muted
+        font-size: $font-size-20
+
+        &.filled
+            border-width: $border-width-2
+            border-color: $color-success
+
+.inline-action
+    padding: 0
+
+    border: $border-style-none
+    background: transparent
+
+    color: $color-primary
+    font-size: inherit
+    font-weight: $font-weight-medium
+
+    cursor: pointer
+
+    transition: $transition-color
+
+    &:hover
+        color: $color-primary-hover
+
+    &:focus-visible
+        outline: 2px solid $color-primary
+        outline-offset: $space-4
+        border-radius: $radius-4
+
+    &:disabled
+        color: $color-text-muted
+        cursor: not-allowed
+
+.resend
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: $space-8
+
+    margin: 0
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+    font-weight: $font-weight-regular
+
+.email-input
+    display: flex
+    align-items: center
+
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-8
+    background: $color-bg-gray
+
+    &:focus-within
+        border-color: $color-primary
+        box-shadow: $shadow-focus
+
+    input
+        flex: 1
+        min-width: 0
+
+        border: 0
+        background: transparent
+
+        &:focus
+            border: 0
+            box-shadow: none
+
+    .email-suffix
+        flex-shrink: 0
+
+        padding-right: $space-16
+
+        color: $color-text-muted
+        white-space: nowrap
+
+.terms
+    margin-top: $space-24
+
+    color: $color-text-muted
+    font-size: $font-size-14
+    font-weight: $font-weight-regular
+    line-height: $line-height-normal
+    text-align: center
+
+    a
+        color: $color-text-secondary
+        text-decoration: underline
+
+        &:hover
+            color: $color-primary

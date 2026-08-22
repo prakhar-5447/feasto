@@ -1,31 +1,106 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChildren, inject, model, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faMobileScreen
-} from '@fortawesome/free-solid-svg-icons';
+  Component,
+  DestroyRef,
+  ElementRef,
+  EventEmitter,
+  Output,
+  QueryList,
+  ViewChildren,
+  inject,
+  signal
+} from '@angular/core';
+
+import { FormsModule } from '@angular/forms';
+
+import { HttpClient } from '@angular/common/http';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import { faMobileScreen, faXmark } from '@fortawesome/free-solid-svg-icons';
+
+import {
+  Observable,
+  finalize,
+  interval,
+  map,
+  of,
+  take,
+} from 'rxjs';
+
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { Router } from '@angular/router';
+
 import { Store } from '@ngrx/store';
+
 import * as AuthActions from '../../store/auth/auth.actions';
 import { AppState } from '../../store/app.state';
-import { Observable } from 'rxjs';
 import { selectUser } from '../../store/auth/auth.selectors';
-import { NgClass } from '@angular/common';
 
-type AuthStep = 'phone' | 'otp' | 'details';
+import { Button } from '../../shared/components/button/button';
+
+
+type AuthStep =
+  | 'phone'
+  | 'otp'
+  | 'details';
+
+
+interface PhoneAuthResponse {
+  isNewUser: boolean;
+  otp?: string;
+}
+
+
+interface VerifyOtpResponse {
+  isNewUser: boolean;
+}
+
+
+interface CompleteProfileResponse {
+  success: boolean;
+}
+
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule, FontAwesomeModule, NgClass],
+  imports: [
+    FormsModule,
+    FontAwesomeModule,
+    Button
+  ],
   templateUrl: './auth.html',
-  styleUrl: './auth.sass',
+  styleUrl: './auth.sass'
 })
 export class Auth {
-  @Output() closeAuth = new EventEmitter<void>();
-  faMobileScreen = faMobileScreen;
-  step = signal<'phone' | 'details' | 'otp'>('phone');
+
+  @Output() readonly closeAuth =
+    new EventEmitter<void>();
+
+  readonly faMobileScreen =
+    faMobileScreen;
+  readonly faXmark =
+    faXmark;
+
+  readonly step =
+    signal<AuthStep>('phone');
+
+  readonly timer =
+    signal(30);
+
+  readonly resendDisabled =
+    signal(true);
+
+  readonly otpArray =
+    [0, 1, 2, 3, 4, 5];
+
+  private readonly store =
+    inject(Store<AppState>);
+
+  readonly user$:
+    Observable<unknown> =
+    this.store.select(selectUser);
 
   phoneNumber = '';
   name = '';
@@ -33,182 +108,489 @@ export class Auth {
 
   loading = false;
 
-  otpArray = [0, 1, 2, 3, 4, 5];
-  otpValues: string[] = ['', '', '', '', '', ''];
+  otpValues: string[] = [
+    '',
+    '',
+    '',
+    '',
+    '',
+    ''
+  ];
 
-  timer = signal(30);
-  resendDisabled = signal(true);
-  private intervalId: any;
+  @ViewChildren('otpInput')
+  otpInputs!: QueryList<
+    ElementRef<HTMLInputElement>
+  >;
 
-  @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
-  private store = inject(Store<AppState>);
 
-  constructor(private router: Router, private http: HttpClient) { }
+  private readonly router =
+    inject(Router);
+
+  private readonly http =
+    inject(HttpClient);
+
+
+  private readonly destroyRef =
+    inject(DestroyRef);
+
 
   get otp(): string {
     return this.otpValues.join('');
   }
 
-  sendOTP() {
-    if (this.phoneNumber.length !== 10) return;
-    this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-      this.step.set('otp');
-      this.startResendTimer();
 
-      setTimeout(() => {
-        this.otpInputs.first.nativeElement.focus();
-      });
-    }, 800);
+  get isPhoneValid(): boolean {
+    return /^\d{10}$/.test(this.phoneNumber);
   }
 
-  verifyOTP() {
-    this.http.post('/api/v1/auth/verify-otp', {
-      phone: this.phoneNumber,
-      otp: this.otp
-    }, { withCredentials: true })
-      .subscribe((res: any) => {
+  continueWithPhone(): void {
 
-        if (res.isNewUser) {
-          this.step.set("details");
-        } else {
-          this.store.dispatch(AuthActions.loadUser());
+    if (
+      !this.isPhoneValid ||
+      this.loading
+    ) {
+      return;
+    }
+
+    this.loading = true;
+
+    this.http
+      .post<PhoneAuthResponse>(
+        '/api/v1/auth/phone-auth',
+        {
+          phone: this.phoneNumber
+        },
+        {
+          withCredentials: true
+        }
+      )
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: response => {
+
+          if (response.isNewUser) {
+
+            this.step.set('details');
+            this.startResendTimer();
+
+            return;
+          }
+
+          this.step.set('otp');
+
+          this.focusFirstOtpInput();
+        },
+
+        error: error => {
+
+          if (error.status === 403) {
+            this.closeAuth.emit();
+          }
+        }
+      });
+  }
+
+
+  verifyOTP(): void {
+
+    if (
+      this.loading ||
+      this.otp.length !== 6
+    ) {
+      return;
+    }
+
+    this.loading = true;
+
+    this.http
+      .post<VerifyOtpResponse>(
+        '/api/v1/auth/verify-otp',
+        {
+          phone: this.phoneNumber,
+          otp: this.otp
+        },
+        {
+          withCredentials: true
+        }
+      )
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: response => {
+
+          if (response.isNewUser) {
+            this.step.set('details');
+            return;
+          }
+
+          this.store.dispatch(
+            AuthActions.loadUser()
+          );
+
           this.closeAuth.emit();
         }
       });
   }
 
-  startResendTimer() {
-    this.resendDisabled.set(true);
-    this.timer.set(30);
 
-    this.intervalId = setInterval(() => {
-      const current = this.timer();
+  get isNameValid(): boolean {
+    const value = this.name.trim();
 
-      if (current > 0) {
-        this.timer.set(current - 1);
-      }
-
-      if (current <= 1) {
-        clearInterval(this.intervalId);
-        this.resendDisabled.set(false);
-      }
-    }, 1000);
+    return (
+      value.length >= 2 &&
+      value.length <= 50 &&
+      /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(value)
+    );
   }
 
+  get isEmailValid(): boolean {
+    const email =
+      this.email
+        .trim()
+        .toLowerCase();
 
-  resendOtp() {
-    if (this.resendDisabled()) return;
-    this.startResendTimer();
+    if (!email) {
+      return true;
+    }
+
+    return /^[a-z0-9._%+-]+$/.test(email);
   }
 
-  loginSuccess() {
-    alert('Login success');
-    this.router.navigate(['/app']);
-  }
+  completeSignup(): void {
 
-  user$: Observable<any> = this.store.select(selectUser);
-
-  completeSignup() {
-    if (!this.name || this.name.length < 2) {
-      alert('Enter valid name');
+    if (this.loading) {
       return;
     }
 
-    if (this.email && !this.email.includes('@')) {
-      alert('Enter valid email');
+    const name =
+      this.name.trim();
+
+    const emailUsername =
+      this.email
+        .trim()
+        .toLowerCase();
+
+    if (
+      !this.isNameValid ||
+      !this.isEmailValid
+    ) {
       return;
     }
 
-    this.http.post('/api/v1/auth/complete-profile', {
-      phone: this.phoneNumber,
-      name: this.name,
-      email: this.email || undefined
-    }, { withCredentials: true })
-      .subscribe(() => {
-        this.store.dispatch(AuthActions.loadUser());
-        Promise.resolve().then(() => {
-          // this.router.navigate(['/']);
-          this.closeAuth.emit()
-        });
-      });
-  }
-
-  continueWithPhone() {
-    if (!this.isPhoneValid || this.loading) return;
+    const email =
+      emailUsername
+        ? `${emailUsername}@gmail.com`
+        : undefined;
 
     this.loading = true;
 
-    this.http.post(
-      '/api/v1/auth/phone-auth',
-      { phone: this.phoneNumber },
-      { withCredentials: true }
-    ).subscribe({
-      next: (res: any) => {
-        this.loading = false;
-
-        if (res.isNewUser) {
-          this.step.set('details');
-          this.startResendTimer();
-        } else {
-          console.log("OTP:", res.otp);
-          this.step.set('otp');
+    this.http
+      .post<CompleteProfileResponse>(
+        '/api/v1/auth/complete-profile',
+        {
+          phone: this.phoneNumber,
+          name,
+          email
+        },
+        {
+          withCredentials: true
         }
-      },
+      )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.loading = false;
+        })
+      )
+      .subscribe({
+        next: () => {
 
-      error: (err) => {
-        this.loading = false;
+          this.store.dispatch(
+            AuthActions.loadUser()
+          );
 
-        if (err.status === 403) {
-          //show alert
-          setTimeout(() => {
-            this.closeAuth.emit();
-          }, 500);
+          this.closeAuth.emit();
         }
-      }
-    });
+      });
   }
 
-  onPhoneChange(value: string) {
-    // Remove non-numbers
-    let cleaned = value.replace(/\D/g, '');
 
-    // Limit to 10 digits
-    if (cleaned.length > 10) {
-      cleaned = cleaned.slice(0, 10);
+  resendOtp(): void {
+
+    if (this.resendDisabled()) {
+      return;
     }
 
+    this.startResendTimer();
+  }
+
+
+  startResendTimer(): void {
+
+    this.resendDisabled.set(true);
+    this.timer.set(30);
+
+    interval(1000)
+      .pipe(
+        take(30),
+        map(second => 29 - second),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(value => {
+
+        this.timer.set(value);
+
+        if (value === 0) {
+          this.resendDisabled.set(false);
+        }
+      });
+  }
+
+
+  changePhone(): void {
+
+    this.step.set('phone');
+
+    this.otpValues = [
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
+    ];
+
+    this.timer.set(30);
+    this.resendDisabled.set(true);
+  }
+
+
+  onPhoneChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    const cleaned = input.value
+      .replace(/\D/g, '')
+      .slice(0, 10);
+
+    input.value = cleaned;
     this.phoneNumber = cleaned;
   }
 
-  get isPhoneValid(): boolean {
-    return this.phoneNumber.length === 10;
-  }
 
-  onOtpInput(event: Event, index: number) {
-    const input = event.target as HTMLInputElement;
+  onOtpInput(
+    event: Event,
+    index: number
+  ): void {
+
+    const input =
+      event.target as HTMLInputElement;
+
     const value = input.value.replace(/\D/g, '');
-    if (!value) return;
+
+    // --------------------------------------------------
+    // Paste / multiple digits
+    // --------------------------------------------------
+
+    if (value.length > 1) {
+
+      this.fillOtpFromIndex(
+        value,
+        index
+      );
+
+      return;
+    }
+
+    // --------------------------------------------------
+    // Empty input
+    // --------------------------------------------------
+
+    if (!value) {
+
+      this.otpValues[index] = '';
+
+      return;
+    }
+
+    // --------------------------------------------------
+    // Normal single digit
+    // --------------------------------------------------
+
     this.otpValues[index] = value;
-    const next = this.otpInputs.get(index + 1);
-    if (next) next.nativeElement.focus();
+
+    input.value = value;
+
+    // Move to next input
+    const nextInput =
+      this.otpInputs.get(index + 1);
+
+    nextInput?.nativeElement.focus();
   }
 
-  onOtpKeydown(event: KeyboardEvent, index: number) {
-    if (event.key === 'Backspace') {
-      if (!this.otpValues[index]) {
-        const prev = this.otpInputs.get(index - 1);
-        if (prev) prev.nativeElement.focus();
+
+  private fillOtpFromIndex(
+    value: string,
+    startIndex: number
+  ): void {
+
+    const digits =
+      value
+        .replace(/\D/g, '')
+        .slice(0, 6 - startIndex);
+
+    for (
+      let i = 0;
+      i < digits.length;
+      i++
+    ) {
+
+      const index =
+        startIndex + i;
+
+      this.otpValues[index] =
+        digits[i];
+
+      const input =
+        this.otpInputs.get(index);
+
+      if (input) {
+        input.nativeElement.value =
+          digits[i];
       }
-      if (index - 1 >= 0)
-        this.otpValues[index - 1] = ''
+    }
+
+    // Focus the first empty input,
+    // otherwise focus the last OTP input.
+    const nextEmptyIndex =
+      this.otpValues.findIndex(
+        value => !value
+      );
+
+    const focusIndex =
+      nextEmptyIndex >= 0
+        ? nextEmptyIndex
+        : 5;
+
+    this.otpInputs
+      .get(focusIndex)
+      ?.nativeElement
+      .focus();
+  }
+
+
+  onOtpKeydown(
+    event: KeyboardEvent,
+    index: number
+  ): void {
+
+    // --------------------------------------------------
+    // Backspace
+    // --------------------------------------------------
+
+    if (event.key === 'Backspace') {
+
+      event.preventDefault();
+
+      // Current input has a value:
+      // clear it first.
+      if (this.otpValues[index]) {
+
+        this.otpValues[index] = '';
+
+        const input =
+          this.otpInputs.get(index);
+
+        if (input) {
+          input.nativeElement.value = '';
+        }
+
+        return;
+      }
+
+      // Current input is already empty:
+      // move to previous and clear it.
+      if (index > 0) {
+
+        const previousIndex =
+          index - 1;
+
+        this.otpValues[previousIndex] = '';
+
+        const previousInput =
+          this.otpInputs.get(previousIndex);
+
+        if (previousInput) {
+
+          previousInput.nativeElement.value = '';
+
+          previousInput.nativeElement.focus();
+        }
+      }
+
+      return;
+    }
+
+    // --------------------------------------------------
+    // Arrow left
+    // --------------------------------------------------
+
+    if (event.key === 'ArrowLeft') {
+
+      event.preventDefault();
+
+      this.otpInputs
+        .get(index - 1)
+        ?.nativeElement
+        .focus();
+
+      return;
+    }
+
+    // --------------------------------------------------
+    // Arrow right
+    // --------------------------------------------------
+
+    if (event.key === 'ArrowRight') {
+
+      event.preventDefault();
+
+      this.otpInputs
+        .get(index + 1)
+        ?.nativeElement
+        .focus();
+
+      return;
+    }
+
+    // --------------------------------------------------
+    // Allow normal typing
+    // --------------------------------------------------
+
+    if (
+      event.key.length === 1 &&
+      !/^\d$/.test(event.key)
+    ) {
+
+      event.preventDefault();
     }
   }
 
-  ngOnDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+  private focusFirstOtpInput(): void {
+
+    queueMicrotask(() => {
+      this.otpInputs
+        .first
+        ?.nativeElement
+        .focus();
+    });
   }
 }

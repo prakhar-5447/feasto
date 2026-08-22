@@ -49,7 +49,7 @@
         border: $border-width-1 $border-style-solid $color-border-light
         border-radius: $radius-4
         background: $color-bg-white
-        box-shadow: $shadow-md
+        box-shadow: $shadow-sm
 
     .box
         position: relative
@@ -58,11 +58,29 @@
         padding: 0 $space-8
 
         &:first-child
-            max-width: 280px
+            max-width: 240px
             border-right: $border-width-1 $border-style-solid $color-border
 
             .dropdown
                 width: 320px
+
+    .skeleton-layout
+        display: flex
+        flex-direction: column
+        align-items: flex-start
+        justify-content: flex-start
+
+        width: 100%
+        padding: $space-20
+
+        border: $border-style-none
+        border-bottom: $border-width-1 $border-style-solid $color-border
+
+        background: transparent
+
+    .skeleton-title
+        width: 70%
+        height: $space-12
 
     .display
         display: flex
