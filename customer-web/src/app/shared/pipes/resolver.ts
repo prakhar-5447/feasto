@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RestaurantService } from '../../core/services/restaurent.service';
+import { RestaurantService } from '../../core/services/restaurant.service';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })

@@ -2,7 +2,7 @@ import { NgClass } from '@angular/common'
 import { Component } from '@angular/core'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { faStar, faThumbsUp, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import { RestaurantService } from '../../../core/services/restaurent.service'
+import { RestaurantService } from '../../../core/services/restaurant.service'
 
 @Component({
   selector: 'app-tab-reviews',
