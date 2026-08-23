@@ -1,6 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChildren, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CartService } from '../../../core/services/cart.service';
-import { RestaurantService } from '../../../core/services/restaurent.service';
+import { RestaurantService } from '../../../core/services/restaurant.service';
 import { NgClass } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';

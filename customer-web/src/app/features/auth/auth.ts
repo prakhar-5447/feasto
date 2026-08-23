@@ -48,7 +48,7 @@ type AuthStep =
 
 interface PhoneAuthResponse {
   isNewUser: boolean;
-  otp?: string;
+  otp: string;
 }
 
 
@@ -183,6 +183,11 @@ export class Auth {
           }
 
           this.step.set('otp');
+          this.otpValues = response.otp
+            .toString()
+            .padStart(6, '0')
+            .slice(0, 6)
+            .split('');
 
           this.focusFirstOtpInput();
         },

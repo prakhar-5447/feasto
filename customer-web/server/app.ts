@@ -15,7 +15,8 @@ import searchRoutes from "./routes/search.routes";
 import foodRoutes from "./routes/food.routes";
 import cartRoutes from "./routes/cart.routes";
 import couponRoutes from "./routes/coupon.routes";
-// import orderRoutes from "./routes/order.routes";
+import orderRoutes from "./routes/order.routes";
+import paymentRoutes from "./routes/payment.routes";
 // import reviewRoutes from "./routes/review.routes";
 
 dotenv.config();
@@ -54,8 +55,9 @@ app.use("/v1/foods", foodRoutes);
 app.use("/v1/search", searchRoutes);
 app.use("/v1/cart", cartRoutes);
 app.use("/api/v1/coupons", couponRoutes);
+app.use("/v1/orders", orderRoutes);
+app.use("/v1/payments", paymentRoutes);
 
-// app.use("/v1/orders", orderRoutes);
 // app.use("/v1/reviews", reviewRoutes);
 
 export default app;

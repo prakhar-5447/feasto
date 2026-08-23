@@ -147,7 +147,8 @@ export const routes: Routes = [
                     breadcrumb: 'Payment',
                     hideBreadcrumb: true
                 }
-            }
+            },
+        
         ]
     },
 

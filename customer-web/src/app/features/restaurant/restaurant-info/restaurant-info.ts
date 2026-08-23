@@ -7,7 +7,7 @@ import {
   faClock,
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { RestaurantService } from '../../../core/services/restaurent.service';
+import { RestaurantService } from '../../../core/services/restaurant.service';
 import { LocationService, LocationServicePersistence } from '../../../core/services/location.service';
 @Component({
   selector: 'app-restaurant-info',

@@ -3,7 +3,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faArrowLeft, faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
-import { RestaurantService } from '../../../core/services/restaurent.service';
+import { RestaurantService } from '../../../core/services/restaurant.service';
 @Component({
   selector: 'app-image-carousel',
   imports: [FontAwesomeModule],
