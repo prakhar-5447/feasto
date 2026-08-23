@@ -178,6 +178,7 @@ export class Checkout {
         this.router.navigate([
           '/india',
           this.locationService.getCity(),
+          'r',
           this.restaurantService.restaurant.slug,
           'payment'
         ], {

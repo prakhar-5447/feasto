@@ -11,11 +11,7 @@
 
         @for(restaurant of restaurants; track restaurant._id) {
 
-        <app-restaurant-card [restaurant]="restaurant" [routerLink]="[
-                    '/india',
-                    currentCity,
-                    formatSlug(restaurant.name) 
-                ]">
+        <app-restaurant-card [restaurant]="restaurant" (click)="selectRestaurant(restaurant.restaurant)">
         </app-restaurant-card>
 
         }

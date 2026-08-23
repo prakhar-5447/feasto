@@ -1,13 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RestaurantCard } from '../restaurant-card/restaurant-card';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
+import { LocationServicePersistence } from '../../../core/services/location.service';
+
+interface RestaurantResult {
+  _id: string;
+  name: string;
+  slug: string;
+}
 
 @Component({
   selector: 'app-restaurant-list',
   standalone: true,
-  imports: [RestaurantCard, RouterLink],
+  imports: [RestaurantCard],
   templateUrl: './restaurant-list.html',
   styleUrl: './restaurant-list.sass',
 })
@@ -20,7 +27,9 @@ export class RestaurantList implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private http: HttpClient,
+    private locationService: LocationServicePersistence,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -68,6 +77,22 @@ export class RestaurantList implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  selectRestaurant(
+    restaurant: RestaurantResult
+  ): void {
+
+
+    const restaurantSlug =
+      this.formatSlug(restaurant.slug);
+
+    this.router.navigate([
+      '/india',
+      this.locationService.getCity(),
+      'r',
+      restaurantSlug
+    ]);
   }
 
   formatSlug(name: string) {

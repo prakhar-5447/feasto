@@ -980,7 +980,7 @@ export class Payment
 
     )
 
-      .then(url => {
+      .then((url: any) => {
 
         this.zone.run(() => {
 
@@ -993,7 +993,7 @@ export class Payment
 
       })
 
-      .catch(error => {
+      .catch((error: any) => {
 
         console.error(
           'QR generation failed:',

@@ -150,7 +150,8 @@ export class Cart {
   checkout() {
     this.router.navigate([
       '/india',
-      this.locationService.getCity(),
+      this.locationService.getCity(), 
+      'r',
       this.restaurantService.restaurant.slug,
       'checkout'
     ]);

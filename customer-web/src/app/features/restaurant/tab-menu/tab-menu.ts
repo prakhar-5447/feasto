@@ -78,7 +78,7 @@ export class TabMenu {
 
   addToCart(item: any) {
 
-    console.log('Adding:', item);
+    // console.log('Adding:', item);
 
     this.cartService
       .addToCart(item._id, 1)
@@ -86,7 +86,7 @@ export class TabMenu {
 
         next: (res) => {
 
-          console.log('Success', res);
+          // console.log('Success', res);
 
           this.loadCart();
           this.cartService.refreshCartCount();
@@ -95,7 +95,7 @@ export class TabMenu {
 
         error: (err) => {
 
-          console.log('Error', err);
+          // console.log('Error', err);
 
           alert(
             err.error?.message ||
