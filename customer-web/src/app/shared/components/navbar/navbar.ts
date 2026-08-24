@@ -133,6 +133,7 @@ export class Navbar {
 
   showLocationDropdown = false;
   showRestaurantDropdown = false;
+  restaurantSearchCompleted = false;
 
   locationLoading = signal(false);
   restaurantLoading = signal(false);
@@ -301,10 +302,14 @@ export class Navbar {
             this.foodResults = [];
             this.cuisineResults = [];
 
+            this.restaurantSearchCompleted = false;
+
             return;
           }
 
           this.restaurantLoading.set(true);
+          this.restaurantSearchCompleted = false;
+
         }),
 
         filter(query => query.length >= 2),
@@ -346,6 +351,8 @@ export class Navbar {
           results.data?.cuisines ?? [];
 
         this.restaurantLoading.set(false);
+
+        this.restaurantSearchCompleted = true;
       });
   }
 
@@ -409,14 +416,20 @@ export class Navbar {
     this.locationSearchSubject.next(query);
   }
 
-
-  onRestaurantQueryChange(
-    query: string
-  ): void {
+  
+  onRestaurantQueryChange(query: string): void {
 
     this.restaurantQuery = query;
 
     this.showRestaurantDropdown = true;
+
+    if (!query.trim()) {
+      this.restaurantSearchCompleted = false;
+
+      this.restaurantResults = [];
+      this.foodResults = [];
+      this.cuisineResults = [];
+    }
 
     this.restaurantSearchSubject.next(query);
   }

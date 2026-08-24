@@ -124,52 +124,58 @@
 
             <div class="suggestions">
 
-              <!-- Restaurants -->
-
-              @for (
-              restaurant of restaurantResults;
-              track restaurant._id
+              @if (restaurantSearchCompleted &&
+              restaurantResults.length === 0 &&
+              foodResults.length === 0 &&
+              cuisineResults.length === 0
               ) {
-              <button type="button" class="suggestion suggestion-result" (click)="selectRestaurant(restaurant)">
-                <span>{{ restaurant.name }}</span>
-                <small>
-                  Restaurant
-                </small>
-              </button>
 
-              }
-
-              <!-- Food -->
-
-              @for (
-              food of foodResults;
-              track food._id
-              ) {
-              <button type="button" class="suggestion suggestion-result" (click)="selectFood(food)">
-                <span>{{ food.name }}</span>
-                <small>
-                  Food
-                </small>
-              </button>
-
-              }
-
-              <!-- Cuisine -->
-
-              @for (
-              cuisine of cuisineResults;
-              track cuisine
-              ) {
-              <button type="button" class="suggestion suggestion-result" (click)="selectCuisine(cuisine)">
-                <span>
-                  {{ cuisine }}
+              <div class="no-results">
+                <span class="no-results-title">
+                  No results found
                 </span>
-                <small>
-                  Cuisine
-                </small>
-              </button>
-              }
 
+                <span class="no-results-message">
+                  Try a different restaurant, dish, or cuisine.
+                </span>
+              </div>
+
+              } @else {
+
+              <div class="suggestions">
+
+                @for (
+                restaurant of restaurantResults;
+                track restaurant._id
+                ) {
+                <button type="button" class="suggestion suggestion-result" (click)="selectRestaurant(restaurant)">
+                  <span>{{ restaurant.name }}</span>
+                  <small>Restaurant</small>
+                </button>
+                }
+
+                @for (
+                food of foodResults;
+                track food._id
+                ) {
+                <button type="button" class="suggestion suggestion-result" (click)="selectFood(food)">
+                  <span>{{ food.name }}</span>
+                  <small>Food</small>
+                </button>
+                }
+
+                @for (
+                cuisine of cuisineResults;
+                track cuisine
+                ) {
+                <button type="button" class="suggestion suggestion-result" (click)="selectCuisine(cuisine)">
+                  <span>{{ cuisine }}</span>
+                  <small>Cuisine</small>
+                </button>
+                }
+
+              </div>
+              }
             </div>
             }
 
