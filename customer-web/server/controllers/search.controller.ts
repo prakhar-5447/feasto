@@ -5,7 +5,7 @@ import {
 } from "express";
 
 import * as searchService
-from "../services/search.service";
+    from "../services/search.service";
 
 export const searchItems = async (
     req: Request,
@@ -38,8 +38,8 @@ export const searchItems = async (
             success: true,
             data
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -56,7 +56,7 @@ export const searchRestaurants = async (
             success: true,
             data: restaurants
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };

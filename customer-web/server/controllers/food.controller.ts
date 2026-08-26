@@ -65,8 +65,8 @@ export const addFood = async (
             data: food
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -98,8 +98,8 @@ export const getRestaurantMenu = async (
             success: true,
             data: foods
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -126,8 +126,8 @@ export const getFood = async (
             success: true,
             data: food
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -166,38 +166,38 @@ export const updateFood = async (
             data: updatedFood
         });
 
-    } catch (error: any) {
+    } catch (err: any) {
 
-        if (error.message === "Food not found") {
+        if (err.message === "Food not found") {
             res.status(404).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
 
         if (
-            error.message === "Restaurant not found"
+            err.message === "Restaurant not found"
         ) {
             res.status(404).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
 
         if (
-            error.message ===
+            err.message ===
             "You do not own this restaurant"
         ) {
             res.status(403).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
 
-        next(error);
+        next(err);
     }
 };
 
@@ -234,28 +234,28 @@ export const deleteFood = async (
             message: "Food deleted successfully"
         });
 
-    } catch (error: any) {
+    } catch (err: any) {
 
-        if (error.message === "Food not found") {
+        if (err.message === "Food not found") {
             res.status(404).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
 
         if (
-            error.message ===
+            err.message ===
             "You do not own this restaurant"
         ) {
             res.status(403).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
 
-        next(error);
+        next(err);
     }
 };
 
@@ -308,28 +308,27 @@ export const updateFoodAvailability = async (
             data: updatedFood
         });
 
-    } catch (error: any) {
+    } catch (err: any) {
 
-        if (error.message === "Food not found") {
+        if (err.message === "Food not found") {
             res.status(404).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
 
         if (
-            error.message ===
+            err.message ===
             "You do not own this restaurant"
         ) {
             res.status(403).json({
                 success: false,
-                message: error.message
+                message: err.message
             });
             return;
         }
-
-        next(error);
+        next(err);
     }
 };
 
@@ -349,7 +348,7 @@ export const filterFoods = async (
             data: foods
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };

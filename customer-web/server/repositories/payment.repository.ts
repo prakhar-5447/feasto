@@ -1,6 +1,4 @@
-import {
-    Payment
-} from '../models/payment.model';
+import Payment from '../models/payment.model';
 
 
 // ======================================================

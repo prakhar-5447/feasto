@@ -47,18 +47,28 @@ type AuthStep =
 
 
 interface PhoneAuthResponse {
-  isNewUser: boolean;
-  otp: string;
+  success: boolean;
+  message: string;
+  otp: number;
 }
-
 
 interface VerifyOtpResponse {
-  isNewUser: boolean;
-}
+  success: boolean;
+  status:
+  | 'LOGIN_SUCCESS'
+  | 'PROFILE_REQUIRED';
 
+  isNewUser: boolean;
+
+  signupToken?: string;
+
+  data?: unknown;
+}
 
 interface CompleteProfileResponse {
   success: boolean;
+  status: 'SIGNUP_SUCCESS';
+  data?: unknown;
 }
 
 
@@ -106,7 +116,7 @@ export class Auth {
   phoneNumber = '';
   name = '';
   email = '';
-
+  signupToken = '';
   loading = false;
 
   otpValues: string[] = [
@@ -172,22 +182,28 @@ export class Auth {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: response => {
 
-          if (response.isNewUser) {
+        next: (res) => {
 
-            this.step.set('details');
-            this.startResendTimer();
-
-            return;
-          }
-
+          // Every user verifies OTP first.
           this.step.set('otp');
-          this.otpValues = response.otp
+
+          this.otpValues = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+          ];
+          this.otpValues = res.otp
             .toString()
             .padStart(6, '0')
             .slice(0, 6)
             .split('');
+
+
+          this.startResendTimer();
 
           this.focusFirstOtpInput();
         },
@@ -197,7 +213,9 @@ export class Auth {
           if (error.status === 403) {
             this.closeAuth.emit();
           }
+
         }
+
       });
   }
 
@@ -231,22 +249,46 @@ export class Auth {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
+
         next: response => {
 
-          if (response.isNewUser) {
-            this.step.set('details');
+          // -----------------------------------------
+          // EXISTING USER
+          // -----------------------------------------
+
+          if (
+            response.status === 'LOGIN_SUCCESS'
+          ) {
+
+            this.store.dispatch(
+              AuthActions.loadUser()
+            );
+
+            this.closeAuth.emit();
+
             return;
           }
 
-          this.store.dispatch(
-            AuthActions.loadUser()
-          );
+          // -----------------------------------------
+          // NEW USER
+          // -----------------------------------------
 
-          this.closeAuth.emit();
+          if (
+            response.status === 'PROFILE_REQUIRED'
+          ) {
+
+            this.signupToken =
+              response.signupToken ?? '';
+
+            this.step.set('details');
+
+            return;
+          }
+
         }
+
       });
   }
-
 
   get isNameValid(): boolean {
     const value = this.name.trim();
@@ -292,6 +334,10 @@ export class Auth {
       return;
     }
 
+    if (!this.signupToken) {
+      return;
+    }
+
     const email =
       emailUsername
         ? `${emailUsername}@gmail.com`
@@ -303,7 +349,7 @@ export class Auth {
       .post<CompleteProfileResponse>(
         '/api/v1/auth/complete-profile',
         {
-          phone: this.phoneNumber,
+          signupToken: this.signupToken,
           name,
           email
         },
@@ -318,25 +364,76 @@ export class Auth {
         })
       )
       .subscribe({
+
         next: () => {
+
+          this.signupToken = '';
 
           this.store.dispatch(
             AuthActions.loadUser()
           );
 
           this.closeAuth.emit();
+
         }
+
       });
   }
 
 
   resendOtp(): void {
 
-    if (this.resendDisabled()) {
+    if (
+      this.resendDisabled() ||
+      this.loading ||
+      !this.isPhoneValid
+    ) {
       return;
     }
 
-    this.startResendTimer();
+    this.loading = true;
+
+    this.http
+      .post<PhoneAuthResponse>(
+        '/api/v1/auth/phone-auth',
+        {
+          phone: this.phoneNumber
+        },
+        {
+          withCredentials: true
+        }
+      )
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: (res) => {
+
+          this.otpValues = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+          ];
+          this.otpValues = res.otp
+            .toString()
+            .padStart(6, '0')
+            .slice(0, 6)
+            .split('');
+
+          this.startResendTimer();
+
+          this.focusFirstOtpInput();
+
+        }
+
+      });
   }
 
 

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as authService from "../services/auth.service";
+import crypto from "crypto";
 
 import {
   generateToken,
@@ -7,13 +8,29 @@ import {
   verifyRefreshToken
 } from "../utils/token.utils";
 
-const otpStore = new Map<
-  string,
-  {
-    otp: string;
-    expiresAt: number;
-  }
->();
+interface OtpRecord {
+  otp: string;
+  expiresAt: number;
+}
+
+interface SignupVerificationRecord {
+  phone: string;
+  expiresAt: number;
+}
+
+export const otpStore =
+  new Map<string, OtpRecord>();
+
+export const signupVerificationStore =
+  new Map<string, SignupVerificationRecord>();
+
+export const generateSignupVerificationToken =
+  (phone: string): string => {
+
+    return crypto
+      .randomBytes(32)
+      .toString("hex");
+  };
 
 const generateOtp = (): string => {
   return Math.floor(
@@ -48,13 +65,17 @@ export const phoneAuth = async (
 
     const { phone } = req.body;
 
-    const { user } = await authService.phoneAuth(phone);
+    const { user } =
+      await authService.phoneAuth(phone);
 
+    // If a user exists, only customer can use this auth flow.
     if (user && user.role !== "customer") {
+
       res.status(403).json({
         success: false,
         message: "Only customers can login here"
       });
+
       return;
     }
 
@@ -67,12 +88,15 @@ export const phoneAuth = async (
 
     res.json({
       success: true,
-      isNewUser: !user,
-      otp
+      otp,
+      // Tell frontend only that OTP was sent.
+      // Don't return OTP in production.
+      message: "OTP sent successfully"
     });
+
   } catch (err) {
 
-    next(err);
+         next(err);
 
   }
 };
@@ -86,8 +110,10 @@ export const verifyOtp = async (
   try {
 
     const { phone, otp } = req.body;
+
     const record = otpStore.get(phone);
 
+    // OTP doesn't exist
     if (!record) {
 
       res.status(400).json({
@@ -98,6 +124,7 @@ export const verifyOtp = async (
       return;
     }
 
+    // OTP expired
     if (record.expiresAt < Date.now()) {
 
       otpStore.delete(phone);
@@ -110,6 +137,7 @@ export const verifyOtp = async (
       return;
     }
 
+    // Invalid OTP
     if (record.otp !== otp) {
 
       res.status(400).json({
@@ -120,57 +148,78 @@ export const verifyOtp = async (
       return;
     }
 
+    // OTP successfully verified
     otpStore.delete(phone);
 
     const { user } =
       await authService.phoneAuth(phone);
 
-    if (!user) {
+    // Existing user
+    if (user) {
+
+      if (user.role !== "customer") {
+
+        res.status(403).json({
+          success: false,
+          message: "Only customers can login here"
+        });
+
+        return;
+      }
+
+      const accessToken =
+        generateToken(user);
+
+      const refreshToken =
+        generateRefreshToken(user);
+
+      res.cookie(
+        "accessToken",
+        accessToken,
+        accessTokenCookieOptions
+      );
+
+      res.cookie(
+        "refreshToken",
+        refreshToken,
+        refreshTokenCookieOptions
+      );
 
       res.json({
         success: true,
-        isNewUser: true
+        status: "LOGIN_SUCCESS",
+        isNewUser: false,
+        data: user
       });
 
       return;
     }
 
-    if (user.role !== "customer") {
-      res.status(403).json({
-        success: false,
-        message: "Only Customer can login here"
-      });
-      return;
-    }
+    // ------------------------------------------------
+    // NEW USER
+    // ------------------------------------------------
 
-    const accessToken =
-      generateToken(user);
+    const signupToken =
+      generateSignupVerificationToken(phone);
 
-    const refreshToken =
-      generateRefreshToken(user);
-
-    res.cookie(
-      "accessToken",
-      accessToken,
-      accessTokenCookieOptions
+    signupVerificationStore.set(
+      signupToken,
+      {
+        phone,
+        expiresAt: Date.now() + 10 * 60 * 1000
+      }
     );
-
-    res.cookie(
-      "refreshToken",
-      refreshToken,
-      refreshTokenCookieOptions
-    );
-
 
     res.json({
       success: true,
-      isNewUser: false,
-      data: user
+      status: "PROFILE_REQUIRED",
+      isNewUser: true,
+      signupToken
     });
 
   } catch (err) {
 
-    next(err);
+         next(err);
 
   }
 };
@@ -183,13 +232,68 @@ export const completeSignup = async (
 
   try {
 
-    const { phone } = req.body;
+    const {
+      signupToken,
+      name,
+      email
+    } = req.body;
+
+    if (!signupToken) {
+
+      res.status(401).json({
+        success: false,
+        message: "Signup verification required"
+      });
+
+      return;
+    }
+
+    const verification =
+      signupVerificationStore.get(
+        signupToken
+      );
+
+    if (!verification) {
+
+      res.status(401).json({
+        success: false,
+        message: "Signup verification expired"
+      });
+
+      return;
+    }
+
+    if (
+      verification.expiresAt < Date.now()
+    ) {
+
+      signupVerificationStore.delete(
+        signupToken
+      );
+
+      res.status(401).json({
+        success: false,
+        message: "Signup verification expired"
+      });
+
+      return;
+    }
+
+    const phone =
+      verification.phone;
+
+    // Make sure user hasn't been created
+    // between OTP verification and profile completion.
     const { user } =
       await authService.phoneAuth(phone);
 
     if (user) {
 
-      res.status(400).json({
+      signupVerificationStore.delete(
+        signupToken
+      );
+
+      res.status(409).json({
         success: false,
         message: "User already exists"
       });
@@ -197,11 +301,18 @@ export const completeSignup = async (
       return;
     }
 
-    req.body.role = "customer"
     const newUser =
-      await authService.completeSignup(
-        req.body
-      );
+      await authService.completeSignup({
+        phone,
+        name,
+        email,
+        role: "customer"
+      });
+
+    // Token can no longer be reused.
+    signupVerificationStore.delete(
+      signupToken
+    );
 
     const accessToken =
       generateToken(newUser);
@@ -221,15 +332,15 @@ export const completeSignup = async (
       refreshTokenCookieOptions
     );
 
-
     res.status(201).json({
       success: true,
+      status: "SIGNUP_SUCCESS",
       data: newUser
     });
 
   } catch (err) {
 
-    next(err);
+         next(err);
 
   }
 };

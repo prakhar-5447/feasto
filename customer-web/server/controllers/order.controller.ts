@@ -31,7 +31,7 @@ export const createOrder =
             });
 
         } catch (err) {
-            next(err);
+                    next(err);
         }
     };
 
@@ -56,7 +56,7 @@ export const getOrder =
             });
 
         } catch (err) {
-            next(err);
+                    next(err);
         }
     };
 
@@ -80,6 +80,6 @@ export const getMyOrders =
             });
 
         } catch (err) {
-            next(err);
+                    next(err);
         }
     };

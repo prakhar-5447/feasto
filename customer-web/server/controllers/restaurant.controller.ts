@@ -295,8 +295,8 @@ export const createRestaurant = async (
             success: true,
             data: restaurant
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -333,8 +333,8 @@ export const getMyRestaurant = async (
             success: true,
             data: restaurant
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -377,8 +377,8 @@ export const getNearbyRestaurants = async (
             success: true,
             data: restaurants
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -432,8 +432,8 @@ export const getNearByRestaurant = async (
             success: true,
             data: restaurants
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -450,8 +450,8 @@ export const getRestaurantsList = async (
             success: true,
             data: restaurants
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -487,8 +487,8 @@ export const restaurantInfo = async (
             success: true,
             data: restaurant
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -532,8 +532,8 @@ export const updateRestaurant = async (
             data: updatedRestaurant
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -575,7 +575,7 @@ export const deleteRestaurant = async (
             message: "Restaurant deleted successfully"
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };

@@ -19,12 +19,23 @@ export const update = async (
     );
 }
 
-export const findUserOrders = async (
-    userId: string
-) => {
-    return Order.find({
-        customer: userId
-    }).sort({
-        createdAt: -1
-    });
-}
+export const findUserOrders = async (userId: string) => {
+    return Order.find(
+        { user: userId },
+        {
+            _id: 1,
+            orderNumber: 1,
+            restaurant: 1,
+            status: 1,
+            totalAmount: 1,
+            itemCount: 1,
+            createdAt: 1
+        }
+    )
+        .populate({
+            path: "restaurant",
+            select: "name"
+        })
+        .sort({ createdAt: -1 })
+        .lean();
+};

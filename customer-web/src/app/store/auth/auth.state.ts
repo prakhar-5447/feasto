@@ -1,11 +1,13 @@
 export interface AuthState {
     user: any | null;
     loading: boolean;
+    initialized: boolean;
     error: string | null;
 }
 
 export const initialState: AuthState = {
     user: null,
-    loading: false,
+    loading: true,
+    initialized: false,
     error: null
 };

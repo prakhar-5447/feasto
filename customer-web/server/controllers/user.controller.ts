@@ -43,8 +43,8 @@ export const getProfile = async (
             success: true,
             data: profile
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -82,8 +82,8 @@ export const updateProfile = async (
             success: true,
             data: updatedUser
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -134,8 +134,8 @@ export const deleteProfile = async (
             success: true,
             message: "Account deleted successfully"
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -172,8 +172,8 @@ export const getPublicProfile = async (
             success: true,
             data: user
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -218,8 +218,8 @@ export const getOrderHistory = async (
             success: true,
             data: orders
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 
@@ -264,8 +264,8 @@ export const getReviewHistory = async (
             success: true,
             data: reviews
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 };
 

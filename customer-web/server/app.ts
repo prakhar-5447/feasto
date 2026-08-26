@@ -54,7 +54,7 @@ app.use("/v1/restaurants", restaurantRoutes);
 app.use("/v1/foods", foodRoutes);
 app.use("/v1/search", searchRoutes);
 app.use("/v1/cart", cartRoutes);
-app.use("/api/v1/coupons", couponRoutes);
+app.use("/v1/coupons", couponRoutes);
 app.use("/v1/orders", orderRoutes);
 app.use("/v1/payments", paymentRoutes);
 

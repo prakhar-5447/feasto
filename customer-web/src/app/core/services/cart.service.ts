@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,8 @@ export class CartService {
       {
         withCredentials: true
       }
+    ).pipe(
+      tap(() => this.refreshCartCount())
     );
   }
 
@@ -56,6 +59,11 @@ export class CartService {
     foodId: string,
     quantity: number
   ) {
+
+    if (quantity <= 0) {
+      return this.removeFromCart(foodId);
+    }
+
     return this.http.patch(
       `/api/v1/cart/items/${foodId}`,
       {
@@ -64,6 +72,8 @@ export class CartService {
       {
         withCredentials: true
       }
+    ).pipe(
+      tap(() => this.refreshCartCount())
     );
   }
 
@@ -75,6 +85,8 @@ export class CartService {
       {
         withCredentials: true
       }
+    ).pipe(
+      tap(() => this.refreshCartCount())
     );
   }
 
@@ -84,6 +96,10 @@ export class CartService {
       {
         withCredentials: true
       }
+    ).pipe(
+      tap(() => {
+        this.cartCount.set(0);
+      })
     );
   }
 
@@ -109,17 +125,22 @@ export class CartService {
   }
 
   refreshCartCount() {
-
     this.getCart().subscribe({
       next: (res: any) => {
 
-        const count = res.data.items.reduce(
+        const items = res.data?.items || [];
+
+        const count = items.reduce(
           (sum: number, item: any) =>
             sum + item.quantity,
           0
         );
 
         this.cartCount.set(count);
+      },
+
+      error: () => {
+        this.cartCount.set(0);
       }
     });
   }

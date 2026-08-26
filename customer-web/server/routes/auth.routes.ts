@@ -9,6 +9,6 @@ router.post('/phone-auth', phoneValidation, authController.phoneAuth);
 router.post('/complete-profile', authController.completeSignup);
 router.post('/logout', authController.logout);
 router.post("/verify-otp", authController.verifyOtp);
-router.get("/refresh-token", protect, authController.refreshToken);
+router.post("/refresh-token", authController.refreshToken);
 
 export default router;

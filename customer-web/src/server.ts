@@ -11,8 +11,6 @@ import { join } from 'node:path';
 import dotenv from 'dotenv';
 import { requestLogger } from '../server/utils/requestLogger';
 import { requestIdMiddleware } from '../server/middlewares/requestId.middleware';
-import { REQUEST_ID } from './app/core/tokens/request-id.token';
-import { randomUUID } from 'crypto';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -132,7 +130,7 @@ app.use(async (req, res, next) => {
     next();
 
   } catch (err) {
-    next(err);
+            next(err);
   }
 });
 
