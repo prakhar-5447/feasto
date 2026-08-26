@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faClock,
-  faMotorcycle,
-  faStar,
-  faUtensils
-} from '@fortawesome/free-solid-svg-icons';
+import { faClock, faMotorcycle, faStar, faUtensils } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({

@@ -1,89 +1,95 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, input } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
+import { Loader } from '../loader/loader';
 
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [FontAwesomeModule, Loader],
   templateUrl: './button.html',
   styleUrl: './button.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Button {
 
-  @Input()
-  variant:
-    | 'primary'
-    | 'secondary'
-    | 'outline'
-    | 'ghost'
-    | 'text'
-    | 'danger'
-    | 'icon' = 'primary';
+  readonly variant =
+    input<
+      | 'primary'
+      | 'secondary'
+      | 'outline'
+      | 'ghost'
+      | 'text'
+      | 'danger'
+      | 'icon'
+    >('primary');
 
-  @Input()
-  size:
-    | 'sm'
-    | 'md'
-    | 'lg' = 'md';
+  readonly size =
+    input<
+      | 'sm'
+      | 'md'
+      | 'lg'
+    >('md');
 
-  @Input()
-  weight:
-    | 'regular'
-    | 'medium'
-    | 'semibold'
-    | 'bold' = 'semibold';
+  readonly weight =
+    input<
+      | 'regular'
+      | 'medium'
+      | 'semibold'
+      | 'bold'
+    >('semibold');
 
-  @Input()
-  tone:
-    | 'default'
-    | 'muted' = 'default';
+  readonly tone =
+    input<
+      | 'default'
+      | 'muted'
+    >('default');
 
-  @Input()
-  type:
-    | 'button'
-    | 'submit'
-    | 'reset' = 'button';
+  readonly type =
+    input<
+      | 'button'
+      | 'submit'
+      | 'reset'
+    >('button');
 
-  @Input()
-  icon?: IconDefinition;
+  readonly icon =
+    input<IconDefinition | undefined>();
 
-  @Input()
-  iconPosition:
-    | 'left'
-    | 'right' = 'left';
+  readonly iconPosition =
+    input<
+      | 'left'
+      | 'right'
+    >('left');
 
-  @Input()
-  disabled = false;
+  readonly disabled =
+    input(false);
 
-  @Input()
-  loading = false;
+  readonly loading =
+    input(false);
 
-  @Input()
-  fullWidth = false;
+  readonly fullWidth =
+    input(false);
 
-  @Input()
-  disableHover = false;
+  readonly disableHover =
+    input(false);
 
-  @Input()
-  ariaLabel?: string;
+  readonly ariaLabel =
+    input<string | undefined>();
+
 
   @Output()
-  clicked = new EventEmitter<MouseEvent>();
+  readonly clicked =
+    new EventEmitter<MouseEvent>();
 
 
   onClick(event: MouseEvent): void {
 
-    if (this.disabled || this.loading) {
+    if (
+      this.disabled() ||
+      this.loading()
+    ) {
       event.preventDefault();
       return;
     }
@@ -91,16 +97,32 @@ export class Button {
     this.clicked.emit(event);
   }
 
+
   get buttonClasses(): string {
+
     return [
       'button',
-      `button-${this.variant}`,
-      `button-${this.size}`,
-      `button-weight-${this.weight}`,
-      `button-tone-${this.tone}`,
-      this.fullWidth ? 'button-full-width' : '',
-      this.disableHover ? 'button-no-hover' : '',
-      this.loading ? 'button-loading' : ''
+
+      `button-${this.variant()}`,
+
+      `button-${this.size()}`,
+
+      `button-weight-${this.weight()}`,
+
+      `button-tone-${this.tone()}`,
+
+      this.fullWidth()
+        ? 'button-full-width'
+        : '',
+
+      this.disableHover()
+        ? 'button-no-hover'
+        : '',
+
+      this.loading()
+        ? 'button-loading'
+        : ''
+
     ]
       .filter(Boolean)
       .join(' ');

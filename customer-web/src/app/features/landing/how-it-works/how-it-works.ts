@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faBox,
-  faCreditCard,
-  faLocationDot,
-  faMagnifyingGlass
-} from '@fortawesome/free-solid-svg-icons';
+import { faBox, faCreditCard, faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
 interface HowItWorksStep {

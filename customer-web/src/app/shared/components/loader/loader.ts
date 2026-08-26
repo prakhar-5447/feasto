@@ -1,17 +1,26 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-loader',
   standalone: true,
-  imports: [],
   templateUrl: './loader.html',
   styleUrl: './loader.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Loader {
-  @Input() loading = true
-  @Input() size = 18
-  @Input() borderSize = 2
-  @Input() color = '#ea580c'
-  @Input() text = ''
-  @Input() overlay = false
+
+  readonly size =
+    input<number>(18);
+
+  readonly borderSize =
+    input<number>(2);
+
+  readonly text =
+    input<string>('');
+
+  readonly overlay =
+    input<boolean>(false);
+
+  readonly label =
+    input<string>('Loading...');
 }

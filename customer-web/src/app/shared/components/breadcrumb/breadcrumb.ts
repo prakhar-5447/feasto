@@ -1,17 +1,6 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    DestroyRef,
-    inject
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 
-import {
-    ActivatedRouteSnapshot,
-    NavigationEnd,
-    Router,
-    RouterLink
-} from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -67,13 +56,11 @@ export class Breadcrumb {
 
     private buildBreadcrumbs(): void {
 
-        const urlTree =
-            this.router.parseUrl(this.router.url);
+        const urlTree = this.router.parseUrl(this.router.url);
 
         const breadcrumbs: BreadcrumbData[] = [];
 
-        const pathSegments =
-            this.getPathSegments(urlTree);
+        const pathSegments = this.getPathSegments(urlTree);
 
 
         // --------------------------------------------------------
@@ -95,13 +82,11 @@ export class Breadcrumb {
         // /india/:city
         // --------------------------------------------------------
 
-        const city =
-            pathSegments[0] === 'india'
-                ? pathSegments[1]
-                : undefined;
+        const city = pathSegments[0] === 'india'
+            ? pathSegments[1]
+            : undefined;
 
         if (city) {
-
             breadcrumbs.push({
                 label: this.formatLabel(city),
                 url: `/india/${city}`
@@ -115,16 +100,13 @@ export class Breadcrumb {
         // /india/:city/r/:restaurant
         // --------------------------------------------------------
 
-        const restaurantIndex =
-            pathSegments.indexOf('r');
+        const restaurantIndex = pathSegments.indexOf('r');
 
-        const restaurant =
-            restaurantIndex >= 0
-                ? pathSegments[restaurantIndex + 1]
-                : undefined;
+        const restaurant = restaurantIndex >= 0
+            ? pathSegments[restaurantIndex + 1]
+            : undefined;
 
         if (restaurant && city) {
-
             breadcrumbs.push({
                 label: this.formatLabel(restaurant),
                 url: `/india/${city}/r/${restaurant}`
@@ -138,11 +120,9 @@ export class Breadcrumb {
         // Order / Reviews / Cart / Checkout / Payment
         // --------------------------------------------------------
 
-        const page =
-            this.getCurrentPage(pathSegments);
+        const page = this.getCurrentPage(pathSegments);
 
         if (page) {
-
             breadcrumbs.push({
                 label: page.label,
                 url: page.path
@@ -153,16 +133,12 @@ export class Breadcrumb {
         this.breadcrumbs = breadcrumbs;
     }
 
-    private getPathSegments(
-        urlTree: ReturnType<Router['parseUrl']>
-    ): string[] {
+    private getPathSegments(urlTree: ReturnType<Router['parseUrl']>): string[] {
 
-        const primary =
-            urlTree.root.children['primary'];
+        const primary = urlTree.root.children['primary'];
 
-        if (!primary) {
+        if (!primary)
             return [];
-        }
 
         return primary.segments
             .map(segment => segment.path)
@@ -170,12 +146,7 @@ export class Breadcrumb {
     }
 
 
-    private getCurrentPage(
-        segments: string[]
-    ): {
-        label: string;
-        path: string;
-    } | null {
+    private getCurrentPage(segments: string[]): { label: string; path: string; } | null {
 
         const pages: Record<string, string> = {
             order: 'Order',
@@ -186,17 +157,15 @@ export class Breadcrumb {
         };
 
 
-        const page =
-            [...segments]
-                .reverse()
-                .find(
-                    segment => pages[segment]
-                );
+        const page = [...segments]
+            .reverse()
+            .find(
+                segment => pages[segment]
+            );
 
 
-        if (!page) {
+        if (!page)
             return null;
-        }
 
 
         return {
@@ -206,10 +175,7 @@ export class Breadcrumb {
     }
 
 
-    private formatLabel(
-        value: string
-    ): string {
-
+    private formatLabel(value: string): string {
         return value
             .split('-')
             .filter(Boolean)

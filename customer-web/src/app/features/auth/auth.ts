@@ -1,14 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  ElementRef,
-  EventEmitter,
-  Output,
-  QueryList,
-  ViewChildren,
-  inject,
-  signal
-} from '@angular/core';
+import { Component, DestroyRef, ElementRef, EventEmitter, Output, QueryList, ViewChildren, inject, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
@@ -18,13 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { faMobileScreen, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  Observable,
-  finalize,
-  interval,
-  map,
-  take,
-} from 'rxjs';
+import { Observable, finalize, interval, map, take, } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -65,12 +49,7 @@ interface CompleteProfileResponse {
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [
-    FormsModule,
-    FontAwesomeModule,
-    Button,
-    Input
-  ],
+  imports: [FormsModule, FontAwesomeModule, Button, Input],
   templateUrl: './auth.html',
   styleUrl: './auth.sass'
 })
@@ -79,29 +58,20 @@ export class Auth {
   @Output() readonly closeAuth =
     new EventEmitter<void>();
 
-  readonly faMobileScreen =
-    faMobileScreen;
-  readonly faXmark =
-    faXmark;
+  readonly faMobileScreen = faMobileScreen;
+  readonly faXmark = faXmark;
 
-  readonly step =
-    signal<AuthStep>('phone');
+  readonly step = signal<AuthStep>('phone');
 
-  readonly timer =
-    signal(30);
+  readonly timer = signal(30);
 
-  readonly resendDisabled =
-    signal(true);
+  readonly resendDisabled = signal(true);
 
-  readonly otpArray =
-    [0, 1, 2, 3, 4, 5];
+  readonly otpArray = [0, 1, 2, 3, 4, 5];
 
-  private readonly store =
-    inject(Store<AppState>);
+  private readonly store = inject(Store<AppState>);
 
-  readonly user$:
-    Observable<unknown> =
-    this.store.select(selectUser);
+  readonly user$: Observable<unknown> = this.store.select(selectUser);
 
   phoneNumber = '';
   name = '';
@@ -109,30 +79,14 @@ export class Auth {
 
   loading = false;
 
-  otpValues: string[] = [
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''
-  ];
+  otpValues: string[] = ['', '', '', '', '', ''];
 
   @ViewChildren('otpInput')
-  otpInputs!: QueryList<
-    ElementRef<HTMLInputElement>
-  >;
+  otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-
-  private readonly router =
-    inject(Router);
-
-  private readonly http =
-    inject(HttpClient);
-
-
-  private readonly destroyRef =
-    inject(DestroyRef);
+  private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+  private readonly destroyRef = inject(DestroyRef);
 
 
   get otp(): string {
@@ -146,12 +100,8 @@ export class Auth {
 
   continueWithPhone(): void {
 
-    if (
-      !this.isPhoneValid ||
-      this.loading
-    ) {
+    if (!this.isPhoneValid || this.loading)
       return;
-    }
 
     this.loading = true;
 
@@ -204,12 +154,8 @@ export class Auth {
 
   verifyOTP(): void {
 
-    if (
-      this.loading ||
-      this.otp.length !== 6
-    ) {
+    if (this.loading || this.otp.length !== 6)
       return;
-    }
 
     this.loading = true;
 
@@ -273,29 +219,22 @@ export class Auth {
 
   completeSignup(): void {
 
-    if (this.loading) {
+    if (this.loading)
       return;
-    }
 
-    const name =
-      this.name.trim();
+    const name = this.name.trim();
 
-    const emailUsername =
-      this.email
-        .trim()
-        .toLowerCase();
+    const emailUsername = this.email
+      .trim()
+      .toLowerCase();
 
-    if (
-      !this.isNameValid ||
-      !this.isEmailValid
-    ) {
+    if (!this.isNameValid || !this.isEmailValid)
       return;
-    }
 
-    const email =
-      emailUsername
-        ? `${emailUsername}@gmail.com`
-        : undefined;
+
+    const email = emailUsername
+      ? `${emailUsername}@gmail.com`
+      : undefined;
 
     this.loading = true;
 
@@ -332,9 +271,8 @@ export class Auth {
 
   resendOtp(): void {
 
-    if (this.resendDisabled()) {
+    if (this.resendDisabled())
       return;
-    }
 
     this.startResendTimer();
   }
@@ -366,25 +304,13 @@ export class Auth {
 
     this.step.set('phone');
 
-    this.otpValues = [
-      '',
-      '',
-      '',
-      '',
-      '',
-      ''
-    ];
+    this.otpValues = ['', '', '', '', '', ''];
 
     this.timer.set(30);
     this.resendDisabled.set(true);
   }
 
-
-
-  onOtpInput(
-    event: Event,
-    index: number
-  ): void {
+  onOtpInput(event: Event, index: number): void {
 
     const input =
       event.target as HTMLInputElement;
@@ -432,21 +358,14 @@ export class Auth {
   }
 
 
-  private fillOtpFromIndex(
-    value: string,
-    startIndex: number
-  ): void {
+  private fillOtpFromIndex(value: string, startIndex: number): void {
 
     const digits =
       value
         .replace(/\D/g, '')
         .slice(0, 6 - startIndex);
 
-    for (
-      let i = 0;
-      i < digits.length;
-      i++
-    ) {
+    for (let i = 0; i < digits.length; i++) {
 
       const index =
         startIndex + i;
@@ -470,10 +389,9 @@ export class Auth {
         value => !value
       );
 
-    const focusIndex =
-      nextEmptyIndex >= 0
-        ? nextEmptyIndex
-        : 5;
+    const focusIndex = nextEmptyIndex >= 0
+      ? nextEmptyIndex
+      : 5;
 
     this.otpInputs
       .get(focusIndex)
@@ -482,10 +400,7 @@ export class Auth {
   }
 
 
-  onOtpKeydown(
-    event: KeyboardEvent,
-    index: number
-  ): void {
+  onOtpKeydown(event: KeyboardEvent, index: number): void {
 
     // --------------------------------------------------
     // Backspace
@@ -515,13 +430,11 @@ export class Auth {
       // move to previous and clear it.
       if (index > 0) {
 
-        const previousIndex =
-          index - 1;
+        const previousIndex = index - 1;
 
         this.otpValues[previousIndex] = '';
 
-        const previousInput =
-          this.otpInputs.get(previousIndex);
+        const previousInput = this.otpInputs.get(previousIndex);
 
         if (previousInput) {
 

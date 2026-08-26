@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  model
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 
 
 @Component({
@@ -47,18 +42,15 @@ export class Input {
 
   onInput(event: Event): void {
 
-    const inputElement =
-      event.target as HTMLInputElement;
+    const inputElement = event.target as HTMLInputElement;
 
-    let value =
-      inputElement.value;
+    let value = inputElement.value;
 
     if (this.digitsOnly()) {
       value = value.replace(/\D/g, '');
     }
 
-    const sanitizePattern =
-      this.sanitizePattern();
+    const sanitizePattern = this.sanitizePattern();
 
     if (sanitizePattern) {
       value = [...value]
@@ -66,8 +58,7 @@ export class Input {
         .join('');
     }
 
-    const maxLength =
-      this.maxlength();
+    const maxLength = this.maxlength();
 
     if (maxLength !== undefined) {
       value = value.slice(0, maxLength);
@@ -81,19 +72,13 @@ export class Input {
 
   onBeforeInput(event: InputEvent): void {
 
-    if (
-      !this.digitsOnly() &&
-      !this.sanitizePattern()
-    ) {
+    if (!this.digitsOnly() && !this.sanitizePattern())
       return;
-    }
 
-    if (
-      event.inputType !== 'insertText' ||
-      !event.data
-    ) {
+
+    if (event.inputType !== 'insertText' || !event.data)
       return;
-    }
+
 
     if (
       this.digitsOnly() &&
@@ -103,8 +88,7 @@ export class Input {
       return;
     }
 
-    const pattern =
-      this.sanitizePattern();
+    const pattern = this.sanitizePattern();
 
     if (
       pattern &&

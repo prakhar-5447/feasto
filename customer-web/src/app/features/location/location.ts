@@ -1,18 +1,12 @@
-import {
-  Component,
-  inject
-} from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faArrowRight,
-  faLineChart,
-  faLocationDot
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faLineChart, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 import { LocationServicePersistence } from '../../core/services/location.service';
+import { SlugPipe } from '../../shared/pipes/slug.pipe';
 
 
 interface PopularCity {
@@ -47,6 +41,8 @@ export class Location {
   readonly faLineChart = faLineChart;
   readonly faLocationDot = faLocationDot;
   readonly faArrowRight = faArrowRight;
+
+  readonly slugPipe = inject(SlugPipe);
 
   readonly popularCities: PopularCity[] = [
     {
@@ -223,23 +219,14 @@ export class Location {
     'Visakhapatnam'
   ].map(name => ({
     name,
-    slug: this.createSlug(name)
+    slug: this.slugPipe.transform(name)
   }));
 
-  private readonly locationService = inject(
-    LocationServicePersistence
-  );
+  private readonly locationService = inject(LocationServicePersistence);
 
 
   selectCity(city: string): void {
     this.locationService.setCity(city);
   }
 
-
-  private createSlug(value: string): string {
-    return value
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-');
-  }
 }

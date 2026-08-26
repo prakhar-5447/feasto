@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { Router } from '@angular/router';
 
@@ -18,13 +14,7 @@ import { LocationServicePersistence } from '../../core/services/location.service
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [
-    Hero,
-    WhyChooseFeasto,
-    Cuisines,
-    HowItWorks,
-    AppPromotion
-  ],
+  imports: [Hero, WhyChooseFeasto, Cuisines, HowItWorks, AppPromotion],
   templateUrl: './landing.html',
   styleUrl: './landing.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,9 +22,7 @@ import { LocationServicePersistence } from '../../core/services/location.service
 export class Landing {
 
   private readonly router = inject(Router);
-  private readonly locationService = inject(
-    LocationServicePersistence
-  );
+  private readonly locationService = inject(LocationServicePersistence);
 
   ngOnInit(): void {
     this.redirectToSavedCity();

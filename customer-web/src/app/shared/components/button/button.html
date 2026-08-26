@@ -1,18 +1,24 @@
-<button [type]="type" [disabled]="disabled || loading" [class]="buttonClasses" [attr.aria-label]="ariaLabel || null"
-    (click)="onClick($event)">
-    @if (loading) {
-    <span class="button-loader" aria-hidden="true"></span>
-    }
+<button [type]="type()" [disabled]="disabled() || loading()" [class]="buttonClasses"
+    [attr.aria-label]="ariaLabel() || null" [attr.aria-busy]="loading()" (click)="onClick($event)">
 
-    @if (!loading && icon && iconPosition === 'left') {
-    <fa-icon [icon]="icon" aria-hidden="true"></fa-icon>
+    @if (loading()) {
+
+    <app-loader [size]="18" [borderSize]="2" color="#ffffff" label="Loading" />
+
+    } @else {
+
+    @if (icon() && iconPosition() === 'left') {
+    <fa-icon [icon]="icon()!" aria-hidden="true" />
     }
 
     <span class="button-content">
-        <ng-content></ng-content>
+        <ng-content />
     </span>
 
-    @if (!loading && icon && iconPosition === 'right') {
-    <fa-icon [icon]="icon" aria-hidden="true"></fa-icon>
+    @if (icon() && iconPosition() === 'right') {
+    <fa-icon [icon]="icon()!" aria-hidden="true" />
     }
+
+    }
+
 </button>

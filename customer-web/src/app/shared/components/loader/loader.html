@@ -1,10 +1,11 @@
-@if(loading){
-<div class="loader-wrapper" [class.overlay]="overlay">
-    <div class="spinner" [style.borderwidth.px]="borderSize" [style.width.px]="size" [style.height.px]="size" [style.borderTopColor]="color"></div>
-    @if(text){
-    <p class="loader-text">
-        {{ text }}
-    </p>
+<div class="loader-wrapper" [class.overlay]="overlay()" [attr.role]="overlay() ? 'status' : null"
+    [attr.aria-label]="label()" [attr.aria-live]="overlay() ? 'polite' : null">
+    <span class="spinner" [style.width.px]="size()" [style.height.px]="size()" [style.border-width.px]="borderSize()"
+        aria-hidden="true"></span>
+
+    @if (text()) {
+    <span class="loader-text">
+        {{ text() }}
+    </span>
     }
 </div>
-}

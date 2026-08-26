@@ -1,17 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet
-} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,13 +16,7 @@ import { Navbar } from '../../shared/components/navbar/navbar';
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [
-    Navbar,
-    Breadcrumb,
-    RouterOutlet,
-    Auth,
-    Footer
-  ],
+  imports: [Navbar, Breadcrumb, RouterOutlet, Auth, Footer],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -46,9 +30,7 @@ export class DashboardLayout {
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly locationService = inject(
-    LocationServicePersistence
-  );
+  private readonly locationService = inject(LocationServicePersistence);
 
 
   ngOnInit(): void {
@@ -76,8 +58,7 @@ export class DashboardLayout {
       this.locationService.setCity(city);
     }
 
-    this.showBreadcrumb =
-      activeRoute.snapshot.data['hideBreadcrumb'] !== true;
+    this.showBreadcrumb = activeRoute.snapshot.data['hideBreadcrumb'] !== true;
   }
 
 

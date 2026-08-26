@@ -1,71 +1,38 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  EventEmitter,
-  Output,
-  inject,
-  signal
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, inject, signal } from '@angular/core';
 
-import {
-  AsyncPipe
-} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
-import {
-  HttpClient,
-  HttpParams
-} from '@angular/common/http';
-
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink
-} from '@angular/router';
-
-import {
-  debounceTime,
-  filter,
-  map,
-  tap,
-  distinctUntilChanged,
-  of,
-  Subject,
-  switchMap,
-  catchError
-} from 'rxjs';
+import { debounceTime, filter, map, tap, distinctUntilChanged, of, Subject, switchMap, catchError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-import {
-  faLocationCrosshairs,
-  faLocationDot,
-  faMagnifyingGlass
-} from '@fortawesome/free-solid-svg-icons';
+import { faLocationCrosshairs, faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { Store } from '@ngrx/store';
 
-import { LocationService, LocationServicePersistence } from '../../../core/services/location.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ClickOutsideDirective } from '../../directive/clickOutside.directive';
-import { Loader } from '../loader/loader';
+
+import { LocationSearchResult, ReverseGeocodeResult } from '../../../core/location/models/location-api.model';
+import { SelectedLocation } from '../../../core/location/models/location.model';
+
+import { LocationService } from '../../../core/location/services/location.service';
+import { LocationStorageService } from '../../../core/location/services/location-storage.service';
 
 import { AppState } from '../../../store/app.state';
+
 import * as AuthActions from '../../../store/auth/auth.actions';
 import { selectUser } from '../../../store/auth/auth.selectors';
-import { FormsModule } from '@angular/forms';
+import { LocationActions } from '../../../store/location/location.actions';
+import { selectSelectedLocation } from '../../../store/location/location.selectors';
+
+import { Loader } from '../loader/loader';
 import { Button } from '../button/button';
 
-
-interface LocationResult {
-  text: string;
-  place_name: string;
-  context?: {
-    text?: string;
-  }[];
-}
+import { ClickOutsideDirective } from '../../directive/clickOutside.directive';
+import { SlugPipe } from '../../pipes/slug.pipe';
 
 
 interface RestaurantResult {
@@ -98,15 +65,7 @@ interface ReverseGeocodeResponse {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    FontAwesomeModule,
-    FormsModule,
-    ClickOutsideDirective,
-    Button,
-    Loader,
-    RouterLink
-  ],
+  imports: [AsyncPipe, FontAwesomeModule, FormsModule, ClickOutsideDirective, Button, Loader, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -119,14 +78,12 @@ export class Navbar {
   readonly faLocationCrosshairs = faLocationCrosshairs;
   readonly faMagnifyingGlass = faMagnifyingGlass;
 
-
-  readonly selectedLocation = signal('Select Location');
   readonly detectLocationLoader = signal(false);
 
   locationQuery = '';
   restaurantQuery = '';
 
-  locationResults: LocationResult[] = [];
+  locationResults: LocationSearchResult[] = [];
   restaurantResults: RestaurantResult[] = [];
   foodResults: FoodResult[] = [];
   cuisineResults: string[] = [];
@@ -142,91 +99,28 @@ export class Navbar {
 
   private readonly store = inject(Store<AppState>);
   private readonly router = inject(Router);
-  private readonly http = inject(HttpClient);
   private readonly locationService = inject(LocationService);
-  private readonly locationServicePersistence = inject(
-    LocationServicePersistence
-  );
+  private readonly locationStorageService = inject(LocationStorageService);
+  private readonly http = inject(HttpClient);
+
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly locationSearchSubject = new Subject<string>();
   private readonly restaurantSearchSubject = new Subject<string>();
 
+  readonly slugPipe = inject(SlugPipe);
+
   readonly user$ = this.store.select(selectUser);
 
+  selectedLocation = this.store.selectSignal(
+    selectSelectedLocation
+  );
+
+
   ngOnInit(): void {
-    this.initializeUrlCity();
     this.initializeLocationSearch();
     this.initializeRestaurantSearch();
-  }
-
-  private initializeUrlCity(): void {
-
-    const updateCityFromUrl = (): void => {
-
-      let route = this.router.routerState.root;
-
-      let city: string | null = null;
-
-      while (route) {
-
-        const routeCity =
-          route.snapshot?.paramMap?.get('city');
-
-        if (routeCity) {
-          city = routeCity;
-          break;
-        }
-
-        const child = route.firstChild;
-
-        if (!child) {
-          break;
-        }
-
-        route = child;
-      }
-
-      if (!city) {
-
-        this.city = '';
-
-        this.selectedLocation.set(
-          'Select Location'
-        );
-
-        return;
-      }
-
-      this.city =
-        this.formatSlug(city);
-
-      this.locationServicePersistence.setCity(
-        this.city
-      );
-
-      this.selectedLocation.set(
-        this.toTitleCase(this.city)
-      );
-    };
-
-    // Initial state
-    updateCityFromUrl();
-
-    // Update whenever navigation changes
-    this.router.events
-      .pipe(
-        filter(
-          event => event instanceof NavigationEnd
-        ),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(() => {
-
-        updateCityFromUrl();
-
-      });
   }
 
 
@@ -234,7 +128,9 @@ export class Navbar {
 
     this.locationSearchSubject
       .pipe(
-        map(query => query.trim()),
+        map(query =>
+          query.trim()
+        ),
 
         debounceTime(300),
 
@@ -243,39 +139,49 @@ export class Navbar {
         tap(query => {
 
           if (!query) {
+
             this.locationLoading.set(false);
+
             this.locationResults = [];
+
             return;
           }
 
           this.locationLoading.set(true);
+
         }),
 
         switchMap(query => {
 
           if (!query) {
-            return of([]);
+            return of(
+              [] as LocationSearchResult[]
+            );
           }
 
           return this.locationService
             .search(query)
             .pipe(
-              map(data =>
-                Array.isArray(data)
-                  ? data as LocationResult[]
-                  : []
-              ),
-              catchError(() => of([]))
+              catchError(() =>
+                of(
+                  [] as LocationSearchResult[]
+                )
+              )
             );
         }),
 
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+
       )
+
       .subscribe(results => {
 
         this.locationResults = results;
 
         this.locationLoading.set(false);
+
       });
   }
 
@@ -341,14 +247,11 @@ export class Navbar {
       )
       .subscribe(results => {
 
-        this.restaurantResults =
-          results.data?.restaurants ?? [];
+        this.restaurantResults = results.data?.restaurants ?? [];
 
-        this.foodResults =
-          results.data?.foods ?? [];
+        this.foodResults = results.data?.foods ?? [];
 
-        this.cuisineResults =
-          results.data?.cuisines ?? [];
+        this.cuisineResults = results.data?.cuisines ?? [];
 
         this.restaurantLoading.set(false);
 
@@ -358,19 +261,18 @@ export class Navbar {
 
 
   toggleLocationDropdown(): void {
-    this.showLocationDropdown =
-      !this.showLocationDropdown;
+    this.showLocationDropdown = !this.showLocationDropdown;
 
     this.showRestaurantDropdown = false;
   }
 
 
   toggleRestaurantDropdown(): void {
-    this.showRestaurantDropdown =
-      !this.showRestaurantDropdown;
+    this.showRestaurantDropdown = !this.showRestaurantDropdown;
 
     this.showLocationDropdown = false;
   }
+
 
   private clearLocationSearch(): void {
 
@@ -382,6 +284,7 @@ export class Navbar {
 
     this.locationLoading.set(false);
   }
+
 
   private clearRestaurantSearch(): void {
 
@@ -411,12 +314,40 @@ export class Navbar {
 
     this.locationQuery = query;
 
-    this.showLocationDropdown = true;
+    if (!query.trim()) {
 
-    this.locationSearchSubject.next(query);
+      this.locationResults = [];
+
+      return;
+    }
+
+    this.locationLoading.set(true);
+
+    this.locationService
+      .search(query.trim())
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: results => {
+
+          this.locationResults = results;
+
+          this.locationLoading.set(false);
+        },
+
+        error: () => {
+
+          this.locationResults = [];
+
+          this.locationLoading.set(false);
+        }
+
+      });
   }
 
-  
+
   onRestaurantQueryChange(query: string): void {
 
     this.restaurantQuery = query;
@@ -435,135 +366,176 @@ export class Navbar {
   }
 
 
-  selectLocation(item: LocationResult): void {
+  selectLocation(item: LocationSearchResult): void {
 
-    const city = this.formatSlug(
-      item.text
+    const slug = this.slugPipe.transform(item.text);
+
+    const [longitude, latitude] = item.center;
+
+
+    const location: SelectedLocation = {
+
+      city:
+        item.text,
+
+      slug,
+
+      latitude,
+
+      longitude,
+
+      source:
+        'search'
+    };
+
+
+    this.store.dispatch(
+      LocationActions.selectLocation({
+        location
+      })
     );
 
-    this.city = city;
-
-    this.locationServicePersistence.setCity(
-      city
-    );
-
-    this.selectedLocation.set(
-      this.toTitleCase(city)
-    );
 
     this.locationResults = [];
+
     this.locationQuery = '';
+
     this.showLocationDropdown = false;
 
+
     this.router.navigate(
-      ['/india', city],
+      ['/india', slug],
       {
         replaceUrl: true
       }
+
     );
   }
 
 
-  detectLocation(): void {
-
-    if (this.detectLocationLoader()) {
-      return;
-    }
-
-    if (
-      typeof navigator === 'undefined' ||
-      !navigator.geolocation
-    ) {
-      return;
-    }
-
-    this.detectLocationLoader.set(true);
-
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.handleDetectedLocation(
-          position.coords.latitude,
-          position.coords.longitude
-        );
-      },
-      () => {
-        this.detectLocationLoader.set(false);
-        this.showLocationDropdown = false;
-      }
-    );
-  }
-
-
-  private handleDetectedLocation(
-    latitude: number,
-    longitude: number
-  ): void {
+  private handleDetectedLocation(latitude: number, longitude: number): void {
 
     this.locationService
-      .reverseGeocode(latitude, longitude)
+      .reverseGeocode(
+        latitude,
+        longitude
+      )
       .pipe(
-        map(data => data as ReverseGeocodeResponse),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(
+          this.destroyRef
+        )
       )
       .subscribe({
-        next: data => {
+
+        next: (
+          data: ReverseGeocodeResult
+        ) => {
 
           const city =
-            data?.context?.[2]?.text;
+            data.context?.[2]?.text;
 
-          const location =
-            data?.context?.[1]?.text;
 
           if (!city) {
-            this.detectLocationLoader.set(false);
+            this.detectLocationLoader.set(
+              false
+            );
             return;
           }
 
-          this.locationServicePersistence.setLocation(
+
+          const slug = this.slugPipe.transform(city);
+
+
+          const location: SelectedLocation = {
+
+            city,
+
+            slug,
+
             latitude,
-            longitude
-          );
 
-          this.locationServicePersistence.setCity(
-            city
-          );
+            longitude,
 
-          this.city =
-            this.formatSlug(city);
+            source:
+              'gps'
+          };
 
-          this.selectedLocation.set(
+
+          this.store.dispatch(LocationActions.selectLocation({
             location
-              ? this.toTitleCase(location)
-              : this.toTitleCase(city)
+          })
           );
+
 
           this.showLocationDropdown = false;
 
+
+          this.locationQuery = '';
+
+
+          this.locationResults = [];
+
+
           this.router.navigate(
-            ['/india', this.city],
+            ['/india', slug],
             {
               replaceUrl: true
             }
           );
 
+
           this.detectLocationLoader.set(false);
+
         },
+
         error: () => {
           this.detectLocationLoader.set(false);
+
           this.showLocationDropdown = false;
+
         }
+
       });
   }
 
+  detectLocation(): void {
 
-  selectRestaurant(
-    restaurant: RestaurantResult
-  ): void {
+    if (!navigator.geolocation)
+      return;
+
+    this.detectLocationLoader.set(true);
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const latitude =
+          position.coords.latitude;
+
+        const longitude =
+          position.coords.longitude;
+
+        this.handleDetectedLocation(
+          latitude,
+          longitude
+        );
+
+      },
+
+      () => {
+        this.detectLocationLoader.set(
+          false
+        );
+
+      }
+
+    );
+  }
+
+
+  selectRestaurant(restaurant: RestaurantResult): void {
 
     this.closeSearchDropdown();
 
-    const restaurantSlug =
-      this.formatSlug(restaurant.slug);
+    const restaurantSlug = this.slugPipe.transform(restaurant.slug);;
 
     this.router.navigate([
       '/india',
@@ -639,9 +611,9 @@ export class Navbar {
 
   toTitleCase(value: string | null): string {
 
-    if (!value) {
+    if (!value)
       return '';
-    }
+
 
     return value
       .split(/\s+/)
@@ -651,16 +623,6 @@ export class Navbar {
         word.slice(1).toLowerCase()
       )
       .join(' ');
-  }
-
-
-  formatSlug(value: string): string {
-
-    return value
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '');
   }
 
 

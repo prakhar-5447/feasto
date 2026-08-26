@@ -16,9 +16,10 @@
               Delivery location
             </label>
 
-            <input id="location-search" name="location" type="text" [placeholder]="selectedLocation()"
-              [(ngModel)]="locationQuery" (ngModelChange)="onLocationQueryChange($event)" autocomplete="off"
-              spellcheck="false" (focus)="toggleLocationDropdown()" />
+            <input id="location-search" name="location" type="text"
+              [placeholder]="selectedLocation()?.city || 'Select location'" [(ngModel)]="locationQuery"
+              (ngModelChange)="onLocationQueryChange($event)" autocomplete="off" spellcheck="false"
+              (focus)="toggleLocationDropdown()" />
           </div>
 
           @if (showLocationDropdown) {

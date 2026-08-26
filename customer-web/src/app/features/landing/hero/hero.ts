@@ -4,10 +4,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faLocationDot,
-  faMagnifyingGlass
-} from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '../../../shared/components/button/button';
 import { LocationServicePersistence } from '../../../core/services/location.service';
@@ -28,9 +25,7 @@ export class Hero {
 
   private readonly router = inject(Router);
 
-  private readonly locationService = inject(
-    LocationServicePersistence
-  );
+  private readonly locationService = inject(LocationServicePersistence);
 
   selectCity(city: string): void {
     this.locationService.setCity(city);

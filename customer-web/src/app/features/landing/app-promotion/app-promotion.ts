@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faDownload,
-  faMobileScreen
-} from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faMobileScreen } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({

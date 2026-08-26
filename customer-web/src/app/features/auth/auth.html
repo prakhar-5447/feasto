@@ -52,7 +52,7 @@
 
                 <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
                     [loading]="loading" [disabled]="loading || !isPhoneValid">
-                    {{ loading ? '' : 'Continue' }}
+                    Continue
                 </app-button>
 
             </form>
@@ -96,7 +96,7 @@
 
                 <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
                     [loading]="loading" [disabled]="loading || otp.length !== 6">
-                    {{ loading ? '' : 'Verify & Continue' }}
+                    Verify & Continue
                 </app-button>
 
                 <p class="resend">
@@ -135,7 +135,7 @@
 
                 <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
                     [loading]="loading" [disabled]="loading || !isNameValid || !isEmailValid">
-                    {{ loading ? 'Processing...' : 'Complete Signup' }}
+                    Complete Signup
                 </app-button>
 
             </form>

@@ -14,6 +14,7 @@ import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 import { LandingLayout } from './layouts/landing-layout/landing-layout';
 
 import { RestaurantResolver } from './shared/pipes/resolver';
+import { validCityGuard } from './core/guards/valid-city.guard';
 
 export const routes: Routes = [
 
@@ -50,7 +51,7 @@ export const routes: Routes = [
     {
         path: 'india/:city',
         loadComponent: () => DashboardLayout,
-
+        canActivate:[validCityGuard],
         children: [
 
             // /india/dhanbad
