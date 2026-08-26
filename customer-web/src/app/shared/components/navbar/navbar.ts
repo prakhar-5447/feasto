@@ -89,8 +89,6 @@ export class Navbar {
   locationLoading = signal(false);
   restaurantLoading = signal(false);
 
-  private city = '';
-
   private readonly store = inject(Store<AppState>);
   private readonly router = inject(Router);
   private readonly locationService = inject(LocationService);
@@ -530,9 +528,16 @@ export class Navbar {
 
     const restaurantSlug = this.slugPipe.transform(restaurant.slug);;
 
+    const location = this.selectedLocation();
+
+    if (!location) {
+      return;
+    }
+
+
     this.router.navigate([
       '/india',
-      this.city,
+      location.city,
       'r',
       restaurantSlug
     ]);
@@ -543,14 +548,22 @@ export class Navbar {
 
     this.closeSearchDropdown();
 
+    const location = this.selectedLocation();
+
+    if (!location) {
+      return;
+    }
+
     this.router.navigate(
-      ['/india', this.city],
+      ['/india', location.city],
       {
         queryParams: {
           cuisine
         }
       }
     );
+
+
   }
 
 
@@ -558,8 +571,14 @@ export class Navbar {
 
     this.closeSearchDropdown();
 
+    const location = this.selectedLocation();
+
+    if (!location) {
+      return;
+    }
+
     this.router.navigate(
-      ['/india', this.city],
+      ['/india', location.city],
       {
         queryParams: {
           food: food.name
