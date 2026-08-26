@@ -1,86 +1,83 @@
-<div class="modal-overlay" role="presentation">
+<section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title"
+    aria-describedby="auth-subtitle">
+    <button type="button" class="close-button" aria-label="Close" (click)="closeAuth.emit()">
+        Close <fa-icon [icon]="faXmark"></fa-icon>
+    </button>
 
-    <div class="auth-card-wrapper">
-        <button type="button" class="close-button" aria-label="Close" (click)="closeAuth.emit()">
-            Close <fa-icon [icon]="faXmark"></fa-icon>
-        </button>
-        <section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title"
-            aria-describedby="auth-subtitle">
+    <header class="header">
 
-            <header class="header">
+        <div class="icon-wrapper" aria-hidden="true">
+            <fa-icon [icon]="faMobileScreen"></fa-icon>
+        </div>
 
-                <div class="icon-wrapper" aria-hidden="true">
-                    <fa-icon [icon]="faMobileScreen"></fa-icon>
-                </div>
+        <h1 id="auth-title" class="title">
+            Welcome to Feasto
+        </h1>
 
-                <h1 id="auth-title" class="title">
-                    Welcome to Feasto
-                </h1>
+        @if (step() === 'phone') {
+        <p id="auth-subtitle" class="subtitle">
+            Enter your mobile number to continue
+        </p>
+        }
 
-                @if (step() === 'phone') {
-                <p id="auth-subtitle" class="subtitle">
-                    Enter your mobile number to continue
-                </p>
-                }
+        @if (step() === 'otp') {
+        <p id="auth-subtitle" class="subtitle">
+            Enter the OTP sent to {{ phoneNumber }}
 
-                @if (step() === 'otp') {
-                <p id="auth-subtitle" class="subtitle">
-                    Enter the OTP sent to {{ phoneNumber }}
+            <button type="button" class="inline-action" [disabled]="loading" (click)="changePhone()">
+                Change
+            </button>
+        </p>
+        }
 
-                    <button type="button" class="inline-action" [disabled]="loading" (click)="changePhone()">
-                        Change
-                    </button>
-                </p>
-                }
+        @if (step() === 'details') {
+        <p id="auth-subtitle" class="subtitle">
+            Complete your profile to continue
+        </p>
+        }
 
-                @if (step() === 'details') {
-                <p id="auth-subtitle" class="subtitle">
-                    Complete your profile to continue
-                </p>
-                }
-
-            </header>
+    </header>
 
 
-            @if (step() === 'phone') {
+    @if (step() === 'phone') {
 
-            <form class="form" (ngSubmit)="continueWithPhone()">
+    <form class="form" (ngSubmit)="continueWithPhone()">
 
-                <app-input id="phone-number" name="phone" label="Mobile Number" type="tel" inputmode="numeric"
-                    autocomplete="tel" [spellcheck]="false" placeholder="Enter 10-digit mobile number" prefix="+91"
-                    [(value)]="phoneNumber" [digitsOnly]="true" [maxlength]="10" [required]="true" />
+        <app-input id="phone-number" name="phone" label="Mobile Number" type="tel" inputmode="numeric"
+            autocomplete="tel" [spellcheck]="false" placeholder="Enter 10-digit mobile number" prefix="+91"
+            [(value)]="phoneNumber" [digitsOnly]="true" [maxlength]="10" [required]="true" />
 
-                <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
-                    [loading]="loading" [disabled]="loading || !isPhoneValid">
-                    Continue
-                </app-button>
+        <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true" [loading]="loading"
+            [disabled]="loading || !isPhoneValid">
+            Continue
+        </app-button>
 
-            </form>
+    </form>
 
-            }
+    }
 
 
-            @if (step() === 'otp') {
+    @if (step() === 'otp') {
 
-            <form class="form" (ngSubmit)="verifyOTP()">
+    <form class="form" (ngSubmit)="verifyOTP()">
 
-                <div class="field-group">
+        <div class="field-group">
 
-                    <label for="otp-0">
-                        Enter OTP
-                    </label>
+            <label for="otp-0">
+                Enter OTP
+            </label>
 
-                    <div class="otp-container" role="group" aria-label="Enter 6-digit OTP">
+            <div class="otp-container" role="group" aria-label="Enter 6-digit OTP">
 
-                        @for (
-                        _ of otpArray;
-                        track $index
-                        ) {
+                @for (
+                _ of otpArray;
+                track $index
+                ) {
 
-                        <input #otpInput [id]="'otp-' + $index" [name]="'otp-' + $index" type="text" inputmode="numeric"
-                            autocomplete="one-time-code" maxlength="1" pattern="[0-9]" [value]="otpValues[$index]"
-                            [class.filled]="otpValues[$index] !== ''" [attr.aria-label]="'OTP digit ' + ($index + 1)"
-                            [disabled]="loading" (input)="onOtpInput(
+                <input #otpInput [id]="'otp-' + $index" [name]="'otp-' + $index" type="text" inputmode="numeric"
+                    autocomplete="one-time-code" maxlength="1" pattern="[0-9]" [value]="otpValues[$index]"
+                    [class.filled]="otpValues[$index] !== ''" [attr.aria-label]="'OTP digit ' + ($index + 1)"
+                    [disabled]="loading" (input)="onOtpInput(
                                     $event,
                                     $index
                                 )" (keydown)="onOtpKeydown(
@@ -88,71 +85,69 @@
                                     $index
                                 )" />
 
-                        }
+                }
 
-                    </div>
+            </div>
 
-                </div>
+        </div>
 
-                <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
-                    [loading]="loading" [disabled]="loading || otp.length !== 6">
-                    Verify & Continue
-                </app-button>
+        <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true" [loading]="loading"
+            [disabled]="loading || otp.length !== 6">
+            Verify & Continue
+        </app-button>
 
-                <p class="resend">
+        <p class="resend">
 
-                    <span>
-                        Didn't receive OTP?
-                    </span>
+            <span>
+                Didn't receive OTP?
+            </span>
 
-                    <button type="button" class="inline-action" [disabled]="resendDisabled()" (click)="resendOtp()">
-                        @if (resendDisabled()) {
-                        Resend OTP in {{ timer() }}s
-                        } @else {
-                        Resend
-                        }
-                    </button>
+            <button type="button" class="inline-action" [disabled]="resendDisabled()" (click)="resendOtp()">
+                @if (resendDisabled()) {
+                Resend OTP in {{ timer() }}s
+                } @else {
+                Resend
+                }
+            </button>
 
-                </p>
+        </p>
 
-            </form>
+    </form>
 
-            }
-
-
-            @if (step() === 'details') {
-
-            <form class="form" (ngSubmit)="completeSignup()">
-
-                <app-input id="name" name="name" label="Name" type="text" autocomplete="name" [spellcheck]="false"
-                    placeholder="Enter your name" [(value)]="name" [minlength]="2" [maxlength]="50"
-                    pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" [disabled]="loading" [required]="true" />
-
-                <app-input id="email" name="email" label="Email" type="text" autocomplete="email"
-                    placeholder="Enter your email" suffix="@gmail.com" [(value)]="email" [maxlength]="64"
-                    [pattern]="'[A-Za-z0-9._%+-]+'" [sanitizePattern]="/[A-Za-z0-9._%+-]/" [disabled]="loading" />
+    }
 
 
-                <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true"
-                    [loading]="loading" [disabled]="loading || !isNameValid || !isEmailValid">
-                    Complete Signup
-                </app-button>
+    @if (step() === 'details') {
 
-            </form>
+    <form class="form" (ngSubmit)="completeSignup()">
 
-            }
+        <app-input id="name" name="name" label="Name" type="text" autocomplete="name" [spellcheck]="false"
+            placeholder="Enter your name" [(value)]="name" [minlength]="2" [maxlength]="50"
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" [disabled]="loading" [required]="true" />
 
-            <p class="terms">
-                By continuing you agree to our
-                <a href="#">
-                    Terms
-                </a>
-                &
-                <a href="#">
-                    Privacy Policy
-                </a>
-            </p>
+        <app-input id="email" name="email" label="Email" type="text" autocomplete="email" placeholder="Enter your email"
+            suffix="@gmail.com" [(value)]="email" [maxlength]="64" [pattern]="'[A-Za-z0-9._%+-]+'"
+            [sanitizePattern]="/[A-Za-z0-9._%+-]/" [disabled]="loading" />
 
-        </section>
-    </div>
-</div>
+
+        <app-button type="submit" variant="primary" size="lg" weight="semibold" [fullWidth]="true" [loading]="loading"
+            [disabled]="loading || !isNameValid || !isEmailValid">
+            Complete Signup
+        </app-button>
+
+    </form>
+
+    }
+
+    <p class="terms">
+        By continuing you agree to our
+        <a href="#">
+            Terms
+        </a>
+        &
+        <a href="#">
+            Privacy Policy
+        </a>
+    </p>
+
+</section>

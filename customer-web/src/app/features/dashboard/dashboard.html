@@ -1,11 +1,53 @@
-<app-ads-carousel></app-ads-carousel>
-<app-categories (categorySelected)="onCategorySelect($event)"></app-categories>
-<app-restaurant-list [selectedCategory]="selectedCategory"></app-restaurant-list>
+<!-- @if (loading) { -->
+
+<!-- <app-dashboard-skeleton /> -->
+
+<!-- } @else { -->
+@if (hasFilters()) {
+
+<app-filter-bar [filters]="filters()" (filterClicked)="openFilters()" (removeFilter)="removeFilter($event)" />
+
+} @else {
+
+<app-ads-carousel />
+
+<app-categories (categorySelected)="onCategorySelect($event)" />
+
+}
+
+<app-restaurant-list [selectedCategory]="selectedCategory" />
+
 <div class="end-of-results">
+
     <div class="content">
+
         <fa-icon [icon]="faUtensils"></fa-icon>
-        <p class="title">You've reached the end</p>
-        <p class="subtitle">No more restaurants to show. <span class="cta">That's all we've got in your area</span></p>
+
+        <p class="title">
+            You've reached the end
+        </p>
+
+        <p class="subtitle">
+            No more restaurants to show.
+
+            <span class="cta">
+                That's all we've got in your area
+            </span>
+        </p>
+
     </div>
 
 </div>
+
+<!-- } -->
+
+
+@if (showFilterModal()) {
+
+<app-modal size="md">
+
+    <app-filter-modal [filters]="filters()" (close)="closeFilters()" (applyFilters)="applyFilters($event)" />
+
+</app-modal>
+
+}

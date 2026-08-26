@@ -3,14 +3,45 @@
 .modal-overlay
     position: fixed
     inset: 0
-    background: $color-overlay-black-subtle
-    display: flex
-    justify-content: center
-    align-items: center
     z-index: $z-modal
+
+    display: flex
+    align-items: center
+    justify-content: center
+
     width: 100%
+    height: 100%
+
+    padding: $space-16
+
+    background: $color-overlay-black-medium
 
     .modal-content
         width: 100%
-        max-width: 4$space-80
+
+        max-height: calc(100vh - #{$space-32})
+
+        overflow: visible
+
+        background: $color-bg-white
         border-radius: $radius-16
+
+        box-shadow: 0 8px 32px $color-overlay-black-medium
+
+    .modal-sm
+        max-width: $container-sm
+
+    .modal-md
+        max-width: $container-md
+
+    .modal-lg
+        max-width: $container-lg
+
+    @media (max-width: $breakpoint-xs)
+        align-items: flex-end
+
+        padding: 0
+
+        .modal-content
+            max-height: 90vh
+            border-radius: $radius-16 $radius-16 0 0

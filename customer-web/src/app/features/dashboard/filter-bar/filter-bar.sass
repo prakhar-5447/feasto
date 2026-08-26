@@ -1,0 +1,96 @@
+@use '../../../../styles/index' as *
+
+.filter-bar
+    max-width: $container-xl
+    margin: 0 auto
+    padding: $space-16
+
+    display: flex
+    align-items: center
+    gap: $space-8
+
+    overflow-x: auto
+    scrollbar-width: none
+
+    &::-webkit-scrollbar
+        display: none
+
+    .filter-button,
+    .filter-chip
+        flex-shrink: 0
+
+        display: inline-flex
+        align-items: center
+        justify-content: center
+
+        min-height: 40px
+        padding: 0 $space-12
+
+        border: $border-width-1 $border-style-solid $color-border
+        border-radius: $radius-8
+
+        background: $color-bg-white
+        color: $color-text-primary
+
+        font-size: $font-size-14
+        font-weight: $font-weight-medium
+
+        transition: $transition-color
+
+    .filter-button
+        border-color: $color-primary
+        color: $color-primary
+
+        cursor: pointer
+
+        &:hover
+            background: $color-primary-light
+            border-color: $color-primary-hover
+            color: $color-primary-hover
+
+    .filter-chip
+        gap: $space-8
+        font-weight: $font-weight-semibold
+        border-color: $color-border-primary
+        color: $color-primary
+
+        fa-icon
+            &:hover
+                cursor: pointer
+
+        &:hover
+            border-color: $color-primary
+            color: $color-primary-hover
+
+    .remove
+        display: inline-flex
+        align-items: center
+        justify-content: center
+
+        width: 18px
+        height: 18px
+
+        font-size: $font-size-16
+        line-height: 1
+
+    @media (max-width: $breakpoint-md)
+        padding: $space-12 $space-16
+
+        .filter-button,
+        .filter-chip
+            min-height: 36px
+            padding: 0 $space-12
+
+            font-size: $font-size-12
+
+    @media (max-width: $breakpoint-xs)
+        padding: $space-8 $space-12
+
+        gap: $space-4
+
+        .filter-button,
+        .filter-chip
+            min-height: 34px
+            padding: 0 $space-8
+
+            font-size: $font-size-12

@@ -55,8 +55,7 @@ interface CompleteProfileResponse {
 })
 export class Auth {
 
-  @Output() readonly closeAuth =
-    new EventEmitter<void>();
+  @Output() readonly closeAuth = new EventEmitter<void>();
 
   readonly faMobileScreen = faMobileScreen;
   readonly faXmark = faXmark;

@@ -1,0 +1,208 @@
+@use '../../../../styles/index' as *
+
+.filter-modal
+    display: flex
+    flex-direction: column
+
+    max-height: calc(100vh - #{$space-32})
+
+.filter-header
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+
+    padding: $space-20
+
+    border-bottom: $border-width-1 $border-style-solid $color-border-light
+
+    h2
+        margin: 0
+
+        font-size: $font-size-20
+        font-weight: $font-weight-semibold
+        color: $color-text-primary
+
+    p
+        margin: $space-4 0 0
+
+        font-size: $font-size-12
+        color: $color-text-secondary
+
+.close-button
+    display: inline-flex
+    align-items: center
+    justify-content: center
+
+    width: 36px
+    height: 36px
+
+    border: 0
+    border-radius: $radius-circle
+
+    background: $color-bg-gray
+    color: $color-text-secondary
+
+    font-size: $font-size-20
+
+    cursor: pointer
+
+    &:hover
+        background: $color-bg-gray-soft
+        color: $color-text-primary
+
+.filter-body
+    flex: 1
+
+    padding: $space-20
+
+    overflow-y: auto
+
+.filter-group
+    padding: $space-16 0
+
+    &:first-child
+        padding-top: 0
+
+    & + .filter-group
+        border-top: $border-width-1 $border-style-solid $color-border-subtle
+
+.group-header
+    margin-bottom: $space-12
+
+    h3
+        margin: 0
+
+        font-size: $font-size-14
+        font-weight: $font-weight-semibold
+        color: $color-text-primary
+
+.options
+    display: flex
+    flex-direction: column
+    gap: $space-4
+
+.option
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    width: 100%
+
+    min-height: 40px
+    padding: $space-8
+
+    border: 0
+    border-radius: $radius-8
+
+    background: transparent
+    color: $color-text-primary
+
+    font-size: $font-size-14
+    text-align: left
+
+    cursor: pointer
+
+    &:hover
+        background: $color-bg-orange-soft
+
+    &.selected
+        background: $color-primary-light
+        color: $color-primary
+
+.checkbox,
+.radio
+    flex-shrink: 0
+
+    display: inline-flex
+    align-items: center
+    justify-content: center
+
+    width: 20px
+    height: 20px
+
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-4
+
+    background: $color-bg-white
+
+.option.selected
+
+    .checkbox
+        border-color: $color-primary
+        background: $color-primary
+        color: $color-text-white
+
+.radio
+    border-radius: $radius-circle
+
+.option.selected
+
+    .radio
+        border-color: $color-primary
+
+        span
+            width: 10px
+            height: 10px
+
+            border-radius: $radius-circle
+
+            background: $color-primary
+
+.filter-footer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-12
+
+    padding: $space-16 $space-20
+
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+.clear-button
+    padding: $space-12 $space-16
+
+    border: 0
+
+    background: transparent
+    color: $color-text-secondary
+
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+    cursor: pointer
+
+    &:hover
+        color: $color-primary
+
+.apply-button
+    flex: 1
+
+    min-height: 44px
+    padding: 0 $space-20
+
+    border: 0
+    border-radius: $radius-8
+
+    background: $color-primary
+    color: $color-text-white
+
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+    cursor: pointer
+
+    transition: $transition-color
+
+    &:hover
+        background: $color-primary-hover
+
+@media (max-width: $breakpoint-xs)
+
+    .filter-header
+        padding: $space-16
+
+    .filter-body
+        padding: $space-16
+
+    .filter-footer
+        padding: $space-12 $space-16

@@ -1,12 +1,17 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [],
   templateUrl: './modal.html',
   styleUrl: './modal.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Modal {
-  @Output() close = new EventEmitter<void>();
+
+  @Input()
+  size:
+    | 'sm'
+    | 'md'
+    | 'lg' = 'md';
 }

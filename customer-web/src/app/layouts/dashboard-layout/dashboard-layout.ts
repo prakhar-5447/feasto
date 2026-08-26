@@ -10,13 +10,14 @@ import { LocationServicePersistence } from '../../core/services/location.service
 import { Auth } from '../../features/auth/auth';
 import { Breadcrumb } from '../../shared/components/breadcrumb/breadcrumb';
 import { Footer } from '../../shared/components/footer/footer';
+import { Modal } from '../../shared/components/modal/modal';
 import { Navbar } from '../../shared/components/navbar/navbar';
 
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [Navbar, Breadcrumb, RouterOutlet, Auth, Footer],
+  imports: [Navbar, Breadcrumb, RouterOutlet, Auth, Modal, Footer],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.sass',
   changeDetection: ChangeDetectionStrategy.OnPush

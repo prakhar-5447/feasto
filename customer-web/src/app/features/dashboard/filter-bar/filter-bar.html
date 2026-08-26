@@ -1,0 +1,27 @@
+<div class="filter-bar">
+
+    <button type="button" class="filter-button" (click)="openFilters()">
+        <fa-icon [icon]="faFilter"></fa-icon> Filters
+    </button>
+
+
+    @for (
+    filter of activeFilters();
+    track filter.key
+    ) {
+
+    <button type="button" class="filter-chip" (click)="remove(filter.key)">
+
+        <span>
+            {{ filter.label }}
+        </span>
+
+        <span class="remove" aria-hidden="true">
+            <fa-icon [icon]="faClose"></fa-icon>
+        </span>
+
+    </button>
+
+    }
+
+</div>

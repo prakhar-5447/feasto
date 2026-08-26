@@ -1,0 +1,160 @@
+<div class="filter-modal">
+
+    <header class="filter-header">
+
+        <div>
+            <h2>
+                Filters
+            </h2>
+
+            <p>
+                Refine restaurants for you
+            </p>
+        </div>
+
+        <button type="button" class="close-button" aria-label="Close filters" (click)="close.emit()">
+            ×
+        </button>
+
+    </header>
+
+
+    <div class="filter-body">
+
+
+        <!-- Cuisine -->
+
+        <section class="filter-group">
+
+            <div class="group-header">
+                <h3>
+                    Cuisine
+                </h3>
+            </div>
+
+            <div class="options">
+
+                @for (
+                cuisine of cuisines;
+                track cuisine
+                ) {
+
+                <button type="button" class="option" [class.selected]="
+                            draftFilters.cuisine === cuisine
+                        " (click)="selectCuisine(cuisine)">
+
+                    <span class="checkbox">
+                        @if (
+                        draftFilters.cuisine === cuisine
+                        ) {
+                        ✓
+                        }
+                    </span>
+
+                    <span>
+                        {{ cuisine }}
+                    </span>
+
+                </button>
+
+                }
+
+            </div>
+
+        </section>
+
+
+        <!-- Rating -->
+
+        <section class="filter-group">
+
+            <div class="group-header">
+                <h3>
+                    Rating
+                </h3>
+            </div>
+
+            <div class="options">
+
+                @for (
+                rating of ratings;
+                track rating
+                ) {
+
+                <button type="button" class="option" [class.selected]="
+                            draftFilters.rating === rating
+                        " (click)="selectRating(rating)">
+
+                    <span class="radio">
+                        @if (
+                        draftFilters.rating === rating
+                        ) {
+                        <span></span>
+                        }
+                    </span>
+
+                    <span>
+                        {{ rating }}★ & above
+                    </span>
+
+                </button>
+
+                }
+
+            </div>
+
+        </section>
+
+
+        <!-- Food preference -->
+
+        <section class="filter-group">
+
+            <div class="group-header">
+
+                <h3>
+                    Food preference
+                </h3>
+
+            </div>
+
+            <div class="options">
+
+                <button type="button" class="option" [class.selected]="draftFilters.veg === true"
+                    (click)="setVeg(true)">
+
+                    <span class="checkbox">
+
+                        @if (draftFilters.veg === true) {
+                        ✓
+                        }
+
+                    </span>
+
+                    <span>
+                        Pure Veg
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+    <footer class="filter-footer">
+
+        <button type="button" class="clear-button" (click)="clearFilters()">
+            Clear all
+        </button>
+
+        <button type="button" class="apply-button" (click)="apply()">
+            Apply Filters
+        </button>
+
+    </footer>
+
+</div>

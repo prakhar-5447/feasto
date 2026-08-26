@@ -9,7 +9,11 @@
 </main>
 
 @if (showAuthModal) {
-<app-auth (closeAuth)="closeAuth()"></app-auth>
+<app-modal size="sm">
+
+    <app-auth (closeAuth)="closeAuth()" />
+
+</app-modal>
 }
 
 <app-footer></app-footer>

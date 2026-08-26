@@ -1,41 +1,16 @@
 @use '../../../styles/index' as *
 
-.modal-overlay
-    position: fixed
-    inset: 0
-    z-index: $z-modal
-
-    display: flex
-    align-items: center
-    justify-content: center
-    flex-direction: column
-
-    width: 100%
-    min-height: 100%
-
-    padding: $space-16
-
-    background: $color-overlay-black-heavy
-
-.auth-card-wrapper
+.auth-card
     position: relative
+    overflow: visible
 
     width: 100%
-    max-width: $container-sm
-    animation: modal-bounce-in $animation-modal
 
-    @keyframes modal-bounce-in
-        0%
-            opacity: 0
-            transform: scale(.9) translateY(12px)
+    padding: $space-32
 
-        60%
-            opacity: 1
-            transform: scale(1.03) translateY(0)
-
-        100%
-            opacity: 1
-            transform: scale(1) translateY(0)
+    border-radius: $radius-16
+    background: $color-bg-white
+    box-shadow: $shadow-lg
 
 .close-button
     z-index: 10
@@ -61,20 +36,11 @@
     cursor: pointer
 
     &:hover
-        color: $color-neutral-300
+        color: $color-primary-hover
 
     &:focus-visible
         outline: 2px solid currentColor
         outline-offset: 4px
-
-.auth-card
-    width: 100%
-
-    padding: $space-32
-
-    border-radius: $radius-16
-    background: $color-bg-white
-    box-shadow: $shadow-lg
 
 .header
     margin-bottom: $space-32

@@ -19,7 +19,6 @@ import { LocationSearchResult, ReverseGeocodeResult } from '../../../core/locati
 import { SelectedLocation } from '../../../core/location/models/location.model';
 
 import { LocationService } from '../../../core/location/services/location.service';
-import { LocationStorageService } from '../../../core/location/services/location-storage.service';
 
 import { AppState } from '../../../store/app.state';
 
@@ -56,11 +55,6 @@ interface SearchResponse {
   };
 }
 
-interface ReverseGeocodeResponse {
-  context?: {
-    text?: string;
-  }[];
-}
 
 @Component({
   selector: 'app-navbar',
@@ -100,7 +94,6 @@ export class Navbar {
   private readonly store = inject(Store<AppState>);
   private readonly router = inject(Router);
   private readonly locationService = inject(LocationService);
-  private readonly locationStorageService = inject(LocationStorageService);
   private readonly http = inject(HttpClient);
 
   private readonly authService = inject(AuthService);

@@ -1,5 +1,10 @@
-<div class="modal-overlay" (click)="close.emit()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-        <ng-content></ng-content>
+<div class="modal-overlay">
+
+    <div class="modal-content" [class.modal-sm]="size === 'sm'" [class.modal-md]="size === 'md'"
+        [class.modal-lg]="size === 'lg'" role="dialog" aria-modal="true" >
+
+        <ng-content />
+
     </div>
+
 </div>
