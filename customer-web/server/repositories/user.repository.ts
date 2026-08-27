@@ -2,7 +2,6 @@ import User, { IUser } from "../models/user.model";
 import Order, { IOrder } from "../models/order.model";
 import Review, { IReview } from "../models/review.model";
 
-
 // --------------------------------------------------
 // AUTH
 // --------------------------------------------------
@@ -16,7 +15,6 @@ export const findByPhone = (
     });
 };
 
-
 export const findById = (
     id: string
 ): Promise<IUser | null> => {
@@ -24,14 +22,12 @@ export const findById = (
     return User.findById(id);
 };
 
-
 export const createUser = (
     data: Partial<IUser>
 ): Promise<IUser> => {
 
     return User.create(data);
 };
-
 
 // --------------------------------------------------
 // USER
@@ -52,27 +48,12 @@ export const updateUser = (
     );
 };
 
-
 export const deleteUser = (
     id: string
 ): Promise<IUser | null> => {
 
     return User.findByIdAndDelete(id);
 };
-
-
-export const findByUsername = (
-    username: string
-): Promise<IUser | null> => {
-
-    return User.findOne({
-        username,
-        isActive: true
-    }).select(
-        "_id name username avatar"
-    );
-};
-
 
 // --------------------------------------------------
 // LOGIN
@@ -93,7 +74,6 @@ export const updateLastLogin = (
     );
 };
 
-
 // --------------------------------------------------
 // ORDERS
 // --------------------------------------------------
@@ -103,12 +83,12 @@ export const findUserOrders = (
 ): Promise<IOrder[]> => {
 
     return Order.find({
-        user: userId
-    }).sort({
-        createdAt: -1
-    });
+        customer: userId
+    })
+        .sort({
+            createdAt: -1
+        });
 };
-
 
 // --------------------------------------------------
 // REVIEWS
@@ -120,7 +100,8 @@ export const findUserReviews = (
 
     return Review.find({
         user: userId
-    }).sort({
-        createdAt: -1
-    });
+    })
+        .sort({
+            createdAt: -1
+        });
 };

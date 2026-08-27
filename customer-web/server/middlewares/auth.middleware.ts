@@ -3,6 +3,7 @@ import {
     Response,
     NextFunction
 } from "express";
+
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/user.model";
 
@@ -15,32 +16,28 @@ export const protect = async (
     res: Response,
     next: NextFunction
 ): Promise<void> => {
-
     try {
         const token =
-            req.cookies['accessToken'];
+            req.cookies["accessToken"];
 
         if (!token) {
             res.status(401).json({
                 success: false,
                 message: "Authentication required"
             });
-
             return;
         }
 
         const decoded =
             jwt.verify(
                 token,
-                process.env['ACCESS_TOKEN_SECRET']!
+                process.env["ACCESS_TOKEN_SECRET"]!
             ) as {
                 userId: string;
             };
 
         const user =
-            await User.findById(
-                decoded.userId
-            );
+            await User.findById(decoded.userId);
 
         if (!user) {
             res.status(401).json({
@@ -55,17 +52,16 @@ export const protect = async (
                 success: false,
                 message: "User account is inactive"
             });
-
             return;
         }
 
         req.user = user;
+
         next();
-    } catch (error) {
+    } catch (err) {
         res.status(401).json({
             success: false,
             message: "Access token expired or invalid"
         });
-
     }
 };

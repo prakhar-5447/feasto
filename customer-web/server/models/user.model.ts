@@ -1,8 +1,11 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, {
+    Schema,
+    Document
+} from "mongoose";
 
 export interface IUser extends Document {
     name?: string;
-    role: "customer" | "restaurant_partner";
+    role: "CUSTOMER" | "RESTAURANT_PARTNER";
     phone: string;
     email?: string;
     avatar?: string | null;
@@ -18,13 +21,17 @@ const userSchema = new Schema<IUser>(
             type: String,
             trim: true,
             minlength: 2,
-            maxlength: 50,
+            maxlength: 50
         },
 
         role: {
             type: String,
-            enum: ["customer", "restaurant_partner"],
-            default: "customer"
+            enum: [
+                "CUSTOMER",
+                "RESTAURANT_PARTNER"
+            ],
+            default: "CUSTOMER",
+            required: true
         },
 
         phone: {
@@ -32,7 +39,10 @@ const userSchema = new Schema<IUser>(
             required: true,
             unique: true,
             index: true,
-            match: [/^\d{10}$/, "Phone must be exactly 10 digits"],
+            match: [
+                /^\d{10}$/,
+                "Phone must be exactly 10 digits"
+            ]
         },
 
         email: {
@@ -41,34 +51,42 @@ const userSchema = new Schema<IUser>(
             trim: true,
             sparse: true,
             validate: {
-                validator: function (v: string) {
-                    if (!v) return true; // allow empty
-                    return /^\S+@\S+\.\S+$/.test(v);
+                validator: (value: string) => {
+                    if (!value) {
+                        return true;
+                    }
+
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
                 },
-                message: "Invalid email",
-            },
+                message: "Invalid email"
+            }
         },
 
         avatar: {
             type: String,
-            default: null,
+            default: null
         },
 
         isActive: {
             type: Boolean,
-            default: true,
+            default: true
         },
 
         lastLogin: {
             type: Date,
-        },
+            default: null
+        }
     },
     {
-        timestamps: true,
+        timestamps: true
     }
 );
 
 const User =
-    mongoose.models["User"] || mongoose.model<IUser>("User", userSchema);
+    mongoose.models["User"] ||
+    mongoose.model<IUser>(
+        "User",
+        userSchema
+    );
 
 export default User;

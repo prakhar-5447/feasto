@@ -2,22 +2,21 @@ import * as orderRepo from "../repositories/order.repository";
 import * as restaurantService from "./restaurant.service";
 import * as cartService from "./cart.service";
 
+type PaymentMethod =
+    | "UPI"
+    | "FAKEUPI"
+    | "RAZORPAY"
+    | "COD";
+
 export const createOrder = async (
     userId: string,
     address: any
 ) => {
-
     const cart =
-        await cartService
-            .getCart(userId);
+        await cartService.getCart(userId);
 
-    if (
-        !cart ||
-        cart.items.length === 0
-    ) {
-        throw new Error(
-            "Cart is empty"
-        );
+    if (!cart || cart.items.length === 0) {
+        throw new Error("Cart is empty");
     }
 
     const restaurantId =
@@ -25,13 +24,11 @@ export const createOrder = async (
 
     const restaurant =
         await restaurantService.getRestaurantById(
-            restaurantId
+            restaurantId.toString()
         );
 
     if (!restaurant) {
-        throw new Error(
-            "Restaurant not found"
-        );
+        throw new Error("Restaurant not found");
     }
 
     const itemTotal =
@@ -45,8 +42,7 @@ export const createOrder = async (
 
     const deliveryFee = 40;
     const platformFee = 5;
-    const gst =
-        itemTotal * 0.05;
+    const gst = itemTotal * 0.05;
 
     const grandTotal =
         itemTotal +
@@ -55,45 +51,29 @@ export const createOrder = async (
         gst;
 
     return orderRepo.create({
-
-        orderId:
-            "FEA" +
-            Date.now(),
+        orderId: "FEA" + Date.now(),
 
         customer: userId,
 
-        restaurant,
+        restaurant: restaurant._id,
 
         restaurantSnapshot: {
-            name:
-                restaurant.name,
-            address:
-                restaurant.address
+            name: restaurant.name,
+            address: restaurant.address || ""
         },
 
-        items:
-            cart.items.map(
-                (item: any) => ({
-                    food:
-                        item.food._id,
-
-                    name:
-                        item.food.name,
-
-                    image:
-                        item.food.image,
-
-                    price:
-                        item.food.price,
-
-                    quantity:
-                        item.quantity,
-
-                    total:
-                        item.food.price *
-                        item.quantity
-                })
-            ),
+        items: cart.items.map(
+            (item: any) => ({
+                food: item.food._id,
+                name: item.food.name,
+                image: item.food.image || "",
+                price: item.food.price,
+                quantity: item.quantity,
+                total:
+                    item.food.price *
+                    item.quantity
+            })
+        ),
 
         billing: {
             itemTotal,
@@ -104,47 +84,49 @@ export const createOrder = async (
             grandTotal
         },
 
-        deliveryAddress:
-            address,
+        deliveryAddress: address,
 
         payment: {
-            method: "UPI",
+            method: "UPI"
         },
-        paymentStatus: "pending",
 
-        orderStatus:
-            "pending_payment"
+        paymentStatus: "PENDING",
+
+        orderStatus: "PENDING_PAYMENT"
     });
-}
+};
 
 export const markPaid = async (
-    orderId: string
+    orderId: string,
+    method: PaymentMethod,
+    transactionId?: string
 ) => {
-
     return orderRepo.update(
         orderId,
         {
-            "payment.status":
-                "success",
+            paymentStatus: "SUCCESS",
 
-            orderStatus:
-                "placed"
+            orderStatus: "PLACED",
+
+            "payment.method": method,
+
+            "payment.transactionId":
+                transactionId || null,
+
+            "payment.paidAt":
+                new Date()
         }
     );
-}
+};
 
 export const getOrder = async (
     orderId: string
 ) => {
-    return orderRepo.findById(
-        orderId
-    );
-}
+    return orderRepo.findById(orderId);
+};
 
 export const getUserOrders = async (
     userId: string
 ) => {
-    return orderRepo.findUserOrders(
-        userId
-    );
-}
+    return orderRepo.findUserOrders(userId);
+};

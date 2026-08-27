@@ -1,10 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 
-const phoneValidation = (req: Request, res: Response, next: NextFunction) => {
+const phoneValidation = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     const { phone } = req.body;
 
-    if (!phone || phone.length !== 10) {
-        res.status(400).json({ message: 'Invalid phone' });
+    if (!phone || !/^\d{10}$/.test(phone)) {
+        res.status(400).json({
+            success: false,
+            message: "Invalid phone number"
+        });
         return;
     }
 

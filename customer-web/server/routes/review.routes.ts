@@ -1,12 +1,8 @@
 import express from "express";
+import { protect } from "../middlewares/auth.middleware";
+import * as reviewController from "../controllers/review.controller";
 
 const router = express.Router();
-
-import { protect }
-from "../middlewares/auth.middleware";
-
-import * as reviewController
-from "../controllers/review.controller";
 
 router.get(
     "/restaurant/:restaurantId",

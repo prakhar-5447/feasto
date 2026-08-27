@@ -1,17 +1,23 @@
-const rateLimit = require("express-rate-limit");
+import rateLimit from "express-rate-limit";
 
 export const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 200,
     standardHeaders: true,
-    legacyHeaders: false
+    legacyHeaders: false,
+    message: {
+        success: false,
+        message: "Too many requests. Try again later."
+    }
 });
 
 export const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
     message: {
         success: false,
-        message: "Too many login attempts. Try later."
+        message: "Too many login attempts. Try again later."
     }
 });

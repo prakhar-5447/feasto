@@ -1,5 +1,4 @@
 export interface PaymentProvider {
-
     createPayment(
         amount: number,
         orderId: string
@@ -8,5 +7,4 @@ export interface PaymentProvider {
     verifyPayment(
         payload: any
     ): Promise<any>;
-
 }

@@ -1,7 +1,11 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, {
+    Schema,
+    Document,
+    Types
+} from "mongoose";
 
 export interface ILocation {
-    type: "Point";
+    type: "POINT";
     coordinates: number[];
 }
 
@@ -32,6 +36,7 @@ const restaurantSchema = new Schema<IRestaurant>(
         name: {
             type: String,
             required: true,
+            trim: true
         },
 
         owner: {
@@ -40,8 +45,17 @@ const restaurantSchema = new Schema<IRestaurant>(
             required: true
         },
 
+        slug: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true,
+            trim: true
+        },
+
         description: {
             type: String,
+            default: ""
         },
 
         images: {
@@ -51,49 +65,50 @@ const restaurantSchema = new Schema<IRestaurant>(
 
         address: {
             type: String,
+            default: ""
         },
 
-        cuisine: [String],
+        cuisine: {
+            type: [String],
+            default: []
+        },
 
         priceRange: {
             type: Number,
             min: 1,
-            max: 5,
+            max: 5
         },
 
         location: {
             type: {
                 type: String,
-                enum: ["Point"],
-                default: "Point",
+                enum: ["POINT"],
+                default: "POINT",
+                required: true
             },
 
             coordinates: {
                 type: [Number],
-                required: true,
-            },
+                required: true
+            }
         },
 
         avgRating: {
             type: Number,
             default: 0,
+            min: 0,
+            max: 5
         },
 
         totalReviews: {
             type: Number,
             default: 0,
-        },
-
-        slug: {
-            type: String,
-            required: true,
-            unique: true,
-            index: true
+            min: 0
         },
 
         isOpen: {
             type: Boolean,
-            default: true,
+            default: true
         },
 
         openTime: {
@@ -115,21 +130,25 @@ const restaurantSchema = new Schema<IRestaurant>(
 
         priceForTwo: {
             type: Number,
-            default: 0
+            default: 0,
+            min: 0
         },
 
         estimatedDeliveryTime: {
             type: Number,
-            default: 0
-        },
+            default: 0,
+            min: 0
+        }
     },
-    { timestamps: true }
+    {
+        timestamps: true
+    }
 );
 
 restaurantSchema.index({
     location: "2dsphere",
     name: "text",
-    cuisine: "text",
+    cuisine: "text"
 });
 
 restaurantSchema.index({
@@ -138,6 +157,9 @@ restaurantSchema.index({
 
 const Restaurant =
     mongoose.models["Restaurant"] ||
-    mongoose.model<IRestaurant>("Restaurant", restaurantSchema);
+    mongoose.model<IRestaurant>(
+        "Restaurant",
+        restaurantSchema
+    );
 
 export default Restaurant;

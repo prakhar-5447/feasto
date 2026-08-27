@@ -14,8 +14,7 @@ export const searchItems = async (
 ): Promise<void> => {
     try {
         const keyword =
-            String(req.query['keyword'] || "")
-                .trim();
+            String(req.query["keyword"] || "").trim();
 
         if (!keyword) {
             res.status(200).json({
@@ -30,16 +29,14 @@ export const searchItems = async (
         }
 
         const data =
-            await searchService.searchItems(
-                keyword
-            );
+            await searchService.searchItems(keyword);
 
         res.status(200).json({
             success: true,
             data
         });
     } catch (err) {
-                  next(err);
+        next(err);
     }
 };
 
@@ -50,13 +47,15 @@ export const searchRestaurants = async (
 ): Promise<void> => {
     try {
         const restaurants =
-            await searchService.searchRestaurants(req.query);
+            await searchService.searchRestaurants(
+                req.query
+            );
 
         res.status(200).json({
             success: true,
             data: restaurants
         });
     } catch (err) {
-                  next(err);
+        next(err);
     }
 };

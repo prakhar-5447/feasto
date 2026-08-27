@@ -1,11 +1,14 @@
-import * as userRepo from '../repositories/user.repository';
+import * as userRepo from "../repositories/user.repository";
 
-export const phoneAuth = async (
-    phone: string
-) => {
+export interface CompleteSignupData {
+    phone: string;
+    name: string;
+    email?: string;
+    role: "CUSTOMER";
+}
 
-    const user =
-        await userRepo.findByPhone(phone);
+export const phoneAuth = async (phone: string) => {
+    const user = await userRepo.findByPhone(phone);
 
     return {
         user,
@@ -13,49 +16,24 @@ export const phoneAuth = async (
     };
 };
 
-
-export const markLogin = async (
-    userId: string
-) => {
-
+export const markLogin = async (userId: string) => {
     return userRepo.updateLastLogin(userId);
 };
-
-
-export interface CompleteSignupData {
-    phone: string;
-    name: string;
-    email?: string;
-    role: 'customer';
-}
-
 
 export const completeSignup = async (
     data: CompleteSignupData
 ) => {
-
-    // Safety check against duplicate account
-    const existingUser =
-        await userRepo.findByPhone(data.phone);
+    const existingUser = await userRepo.findByPhone(data.phone);
 
     if (existingUser) {
-        throw new Error(
-            'User already exists'
-        );
+        throw new Error("User already exists");
     }
 
     return userRepo.createUser(data);
 };
 
-
-export const getUserById = async (
-    userId: string
-) => {
-
-    const user =
-        await userRepo.findById(userId);
-
+export const getUserById = async (userId: string) => {
     return {
-        user
+        user: await userRepo.findById(userId)
     };
 };

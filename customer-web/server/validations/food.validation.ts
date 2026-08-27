@@ -5,17 +5,27 @@ export const createFoodSchema = Joi.object({
 
     description: Joi.string().allow(""),
 
-    price: Joi.number().required(),
+    price: Joi.number()
+        .min(0)
+        .required(),
 
     cuisine: Joi.string().allow(""),
 
     foodType: Joi.string()
-        .valid("veg", "egg", "non-veg")
+        .valid("VEG", "EGG", "NON_VEG")
         .required(),
 
-    isAvailable: Joi.boolean().default(true),
+    preparationTime: Joi.number()
+        .min(1)
+        .required(),
+
+    isAvailable: Joi.boolean()
+        .default(true),
+
+    isFeatured: Joi.boolean()
+        .default(false),
 
     image: Joi.string()
         .allow("")
-        .optional(),
+        .optional()
 });

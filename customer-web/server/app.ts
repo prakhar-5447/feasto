@@ -1,7 +1,5 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import dotenv from "dotenv";
-
-import mongoSanitize from "express-mongo-sanitize";
 import cookieParser from "cookie-parser";
 
 import { apiLimiter, authLimiter } from "./middlewares/rateLimit.middleware";
@@ -26,28 +24,16 @@ const app: Application = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// Security middlewares
-securityMiddleware.forEach((m) => app.use(m));
-
-// Optional sanitize middleware
-// app.use((req: Request, res: Response, next: Function) => {
-//   if (req.originalUrl.startsWith('/api')) {
-//     return mongoSanitize()(req, res, next);
-//   }
-//   next();
-// });
-
-app.post("/logs", (req: Request, res: Response) => {
-  // logger middleware already handles logs
-  res.sendStatus(200);
+securityMiddleware.forEach((middleware) => {
+  app.use(middleware);
 });
 
 // Rate limiting
-app.use("/v1/auth", authLimiter);
-app.use("/v1/logs", logRoutes);
 app.use("/v1", apiLimiter);
+app.use("/v1/auth", authLimiter);
 
 // Routes
+app.use("/v1/logs", logRoutes);
 app.use("/v1/auth", authRoutes);
 app.use("/v1/users", userRoutes);
 app.use("/v1/restaurants", restaurantRoutes);
@@ -57,7 +43,6 @@ app.use("/v1/cart", cartRoutes);
 app.use("/v1/coupons", couponRoutes);
 app.use("/v1/orders", orderRoutes);
 app.use("/v1/payments", paymentRoutes);
-
 // app.use("/v1/reviews", reviewRoutes);
 
 export default app;

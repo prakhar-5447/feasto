@@ -1,4 +1,8 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, {
+    Schema,
+    Document,
+    Types
+} from "mongoose";
 
 export interface IReview extends Document {
     user: Types.ObjectId;
@@ -14,31 +18,43 @@ const reviewSchema = new Schema<IReview>(
         user: {
             type: Schema.Types.ObjectId,
             ref: "User",
-            required: true,
+            required: true
         },
 
         restaurant: {
             type: Schema.Types.ObjectId,
             ref: "Restaurant",
-            required: true,
+            required: true
         },
 
         rating: {
             type: Number,
-            min: 1,
-            max: 5,
             required: true,
+            min: 1,
+            max: 5
         },
 
         comment: {
             type: String,
             trim: true,
-        },
+            default: ""
+        }
     },
-    { timestamps: true }
+    {
+        timestamps: true
+    }
 );
 
+reviewSchema.index({
+    restaurant: 1,
+    createdAt: -1
+});
+
 const Review =
-    mongoose.models["Review"] || mongoose.model<IReview>("Review", reviewSchema);
+    mongoose.models["Review"] ||
+    mongoose.model<IReview>(
+        "Review",
+        reviewSchema
+    );
 
 export default Review;

@@ -1,15 +1,21 @@
-import { Request, Response, NextFunction } from 'express';
-import { randomUUID } from 'crypto';
+import { Request, Response, NextFunction } from "express";
+import { randomUUID } from "crypto";
 
-export const requestIdMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const requestIdMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const requestId =
+    (req.headers["x-request-id"] as string) ||
+    randomUUID();
 
-  const incomingId = req.headers['x-request-id'] as string;
-  
-  const requestId = incomingId || randomUUID();
-  
   req.requestId = requestId;
-  
-  // expose to client (debugging / tracing)
-  res.setHeader('x-request-id', requestId);
+
+  res.setHeader(
+    "x-request-id",
+    requestId
+  );
+
   next();
 };

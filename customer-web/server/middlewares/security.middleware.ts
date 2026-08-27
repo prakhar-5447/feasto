@@ -1,15 +1,12 @@
-const helmet = require("helmet");
-const cors = require("cors");
+import helmet from "helmet";
+import cors from "cors";
 
 export const securityMiddleware = [
+    helmet(),
 
-    helmet({
-        contentSecurityPolicy: false
-    }),
-    
     cors({
-        origin: "*",
-        methods: ["GET", "POST", "PUT", "DELETE"]
+        origin: process.env["FRONTEND_URL"],
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     })
-
 ];

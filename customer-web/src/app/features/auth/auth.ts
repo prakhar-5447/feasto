@@ -49,26 +49,19 @@ type AuthStep =
 interface PhoneAuthResponse {
   success: boolean;
   message: string;
-  otp: number;
+  data: any;
 }
 
 interface VerifyOtpResponse {
   success: boolean;
-  status:
-  | 'LOGIN_SUCCESS'
-  | 'PROFILE_REQUIRED';
-
-  isNewUser: boolean;
-
-  signupToken?: string;
-
-  data?: unknown;
+  message: string;
+  data: any;
 }
 
 interface CompleteProfileResponse {
   success: boolean;
-  status: 'SIGNUP_SUCCESS';
-  data?: unknown;
+  message: string;
+  data: any;
 }
 
 
@@ -196,7 +189,7 @@ export class Auth {
             '',
             ''
           ];
-          this.otpValues = res.otp
+          this.otpValues = res.data.otp
             .toString()
             .padStart(6, '0')
             .slice(0, 6)
@@ -257,7 +250,7 @@ export class Auth {
           // -----------------------------------------
 
           if (
-            response.status === 'LOGIN_SUCCESS'
+            response.data.status === 'LOGIN_SUCCESS'
           ) {
 
             this.store.dispatch(
@@ -274,11 +267,11 @@ export class Auth {
           // -----------------------------------------
 
           if (
-            response.status === 'PROFILE_REQUIRED'
+            response.data.status === 'PROFILE_REQUIRED'
           ) {
 
             this.signupToken =
-              response.signupToken ?? '';
+              response.data.signupToken ?? '';
 
             this.step.set('details');
 
@@ -421,7 +414,7 @@ export class Auth {
             '',
             ''
           ];
-          this.otpValues = res.otp
+          this.otpValues = res.data.otp
             .toString()
             .padStart(6, '0')
             .slice(0, 6)

@@ -14,25 +14,29 @@ export const searchItems = async (
         restaurants
     ] = await Promise.all([
         Food.find({
-            name: regex
+            name: regex,
+            isAvailable: true
         })
-            .select("_id name restaurant image price")
-            .limit(5),
+            .select("_id name restaurant image price cuisine foodType")
+            .limit(5)
+            .lean(),
 
         Restaurant.find({
+            isOpen: true,
             $or: [
                 { name: regex },
                 { cuisine: regex }
             ]
         })
-            .select("_id name cuisine slug")
+            .select("_id name cuisine slug images avgRating")
             .limit(5)
+            .lean()
     ]);
 
     const cuisines = [
         ...new Set(
             restaurants
-                .flatMap(restaurant => restaurant.cuisine)
+                .flatMap(restaurant => restaurant.cuisine || [])
                 .filter(cuisine =>
                     cuisine
                         .toLowerCase()
@@ -48,16 +52,20 @@ export const searchItems = async (
     };
 };
 
-export const searchRestaurants = async (query: any) => {
+export const searchRestaurants = async (
+    query: any
+) => {
     const {
         cuisine,
         food
     } = query;
 
-    const filter: Record<string, any> = {};
+    const filter: Record<string, any> = {
+        isOpen: true
+    };
 
     if (cuisine) {
-        filter['cuisine'] = {
+        filter["cuisine"] = {
             $elemMatch: {
                 $regex: cuisine,
                 $options: "i"
@@ -72,7 +80,9 @@ export const searchRestaurants = async (query: any) => {
                 $options: "i"
             },
             isAvailable: true
-        }).select("restaurant");
+        })
+            .select("restaurant")
+            .lean();
 
         const restaurantIds = [
             ...new Set(
@@ -82,10 +92,14 @@ export const searchRestaurants = async (query: any) => {
             )
         ];
 
-        filter['_id'] = {
+        filter["_id"] = {
             $in: restaurantIds
         };
     }
 
-    return Restaurant.find(filter);
+    return Restaurant.find(filter)
+        .select(
+            "_id name slug cuisine images avgRating totalReviews isOpen"
+        )
+        .lean();
 };

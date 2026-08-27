@@ -1,14 +1,56 @@
-const morgan = require("morgan");
-const logger = require("../utils/logger");
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import User, { IUser } from "../models/user.model";
 
-const stream = {
+export interface AuthRequest extends Request {
+    user?: IUser;
+}
 
-    write: (message: any) => {
+export const protect = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const token = req.cookies["accessToken"];
 
-        logger.info(message.trim());
+        if (!token) {
+            res.status(401).json({
+                success: false,
+                message: "Authentication required"
+            });
+            return;
+        }
 
+        const decoded = jwt.verify(
+            token,
+            process.env["ACCESS_TOKEN_SECRET"]!
+        ) as { userId: string };
+
+        const user = await User.findById(decoded.userId);
+
+        if (!user) {
+            res.status(401).json({
+                success: false,
+                message: "User not found"
+            });
+            return;
+        }
+
+        if (!user.isActive) {
+            res.status(401).json({
+                success: false,
+                message: "User account is inactive"
+            });
+            return;
+        }
+
+        req.user = user;
+        next();
+    } catch {
+        res.status(401).json({
+            success: false,
+            message: "Access token expired or invalid"
+        });
     }
-
 };
-
-module.exports = morgan("combined", { stream });
