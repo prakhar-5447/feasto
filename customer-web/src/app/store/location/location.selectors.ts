@@ -1,11 +1,6 @@
-import {
-    createFeatureSelector,
-    createSelector
-} from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-import {
-    LocationState
-} from './location.state';
+import { LocationState } from './location.state';
 
 
 export const selectLocationState =

@@ -1,15 +1,8 @@
-import {
-    createReducer,
-    on
-} from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 
-import {
-    LocationActions
-} from './location.actions';
+import * as LocationActions from './location.actions';
 
-import {
-    initialLocationState
-} from './location.state';
+import { initialLocationState } from './location.state';
 
 
 export const locationReducer =

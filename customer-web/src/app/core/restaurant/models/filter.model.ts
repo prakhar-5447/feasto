@@ -11,6 +11,13 @@ export type PriceRange =
     | 'medium'
     | 'high';
 
+
+export type DietaryOption =
+    | 'veg'
+    | 'nonVeg'
+    | 'vegan'
+    | 'halal';
+
 export interface RestaurantFilters {
 
     // Search

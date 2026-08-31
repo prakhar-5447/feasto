@@ -1,8 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
-import * as AuthActions from './auth.actions';
+
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+
 import { catchError, map, mergeMap, of } from 'rxjs';
+
+
+import * as AuthActions from './auth.actions';
+
 
 @Injectable()
 export class AuthEffects {

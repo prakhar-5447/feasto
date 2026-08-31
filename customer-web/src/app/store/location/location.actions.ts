@@ -1,44 +1,33 @@
-import {
-    createActionGroup,
-    emptyProps,
-    props
-} from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
-import {
-    SelectedLocation
-} from '../../core/location/models/location.model';
+import { SelectedLocation } from '../../core/location/models/location.model';
 
+export const selectLocation = createAction(
+    '[Location] Select Location',
+    props<{
+        location: SelectedLocation;
+    }>()
+);
 
-export const LocationActions =
-    createActionGroup({
+export const loadSavedLocation = createAction(
+    '[Location] Load Saved Location'
+);
 
-        source: 'Location',
+export const loadSavedLocationSuccess = createAction(
+    '[Location] Load Saved Location Success',
+    props<{
+        location: SelectedLocation;
+    }>()
+);
 
-        events: {
+export const loadSavedLocationFailure =
+    createAction(
+        '[Location] Load Saved Location Failure',
+        props<{
+            error: string;
+        }>()
+    );
 
-            'Select Location':
-                props<{
-                    location: SelectedLocation;
-                }>(),
-
-
-            'Load Saved Location':
-                emptyProps(),
-
-
-            'Load Saved Location Success':
-                props<{
-                    location: SelectedLocation;
-                }>(),
-
-
-            'Load Saved Location Failure':
-                props<{
-                    error: string;
-                }>(),
-
-
-            'Clear Location':
-                emptyProps()
-        }
-    });
+export const clearLocation = createAction(
+    '[Location] Clear Location'
+);
