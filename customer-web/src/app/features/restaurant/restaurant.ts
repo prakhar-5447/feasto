@@ -11,7 +11,6 @@ import { RestaurantInfo } from './restaurant-info/restaurant-info';
 import { RestaurantService } from '../../core/services/restaurant.service';
 import { LocationServicePersistence } from '../../core/services/location.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-restaurant',
@@ -74,8 +73,6 @@ export class Restaurant {
         }
       });
     });
-
-    this.cartService.refreshCartCount();
   }
 
   get getCartCount() {

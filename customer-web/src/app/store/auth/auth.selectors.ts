@@ -1,12 +1,34 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+    createFeatureSelector,
+    createSelector
+} from '@ngrx/store';
+
 import { AuthState } from './auth.state';
 
-// 🔥 feature key must match provideStore
 export const selectAuthState =
     createFeatureSelector<AuthState>('auth');
 
-// ✅ THIS IS REQUIRED
 export const selectUser = createSelector(
     selectAuthState,
-    (state: AuthState | undefined) => state ? state.user : null
+    state => state.user
+);
+
+export const selectAuthLoading = createSelector(
+    selectAuthState,
+    state => state.loading
+);
+
+export const selectAuthInitialized = createSelector(
+    selectAuthState,
+    state => state.initialized
+);
+
+export const selectAuthError = createSelector(
+    selectAuthState,
+    state => state.error
+);
+
+export const selectIsAuthenticated = createSelector(
+    selectUser,
+    user => !!user
 );

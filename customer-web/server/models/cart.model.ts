@@ -1,4 +1,8 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, {
+  Document,
+  Schema,
+  Types
+} from "mongoose";
 
 export interface ICartItem {
   food: Types.ObjectId;
@@ -7,7 +11,7 @@ export interface ICartItem {
 
 export interface ICart extends Document {
   user: Types.ObjectId;
-  restaurant: Types.ObjectId;
+  restaurant?: Types.ObjectId;
   items: ICartItem[];
   couponCode?: string;
 }
@@ -33,25 +37,27 @@ const cartSchema = new Schema<ICart>(
           ref: "Food",
           required: true
         },
-
         quantity: {
           type: Number,
-          default: 1
+          required: true,
+          default: 1,
+          min: 1
         }
       }
     ],
 
-    couponCode: String
+    couponCode: {
+      type: String,
+      trim: true
+    }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
-
 const Cart =
-  mongoose.models['Cart'] ||
-  mongoose.model<ICart>(
-    "Cart",
-    cartSchema
-  );
+  mongoose.models["Cart"] ||
+  mongoose.model<ICart>("Cart", cartSchema);
 
 export default Cart;

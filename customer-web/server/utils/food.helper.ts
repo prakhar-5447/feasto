@@ -6,7 +6,6 @@ export const validateFoodOwnership = async (
     foodId: string,
     userId: string
 ): Promise<IFood> => {
-
     const food = await foodService.getFood(foodId);
 
     if (!food) {
@@ -22,10 +21,7 @@ export const validateFoodOwnership = async (
         throw new Error("Restaurant not found");
     }
 
-    if (
-        restaurant.owner.toString() !==
-        userId
-    ) {
+    if (restaurant.owner.toString() !== userId) {
         throw new Error("You do not own this restaurant");
     }
 

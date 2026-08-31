@@ -113,21 +113,38 @@ export class Cart {
   }
 
   updateQuantity(foodId: string, quantity: number) {
-    this.cartService.updateQuantity(foodId, quantity)
-      .subscribe(() => {
-        this.loadCart();
+    this.cartService
+      .updateQuantity(foodId, quantity)
+      .subscribe({
+        next: () => {
+          this.loadCart();
+        },
+        error: (err) => {
+          console.error(
+            'Update quantity error:',
+            err
+          );
+        }
       });
   }
 
   removeItem(foodId: string) {
-    this.cartService.removeFromCart(foodId)
-      .subscribe(() => {
-        this.loadCart();
+    this.cartService
+      .removeFromCart(foodId)
+      .subscribe({
+        next: () => {
+          this.loadCart();
+        },
+        error: (err) => {
+          console.error(
+            'Remove item error:',
+            err
+          );
+        }
       });
   }
 
   clearCart() {
-
     this.cartService
       .clearCart()
       .subscribe({
@@ -150,7 +167,7 @@ export class Cart {
   checkout() {
     this.router.navigate([
       '/india',
-      this.locationService.getCity(), 
+      this.locationService.getCity(),
       'r',
       this.restaurantService.restaurant.slug,
       'checkout'

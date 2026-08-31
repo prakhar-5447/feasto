@@ -50,7 +50,7 @@ export class Categories {
       name: 'Drinks',
       icon: '🥤'
     }
-  ];;
+  ];
 
   selectedCategory: string | null = null;
 

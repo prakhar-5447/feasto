@@ -188,6 +188,7 @@
 
 
     <nav class="nav" aria-label="Main navigation">
+      @if (authInitialized$ | async) {
       @let user = user$ | async;
 
       @if (user) {
@@ -218,7 +219,7 @@
         Log in
       </app-button>
 
-      }
+      } }
     </nav>
 
   </div>

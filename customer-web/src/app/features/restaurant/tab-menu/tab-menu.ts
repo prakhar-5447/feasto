@@ -1,29 +1,54 @@
-import { Component, ElementRef, QueryList, ViewChildren, HostListener, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+  HostListener,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { CartService } from '../../../core/services/cart.service';
 import { RestaurantService } from '../../../core/services/restaurant.service';
 import { NgClass } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faPlus, faMinus
+  faPlus,
+  faMinus
 } from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute, Router } from '@angular/router';
+
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+
 import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-tab-menu',
   standalone: true,
-  imports: [NgClass, FontAwesomeModule],
+  imports: [
+    NgClass,
+    FontAwesomeModule
+  ],
   templateUrl: './tab-menu.html',
   styleUrl: './tab-menu.sass',
 })
 export class TabMenu {
-  faMinus = faMinus
-  faPlus = faPlus
+
+  faMinus = faMinus;
+  faPlus = faPlus;
+
   cartItems: any[] = [];
+
   activeCategory = 0;
-  OFFSET = 290 + 50
-  observer!: IntersectionObserver
-  @ViewChildren('categorySection') categorySections!: QueryList<ElementRef>;
+
+  OFFSET = 290 + 50;
+
+  observer!: IntersectionObserver;
+
+  @ViewChildren('categorySection')
+  categorySections!: QueryList<ElementRef>;
 
   constructor(
     public cartService: CartService,
@@ -32,13 +57,9 @@ export class TabMenu {
     private http: HttpClient,
     public route: ActivatedRoute,
     private router: Router
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
-
-    this.loadCart();
 
     this.route.parent?.paramMap.subscribe(
       params => {
@@ -51,105 +72,82 @@ export class TabMenu {
           return;
         }
 
+        this.loadCart();
         this.loadFoods(slug);
       }
     );
   }
 
-
   loadFoods(slug: string) {
-    this.http.get(
-      `/api/v1/foods/restaurant/${slug}/foods`
-    ).subscribe({
-      next: (res: any) => {
 
-        const foods = res.data;
-
-        this.restaurantService.menu = {
-          categories: this.groupByCuisine(foods)
-        };
-      },
-
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
-
-  addToCart(item: any) {
-
-    // console.log('Adding:', item);
-
-    this.cartService
-      .addToCart(item._id, 1)
+    this.http
+      .get(`/api/v1/foods/restaurant/${slug}/foods`)
       .subscribe({
 
-        next: (res) => {
+        next: (res: any) => {
 
-          // console.log('Success', res);
+          const foods = res.data;
 
-          this.loadCart();
-          this.cartService.refreshCartCount();
-          this.cdr.detectChanges()
+          this.restaurantService.menu = {
+            categories:
+              this.groupByCuisine(foods)
+          };
         },
 
         error: (err) => {
-
-          // console.log('Error', err);
-
-          alert(
-            err.error?.message ||
-            'Unable to add item'
+          console.error(
+            'Load foods error:',
+            err
           );
         }
       });
   }
 
-  groupByCuisine(foods: any[]) {
-    const grouped: any = {};
-
-    foods.forEach(food => {
-      const cuisine = food.cuisine || 'Others';
-
-      if (!grouped[cuisine]) {
-        grouped[cuisine] = [];
+  addToCart(item: any) {
+    this.cartService.addToCart(item._id, 1).subscribe({
+      next: () => {
+        this.loadCart();
+      },
+      error: (err) => {
+        alert(
+          err.error?.message ||
+          'Unable to add item'
+        );
       }
-
-      grouped[cuisine].push(food);
     });
-
-    return Object.keys(grouped).map(key => ({
-      name: key,
-      items: grouped[key]
-    }));
   }
 
-  @HostListener('window:scroll', [])
-  onScroll() {
-    let activeIndex = 0
+  updateQuantity(
+    itemId: string,
+    qty: number,
+    inc: boolean
+  ) {
+    const newQty = inc ? qty + 1 : qty - 1;
 
-    this.categorySections.forEach((section, index) => {
-      const el = section.nativeElement
-      const rect = el.getBoundingClientRect()
-      if (rect.top - this.OFFSET <= 0) {
-        activeIndex = index
+    this.cartService
+      .updateQuantity(itemId, newQty)
+      .subscribe({
+        next: () => {
+          this.loadCart();
+        }
+      });
+  }
+
+  loadCart() {
+    this.cartService.getCart().subscribe({
+      next: (res: any) => {
+        this.cartItems = res.data?.items || [];
+
+        const count = this.cartItems.reduce(
+          (sum: number, item: any) =>
+            sum + item.quantity,
+          0
+        );
+
+        this.cartService.cartCount.set(count);
+        this.cdr.detectChanges();
+
       }
-    })
-
-    this.activeCategory = activeIndex;
-  }
-
-  scrollToCategory(index: number) {
-    const el = this.categorySections.toArray()[index]?.nativeElement
-    if (!el) return
-
-
-    const y = el.getBoundingClientRect().top + window.scrollY - this.OFFSET
-
-
-    window.scrollTo({
-      top: y,
-      behavior: 'auto'
     });
   }
 
@@ -166,41 +164,78 @@ export class TabMenu {
     return item?.quantity || 0;
   }
 
-  updateQuantity(
-    itemId: string,
-    qty: number,
-    inc: boolean
+  groupByCuisine(
+    foods: any[]
   ) {
 
-    const newQty =
-      inc ? qty + 1 : qty - 1;
+    const grouped: any = {};
 
-    this.cartService
-      .updateQuantity(
-        itemId,
-        newQty
-      )
-      .subscribe({
+    foods.forEach(food => {
 
-        next: () => {
+      const cuisine =
+        food.cuisine || 'Others';
 
-          this.loadCart();
+      if (!grouped[cuisine]) {
+        grouped[cuisine] = [];
+      }
 
-          this.cartService
-            .refreshCartCount();
-        }
-      });
+      grouped[cuisine].push(food);
+    });
+
+    return Object.keys(grouped).map(
+      key => ({
+        name: key,
+        items: grouped[key]
+      })
+    );
   }
 
-  loadCart() {
-    this.cartService.getCart().subscribe({
-      next: (res: any) => {
+  @HostListener(
+    'window:scroll',
+    []
+  )
+  onScroll() {
 
-        this.cartItems = res.data?.items || [];
+    let activeIndex = 0;
 
-        // force new reference
-        this.cartItems = [...this.cartItems];
+    this.categorySections.forEach(
+      (section, index) => {
+
+        const el =
+          section.nativeElement;
+
+        const rect =
+          el.getBoundingClientRect();
+
+        if (
+          rect.top - this.OFFSET <= 0
+        ) {
+          activeIndex = index;
+        }
       }
+    );
+
+    this.activeCategory =
+      activeIndex;
+  }
+
+  scrollToCategory(index: number) {
+
+    const el =
+      this.categorySections
+        .toArray()[index]
+        ?.nativeElement;
+
+    if (!el) return;
+
+    const y =
+      el.getBoundingClientRect().top +
+      window.scrollY -
+      this.OFFSET;
+
+    window.scrollTo({
+      top: y,
+      behavior: 'auto'
     });
   }
 }

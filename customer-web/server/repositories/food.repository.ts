@@ -57,13 +57,11 @@ export const updateFoodAvailability = (
 export const filterFoods = async (
     query: any
 ) => {
-
     const filter: any = {
         isAvailable: true
     };
 
     if (query.cuisine) {
-
         filter.cuisine = {
             $regex: query.cuisine,
             $options: "i"
@@ -71,7 +69,6 @@ export const filterFoods = async (
     }
 
     if (query.food) {
-
         filter.name = {
             $regex: query.food,
             $options: "i"
@@ -79,8 +76,5 @@ export const filterFoods = async (
     }
 
     return Food.find(filter)
-        .populate(
-            "restaurant",
-            "name slug"
-        );
+        .populate("restaurant", "name slug");
 };

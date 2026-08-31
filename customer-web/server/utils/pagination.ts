@@ -1,10 +1,12 @@
 export const getPagination = (query: any) => {
-
-    const page = parseInt(query.page) || 1;
-    const limit = parseInt(query.limit) || 10;
+    const page = parseInt(query.page, 10) || 1;
+    const limit = parseInt(query.limit, 10) || 10;
 
     const skip = (page - 1) * limit;
 
-    return { page, limit, skip };
-
+    return {
+        page,
+        limit,
+        skip
+    };
 };

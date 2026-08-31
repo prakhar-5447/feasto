@@ -1,26 +1,39 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document, Types } from "mongoose";
 
-const paymentSchema = new Schema(
+export interface IPayment extends Document {
+    order: Types.ObjectId;
+    amount: number;
+    method: "UPI" | "FAKEUPI" | "RAZORPAY" | "COD";
+    provider: string;
+    transactionId?: string | null;
+    status: "PENDING" | "SUCCESS" | "FAILED";
+    paidAt?: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const paymentSchema = new Schema<IPayment>(
     {
         order: {
             type: Schema.Types.ObjectId,
-            ref: 'Order',
+            ref: "Order",
             required: true,
             unique: true
         },
 
         amount: {
             type: Number,
-            required: true
+            required: true,
+            min: 0
         },
 
         method: {
             type: String,
             enum: [
-                'UPI',
-                'FAKEUPI',
-                'RAZORPAY',
-                'COD'
+                "UPI",
+                "FAKEUPI",
+                "RAZORPAY",
+                "COD"
             ],
             required: true
         },
@@ -38,11 +51,11 @@ const paymentSchema = new Schema(
         status: {
             type: String,
             enum: [
-                'PENDING',
-                'SUCCESS',
-                'FAILED'
+                "PENDING",
+                "SUCCESS",
+                "FAILED"
             ],
-            default: 'PENDING'
+            default: "PENDING"
         },
 
         paidAt: {
@@ -55,8 +68,11 @@ const paymentSchema = new Schema(
     }
 );
 
-export const Payment =
-    mongoose.model(
-        'Payment',
+const Payment =
+    mongoose.models["Payment"] ||
+    mongoose.model<IPayment>(
+        "Payment",
         paymentSchema
     );
+
+export default Payment;

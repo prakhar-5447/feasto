@@ -1,8 +1,21 @@
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
+
 import logger from "../utils/logger";
-import { Request, Response, NextFunction } from "express";
 
-export const error = (err: any, req: Request, res: Response, next: NextFunction) => {
+interface AppError extends Error {
+    status?: number;
+}
 
+export const error = (
+    err: AppError,
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     logger.error({
         message: err.message,
         stack: err.stack,
@@ -14,5 +27,4 @@ export const error = (err: any, req: Request, res: Response, next: NextFunction)
         success: false,
         message: err.message || "Server Error"
     });
-
 };

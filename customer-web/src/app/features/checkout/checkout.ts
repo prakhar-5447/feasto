@@ -169,8 +169,8 @@ export class Checkout {
         deliveryAddress: {
           fullAddress:
             `${this.address.street}, ${this.address.landmark}, ${this.address.city} - ${this.address.pincode}`,
-          lat: null,
-          lng: null
+          lat: 33.65,
+          lng: 33.45
         }
       }
     ).subscribe({

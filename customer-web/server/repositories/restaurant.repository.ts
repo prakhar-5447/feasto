@@ -8,10 +8,12 @@ export const findById = (
     return Restaurant.findById(id);
 };
 
-export const findBySLug = (
-    restaurantSLug: string
+export const findBySlug = (
+    slug: string
 ): Promise<IRestaurant | null> => {
-    return Restaurant.findOne({ slug: restaurantSLug });
+    return Restaurant.findOne({
+        slug
+    });
 };
 
 export const findByOwner = (
@@ -81,8 +83,4 @@ export const findAll = (): Promise<IRestaurant[]> => {
     }).sort({
         createdAt: -1
     });
-};
-
-export const findBySlug = (slug: string) => {
-    return Restaurant.findOne({ slug });
 };

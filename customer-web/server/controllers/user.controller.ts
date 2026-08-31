@@ -43,8 +43,8 @@ export const getProfile = async (
             success: true,
             data: profile
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -80,10 +80,11 @@ export const updateProfile = async (
 
         res.status(200).json({
             success: true,
+            message: "Profile updated successfully",
             data: updatedUser
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -119,61 +120,23 @@ export const deleteProfile = async (
         res.clearCookie("accessToken", {
             httpOnly: true,
             sameSite: "lax",
-            secure: process.env['NODE_ENV'] === "production",
+            secure: process.env["NODE_ENV"] === "production",
             path: "/"
         });
 
         res.clearCookie("refreshToken", {
             httpOnly: true,
             sameSite: "lax",
-            secure: process.env['NODE_ENV'] === "production",
-            path: "/"
+            secure: process.env["NODE_ENV"] === "production",
+            path: "/api/v1/auth"
         });
 
         res.status(200).json({
             success: true,
             message: "Account deleted successfully"
         });
-    } catch (error) {
-        next(error);
-    }
-};
-
-export const getPublicProfile = async (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction
-): Promise<void> => {
-    try {
-        const username = req.params['username'] as string;
-
-        if (!username) {
-            res.status(400).json({
-                success: false,
-                message: "Username is required"
-            });
-            return;
-        }
-
-        const user =
-            await userService.getPublicProfile(
-                username
-            );
-
-        if (!user) {
-            res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
-            return;
-        }
-
-        res.status(200).json({
-            success: true,
-            data: user
-        });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -193,7 +156,8 @@ export const getOrderHistory = async (
             return;
         }
 
-        const id = req.params['id'] as string;
+        const id =
+            req.params["id"] as string;
 
         if (!id) {
             res.status(400).json({
@@ -218,8 +182,8 @@ export const getOrderHistory = async (
             success: true,
             data: orders
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 
@@ -239,7 +203,8 @@ export const getReviewHistory = async (
             return;
         }
 
-        const id = req.params['id'] as string;
+        const id =
+            req.params["id"] as string;
 
         if (!id) {
             res.status(400).json({
@@ -264,8 +229,7 @@ export const getReviewHistory = async (
             success: true,
             data: reviews
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
-

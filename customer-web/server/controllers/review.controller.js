@@ -15,8 +15,8 @@ exports.createReview = async (req, res, next) => {
             data: review
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 
 };
@@ -34,8 +34,8 @@ exports.getRestaurantReviews = async (req, res, next) => {
             data: reviews
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 
 };
@@ -54,8 +54,8 @@ exports.updateReview = async (req, res, next) => {
             data: review
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 
 };
@@ -71,8 +71,8 @@ exports.deleteReview = async (req, res, next) => {
             message: "Review deleted"
         });
 
-    } catch (error) {
-        next(error);
+    } catch (err) {
+                  next(err);
     }
 
 };
