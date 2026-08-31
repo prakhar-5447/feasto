@@ -1,36 +1,78 @@
+<!-- Filter bar -->
 <app-filter-bar [filters]="filters()" (filterClicked)="openFilters()" (removeFilter)="removeFilter($event)"
     (vegChanged)="onVegChanged($event)" (sortChanged)="onSortChanged($event)" />
 
-@if (loading()) {
 
+<!-- Filtered restaurants -->
 @if (hasFilters()) {
 
-<!-- Filtered state -->
+@if (filterLoading()) {
+
 <app-restaurant-list-skeleton />
 
 } @else {
 
-<!-- Initial state -->
-<app-ads-carousel-skeleton />
-
-<app-categories-skeleton />
-
-<app-restaurant-list-skeleton />
+<app-restaurant-list [restaurants]="filteredRestaurants()" [city]="selectedLocation()?.city ?? ''" [filters]="filters()"
+    mode="filtered" />
 
 }
 
+}
+
+
+@if(!hasFilters()){
+
+<!-- Ads -->
+@if (loading()) {
+
+<app-ads-carousel-skeleton />
+
 } @else {
-
-
-@if(!hasFilters()) {
 
 <app-ads-carousel />
 
-<app-categories (categorySelected)=" onCategorySelected($event)" />
+}
+}
+
+
+<!-- Categories -->
+@if (loading()) {
+
+<app-categories-skeleton />
+
+} @else {
+
+<app-categories (categorySelected)="onCategorySelected($event)" />
 
 }
 
+
+<!-- Location-based restaurants -->
+@if (loading()) {
+
+<app-restaurant-list-skeleton />
+
+} @else {
+
 <app-restaurant-list [restaurants]="restaurants()" [city]="selectedLocation()?.city ?? ''" [filters]="filters()" />
+
+}
+
+
+<!-- Explore / End -->
+@if (!loading()) {
+
+@if (hasFilters()) {
+
+<div class="explore-section">
+
+    <button type="button" class="explore-button" (click)="exploreRestaurants()">
+        Explore Restaurants
+    </button>
+
+</div>
+
+} @else {
 
 <div class="end-of-results">
 
@@ -56,6 +98,10 @@
 
 }
 
+}
+
+
+<!-- Filter modal -->
 @if (showFilterModal()) {
 
 <app-modal size="lg">

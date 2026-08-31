@@ -1,5 +1,40 @@
 @use '../../../styles/index' as *
 
+.explore-section
+    display: flex
+    justify-content: center
+
+    margin-top: $space-24
+    padding: 0 $space-16 $space-24
+
+.explore-button
+    min-width: 180px
+    padding: $space-12 $space-24
+
+    border: $border-width-1 $border-style-solid $color-primary
+    border-radius: $radius-8
+
+    background: $color-primary
+
+    color: $color-text-white
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+    line-height: $line-height-normal
+
+    cursor: pointer
+
+    transition: $transition-background, $transition-color, $transition-border
+
+    &:hover
+        background: $color-primary-hover
+
+    &:focus-visible
+        outline: none
+        box-shadow: $shadow-focus
+
+    &:active
+        transform: scale(.98)
+
 .end-of-results
     display: flex
     align-items: center

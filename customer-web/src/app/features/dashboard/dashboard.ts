@@ -57,10 +57,13 @@ export class Dashboard {
     );
 
   readonly restaurants = signal<Restaurant[]>([]);
+  readonly filteredRestaurants = signal<Restaurant[]>([]);
+
+  readonly filterLoading = signal(false);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  ngOnInit(): void {
+  private readonly locationEffect = effect(() => {
 
     const location =
       this.selectedLocation();
@@ -68,13 +71,23 @@ export class Dashboard {
     if (!location) {
       return;
     }
-  }
+
+    this.loadRestaurants();
+  });
 
 
-  private readonly loadRestaurantsEffect = effect(() => {
+  private readonly filterEffect = effect(() => {
+
     const filters = this.filters();
 
-    this.loadRestaurants(filters);
+    if (!Object.keys(filters).length) {
+
+      this.filteredRestaurants.set([]);
+
+      return;
+    }
+
+    this.loadFilteredRestaurants(filters);
   });
 
   openFilters(): void {
@@ -324,30 +337,28 @@ export class Dashboard {
     });
   }
 
-  private loadRestaurants(filters: RestaurantFilters): void {
 
-    const params: Record<string, string> = {};
+  private loadRestaurants(): void {
 
-    if (filters.cuisine) {
-      params['cuisine'] = filters.cuisine;
-    }
+    const location = this.selectedLocation();
 
-    if (filters.food) {
-      params['food'] = filters.food;
+    if (!location) {
+      return;
     }
 
     this.loading.set(true);
 
+    const params: Record<string, string> = {
+      city: location.city
+    };
 
     this.http.get<{ data: Restaurant[] }>(
       '/api/v1/foods/filter',
       { params }
-    ).pipe(
-      // delay(5000)
     ).subscribe({
+
       next: response => {
 
-        // Important: create a new array reference
         this.restaurants.set([
           ...response.data
         ]);
@@ -356,15 +367,115 @@ export class Dashboard {
       },
 
       error: error => {
+
         console.error(error);
 
         this.restaurants.set([]);
-        this.error.set('Unable to load restaurants.');
+
+        this.error.set(
+          'Unable to load restaurants.'
+        );
+
         this.loading.set(false);
       }
     });
   }
-  
+
+  private loadFilteredRestaurants(
+    filters: RestaurantFilters
+  ): void {
+
+    const params: Record<string, string> = {};
+
+    if (filters.food) {
+      params['food'] = filters.food;
+    }
+
+    if (filters.cuisine) {
+      params['cuisine'] = filters.cuisine;
+    }
+
+    if (filters.restaurant) {
+      params['restaurant'] = filters.restaurant;
+    }
+
+    if (filters.collection) {
+      params['collection'] = filters.collection;
+    }
+
+    if (filters.veg) {
+      params['veg'] = 'true';
+    }
+
+    if (filters.nonVeg) {
+      params['nonVeg'] = 'true';
+    }
+
+    if (filters.vegan) {
+      params['vegan'] = 'true';
+    }
+
+    if (filters.halal) {
+      params['halal'] = 'true';
+    }
+
+    if (filters.rating) {
+      params['rating'] = String(filters.rating);
+    }
+
+    if (filters.price) {
+      params['price'] = filters.price;
+    }
+
+    if (filters.maxDeliveryTime) {
+      params['maxDeliveryTime'] =
+        String(filters.maxDeliveryTime);
+    }
+
+    if (filters.maxDistance) {
+      params['maxDistance'] =
+        String(filters.maxDistance);
+    }
+
+    if (filters.offers) {
+      params['offers'] = 'true';
+    }
+
+    if (filters.openNow) {
+      params['openNow'] = 'true';
+    }
+
+    if (filters.sort) {
+      params['sort'] = filters.sort;
+    }
+
+    this.filterLoading.set(true);
+
+    this.http.get<{ data: Restaurant[] }>(
+      '/api/v1/foods/filter',
+      { params }
+    ).subscribe({
+
+      next: response => {
+
+        this.filteredRestaurants.set([
+          ...response.data
+        ]);
+
+        this.filterLoading.set(false);
+      },
+
+      error: error => {
+
+        console.error(error);
+
+        this.filteredRestaurants.set([]);
+
+        this.filterLoading.set(false);
+      }
+    });
+  }
+
   onVegChanged(veg: boolean): void {
 
     this.router.navigate([], {
@@ -388,5 +499,37 @@ export class Dashboard {
       },
       queryParamsHandling: 'merge'
     });
+  }
+
+  exploreRestaurants(): void {
+
+    this.router.navigate([], {
+      queryParams: {
+        food: null,
+        cuisine: null,
+
+        restaurant: null,
+        collection: null,
+
+        veg: null,
+        nonVeg: null,
+        vegan: null,
+        halal: null,
+
+        rating: null,
+        price: null,
+
+        maxDeliveryTime: null,
+        maxDistance: null,
+
+        offers: null,
+        openNow: null,
+
+        sort: null
+      },
+      queryParamsHandling: 'merge'
+    });
+
+    this.filteredRestaurants.set([]);
   }
 }

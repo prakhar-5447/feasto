@@ -29,11 +29,11 @@
     <div class="info">
 
         <h3>
-            {{ restaurant.name }}
+            {{ restaurant.restaurant.name }}
         </h3>
 
         <p class="cuisine">
-            {{ restaurant.cuisines }}
+            {{ restaurant.cuisine }}
         </p>
 
 
@@ -53,7 +53,7 @@
                 <fa-icon [icon]="faClock" aria-hidden="true"></fa-icon>
 
                 <span>
-                    {{ restaurant.deliveryTime }}
+                    {{ restaurant.preparationTime }} min
                 </span>
 
             </span>
@@ -64,7 +64,7 @@
         <div class="meta-bottom">
 
             <span>
-                &#x20B9;{{ restaurant.priceForTwo }} for two
+                &#x20B9;{{ restaurant.price }} for one
             </span>
 
             <span>

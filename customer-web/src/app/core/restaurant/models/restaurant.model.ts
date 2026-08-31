@@ -1,7 +1,7 @@
 export interface Restaurant {
     _id: string;
     name: string;
-    
+
     restaurant: {
         _id: string;
         name: string;
@@ -11,15 +11,20 @@ export interface Restaurant {
 
     image: string;
 
-    cuisines: string[];
+    cuisine: string;
 
+    price: number;
     rating: number;
-    deliveryTime: number;
+
+    preparationTime: number;
 
     location: {
         city: string;
         area: string;
     };
+
+    isAvailable: boolean;
+    isFeatured: boolean;
 
     priceForTwo: number;
     distance?: number;

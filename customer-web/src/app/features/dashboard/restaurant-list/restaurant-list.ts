@@ -25,20 +25,26 @@ export class RestaurantList {
   readonly area = input('');
   readonly filters = input<RestaurantFilters>({});
 
+  readonly mode = input<'location' | 'filtered'>('location');
 
   readonly heading = computed(() => {
 
     const filters = this.filters();
     const city = this.city();
 
-    if (filters.cuisine) {
-      return `Top ${this.labelPipe.transform(filters.cuisine)} Restaurants Near You`;
+    if (this.mode() === 'filtered') {
+
+      if (filters.cuisine) {
+        return `Top ${this.labelPipe.transform(filters.cuisine)} Restaurants Near You`;
+      }
+
+      if (filters.food) {
+        return `Best ${this.labelPipe.transform(filters.food)} Near You`;
+      }
+
     }
 
-    if (filters.food) {
-      return `Best ${this.labelPipe.transform(filters.food)} Near You`;
-    }
-
+    // Default location-based heading
     if (city) {
       return `Top Restaurants in ${this.labelPipe.transform(city)}`;
     }
