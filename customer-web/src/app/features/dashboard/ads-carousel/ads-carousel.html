@@ -1,33 +1,68 @@
-<div class="ads-section">
-    <div class="carousel-wrapper">
-        <div class="ads-container" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-            @for(ad of ads; track ad.id){
-            <div class="carousel-slide">
+<section class="ads-section" aria-label="Featured offers">
+
+    <div class="carousel-wrapper" aria-live="polite">
+
+        <div class="ads-container" [style.transform]="  'translateX(-' + currentIndex() * 100 + '%)'  ">
+
+            @for ( ad of ads; track ad.id; let i = $index ) {
+
+            <article class="carousel-slide">
+
                 <div class="ad-card">
-                    <img loading="lazy" [src]="ad.image" [alt]="ad.title">
+
+                    <img [src]="ad.image" [srcset]="ad.imageSrcSet" sizes="(max-width: 767px) 100vw, 80vw"
+                        [alt]="ad.title" width="1200" height="400" loading="lazy" decoding="async" />
+
                     <div class="overlay">
-                        <h3>{{ad.title}}</h3>
-                        <p>{{ad.subtitle}}</p>
+
+                        <h2>
+                            {{ ad.title }}
+                        </h2>
+
+                        <p>
+                            {{ ad.subtitle }}
+                        </p>
+
                     </div>
+
                 </div>
-            </div>
+
+            </article>
+
             }
+
         </div>
 
-        <!-- navigation -->
-        <button class="nav prev" (click)="prev()"><fa-icon [icon]="faArrowLeft"></fa-icon></button>
-        <button class="nav next" (click)="next()"><fa-icon [icon]="faArrowRight"></fa-icon></button>
 
-    </div>
+        @if (ads.length > 1) {
 
-    <!-- dots -->
-    <div class="dots">
+        <button type="button" class="nav prev" aria-label="Previous offer" (click)="prev()">
+            <fa-icon [icon]="faArrowLeft" aria-hidden="true"></fa-icon>
+        </button>
 
-        @for(ad of ads; track ad.id; let i = $index){
-        <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)">
-        </span>
+        <button type="button" class="nav next" aria-label="Next offer" (click)="next()">
+            <fa-icon [icon]="faArrowRight" aria-hidden="true"></fa-icon>
+        </button>
+
         }
 
     </div>
 
-</div>
+
+    @if (ads.length > 1) {
+
+    <div class="dots" aria-label="Choose offer">
+
+        @for ( ad of ads; track ad.id; let i = $index ) {
+
+        <button type="button" class="dot" [class.active]="i === currentIndex()"
+            [attr.aria-label]="'Show offer ' + (i + 1)" [attr.aria-current]=" i === currentIndex() ? 'true' : null "
+            (click)="goTo(i)"></button>
+
+        }
+
+    </div>
+
+    }
+
+</section>

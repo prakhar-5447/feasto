@@ -1,25 +1,62 @@
 @use '../../../../styles/index' as *
 
 .restaurant-section
-    max-width: 1200px
-    margin: 0 auto
-    padding:$space-16
+    padding: $space-16 0
+
+    .container
+        width: 100%
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
+
     h2
+        margin: 0 0 $space-24
+
+        color: $color-text-primary
         font-size: $font-size-24
         font-weight: $font-weight-bold
-        margin-bottom:$space-24
-        color: $color-text-primary
+        line-height: $line-height-tight
 
     .restaurant-grid
         display: grid
         grid-template-columns: 1fr
-        gap:$space-24
+        gap: $space-24
 
-        @media (min-width: 768px)
+        margin: 0
+        padding: 0
+
+        list-style: none
+
+    .empty-state
+        margin: 0
+        padding: $space-40 0
+
+        color: $color-text-secondary
+        text-align: center
+
+@media (min-width: $breakpoint-md)
+    .restaurant-section
+        .restaurant-grid
             grid-template-columns: repeat(2, 1fr)
 
-        @media (min-width: 1024px)
+@media (min-width: $breakpoint-lg)
+    .restaurant-section
+        .restaurant-grid
             grid-template-columns: repeat(3, 1fr)
 
-        @media (min-width: 12$space-80)
+@media (min-width: $breakpoint-xl)
+    .restaurant-section
+        .restaurant-grid
             grid-template-columns: repeat(4, 1fr)
+
+@media (max-width: $breakpoint-xs)
+    .restaurant-section
+        .container
+            padding: 0 $space-12
+
+        h2
+            margin-bottom: $space-20
+            font-size: $font-size-20
+
+        .restaurant-grid
+            gap: $space-16

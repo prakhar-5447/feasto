@@ -1,52 +1,190 @@
 @use '../../../../styles/index' as *
 
 .categories
-    background: $color-bg-white
     border-top: $border-width-1 $border-style-solid $color-border-light
     border-bottom: $border-width-1 $border-style-solid $color-border-light
 
-    padding:$space-16
-    max-width: 1200px
-    margin: 0 auto
+    background: $color-bg-white
+
+    max-width: $container-xl
+
+    margin: auto
+    padding: $space-16
+
+    .container
+        width: 100%
+        margin: 0 auto
 
     h2
+        margin: 0 0 $space-20
+
+        color: $color-text-primary
         font-size: $font-size-24
         font-weight: $font-weight-bold
-        margin-bottom:$space-20
-        color: $color-text-primary
+        line-height: $line-height-tight
+
+    .category-carousel
+        position: relative
+
+        width: 100%
 
     .category-grid
-        display: grid
-        grid-template-columns: repeat(4, 1fr)
-        gap:$space-16
+        display: flex
+        gap: $space-12
 
-        @media (min-width: 768px)
-            grid-template-columns: repeat(8, 1fr)
+        width: 100%
+
+        list-style: none
+
+        overflow-x: auto
+        overflow-y: hidden
+
+        scroll-behavior: smooth
+        scroll-snap-type: x mandatory
+
+        scrollbar-width: none
+
+        &::-webkit-scrollbar
+            display: none
+
+    .category-card
+        flex: 0 0 104px
+
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        gap: $space-8
+
+        width: 104px
+        min-height: 104px
+        padding: $space-12
+
+        border: $border-style-none
+        border-radius: $radius-12
+
+        background: $color-bg-white
+
+        color: $color-text-secondary
+        cursor: pointer
+
+        scroll-snap-align: start
+
+        transition: $transition-background, $transition-color, $transition-transform
+
+        &:hover
+            background: $color-bg-orange-soft
+            color: $color-text-primary
+
+        &:focus-visible
+            outline: none
+            box-shadow: $shadow-focus
+
+        &:active
+            transform: scale(.98)
+
+    .icon
+        height: $space-52
+        width: $space-52
+    
+        font-size: $font-size-40
+
+        line-height: 1
+
+    .name
+        color: inherit
+        font-size: $font-size-12
+        font-weight: $font-weight-medium
+        line-height: $line-height-tight
+        text-align: center
+
+    .carousel-button
+        z-index: $z-10
+
+        position: absolute
+        top: 50%
+
+        display: flex
+        align-items: center
+        justify-content: center
+
+        width: 36px
+        height: 36px
+
+        padding: 0
+
+        border: $border-width-1 $border-style-solid $color-border-light
+        border-radius: 50%
+
+        background: $color-bg-white
+        color: $color-text-primary
+
+        box-shadow: $shadow-md
+
+        cursor: pointer
+
+        transform: translateY(-50%)
+
+        transition: $transition-background, $transition-color, $transition-transform
+
+        &:hover
+            background: $color-bg-gray-soft
+
+        &:active
+            transform: translateY(-50%) scale(.94)
+
+        &:focus-visible
+            outline: none
+            box-shadow: $shadow-focus
+
+    .previous
+        left: -$space-16
+
+    .next
+        right: -$space-16
+
+@media (min-width: $breakpoint-sm)
+
+    .categories
+
+        .category-grid
+            gap: $space-16
 
         .category-card
-            display: flex
-            flex-direction: column
-            align-items: center
-            justify-content: center
-            gap:$space-8
-            padding:$space-16
-            border: $border-style-none
-            border-radius: $radius-12
-            background: $color-bg-white
-            cursor: pointer
-            transition: all 0.2s ease
+            flex-basis: 112px
+            width: 112px
+            min-height: 112px
 
-            &:hover
-                background: $color-bg-gray-soft
+@media (max-width: $breakpoint-xs)
 
-            .icon
-                font-size: $font-size-40
+    .categories
 
-            .name
-                font-size: $font-size-12
-                font-weight: $font-weight-medium
-                text-align: center
-                color: $color-text-secondary
+        padding: $space-12
 
-            &.active
-                background: $color-bg-orange-soft
+        .container
+            padding: 0
+
+        h2
+            font-size: $font-size-20
+
+        .category-grid
+            gap: $space-8
+
+        .category-card
+            flex-basis: 88px
+            width: 88px
+            min-height: 88px
+            padding: $space-8
+
+        .icon
+            font-size: $font-size-32
+
+        .carousel-button
+            width: 32px
+            height: 32px
+
+        .previous
+            left: -$space-8
+
+        .next
+            right: -$space-8

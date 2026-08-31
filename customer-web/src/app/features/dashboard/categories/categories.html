@@ -1,12 +1,47 @@
-<div class="categories">
-    <h2>What's on your mind?</h2>
-    <div class="category-grid">
-        @for(category of categories; track category.id){
-        <button (click)="selectCategory(category.id)" class="category-card"
-            [class.active]="selectedCategory===category.id">
-            <span class="icon">{{category.icon}}</span>
-            <span class="name">{{category.name}}</span>
-        </button>
-        }
+<section class="categories" aria-labelledby="categories-title">
+    <div class="container">
+
+        <h2 id="categories-title">
+            What's on your mind?
+        </h2>
+
+        <div class="category-carousel">
+
+
+            @if (canScrollPrevious()) {
+
+            <button type="button" class="carousel-button previous" aria-label="Previous categories"
+                (click)="scrollPrevious()">
+                <fa-icon [icon]="faChevronLeft"></fa-icon>
+            </button>
+
+            }
+
+            <ul #categoryList class="category-grid" (scroll)="onCategoryScroll()">
+                @for ( category of categories; track category.id ) {
+                <li>
+                    <button type="button" class="category-card" [attr.aria-label]="'Filter by ' + category.name"
+                        (click)="selectCategory(category)">
+                        <span class="icon" aria-hidden="true">
+                            {{ category.icon }}
+                        </span>
+
+                        <span class="name">
+                            {{ category.name }}
+                        </span>
+                    </button>
+                </li>
+                }
+            </ul>
+
+            @if (canScrollNext()) {
+
+            <button type="button" class="carousel-button next" aria-label="Next categories" (click)="scrollNext()">
+                <fa-icon [icon]="faChevronRight"></fa-icon>
+            </button>
+
+            }
+        </div>
+
     </div>
-</div>
+</section>

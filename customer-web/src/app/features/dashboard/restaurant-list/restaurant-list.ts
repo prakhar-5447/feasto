@@ -1,104 +1,48 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { RestaurantCard } from '../restaurant-card/restaurant-card';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef } from '@angular/core';
-import { LocationServicePersistence } from '../../../core/services/location.service';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
-interface RestaurantResult {
-  _id: string;
-  name: string;
-  slug: string;
-}
+import { RestaurantCard } from '../restaurant-card/restaurant-card';
+
+import { Restaurant } from '../../../core/restaurant/models/restaurant.model';
+import { RestaurantFilters } from '../../../core/restaurant/models/filter.model';
+
+import { LabelPipe } from '../../../shared/pipes/label.pipe';
+
 
 @Component({
   selector: 'app-restaurant-list',
   standalone: true,
-  imports: [RestaurantCard],
+  imports: [RestaurantCard,],
   templateUrl: './restaurant-list.html',
   styleUrl: './restaurant-list.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RestaurantList implements OnInit {
-  @Input() selectedCategory: string | null = null;
+export class RestaurantList {
 
-  currentCity = '';
+  private readonly labelPipe = inject(LabelPipe);
 
-  restaurants: any[] = [];
+  readonly restaurants = input<Restaurant[]>([]);
+  readonly city = input('');
+  readonly area = input('');
+  readonly filters = input<RestaurantFilters>({});
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private http: HttpClient,
-    private locationService: LocationServicePersistence,
-    private cdr: ChangeDetectorRef
-  ) { }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.currentCity = params.get('city') || '';
-    });
+  readonly heading = computed(() => {
 
-    this.route.queryParamMap.subscribe(params => {
-      const cuisine = params.get('cuisine');
-      const food = params.get('food');
+    const filters = this.filters();
+    const city = this.city();
 
-      this.loadRestaurants(cuisine, food);
-    });
-  }
-
-  loadRestaurants(
-    cuisine: string | null,
-    food: string | null
-  ) {
-    const params: any = {};
-    if (!cuisine && !food) {
-      return;
+    if (filters.cuisine) {
+      return `Top ${this.labelPipe.transform(filters.cuisine)} Restaurants Near You`;
     }
 
-    if (cuisine) {
-      params.cuisine = cuisine;
+    if (filters.food) {
+      return `Best ${this.labelPipe.transform(filters.food)} Near You`;
     }
 
-    if (food) {
-      params.food = food;
+    if (city) {
+      return `Top Restaurants in ${this.labelPipe.transform(city)}`;
     }
 
-    this.http.get<any>(
-      '/api/v1/foods/filter',
-      { params }
-    ).subscribe({
-      next: (res) => {
-        this.restaurants = res.data;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error(error);
-        this.restaurants = [];
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  selectRestaurant(
-    restaurant: RestaurantResult
-  ): void {
-
-
-    const restaurantSlug =
-      this.formatSlug(restaurant.slug);
-
-    this.router.navigate([
-      '/india',
-      this.locationService.getCity(),
-      'r',
-      restaurantSlug
-    ]);
-  }
-
-  formatSlug(name: string) {
-    return name
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '');
-  }
+    return 'Top Restaurants Near You';
+  });
 }

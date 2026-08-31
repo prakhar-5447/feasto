@@ -1,0 +1,119 @@
+@use '../../../../../styles/index' as *
+
+.categories-skeleton
+    width: 100%
+    max-width: $container-xl
+
+    margin: auto
+    padding: $space-20
+
+    border-top: $border-width-1 $border-style-solid $color-border-light
+    border-bottom: $border-width-1 $border-style-solid $color-border-light
+
+    background: $color-bg-white
+
+    .container
+        width: 100%
+        margin: 0
+
+    .title
+        width: 220px
+        height: $space-20
+
+        margin-bottom: $space-20
+
+        border-radius: $radius-4
+
+    .category-carousel
+        position: relative
+
+        width: 100%
+
+    .category-grid
+        display: flex !important
+        flex-direction: row !important
+        flex-wrap: nowrap !important
+        align-items: stretch
+
+        gap: $space-8
+
+        width: 100%
+
+        margin: 0
+        padding: 0
+
+        overflow: hidden
+
+    .category-card
+        flex: 0 0 104px !important
+
+        display: flex !important
+        flex-direction: column !important
+        align-items: center
+        justify-content: center
+        gap: $space-8
+
+        width: 104px
+        min-width: 104px
+        min-height: 104px
+
+        padding: $space-12
+
+    .icon
+        flex: 0 0 auto
+
+        width: $space-52
+        height: $space-52
+
+        border-radius: $radius-circle
+
+        mask-border: $space-4
+    .name
+        flex: 0 0 auto
+
+        width: $space-64
+        height: $space-12
+
+        border-radius: 0
+
+@media (min-width: $breakpoint-sm)
+
+    .categories-skeleton
+
+        .category-grid
+            gap: $space-16
+
+        .category-card
+            flex-basis: 112px !important
+            width: 112px
+            min-width: 112px
+            min-height: 112px
+
+@media (max-width: $breakpoint-xs)
+
+    .categories-skeleton
+        padding: $space-12
+
+        .title
+            width: 180px
+            height: 24px
+            margin-bottom: $space-16
+
+        .category-grid
+            gap: $space-8
+
+        .category-card
+            flex-basis: 88px !important
+            width: 88px
+            min-width: 88px
+            min-height: 88px
+
+            padding: $space-8
+
+        .icon
+            width: $font-size-32
+            height: $font-size-32
+
+        .name
+            width: $space-52
+            height: $space-12

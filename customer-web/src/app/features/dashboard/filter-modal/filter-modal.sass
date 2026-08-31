@@ -4,149 +4,205 @@
     display: flex
     flex-direction: column
 
-    max-height: calc(100vh - #{$space-32})
+    width: 100%
+    max-height: 90vh
+
+    overflow: hidden
+
+    border-radius: $radius-16
+    background: $color-bg-white
+    box-shadow: $shadow-lg
 
 .filter-header
     display: flex
     align-items: flex-start
     justify-content: space-between
 
-    padding: $space-20
-
-    border-bottom: $border-width-1 $border-style-solid $color-border-light
+    padding: $space-24
+    border-bottom: $border-width-1 $border-style-solid $color-neutral-300
 
     h2
         margin: 0
-
         font-size: $font-size-20
-        font-weight: $font-weight-semibold
+        font-weight: $font-weight-bold
         color: $color-text-primary
 
     p
-        margin: $space-4 0 0
-
-        font-size: $font-size-12
+        margin-top: $space-4
+        font-size: $font-size-14
         color: $color-text-secondary
 
 .close-button
-    display: inline-flex
-    align-items: center
-    justify-content: center
+    display: grid
+    place-items: center
 
-    width: 36px
-    height: 36px
+    width: $space-32
+    height: $space-32
+
+    padding: 0
 
     border: 0
     border-radius: $radius-circle
+    background: transparent
 
-    background: $color-bg-gray
     color: $color-text-secondary
-
-    font-size: $font-size-20
+    font-size: $font-size-14
 
     cursor: pointer
 
     &:hover
-        background: $color-bg-gray-soft
+        background: $color-neutral-300
         color: $color-text-primary
 
 .filter-body
     flex: 1
-
-    padding: $space-20
+    min-height: 0
 
     overflow-y: auto
 
+    @media (max-width: $breakpoint-md)
+        flex-direction: column
+
+.filter-content
+    display: flex
+    align-items: flex-start
+    gap: $space-40
+
+    padding: $space-24
+    padding-bottom: $space-32
+
+.filter-column
+    flex: 1
+    min-width: 0
+
+    display: flex
+    flex-direction: column
+    gap: $space-24
+
 .filter-group
-    padding: $space-16 0
-
-    &:first-child
-        padding-top: 0
-
-    & + .filter-group
-        border-top: $border-width-1 $border-style-solid $color-border-subtle
-
-.group-header
-    margin-bottom: $space-12
 
     h3
-        margin: 0
+        margin: 0 0 $space-12
 
         font-size: $font-size-14
         font-weight: $font-weight-semibold
         color: $color-text-primary
 
-.options
+.chip-grid
     display: flex
-    flex-direction: column
+    flex-wrap: wrap
+    gap: $space-8
+
+.chip
+    display: inline-flex
+    align-items: center
     gap: $space-4
 
-.option
-    display: flex
-    align-items: center
-    gap: $space-12
+    min-height: $space-32
 
-    width: 100%
+    padding: $space-8 $space-12
 
-    min-height: 40px
-    padding: $space-8
+    border: $border-width-1 $border-style-solid $color-neutral-300
+    border-radius: $radius-16
+    background: $color-bg-white
 
-    border: 0
-    border-radius: $radius-8
-
-    background: transparent
-    color: $color-text-primary
-
+    color: $color-text-secondary
     font-size: $font-size-14
-    text-align: left
+    font-weight: $font-weight-medium
 
     cursor: pointer
 
-    &:hover
-        background: $color-bg-orange-soft
+    transition: $transition-background,$transition-color,$transition-border
 
-    &.selected
-        background: $color-primary-light
+    &:hover
+        border-color: $color-primary
         color: $color-primary
 
-.checkbox,
-.radio
-    flex-shrink: 0
-
-    display: inline-flex
-    align-items: center
-    justify-content: center
-
-    width: 20px
-    height: 20px
-
-    border: $border-width-1 $border-style-solid $color-border
-    border-radius: $radius-4
-
-    background: $color-bg-white
-
-.option.selected
-
-    .checkbox
+    &.selected
         border-color: $color-primary
         background: $color-primary
         color: $color-text-white
 
-.radio
-    border-radius: $radius-circle
+.check
+    font-size: $font-size-12
 
-.option.selected
+.option-list
+    .preference-option:first-child
+        margin-bottom: $space-12
 
-    .radio
-        border-color: $color-primary
+.preference-option
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    width: 100%
+
+    padding: $space-12
+
+    border: $border-width-1 $border-style-solid $color-neutral-300
+    border-radius: $radius-12
+    background: $color-bg-white
+
+    cursor: pointer
+
+.preference-content
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    text-align: left
+
+    strong
+        display: block
+        font-size: $font-size-14
+        color: $color-text-primary
+
+    small
+        display: block
+        margin-top: $space-2
+        font-size: $font-size-12
+        color: $color-text-secondary
+
+.veg-icon
+    display: grid
+    place-items: center
+
+    width: $space-32
+    height: $space-32
+
+    border-radius: $radius-8
+    background: $color-neutral-300
+
+    font-size: $font-size-14
+
+.toggle
+    display: flex
+    align-items: center
+
+    width: 40px
+    height: 22px
+
+    padding: 2px
+
+    border-radius: 20px
+    background: $color-neutral-300
+
+    span
+        width: 18px
+        height: 18px
+
+        border-radius: 50%
+        background: $color-bg-white
+
+        transition: transform 0.2s ease
+
+.preference-option.selected
+
+    .toggle
+        background: $color-primary
 
         span
-            width: 10px
-            height: 10px
-
-            border-radius: $radius-circle
-
-            background: $color-primary
+            transform: translateX(18px)
 
 .filter-footer
     display: flex
@@ -154,55 +210,7 @@
     justify-content: space-between
     gap: $space-12
 
-    padding: $space-16 $space-20
+    padding: $space-16 $space-24
 
-    border-top: $border-width-1 $border-style-solid $color-border-light
-
-.clear-button
-    padding: $space-12 $space-16
-
-    border: 0
-
-    background: transparent
-    color: $color-text-secondary
-
-    font-size: $font-size-14
-    font-weight: $font-weight-medium
-
-    cursor: pointer
-
-    &:hover
-        color: $color-primary
-
-.apply-button
-    flex: 1
-
-    min-height: 44px
-    padding: 0 $space-20
-
-    border: 0
-    border-radius: $radius-8
-
-    background: $color-primary
-    color: $color-text-white
-
-    font-size: $font-size-14
-    font-weight: $font-weight-semibold
-
-    cursor: pointer
-
-    transition: $transition-color
-
-    &:hover
-        background: $color-primary-hover
-
-@media (max-width: $breakpoint-xs)
-
-    .filter-header
-        padding: $space-16
-
-    .filter-body
-        padding: $space-16
-
-    .filter-footer
-        padding: $space-12 $space-16
+    border-top: $border-width-1 $border-style-solid $color-neutral-300
+    background: $color-bg-white

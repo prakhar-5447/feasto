@@ -2,100 +2,160 @@
 
 .restaurant-card
     display: block
-    background: $color-bg-white
-    border-radius: $radius-12
     overflow: hidden
-    text-decoration: none
-    transition: all 0.25s ease
+
+    border-radius: $radius-12
+    background: $color-bg-white
     box-shadow: $shadow-sm
 
+    color: inherit
+    text-decoration: none
+
+    transition: $transition-transform, $transition-shadow
+
     &:hover
-        transform: translateY(-6px)
-        cursor: pointer
+        transform: translateY(-$space-4)
         box-shadow: $shadow-lg
+
         .image
             img
-                transform: scale(1.08)
+                transform: scale(1.05)
+
+    &:focus-visible
+        outline: none
+        box-shadow: $shadow-focus
 
     .image
         position: relative
-        height: 1$space-80
+
+        height: 180px
+
         overflow: hidden
-        .gradient
-            z-index: $z-10
-            position: absolute
-            width: 100%
-            height: 100%
-            background: linear-gradient(to top, $color-overlay-black-strong, rgba(0, 0, 0, 0))
+
+        background: $color-bg-gray
 
         img
+            display: block
+
             width: 100%
             height: 100%
-            object-fit: cover
-            transition: transform 0.4s ease
 
-        .offer
-            z-index: $z-30
-            position: absolute
-            bottom:$space-4
-            left:$space-4
-            right: 0
-            padding:$space-8$space-12
-            font-size: $font-size-12
-            font-weight: $font-weight-semibold
-            color: $color-bg-white
+            object-fit: cover
+
+            transition: $transition-transform
+
+    .gradient
+        position: absolute
+        inset: 0
+        z-index: 1
+
+        background: $gradient-dark-top
+
+        pointer-events: none
+
+    .offer
+        position: absolute
+        right: $space-8
+        bottom: $space-8
+        left: $space-8
+        z-index: 2
+
+        display: flex
+        align-items: center
+        gap: $space-4
+
+        color: $color-text-white
+        font-size: $font-size-12
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+
+        fa-icon
+            flex-shrink: 0
 
     .info
-        padding:$space-16
+        padding: $space-16
+
+    h3
+        overflow: hidden
+
+        margin: 0 0 $space-4
+
+        color: $color-text-primary
+        font-size: $font-size-18
+        font-weight: $font-weight-bold
+        line-height: $line-height-tight
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    .cuisine
+        overflow: hidden
+
+        margin: 0 0 $space-8
+
+        color: $color-text-secondary
+        font-size: $font-size-14
+        line-height: $line-height-normal
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    .meta,
+    .meta-bottom
+        display: flex
+        align-items: center
+        justify-content: space-between
+        gap: $space-8
+
+    .meta
+        margin-bottom: $space-8
+
+        color: $color-text-muted
+        font-size: $font-size-12
+
+    .rating
+        display: inline-flex
+        align-items: center
+        gap: $space-4
+
+        padding: $space-4
+
+        border-radius: $radius-4
+        background: $color-success
+
+        color: $color-text-white
+        font-weight: $font-weight-medium
+
+        fa-icon
+            font-size: $font-size-12
+
+    .time
+        display: inline-flex
+        align-items: center
+        gap: $space-4
+
+        font-weight: $font-weight-medium
+
+        fa-icon
+            font-size: $font-size-12
+
+    .meta-bottom
+        padding-top: $space-8
+
+        border-top: $border-width-1 $border-style-solid $color-border-light
+
+        color: $color-text-muted
+        font-size: $font-size-12
+        line-height: $line-height-normal
+
+@media (max-width: $breakpoint-xs)
+    .restaurant-card
+        .image
+            height: 160px
+
+        .info
+            padding: $space-12
 
         h3
-            font-size: $font-size-18
-            font-weight: $font-weight-bold
-            color: $color-text-primary
-            margin-bottom:$space-4
+            font-size: $font-size-16
 
-        p
-            font-size: $font-size-14
-            color: $color-text-secondary
-            margin-bottom:$space-8
-
-        .meta
-            display: flex
-            justify-content: space-between
-            align-items: center
-            gap:$space-4
-            font-size: $font-size-14
-            color: $color-text-muted
-            margin-bottom:$space-8
-
-            .rating
-                display: flex
-                align-items: center
-                gap:$space-4
-                background: $color-success
-                color: $color-bg-white
-                padding:$space-4$space-4
-                border-radius: $radius-4
-                font-size: $font-size-12
-                font-weight: $font-weight-medium
-                fa-icon
-                    font-size: $font-size-12
-
-            .time
-                display: flex
-                align-items: center
-                gap:$space-2
-                font-size: $font-size-12
-                font-weight: $font-weight-medium
-                fa-icon
-                    font-size: $font-size-12
-
-        .meta-bottom
-            display: flex
-            justify-content: space-between
-            align-items: center
-            gap:$space-4
+        .cuisine
             font-size: $font-size-12
-            color: $color-text-muted
-            padding:$space-4 0px
-            border-top: $border-width-0-5 $border-style-solid $color-text-muted

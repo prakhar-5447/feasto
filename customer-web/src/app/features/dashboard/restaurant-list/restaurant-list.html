@@ -1,21 +1,27 @@
-<div class="restaurant-section">
+<section class="restaurant-section" aria-labelledby="restaurant-list-title">
+    <div class="container">
 
-    <h2>
-        {{ selectedCategory
-        ? selectedCategory + ' Restaurants'
-        : 'Top Restaurants Near You'
-        }}
-    </h2>
+        <h2 id="restaurant-list-title">
+            {{ heading() }}
+        </h2>
 
-    <div class="restaurant-grid">
+        @if (restaurants().length) {
 
-        @for(restaurant of restaurants; track restaurant._id) {
+        <ul class="restaurant-grid">
+            @for ( restaurant of restaurants(); track restaurant._id ) {
+            <li>
+                <app-restaurant-card [restaurant]="restaurant" [city]="city()"></app-restaurant-card>
+            </li>
+            }
+        </ul>
 
-        <app-restaurant-card [restaurant]="restaurant" (click)="selectRestaurant(restaurant.restaurant)">
-        </app-restaurant-card>
+        } @else {
+
+        <p class="empty-state">
+            No restaurants found.
+        </p>
 
         }
 
     </div>
-
-</div>
+</section>

@@ -1,32 +1,33 @@
 @use '../../../../styles/index' as *
 
 .filter-bar
-    max-width: $container-xl
-    margin: 0 auto
-    padding: $space-16
-
     display: flex
     align-items: center
     gap: $space-8
 
-    overflow-x: auto
+    width: 100%
+    max-width: $container-xl
+
+    margin: 0 auto
+    padding: $space-12 $space-16
+
     scrollbar-width: none
 
     &::-webkit-scrollbar
         display: none
 
-    .filter-button,
-    .filter-chip
+    button
         flex-shrink: 0
 
+    .filter-button
         display: inline-flex
         align-items: center
         justify-content: center
+        gap: $space-4
 
-        min-height: 40px
-        padding: 0 $space-12
+        padding: $space-8 $space-12
 
-        border: $border-width-1 $border-style-solid $color-border
+        border: $border-width-1 $border-style-solid $color-border-light
         border-radius: $radius-8
 
         background: $color-bg-white
@@ -35,62 +36,206 @@
         font-size: $font-size-14
         font-weight: $font-weight-medium
 
-        transition: $transition-color
-
-    .filter-button
-        border-color: $color-primary
-        color: $color-primary
-
         cursor: pointer
 
+        transition: $transition-background, $transition-border, $transition-color
+
         &:hover
-            background: $color-primary-light
-            border-color: $color-primary-hover
-            color: $color-primary-hover
+            background: $color-bg-gray-soft
+            border-color: $color-neutral-300
+
+        &:focus-visible
+            outline: none
+            box-shadow: $shadow-focus
 
     .filter-chip
-        gap: $space-8
-        font-weight: $font-weight-semibold
-        border-color: $color-border-primary
-        color: $color-primary
-
-        fa-icon
-            &:hover
-                cursor: pointer
-
-        &:hover
-            border-color: $color-primary
-            color: $color-primary-hover
-
-    .remove
         display: inline-flex
         align-items: center
         justify-content: center
-
-        width: 18px
-        height: 18px
-
-        font-size: $font-size-16
-        line-height: 1
-
-    @media (max-width: $breakpoint-md)
-        padding: $space-12 $space-16
-
-        .filter-button,
-        .filter-chip
-            min-height: 36px
-            padding: 0 $space-12
-
-            font-size: $font-size-12
-
-    @media (max-width: $breakpoint-xs)
-        padding: $space-8 $space-12
-
         gap: $space-4
 
-        .filter-button,
-        .filter-chip
-            min-height: 34px
-            padding: 0 $space-8
+        padding: $space-8 $space-12
+
+        border: $border-width-1 $border-style-solid $color-border-light
+        border-radius: $radius-8
+
+        background: $color-bg-white
+        color: $color-text-secondary
+
+        font-size: $font-size-14
+        font-weight: $font-weight-medium
+
+        white-space: nowrap
+
+        cursor: pointer
+
+        transition: $transition-background, $transition-border, $transition-color
+
+        &:hover
+            background: $color-bg-gray-soft
+            border-color: $color-neutral-300
+            color: $color-text-primary
+
+        &:focus-visible
+            outline: none
+            box-shadow: $shadow-focus
+
+        &.active
+            border-color: $color-text-primary
+            background: $color-text-primary
+            color: $color-bg-white
+
+        .remove
+            display: inline-flex
+            align-items: center
+            justify-content: center
 
             font-size: $font-size-12
+
+    .sort-control
+        position: relative
+
+        flex-shrink: 0
+
+    .sort-button
+        display: flex
+        align-items: center
+        gap: $space-8
+
+        min-height: 40px
+        padding: $space-8 $space-12
+
+        border: $border-width-1 $border-style-solid $color-border-light
+        border-radius: $radius-8
+
+        background: $color-bg-white
+
+        color: $color-text-primary
+        font-size: $font-size-14
+        font-weight: $font-weight-medium
+
+        cursor: pointer
+
+        transition: $transition-background, $transition-border
+
+        &:hover
+            background: $color-bg-gray-soft
+            border-color: $color-neutral-300
+
+        &:focus-visible
+            outline: none
+            box-shadow: $shadow-focus
+
+    .sort-label
+        color: $color-text-muted
+        font-size: $font-size-12
+        font-weight: $font-weight-medium
+
+    .sort-value
+        color: $color-text-primary
+        white-space: nowrap
+
+    fa-icon
+        margin-left: $space-4
+
+        color: $color-text-muted
+        font-size: $font-size-12
+
+    .sort-dropdown
+        position: absolute
+        top: calc(100% + $space-8)
+        left: 0
+        z-index: $z-modal
+
+        width: 220px
+        max-height: 360px
+        overflow-y: auto
+
+        border-radius: $radius-8
+        background: $color-bg-white
+
+        box-shadow: $shadow-xl
+
+    .sort-options
+        display: flex
+        flex-direction: column
+
+    .sort-option
+        display: flex
+        align-items: center
+        justify-content: space-between
+        gap: $space-12
+
+        width: 100%
+        padding: $space-12 $space-16
+
+        border: $border-style-none
+        border-bottom: $border-width-1 $border-style-solid $color-border
+
+        background: transparent
+
+        color: $color-text-secondary
+        font-size: $font-size-14
+        font-weight: $font-weight-medium
+
+        text-align: left
+
+        cursor: pointer
+
+        transition: $transition-background, $transition-color
+
+        &:last-child
+            border-bottom: $border-style-none
+
+        &:hover,
+        &:focus-visible
+            background: $color-bg-gray-soft
+            color: $color-text-primary
+
+        &:focus-visible
+            outline: none
+
+        &.selected
+            background: $color-bg-gray-soft
+            color: $color-text-primary
+            font-weight: $font-weight-semibold
+
+    .check
+        flex-shrink: 0
+
+        color: $color-text-primary
+        font-size: $font-size-16
+        font-weight: $font-weight-bold
+        color: $color-success
+
+@media (max-width: $breakpoint-xs)
+
+    .filter-bar
+        gap: $space-4
+        padding: $space-8 $space-12
+
+        .filter-button,
+        .filter-chip
+            padding: $space-8 $space-8
+            font-size: $font-size-12
+
+        .sort-control
+
+            .sort-button
+                min-height: $space-32
+                padding: $space-4 $space-8
+
+                font-size: $font-size-12
+
+            .sort-label
+                font-size: $font-size-12
+
+            .sort-dropdown
+                right: 0
+
+                width: 200px
+
+            .sort-option
+                padding: $space-8 $space-12
+
+                font-size: $font-size-12

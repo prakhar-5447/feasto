@@ -1,21 +1,36 @@
-<!-- @if (loading) { -->
+<app-filter-bar [filters]="filters()" (filterClicked)="openFilters()" (removeFilter)="removeFilter($event)"
+    (vegChanged)="onVegChanged($event)" (sortChanged)="onSortChanged($event)" />
 
-<!-- <app-dashboard-skeleton /> -->
+@if (loading()) {
 
-<!-- } @else { -->
 @if (hasFilters()) {
 
-<app-filter-bar [filters]="filters()" (filterClicked)="openFilters()" (removeFilter)="removeFilter($event)" />
+<!-- Filtered state -->
+<app-restaurant-list-skeleton />
 
 } @else {
 
-<app-ads-carousel />
+<!-- Initial state -->
+<app-ads-carousel-skeleton />
 
-<app-categories (categorySelected)="onCategorySelect($event)" />
+<app-categories-skeleton />
+
+<app-restaurant-list-skeleton />
 
 }
 
-<app-restaurant-list [selectedCategory]="selectedCategory" />
+} @else {
+
+
+@if(!hasFilters()) {
+
+<app-ads-carousel />
+
+<app-categories (categorySelected)=" onCategorySelected($event)" />
+
+}
+
+<app-restaurant-list [restaurants]="restaurants()" [city]="selectedLocation()?.city ?? ''" [filters]="filters()" />
 
 <div class="end-of-results">
 
@@ -39,12 +54,11 @@
 
 </div>
 
-<!-- } -->
-
+}
 
 @if (showFilterModal()) {
 
-<app-modal size="md">
+<app-modal size="lg">
 
     <app-filter-modal [filters]="filters()" (close)="closeFilters()" (applyFilters)="applyFilters($event)" />
 

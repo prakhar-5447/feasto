@@ -1,33 +1,53 @@
-@use '../../../styles/_index' as *
+@use '../../../styles/index' as *
 
 .end-of-results
-    margin-bottom: $space-40
     display: flex
     align-items: center
     justify-content: center
 
-    .content
-        display: flex
-        flex-direction: column
-        align-items: center
-        justify-content: center
-        gap:$space-12
+    margin-bottom: $space-40
 
-        fa-icon
-            font-size: $font-size-64
-            color: $color-text-muted
+.content
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: $space-12
 
-        .title
-            font-size: $font-size-32
-            font-weight: $font-weight-semibold
-            color: $color-primary
+    text-align: center
 
-        .subtitle
-            font-size: $font-size-16
-            color: $color-text-secondary
-            .cta
-                font-weight: $font-weight-semibold
-                color: $color-primary
-                cursor: pointer
-                &:hover
-                    text-decoration: underline
+    fa-icon
+        color: $color-text-muted
+        font-size: $font-size-64
+
+.title
+    margin: 0
+
+    color: $color-primary
+    font-size: $font-size-32
+    font-weight: $font-weight-semibold
+    line-height: $line-height-tight
+
+.subtitle
+    margin: 0
+
+    color: $color-text-secondary
+    font-size: $font-size-16
+    line-height: $line-height-normal
+
+    .cta
+        color: $color-primary
+        font-weight: $font-weight-semibold
+        text-decoration: none
+
+        cursor: pointer
+
+        transition: $transition-color
+
+        &:hover
+            text-decoration: underline
+
+        &:focus-visible
+            outline: 2px solid $color-primary
+            outline-offset: $space-4
+            border-radius: $radius-4

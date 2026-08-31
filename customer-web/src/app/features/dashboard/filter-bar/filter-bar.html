@@ -1,10 +1,87 @@
 <div class="filter-bar">
 
+    <!-- Open all filters -->
     <button type="button" class="filter-button" (click)="openFilters()">
-        <fa-icon [icon]="faFilter"></fa-icon> Filters
+
+        <fa-icon [icon]="faFilter"></fa-icon>
+
+        Filters
+
     </button>
 
 
+    <!-- Pure Veg -->
+    <button type="button" class="filter-chip" [class.active]="isVegSelected()" (click)="toggleVeg()">
+
+        <span>
+            Pure Veg
+        </span>
+
+        @if (isVegSelected()) {
+
+        <span class="remove" aria-hidden="true">
+
+            <fa-icon [icon]="faClose"></fa-icon>
+
+        </span>
+
+        }
+
+    </button>
+
+
+    <!-- Sort By -->
+    <div class="sort-control">
+
+        <button type="button" class="sort-button" (click)="toggleSortDropdown()"
+            [attr.aria-expanded]="showSortDropdown()">
+            <span class="sort-label">
+                Sort by
+            </span>
+
+            <span class="sort-value">
+                {{ currentSortLabel() }}
+            </span>
+
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+        </button>
+
+
+        @if (showSortDropdown()) {
+
+        <div class="sort-dropdown">
+
+            <div class="sort-options">
+
+                @for (option of sortOptions; track option.value) {
+
+                <button type="button" class="sort-option" [class.selected]="currentSort() === option.value"
+                    (click)="selectSort(option.value)">
+
+                    <span>
+                        {{ option.label }}
+                    </span>
+
+                    @if (currentSort() === option.value) {
+                    <span class="check">
+                        <fa-icon [icon]="faCheck"></fa-icon>
+                    </span>
+                    }
+
+                </button>
+
+                }
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+
+    <!-- Active filters -->
     @for (
     filter of activeFilters();
     track filter.key
@@ -17,7 +94,9 @@
         </span>
 
         <span class="remove" aria-hidden="true">
+
             <fa-icon [icon]="faClose"></fa-icon>
+
         </span>
 
     </button>

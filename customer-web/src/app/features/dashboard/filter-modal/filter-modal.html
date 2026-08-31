@@ -1,159 +1,348 @@
 <div class="filter-modal">
 
+    <!-- Header -->
+
     <header class="filter-header">
 
         <div>
-            <h2>
-                Filters
-            </h2>
-
-            <p>
-                Refine restaurants for you
-            </p>
+            <h2>Filters</h2>
+            <p>Refine your results</p>
         </div>
 
         <button type="button" class="close-button" aria-label="Close filters" (click)="close.emit()">
-            ×
+            <fa-icon [icon]="faClose"></fa-icon>
         </button>
 
     </header>
 
 
     <div class="filter-body">
+        <div class="filter-content">
+            <div class="filter-column">
+                <!-- Cuisines    -->
 
+                <section class="filter-group">
 
-        <!-- Cuisine -->
+                    <h3>Cuisine</h3>
 
-        <section class="filter-group">
+                    <div class="chip-grid">
 
-            <div class="group-header">
-                <h3>
-                    Cuisine
-                </h3>
-            </div>
-
-            <div class="options">
-
-                @for (
-                cuisine of cuisines;
-                track cuisine
-                ) {
-
-                <button type="button" class="option" [class.selected]="
-                            draftFilters.cuisine === cuisine
-                        " (click)="selectCuisine(cuisine)">
-
-                    <span class="checkbox">
-                        @if (
-                        draftFilters.cuisine === cuisine
+                        @for (
+                        cuisine of cuisines;
+                        track cuisine
                         ) {
-                        ✓
+
+                        <button type="button" class="chip"
+                            [class.selected]="draftFilters.cuisine === cuisine.id || draftFilters.food === cuisine.id"
+                            (click)="selectCategory(cuisine)">
+                            {{ cuisine.name }}
+                        </button>
+
                         }
-                    </span>
 
-                    <span>
-                        {{ cuisine }}
-                    </span>
+                    </div>
 
-                </button>
-
-                }
-
-            </div>
-
-        </section>
+                </section>
 
 
-        <!-- Rating -->
+                <!-- Restaurant -->
 
-        <section class="filter-group">
+                <section class="filter-group">
 
-            <div class="group-header">
-                <h3>
-                    Rating
-                </h3>
-            </div>
+                    <h3>Restaurant</h3>
 
-            <div class="options">
+                    <div class="chip-grid">
 
-                @for (
-                rating of ratings;
-                track rating
-                ) {
+                        @for (
+                        restaurant of restaurants;
+                        track restaurant
+                        ) {
 
-                <button type="button" class="option" [class.selected]="
+                        <button type="button" class="chip" [class.selected]="
+                            draftFilters.restaurant === restaurant
+                        " (click)="selectRestaurant(restaurant)">
+                            {{ restaurant }}
+                        </button>
+
+                        }
+
+                    </div>
+
+                </section>
+
+
+                <!-- Collection -->
+
+                <section class="filter-group">
+
+                    <h3>Collections</h3>
+
+                    <div class="chip-grid">
+
+                        @for (
+                        collection of collections;
+                        track collection
+                        ) {
+
+                        <button type="button" class="chip" [class.selected]="
+                            draftFilters.collection === collection
+                        " (click)="selectCollection(collection)">
+                            {{ collection }}
+                        </button>
+
+                        }
+
+                    </div>
+
+                </section>
+
+
+                <!-- Dietary -->
+
+                <section class="filter-group">
+
+                    <h3>Dietary preference</h3>
+
+                    <div class="chip-grid">
+
+                        <button type="button" class="chip" [class.selected]="draftFilters.veg === true"
+                            (click)="setDietary('veg')">
+                            <span>🌱</span>
+                            Pure Veg
+                        </button>
+
+                        <button type="button" class="chip" [class.selected]="draftFilters.nonVeg === true"
+                            (click)="setDietary('nonVeg')">
+                            Non-Veg
+                        </button>
+
+                        <button type="button" class="chip" [class.selected]="draftFilters.vegan === true"
+                            (click)="setDietary('vegan')">
+                            Vegan
+                        </button>
+
+                        <button type="button" class="chip" [class.selected]="draftFilters.halal === true"
+                            (click)="setDietary('halal')">
+                            Halal
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Rating -->
+
+                <section class="filter-group">
+
+                    <h3>Rating</h3>
+
+                    <div class="chip-grid">
+
+                        @for (
+                        rating of ratings;
+                        track rating
+                        ) {
+
+                        <button type="button" class="chip" [class.selected]="
                             draftFilters.rating === rating
                         " (click)="selectRating(rating)">
 
-                    <span class="radio">
-                        @if (
-                        draftFilters.rating === rating
+                            <span>★</span>
+                            {{ rating }} & above
+
+                        </button>
+
+                        }
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <div class="filter-column">
+
+                <!-- Price -->
+
+                <section class="filter-group">
+
+                    <h3>Price range</h3>
+
+                    <div class="chip-grid">
+
+                        @for (
+                        price of priceRanges;
+                        track price.value
                         ) {
-                        <span></span>
-                        }
-                    </span>
 
-                    <span>
-                        {{ rating }}★ & above
-                    </span>
+                        <button type="button" class="chip" [class.selected]="
+                    draftFilters.price === price.value
+                " (click)="selectPrice(price.value)">
+                            {{ price.label }}
+                        </button>
 
-                </button>
-
-                }
-
-            </div>
-
-        </section>
-
-
-        <!-- Food preference -->
-
-        <section class="filter-group">
-
-            <div class="group-header">
-
-                <h3>
-                    Food preference
-                </h3>
-
-            </div>
-
-            <div class="options">
-
-                <button type="button" class="option" [class.selected]="draftFilters.veg === true"
-                    (click)="setVeg(true)">
-
-                    <span class="checkbox">
-
-                        @if (draftFilters.veg === true) {
-                        ✓
                         }
 
-                    </span>
+                    </div>
 
-                    <span>
-                        Pure Veg
-                    </span>
+                </section>
 
-                </button>
+                <!-- Delivery -->
 
+                <section class="filter-group">
+
+                    <h3>Delivery time</h3>
+
+                    <div class="chip-grid">
+
+                        @for (
+                        time of deliveryTimes;
+                        track time.value
+                        ) {
+
+                        <button type="button" class="chip" [class.selected]="
+                            draftFilters.maxDeliveryTime === time.value
+                        " (click)="selectDeliveryTime(time.value)">
+                            {{ time.label }}
+                        </button>
+
+                        }
+
+                    </div>
+
+                </section>
+
+
+                <!-- Distance -->
+
+                <section class="filter-group">
+
+                    <h3>Distance</h3>
+
+                    <div class="chip-grid">
+
+                        @for (
+                        distance of distances;
+                        track distance.value
+                        ) {
+
+                        <button type="button" class="chip" [class.selected]="
+                            draftFilters.maxDistance === distance.value
+                        " (click)="selectDistance(distance.value)">
+                            {{ distance.label }}
+                        </button>
+
+                        }
+
+                    </div>
+
+                </section>
+
+
+                <!-- Offers / Availability -->
+
+                <section class="filter-group">
+
+                    <h3>More options</h3>
+
+                    <div class="option-list">
+
+                        <button type="button" class="preference-option" [class.selected]="draftFilters.offers === true"
+                            (click)="toggleOffers()">
+
+                            <div class="preference-content">
+
+                                <span class="option-icon">
+                                    %
+                                </span>
+
+                                <div>
+                                    <strong>Offers</strong>
+                                    <small>
+                                        Restaurants with active offers
+                                    </small>
+                                </div>
+
+                            </div>
+
+                            <span class="toggle">
+                                <span></span>
+                            </span>
+
+                        </button>
+
+
+                        <button type="button" class="preference-option" [class.selected]="draftFilters.openNow === true"
+                            (click)="toggleOpenNow()">
+
+                            <div class="preference-content">
+
+                                <span class="option-icon">
+                                    ●
+                                </span>
+
+                                <div>
+                                    <strong>Open now</strong>
+                                    <small>
+                                        Show currently open restaurants
+                                    </small>
+                                </div>
+
+                            </div>
+
+                            <span class="toggle">
+                                <span></span>
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Sort -->
+
+                <section class="filter-group">
+
+                    <h3>Sort by</h3>
+
+                    <div class="chip-grid">
+
+                        @for (
+                        option of sortOptions;
+                        track option.value
+                        ) {
+
+                        <button type="button" class="chip" [class.selected]="
+                    draftFilters.sort === option.value
+                " (click)="selectSort(option.value)">
+                            {{ option.label }}
+                        </button>
+
+                        }
+
+                    </div>
+
+                </section>
             </div>
-
-        </section>
-
+        </div>
 
     </div>
 
 
+    <!-- Footer -->
+
     <footer class="filter-footer">
-
-        <button type="button" class="clear-button" (click)="clearFilters()">
+        <app-button variant="text" size="md" weight="medium" tone="muted" (click)="clearFilters()">
             Clear all
-        </button>
+        </app-button>
 
-        <button type="button" class="apply-button" (click)="apply()">
-            Apply Filters
-        </button>
+        <app-button type="button" variant="primary" size="md" weight="semibold" [fullWidth]="false" (click)="apply()">
+            Apply filters
+        </app-button>
 
     </footer>
 
