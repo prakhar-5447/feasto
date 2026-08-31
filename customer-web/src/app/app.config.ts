@@ -20,6 +20,7 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 import { SlugPipe } from './shared/pipes/slug.pipe';
+import { LabelPipe } from './shared/pipes/label.pipe';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -80,7 +81,8 @@ export const appConfig: ApplicationConfig = {
     // Shared
     // ─────────────────────────────────────────────
 
-    SlugPipe
+    SlugPipe,
+    LabelPipe
 
   ]
 };

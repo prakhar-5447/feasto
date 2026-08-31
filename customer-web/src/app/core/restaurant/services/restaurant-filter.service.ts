@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { RestaurantFilters } from '../models/restaurant-filter.model';
+import { RestaurantFilters } from '../models/filter.model';
 
 @Injectable({
     providedIn: 'root'

@@ -7,7 +7,7 @@ import { LocationService } from '../../core/location/services/location.service';
 
 import { Store } from '@ngrx/store';
 import { SelectedLocation } from '../location/models/location.model';
-import { LocationActions } from '../../store/location/location.actions';
+import * as LocationActions from '../../store/location/location.actions';
 
 import { SlugPipe } from '../../shared/pipes/slug.pipe';
 
