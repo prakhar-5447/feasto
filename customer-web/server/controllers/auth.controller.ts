@@ -1,59 +1,92 @@
-import { Request, Response, NextFunction } from "express";
-import * as authService from "../services/auth.service";
+import { Request, Response, NextFunction } from 'express';
+import crypto from 'crypto';
+
+import * as authService from '../services/auth.service';
 
 import {
   generateToken,
   generateRefreshToken,
   verifyRefreshToken
-} from "../utils/token.utils";
+} from '../utils/token.utils';
 
-const otpStore = new Map<
-  string,
-  {
+interface PhoneAuthRequest extends Request {
+  body: {
+    phone: string;
+  };
+}
+
+interface VerifyOtpRequest extends Request {
+  body: {
+    phone: string;
     otp: string;
-    expiresAt: number;
-  }
->();
+  };
+}
 
-const generateOtp = (): string => {
-  return Math.floor(
+interface CompleteSignupRequest extends Request {
+  body: {
+    signupToken: string;
+    name: string;
+    email?: string;
+  };
+}
+
+interface OtpRecord {
+  otp: string;
+  expiresAt: number;
+}
+
+interface SignupVerificationRecord {
+  phone: string;
+  expiresAt: number;
+}
+
+export const otpStore =
+  new Map<string, OtpRecord>();
+
+export const signupVerificationStore =
+  new Map<string, SignupVerificationRecord>();
+
+const generateOtp = (): string =>
+  Math.floor(
     100000 + Math.random() * 900000
   ).toString();
-};
+
+export const generateSignupVerificationToken =
+  (): string =>
+    crypto.randomBytes(32).toString('hex');
 
 const accessTokenCookieOptions = {
   httpOnly: true,
-  sameSite: "lax" as const,
-  secure: process.env['NODE_ENV'] === "production",
-  path: "/",
-  maxAge: 15 * 60 * 1000 // 15 minutes
+  sameSite: 'lax' as const,
+  secure: process.env['NODE_ENV'] === 'production',
+  path: '/',
+  maxAge: 15 * 60 * 1000
 };
-
 
 const refreshTokenCookieOptions = {
   httpOnly: true,
-  sameSite: "lax" as const,
-  secure: process.env['NODE_ENV'] === "production",
-  path: "/api/v1/auth",
-  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  sameSite: 'lax' as const,
+  secure: process.env['NODE_ENV'] === 'production',
+  path: '/api/v1/auth',
+  maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
 export const phoneAuth = async (
-  req: Request,
+  req: PhoneAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-
   try {
-
     const { phone } = req.body;
 
-    const { user } = await authService.phoneAuth(phone);
+    const { user } =
+      await authService.phoneAuth(phone);
 
-    if (user && user.role !== "customer") {
+    if (user && user.role !== 'CUSTOMER') {
       res.status(403).json({
         success: false,
-        message: "Only customers can login here"
+        message: 'Only customers can login here',
+        data: null
       });
       return;
     }
@@ -67,56 +100,53 @@ export const phoneAuth = async (
 
     res.json({
       success: true,
-      isNewUser: !user,
-      otp
+      message: 'OTP sent successfully',
+      data: {
+        phone,
+        otp
+      }
     });
   } catch (err) {
-
     next(err);
-
   }
 };
 
 export const verifyOtp = async (
-  req: Request,
+  req: VerifyOtpRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-
   try {
-
     const { phone, otp } = req.body;
+
     const record = otpStore.get(phone);
 
     if (!record) {
-
       res.status(400).json({
         success: false,
-        message: "OTP not found or expired"
+        message: 'OTP not found or expired',
+        data: null
       });
-
       return;
     }
 
     if (record.expiresAt < Date.now()) {
-
       otpStore.delete(phone);
 
       res.status(400).json({
         success: false,
-        message: "OTP expired"
+        message: 'OTP expired',
+        data: null
       });
-
       return;
     }
 
     if (record.otp !== otp) {
-
       res.status(400).json({
         success: false,
-        message: "Invalid OTP"
+        message: 'Invalid OTP',
+        data: null
       });
-
       return;
     }
 
@@ -125,83 +155,150 @@ export const verifyOtp = async (
     const { user } =
       await authService.phoneAuth(phone);
 
-    if (!user) {
+    if (user) {
+      if (user.role !== 'CUSTOMER') {
+        res.status(403).json({
+          success: false,
+          message: 'Only customers can login here',
+          data: null
+        });
+        return;
+      }
+
+      const accessToken =
+        generateToken(user);
+
+      const refreshToken =
+        generateRefreshToken(user);
+
+      res.cookie(
+        'accessToken',
+        accessToken,
+        accessTokenCookieOptions
+      );
+
+      res.cookie(
+        'refreshToken',
+        refreshToken,
+        refreshTokenCookieOptions
+      );
 
       res.json({
         success: true,
-        isNewUser: true
+        message: 'Login successful',
+        data: {
+          status: 'LOGIN_SUCCESS',
+          isNewUser: false,
+          user
+        }
       });
 
       return;
     }
 
-    if (user.role !== "customer") {
-      res.status(403).json({
-        success: false,
-        message: "Only Customer can login here"
-      });
-      return;
-    }
+    const signupToken =
+      generateSignupVerificationToken();
 
-    const accessToken =
-      generateToken(user);
-
-    const refreshToken =
-      generateRefreshToken(user);
-
-    res.cookie(
-      "accessToken",
-      accessToken,
-      accessTokenCookieOptions
+    signupVerificationStore.set(
+      signupToken,
+      {
+        phone,
+        expiresAt: Date.now() + 10 * 60 * 1000
+      }
     );
-
-    res.cookie(
-      "refreshToken",
-      refreshToken,
-      refreshTokenCookieOptions
-    );
-
 
     res.json({
       success: true,
-      isNewUser: false,
-      data: user
+      message: 'Profile information required',
+      data: {
+        status: 'PROFILE_REQUIRED',
+        isNewUser: true,
+        signupToken
+      }
     });
-
   } catch (err) {
-
     next(err);
-
   }
 };
 
 export const completeSignup = async (
-  req: Request,
+  req: CompleteSignupRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-
   try {
+    const {
+      signupToken,
+      name,
+      email
+    } = req.body;
 
-    const { phone } = req.body;
+    if (!signupToken) {
+      res.status(401).json({
+        success: false,
+        message: 'Signup verification required',
+        data: null
+      });
+      return;
+    }
+
+    const verification =
+      signupVerificationStore.get(
+        signupToken
+      );
+
+    if (!verification) {
+      res.status(401).json({
+        success: false,
+        message: 'Signup verification expired',
+        data: null
+      });
+      return;
+    }
+
+    if (verification.expiresAt < Date.now()) {
+      signupVerificationStore.delete(
+        signupToken
+      );
+
+      res.status(401).json({
+        success: false,
+        message: 'Signup verification expired',
+        data: null
+      });
+      return;
+    }
+
+    const phone =
+      verification.phone;
+
     const { user } =
       await authService.phoneAuth(phone);
 
     if (user) {
+      signupVerificationStore.delete(
+        signupToken
+      );
 
-      res.status(400).json({
+      res.status(409).json({
         success: false,
-        message: "User already exists"
+        message: 'User already exists',
+        data: null
       });
-
       return;
     }
 
-    req.body.role = "customer"
     const newUser =
-      await authService.completeSignup(
-        req.body
-      );
+      await authService.completeSignup({
+        phone,
+        name,
+        email,
+        role: 'CUSTOMER'
+      });
+
+    signupVerificationStore.delete(
+      signupToken
+    );
 
     const accessToken =
       generateToken(newUser);
@@ -210,27 +307,27 @@ export const completeSignup = async (
       generateRefreshToken(newUser);
 
     res.cookie(
-      "accessToken",
+      'accessToken',
       accessToken,
       accessTokenCookieOptions
     );
 
     res.cookie(
-      "refreshToken",
+      'refreshToken',
       refreshToken,
       refreshTokenCookieOptions
     );
 
-
     res.status(201).json({
       success: true,
-      data: newUser
+      message: 'Signup successful',
+      data: {
+        status: 'SIGNUP_SUCCESS',
+        user: newUser
+      }
     });
-
   } catch (err) {
-
     next(err);
-
   }
 };
 
@@ -239,49 +336,42 @@ export const refreshToken = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-
   try {
-
     const token =
       req.cookies['refreshToken'];
 
     if (!token) {
-
       res.status(401).json({
         success: false,
-        message: "Refresh token not found"
+        message: 'Refresh token not found',
+        data: null
       });
-
       return;
     }
 
     const decoded =
       verifyRefreshToken(token);
 
-
-    // Find user
     const { user } =
       await authService.getUserById(
         decoded.userId
       );
 
     if (!user) {
-
       res.status(401).json({
         success: false,
-        message: "User not found"
+        message: 'User not found',
+        data: null
       });
-
       return;
     }
 
     if (!user.isActive) {
-
       res.status(401).json({
         success: false,
-        message: "User account is inactive"
+        message: 'User account is inactive',
+        data: null
       });
-
       return;
     }
 
@@ -289,24 +379,22 @@ export const refreshToken = async (
       generateToken(user);
 
     res.cookie(
-      "accessToken",
+      'accessToken',
       newAccessToken,
       accessTokenCookieOptions
     );
 
-
     res.json({
       success: true,
-      message: "Access token refreshed"
+      message: 'Access token refreshed',
+      data: null
     });
-
   } catch (err) {
-
     res.status(401).json({
       success: false,
-      message: "Invalid or expired refresh token"
+      message: 'Invalid or expired refresh token',
+      data: null
     });
-
   }
 };
 
@@ -314,33 +402,23 @@ export const logout = (
   req: Request,
   res: Response
 ): void => {
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env['NODE_ENV'] === 'production',
+    path: '/'
+  });
 
-  res.clearCookie(
-    "accessToken",
-    {
-      httpOnly: true,
-      sameSite: "lax",
-      secure:
-        process.env['NODE_ENV'] === "production",
-      path: "/"
-    }
-  );
-
-
-  res.clearCookie(
-    "refreshToken",
-    {
-      httpOnly: true,
-      sameSite: "lax",
-      secure:
-        process.env['NODE_ENV'] === "production",
-      path: "/api/v1/auth"
-    }
-  );
-
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env['NODE_ENV'] === 'production',
+    path: '/api/v1/auth'
+  });
 
   res.json({
     success: true,
-    message: "Logged out successfully"
+    message: 'Logged out successfully',
+    data: null
   });
 };

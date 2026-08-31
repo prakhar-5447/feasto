@@ -1,8 +1,6 @@
 import * as foodRepo from "../repositories/food.repository";
 
-export const getFood = (
-    foodId: string
-) => {
+export const getFood = (foodId: string) => {
     return foodRepo.findById(foodId);
 };
 
@@ -17,8 +15,13 @@ export const getRestaurantMenu = (
 export const addFood = (
     data: any,
     restaurantId: string,
-    imageUrl: any) => {
-    return foodRepo.createFood({ ...data, restaurant: restaurantId, image: imageUrl });
+    imageUrl?: string
+) => {
+    return foodRepo.createFood({
+        ...data,
+        restaurant: restaurantId,
+        image: imageUrl || ""
+    });
 };
 
 export const updateFood = (

@@ -1,14 +1,31 @@
-import { Request, Response, NextFunction } from "express";
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
+
 import { ObjectSchema } from "joi";
 
-const validate = (schema: ObjectSchema) => {
-    return (req: Request, res: Response, next: NextFunction): void => {
-        const { error } = schema.validate(req.body);
+const validate = (
+    schema: ObjectSchema,
+    source: "body" | "query" | "params" = "body"
+) => {
+    return (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): void => {
+        const { error } = schema.validate(
+            req[source],
+            {
+                abortEarly: true
+            }
+        );
 
         if (error) {
             res.status(400).json({
                 success: false,
-                message: error.message,
+                message: error.details[0].message
             });
             return;
         }

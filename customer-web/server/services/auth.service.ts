@@ -1,27 +1,39 @@
-import * as userRepo from '../repositories/user.repository';
+import * as userRepo from "../repositories/user.repository";
+
+export interface CompleteSignupData {
+    phone: string;
+    name: string;
+    email?: string;
+    role: "CUSTOMER";
+}
 
 export const phoneAuth = async (phone: string) => {
     const user = await userRepo.findByPhone(phone);
 
-    if (user) {
-        user.lastLogin = new Date();
-        await user.save();
-        return { user, isNewUser: false };
-    }
-
-    return { user: null, isNewUser: true };
+    return {
+        user,
+        isNewUser: !user
+    };
 };
 
-export const completeSignup = async (data: any) => {
+export const markLogin = async (userId: string) => {
+    return userRepo.updateLastLogin(userId);
+};
+
+export const completeSignup = async (
+    data: CompleteSignupData
+) => {
+    const existingUser = await userRepo.findByPhone(data.phone);
+
+    if (existingUser) {
+        throw new Error("User already exists");
+    }
+
     return userRepo.createUser(data);
 };
 
-export const getUserById = async (
-    userId: string
-) => {
-    const user =
-        await userRepo.findById(userId);
+export const getUserById = async (userId: string) => {
     return {
-        user
+        user: await userRepo.findById(userId)
     };
 };

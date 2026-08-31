@@ -283,11 +283,6 @@ export class Payment
     private cdr: ChangeDetectorRef,
 
     private zone: NgZone,
-
-    private restaurantService: RestaurantService,
-
-    private locationService: LocationServicePersistence
-
   ) { }
 
 
@@ -310,8 +305,6 @@ export class Payment
         return;
 
       }
-
-
       this.loadOrder(orderId);
 
     });

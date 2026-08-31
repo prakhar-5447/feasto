@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import {
+    Response,
+    NextFunction
+} from "express";
 
-interface AuthRequest extends Request {
-    user?: any;
-}
+import { AuthRequest } from "./auth.middleware";
 
 export const role = (...roles: string[]) => {
     return (
@@ -12,13 +13,15 @@ export const role = (...roles: string[]) => {
     ): void => {
         if (!req.user) {
             res.status(401).json({
-                message: "Unauthorized"
+                success: false,
+                message: "Authentication required"
             });
             return;
         }
 
         if (!roles.includes(req.user.role)) {
             res.status(403).json({
+                success: false,
                 message: "Access denied"
             });
             return;

@@ -1,17 +1,12 @@
 import mongoose, {
-    Schema,
-    Document
+    Document,
+    Schema
 } from "mongoose";
 
-export interface IOrder
-    extends Document {
-
+export interface IOrder extends Document {
     orderId: string;
-
     customer: mongoose.Types.ObjectId;
-
-    restaurant:
-    mongoose.Types.ObjectId;
+    restaurant: mongoose.Types.ObjectId;
 
     restaurantSnapshot: {
         name: string;
@@ -43,120 +38,220 @@ export interface IOrder
     };
 
     payment: {
-        method: string;
+        method: "UPI" | "FAKEUPI" | "RAZORPAY" | "COD";
         transactionId?: string;
-        paidAt: Date
+        paidAt?: Date;
     };
 
-    orderStatus: string;
-    paymentStatus: string;
+    orderStatus:
+    | "PENDING_PAYMENT"
+    | "PLACED"
+    | "ACCEPTED"
+    | "PREPARING"
+    | "PICKED_UP"
+    | "DELIVERED"
+    | "CANCELLED";
+
+    paymentStatus:
+    | "PENDING"
+    | "SUCCESS"
+    | "FAILED"
+    | "REFUNDED";
 }
 
-const orderSchema =
-    new Schema<IOrder>(
-        {
-            orderId: String,
+const orderSchema = new Schema<IOrder>(
+    {
+        orderId: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true
+        },
 
-            customer: {
-                type: Schema.Types.ObjectId,
-                ref: "User"
+        customer: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+            index: true
+        },
+
+        restaurant: {
+            type: Schema.Types.ObjectId,
+            ref: "Restaurant",
+            required: true,
+            index: true
+        },
+
+        restaurantSnapshot: {
+            name: {
+                type: String,
+                required: true
             },
 
-            restaurant: {
-                type: Schema.Types.ObjectId,
-                ref: "Restaurant"
-            },
+            address: {
+                type: String,
+                required: true
+            }
+        },
 
-            restaurantSnapshot: {
-                name: String,
-                address: String
-            },
-
-            items: [
-                {
-                    food: {
-                        type: Schema.Types.ObjectId,
-                        ref: "Food"
-                    },
-
-                    name: String,
-                    image: String,
-                    price: Number,
-                    quantity: Number,
-                    total: Number
-                }
-            ],
-
-            billing: {
-                itemTotal: Number,
-                discount: Number,
-                deliveryFee: Number,
-                platformFee: Number,
-                gst: Number,
-                grandTotal: Number
-            },
-
-            deliveryAddress: {
-                fullAddress: String,
-                lat: Number,
-                lng: Number
-            },
-
-            payment: {
-                method: {
-                    type: String,
-                    enum: [
-                        'UPI',
-                        'FAKEUPI',
-                        'RAZORPAY',
-                        'COD'
-                    ],
+        items: [
+            {
+                food: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Food",
                     required: true
                 },
 
-                transactionId: {
+                name: {
                     type: String,
-                    default: null
+                    required: true
                 },
 
-                paidAt: {
-                    type: Date,
-                    default: null
+                image: {
+                    type: String,
+                    default: ""
+                },
+
+                price: {
+                    type: Number,
+                    required: true,
+                    min: 0
+                },
+
+                quantity: {
+                    type: Number,
+                    required: true,
+                    min: 1
+                },
+
+                total: {
+                    type: Number,
+                    required: true,
+                    min: 0
                 }
+            }
+        ],
+
+        billing: {
+            itemTotal: {
+                type: Number,
+                required: true,
+                min: 0
             },
 
-            paymentStatus: {
-                type: String,
-                enum: [
-                    'pending',
-                    'paid',
-                    'failed',
-                    'refunded'
-                ],
-                default: 'pending'
+            discount: {
+                type: Number,
+                default: 0,
+                min: 0
             },
 
-            orderStatus: {
-                type: String,
-                enum: [
-                    "pending_payment",
-                    "placed",
-                    "accepted",
-                    "preparing",
-                    "picked_up",
-                    "delivered",
-                    "cancelled"
-                ],
-                default:
-                    "pending_payment"
+            deliveryFee: {
+                type: Number,
+                default: 0,
+                min: 0
+            },
+
+            platformFee: {
+                type: Number,
+                default: 0,
+                min: 0
+            },
+
+            gst: {
+                type: Number,
+                default: 0,
+                min: 0
+            },
+
+            grandTotal: {
+                type: Number,
+                required: true,
+                min: 0
             }
         },
-        {
-            timestamps: true
+
+        deliveryAddress: {
+            fullAddress: {
+                type: String,
+                required: true
+            },
+
+            lat: {
+                type: Number,
+                required: true
+            },
+
+            lng: {
+                type: Number,
+                required: true
+            }
+        },
+
+        payment: {
+            method: {
+                type: String,
+                enum: [
+                    "UPI",
+                    "FAKEUPI",
+                    "RAZORPAY",
+                    "COD"
+                ],
+                required: true
+            },
+
+            transactionId: {
+                type: String,
+                default: null
+            },
+
+            paidAt: {
+                type: Date,
+                default: null
+            }
+        },
+
+        paymentStatus: {
+            type: String,
+            enum: [
+                "PENDING",
+                "SUCCESS",
+                "FAILED",
+                "REFUNDED"
+            ],
+            default: "PENDING"
+        },
+
+        orderStatus: {
+            type: String,
+            enum: [
+                "PENDING_PAYMENT",
+                "PLACED",
+                "ACCEPTED",
+                "PREPARING",
+                "PICKED_UP",
+                "DELIVERED",
+                "CANCELLED"
+            ],
+            default: "PENDING_PAYMENT"
         }
-    );
+    },
+    {
+        timestamps: true
+    }
+);
+
+orderSchema.index({
+    customer: 1,
+    createdAt: -1
+});
+
+orderSchema.index({
+    restaurant: 1,
+    createdAt: -1
+});
 
 const Order =
-    mongoose.models["Order"] || mongoose.model<IOrder>("Order", orderSchema);
+    mongoose.models["Order"] ||
+    mongoose.model<IOrder>("Order", orderSchema);
 
 export default Order;

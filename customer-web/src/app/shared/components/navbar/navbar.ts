@@ -1,33 +1,52 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Output, inject, signal } from '@angular/core';
 
-import { AsyncPipe } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import {
+  AsyncPipe
+} from '@angular/common';
 
-import { debounceTime, filter, map, tap, distinctUntilChanged, of, Subject, switchMap, catchError } from 'rxjs';
+import {
+  HttpClient,
+  HttpParams
+} from '@angular/common/http';
+
+import {
+  Router,
+  RouterLink
+} from '@angular/router';
+
+import {
+  debounceTime,
+  filter,
+  map,
+  tap,
+  distinctUntilChanged,
+  of,
+  Subject,
+  switchMap,
+  catchError
+} from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLocationCrosshairs, faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { Store } from '@ngrx/store';
-
-import { AuthService } from '../../../core/services/auth.service';
-
 import { LocationSearchResult, ReverseGeocodeResult } from '../../../core/location/models/location-api.model';
+
 import { SelectedLocation } from '../../../core/location/models/location.model';
 
 import { LocationService } from '../../../core/location/services/location.service';
+import { AuthService } from '../../../core/services/auth.service';
 
-import { AppState } from '../../../store/app.state';
-
-import * as AuthActions from '../../../store/auth/auth.actions';
-import { selectUser } from '../../../store/auth/auth.selectors';
 import * as LocationActions from '../../../store/location/location.actions';
 import { selectSelectedLocation } from '../../../store/location/location.selectors';
 
 import { Loader } from '../loader/loader';
+
+import { AppState } from '../../../store/app.state';
+import * as AuthActions from '../../../store/auth/auth.actions';
+import { selectAuthInitialized, selectUser } from '../../../store/auth/auth.selectors';
+import { FormsModule } from '@angular/forms';
 import { Button } from '../button/button';
 
 import { ClickOutsideDirective } from '../../directive/clickOutside.directive';
@@ -40,12 +59,10 @@ interface RestaurantResult {
   slug: string;
 }
 
-
 interface FoodResult {
   _id: string;
   name: string;
 }
-
 
 interface SearchResponse {
   data?: {
@@ -66,24 +83,40 @@ interface SearchResponse {
 })
 export class Navbar {
 
-  @Output() readonly openAuth = new EventEmitter<void>();
+  @Output()
+  readonly openAuth =
+    new EventEmitter<void>();
 
-  readonly faLocationDot = faLocationDot;
-  readonly faLocationCrosshairs = faLocationCrosshairs;
-  readonly faMagnifyingGlass = faMagnifyingGlass;
+
+  readonly faLocationDot =
+    faLocationDot;
+
+  readonly faLocationCrosshairs =
+    faLocationCrosshairs;
+
+  readonly faMagnifyingGlass =
+    faMagnifyingGlass;
+
+
 
   readonly detectLocationLoader = signal(false);
+
 
   locationQuery = '';
   restaurantQuery = '';
 
   locationResults: LocationSearchResult[] = [];
   restaurantResults: RestaurantResult[] = [];
+
   foodResults: FoodResult[] = [];
+
   cuisineResults: string[] = [];
 
+
   showLocationDropdown = false;
+
   showRestaurantDropdown = false;
+
   restaurantSearchCompleted = false;
 
   locationLoading = signal(false);
@@ -91,16 +124,16 @@ export class Navbar {
 
   private readonly store = inject(Store<AppState>);
   private readonly router = inject(Router);
-  private readonly locationService = inject(LocationService);
   private readonly http = inject(HttpClient);
+  private readonly locationService = inject(LocationService);
 
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly slugPipe = inject(SlugPipe);
+
   private readonly locationSearchSubject = new Subject<string>();
   private readonly restaurantSearchSubject = new Subject<string>();
-
-  readonly slugPipe = inject(SlugPipe);
 
   readonly user$ = this.store.select(selectUser);
 
@@ -108,20 +141,26 @@ export class Navbar {
     selectSelectedLocation
   );
 
+  readonly authInitialized$ = this.store.select(selectAuthInitialized);
 
   ngOnInit(): void {
     this.initializeLocationSearch();
+
     this.initializeRestaurantSearch();
   }
 
+  logout(): void {
+
+    this.store.dispatch(
+      AuthActions.logout()
+    );
+  }
 
   private initializeLocationSearch(): void {
 
     this.locationSearchSubject
       .pipe(
-        map(query =>
-          query.trim()
-        ),
+        map(query => query.trim()),
 
         debounceTime(300),
 
@@ -130,16 +169,13 @@ export class Navbar {
         tap(query => {
 
           if (!query) {
-
             this.locationLoading.set(false);
-
             this.locationResults = [];
 
             return;
           }
 
           this.locationLoading.set(true);
-
         }),
 
         switchMap(query => {
@@ -153,34 +189,37 @@ export class Navbar {
           return this.locationService
             .search(query)
             .pipe(
-              catchError(() =>
-                of(
-                  [] as LocationSearchResult[]
-                )
-              )
+              map(data =>
+                Array.isArray(data)
+                  ? data as LocationSearchResult[]
+                  : []
+              ),
+              catchError(() => of([]))
             );
         }),
 
-        takeUntilDestroyed(
-          this.destroyRef
-        )
-
+        takeUntilDestroyed(this.destroyRef)
       )
 
       .subscribe(results => {
 
-        this.locationResults = results;
+        this.locationResults =
+          results;
 
         this.locationLoading.set(false);
-
       });
   }
 
+
+  // ==============================
+  // RESTAURANT SEARCH
+  // ==============================
 
   private initializeRestaurantSearch(): void {
 
     this.restaurantSearchSubject
       .pipe(
+
         map((query: string) =>
           query.trim()
         ),
@@ -193,35 +232,52 @@ export class Navbar {
 
           if (query.length < 2) {
 
-            this.restaurantLoading.set(false);
+            this.restaurantLoading
+              .set(false);
 
             this.restaurantResults = [];
+
             this.foodResults = [];
+
             this.cuisineResults = [];
 
-            this.restaurantSearchCompleted = false;
+            this.restaurantSearchCompleted =
+              false;
 
             return;
           }
 
-          this.restaurantLoading.set(true);
-          this.restaurantSearchCompleted = false;
+
+          this.restaurantLoading
+            .set(true);
+
+          this.restaurantSearchCompleted =
+            false;
 
         }),
 
-        filter(query => query.length >= 2),
+        filter(query =>
+          query.length >= 2
+        ),
 
-        switchMap((query: string) => {
+        switchMap(query => {
 
-          const params = new HttpParams()
-            .set('keyword', query);
+          const params =
+            new HttpParams()
+              .set(
+                'keyword',
+                query
+              );
+
 
           return this.http
             .get<SearchResponse>(
               '/api/v1/search/search-items',
               { params }
             )
+
             .pipe(
+
               catchError(() =>
                 of<SearchResponse>({
                   data: {
@@ -234,8 +290,11 @@ export class Navbar {
             );
         }),
 
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(
+          this.destroyRef
+        )
       )
+
       .subscribe(results => {
 
         this.restaurantResults = results.data?.restaurants ?? [];
@@ -246,50 +305,63 @@ export class Navbar {
 
         this.restaurantLoading.set(false);
 
-        this.restaurantSearchCompleted = true;
+
+        this.restaurantSearchCompleted =
+          true;
       });
   }
 
 
+  // ==============================
+  // DROPDOWNS
+  // ==============================
+
   toggleLocationDropdown(): void {
     this.showLocationDropdown = !this.showLocationDropdown;
 
-    this.showRestaurantDropdown = false;
+    this.showRestaurantDropdown =
+      false;
   }
 
 
   toggleRestaurantDropdown(): void {
-    this.showRestaurantDropdown = !this.showRestaurantDropdown;
+    this.showRestaurantDropdown =
+      !this.showRestaurantDropdown;
 
-    this.showLocationDropdown = false;
+    this.showLocationDropdown =
+      false;
   }
-
 
   private clearLocationSearch(): void {
 
-    this.locationSearchSubject.next('');
+    this.locationSearchSubject
+      .next('');
 
     this.locationQuery = '';
 
     this.locationResults = [];
 
-    this.locationLoading.set(false);
+    this.locationLoading
+      .set(false);
   }
 
 
   private clearRestaurantSearch(): void {
 
-    this.restaurantSearchSubject.next('');
+    this.restaurantSearchSubject
+      .next('');
 
     this.restaurantQuery = '';
 
     this.restaurantResults = [];
+
     this.foodResults = [];
+
     this.cuisineResults = [];
 
-    this.restaurantLoading.set(false);
+    this.restaurantLoading
+      .set(false);
   }
-
 
   closeDropdown(): void {
 
@@ -300,11 +372,16 @@ export class Navbar {
     this.clearRestaurantSearch();
   }
 
+  // ==============================
+  // LOCATION INPUT
+  // ==============================
 
-  onLocationQueryChange(query: string): void {
+  onLocationQueryChange(
+    query: string
+  ): void {
 
-    this.locationQuery = query;
-
+    this.locationQuery =
+      query;
     if (!query.trim()) {
 
       this.locationResults = [];
@@ -339,23 +416,37 @@ export class Navbar {
   }
 
 
+
   onRestaurantQueryChange(query: string): void {
 
-    this.restaurantQuery = query;
+    this.restaurantQuery =
+      query;
 
-    this.showRestaurantDropdown = true;
+    this.showRestaurantDropdown =
+      true;
+
 
     if (!query.trim()) {
-      this.restaurantSearchCompleted = false;
+
+      this.restaurantSearchCompleted =
+        false;
 
       this.restaurantResults = [];
+
       this.foodResults = [];
+
       this.cuisineResults = [];
     }
 
-    this.restaurantSearchSubject.next(query);
+
+    this.restaurantSearchSubject
+      .next(query);
   }
 
+
+  // ==============================
+  // SELECT LOCATION
+  // ==============================
 
   selectLocation(item: LocationSearchResult): void {
 
@@ -544,6 +635,8 @@ export class Navbar {
   }
 
 
+
+
   selectCuisine(cuisine: string): void {
 
     this.closeSearchDropdown();
@@ -588,7 +681,10 @@ export class Navbar {
   }
 
 
-  goToProfile(user: string): void {
+  goToProfile(
+    user: string
+  ): void {
+
     this.router.navigate([
       '/users',
       user
@@ -596,32 +692,22 @@ export class Navbar {
   }
 
 
-  logout(): void {
+  private closeSearchDropdown(): void {
 
-    this.authService
-      .logout()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-        next: () => {
+    this.showRestaurantDropdown =
+      false;
 
-          this.store.dispatch(
-            AuthActions.logout()
-          );
-
-          this.router.navigate(
-            ['/'],
-            {
-              replaceUrl: true
-            }
-          );
-        }
-      });
+    this.restaurantQuery = '';
   }
 
 
-  toTitleCase(value: string | null): string {
+  // ==============================
+  // HELPERS
+  // ==============================
+
+  toTitleCase(
+    value: string | null
+  ): string {
 
     if (!value)
       return '';
@@ -637,9 +723,4 @@ export class Navbar {
       .join(' ');
   }
 
-
-  private closeSearchDropdown(): void {
-    this.showRestaurantDropdown = false;
-    this.restaurantQuery = '';
-  }
 }

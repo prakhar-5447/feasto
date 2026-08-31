@@ -6,11 +6,31 @@ const DELIVERY_FEE = 40;
 const PLATFORM_FEE = 5;
 const GST_RATE = 0.05;
 
+const getCartOrThrow = async (userId: string) => {
+    const cart = await cartRepo.findCartByUser(userId);
+
+    if (!cart) {
+        throw new Error("Cart not found");
+    }
+
+    return cart;
+};
+
+const resetEmptyCart = (cart: any) => {
+    if (!cart.items.length) {
+        cart.restaurant = undefined;
+        cart.couponCode = undefined;
+    }
+};
+
 export const addToCart = async (
     userId: string,
     foodId: string,
     quantity: number
 ) => {
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+        throw new Error("Quantity must be greater than 0");
+    }
 
     const food = await Food.findById(foodId);
 
@@ -18,8 +38,7 @@ export const addToCart = async (
         throw new Error("Food not found");
     }
 
-    let cart =
-        await cartRepo.findCartByUser(userId);
+    let cart = await cartRepo.findCartByUser(userId);
 
     if (!cart) {
         cart = await cartRepo.createCart({
@@ -29,21 +48,18 @@ export const addToCart = async (
         });
     }
 
-    if (
-        cart.restaurant &&
-        cart.restaurant.toString() !==
-        food.restaurant.toString()
-    ) {
-        throw new Error(
-            "Cart contains items from another restaurant"
-        );
+    if (cart.items.length) {
+        if (cart.restaurant?.toString() !== food.restaurant.toString()) {
+            throw new Error("Cart contains items from another restaurant");
+        }
+    } else {
+        cart.restaurant = food.restaurant;
+        cart.couponCode = undefined;
     }
 
-    const item =
-        cart.items.find(
-            (i: any) =>
-                i.food._id.toString() === foodId
-        );
+    const item = cart.items.find(
+        (item: any) => item.food.toString() === foodId
+    );
 
     if (item) {
         item.quantity += quantity;
@@ -51,7 +67,7 @@ export const addToCart = async (
         cart.items.push({
             food: food._id,
             quantity
-        } as any);
+        });
     }
 
     await cart.save();
@@ -59,13 +75,8 @@ export const addToCart = async (
     return cart;
 };
 
-export const getCart = async (
-    userId: string
-) => {
-
-    return cartRepo.findCartByUser(
-        userId
-    );
+export const getCart = async (userId: string) => {
+    return getCartOrThrow(userId);
 };
 
 export const updateCartItem = async (
@@ -73,38 +84,25 @@ export const updateCartItem = async (
     foodId: string,
     quantity: number
 ) => {
+    const cart = await getCartOrThrow(userId);
 
-    const cart =
-        await cartRepo.findCartByUser(userId);
-
-    if (!cart) {
-        throw new Error("Cart not found");
-    }
-
-    const item =
-        cart.items.find(
-            (i: any) =>
-                i.food._id.toString() === foodId
-        );
+    const item = cart.items.find(
+        (item: any) => item.food._id.toString() === foodId
+    );
 
     if (!item) {
         throw new Error("Item not found");
     }
 
     if (quantity <= 0) {
-        cart.items =
-            cart.items.filter(
-                (i: any) =>
-                    i.food._id.toString() !== foodId
-            );
+        cart.items = cart.items.filter(
+            (item: any) => item.food._id.toString() !== foodId
+        );
     } else {
         item.quantity = quantity;
     }
 
-    if (cart.items.length === 0) {
-        cart.restaurant = undefined as any;
-        cart.couponCode = undefined;
-    }
+    resetEmptyCart(cart);
 
     await cart.save();
 
@@ -115,59 +113,39 @@ export const removeCartItem = async (
     userId: string,
     foodId: string
 ) => {
+    const cart = await getCartOrThrow(userId);
 
-    const cart =
-        await cartRepo.findCartByUser(userId);
+    cart.items = cart.items.filter(
+        (item: any) => item.food._id.toString() !== foodId
+    );
 
-    if (!cart) {
-        throw new Error("Cart not found");
-    }
-
-    cart.items =
-        cart.items.filter(
-            (i: any) =>
-                i.food._id.toString() !== foodId
-        );
+    resetEmptyCart(cart);
 
     await cart.save();
 
     return cart;
 };
 
-export const clearCart = async (
-    userId: string
-) => {
-
-    const cart =
-        await cartRepo.findCartByUser(userId);
+export const clearCart = async (userId: string) => {
+    const cart = await cartRepo.deleteCart(userId);
 
     if (!cart) {
-        return;
+        throw new Error("Cart not found");
     }
 
-    cart.items = [];
-    cart.couponCode = undefined;
-
-    await cart.save();
+    return cart;
 };
 
 export const applyCoupon = async (
     userId: string,
     code: string
 ) => {
+    const cart = await getCartOrThrow(userId);
 
-    const cart =
-        await cartRepo.findCartByUser(userId);
-
-    if (!cart) {
-        throw new Error("Cart not found");
-    }
-
-    const coupon =
-        await Coupon.findOne({
-            code: code.toUpperCase(),
-            isActive: true
-        });
+    const coupon = await Coupon.findOne({
+        code: code.toUpperCase(),
+        isActive: true
+    });
 
     if (!coupon) {
         throw new Error("Invalid coupon");
@@ -180,84 +158,54 @@ export const applyCoupon = async (
     return coupon;
 };
 
-export const removeCoupon = async (
-    userId: string
-) => {
-
-    const cart =
-        await cartRepo.findCartByUser(userId);
-
-    if (!cart) {
-        throw new Error("Cart not found");
-    }
+export const removeCoupon = async (userId: string) => {
+    const cart = await getCartOrThrow(userId);
 
     cart.couponCode = undefined;
 
     await cart.save();
 };
 
-export const getSummary = async (
-    userId: string
-) => {
+export const getSummary = async (userId: string) => {
+    const cart = await getCartOrThrow(userId);
 
-    const cart =
-        await cartRepo.findCartByUser(userId);
-
-    if (!cart) {
-        throw new Error("Cart not found");
-    }
-
-    let itemTotal = 0;
-
-    for (const item of cart.items as any) {
-        itemTotal +=
-            item.food.price *
-            item.quantity;
-    }
+    const itemTotal = cart.items.reduce(
+        (total: number, item: any) =>
+            total + item.food.price * item.quantity,
+        0
+    );
 
     let discount = 0;
 
     if (cart.couponCode) {
-
-        const coupon =
-            await Coupon.findOne({
-                code: cart.couponCode
-            });
+        const coupon = await Coupon.findOne({
+            code: cart.couponCode,
+            isActive: true
+        });
 
         if (coupon) {
+            discount =
+                coupon.discountType === "flat"
+                    ? coupon.discount
+                    : (itemTotal * coupon.discount) / 100;
 
             if (
-                coupon.discountType === "flat"
+                coupon.discountType === "percentage" &&
+                coupon.maxDiscount
             ) {
-                discount =
-                    coupon.discount;
-            } else {
-
-                discount =
-                    (itemTotal *
-                        coupon.discount) / 100;
-
-                if (
+                discount = Math.min(
+                    discount,
                     coupon.maxDiscount
-                ) {
-                    discount = Math.min(
-                        discount,
-                        coupon.maxDiscount
-                    );
-                }
+                );
             }
         }
     }
 
-    const gst =
-        Math.round(
-            (itemTotal - discount) *
-            GST_RATE
-        );
+    const taxableAmount = itemTotal - discount;
+    const gst = Math.round(taxableAmount * GST_RATE);
 
     const grandTotal =
-        itemTotal -
-        discount +
+        taxableAmount +
         gst +
         DELIVERY_FEE +
         PLATFORM_FEE;

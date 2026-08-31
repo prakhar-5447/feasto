@@ -2,8 +2,8 @@ import Joi from "joi";
 
 export const createRestaurantSchema = Joi.object({
     name: Joi.string().required(),
-    description: Joi.string(),
-    address: Joi.string(),
+    description: Joi.string().allow(""),
+    address: Joi.string().allow(""),
 
     cuisine: Joi.array().items(
         Joi.string()
@@ -13,24 +13,28 @@ export const createRestaurantSchema = Joi.object({
         .min(1)
         .max(5),
 
-    priceForTwo: Joi.number(),
+    priceForTwo: Joi.number()
+        .min(0),
 
-    estimatedDeliveryTime: Joi.number(),
+    estimatedDeliveryTime: Joi.number()
+        .min(0),
 
-    avgRating: Joi.number(),
+    openTime: Joi.number()
+        .min(0)
+        .max(23),
 
-    totalReviews: Joi.number(),
-
-    openTime: Joi.number(),
-
-    closeTime: Joi.number(),
+    closeTime: Joi.number()
+        .min(0)
+        .max(23),
 
     offer: Joi.array().items(
         Joi.string()
     ),
 
     location: Joi.object({
-        type: Joi.string().required(),
+        type: Joi.string()
+            .valid("Point")
+            .required(),
 
         coordinates: Joi.array()
             .items(Joi.number())

@@ -1,24 +1,20 @@
 import express from "express";
-const router = express.Router();
-
 import * as restaurantController from "../controllers/restaurant.controller";
-
 import { protect } from "../middlewares/auth.middleware";
-
 import { role } from "../middlewares/role.middleware";
-
 import validate from "../middlewares/validation.middleware";
-import phoneValidation from '../validations/auth.validation';
-
+import phoneValidation from "../validations/auth.validation";
 import { createRestaurantSchema } from "../validations/restaurant.validation";
 import upload from "../middlewares/upload.middleware";
+
+const router = express.Router();
 
 router.get("/nearby", restaurantController.getNearbyRestaurants);
 
 router.post(
     "/",
     protect,
-    role("restaurant_partner"),
+    role("RESTAURANT_PARTNER"),
     upload.array("images", 5),
     validate(createRestaurantSchema),
     restaurantController.createRestaurant
@@ -43,7 +39,7 @@ router.post(
 router.get(
     "/my",
     protect,
-    role("restaurant_partner"),
+    role("RESTAURANT_PARTNER"),
     restaurantController.getMyRestaurant
 );
 
@@ -66,14 +62,14 @@ router.get(
 router.patch(
     "/update",
     protect,
-    role("restaurant_partner"),
+    role("RESTAURANT_PARTNER"),
     restaurantController.updateRestaurant
 );
 
 router.delete(
     "/delete",
     protect,
-    role("restaurant_partner"),
+    role("RESTAURANT_PARTNER"),
     restaurantController.deleteRestaurant
 );
 

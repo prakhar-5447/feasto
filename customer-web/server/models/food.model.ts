@@ -1,6 +1,6 @@
 import mongoose, {
-    Schema,
     Document,
+    Schema,
     Types
 } from "mongoose";
 
@@ -11,19 +11,12 @@ export interface IFood extends Document {
     description?: string;
     price: number;
     cuisine?: string;
-
-    foodType: "veg" | "non-veg" | "egg";
-
+    foodType: "VEG" | "NON_VEG" | "EGG";
     preparationTime: number;
-
     isAvailable: boolean;
     isFeatured: boolean;
-
     rating: number;
     totalReviews: number;
-
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 const foodSchema = new Schema<IFood>(
@@ -31,73 +24,79 @@ const foodSchema = new Schema<IFood>(
         restaurant: {
             type: Schema.Types.ObjectId,
             ref: "Restaurant",
-            required: true,
+            required: true
         },
 
         name: {
             type: String,
             required: true,
-            trim: true,
+            trim: true
         },
 
         image: {
             type: String,
-            default: "",
+            default: ""
         },
 
         description: {
             type: String,
-            default: "",
+            default: ""
         },
 
         price: {
             type: Number,
             required: true,
-            min: 0,
+            min: 0
         },
 
         cuisine: {
             type: String,
             default: "",
+            trim: true
         },
 
         foodType: {
             type: String,
-            enum: ["veg", "non-veg", "egg"],
-            required: true,
-            default: "veg",
+            enum: [
+                "VEG",
+                "NON_VEG",
+                "EGG"
+            ],
+            default: "VEG",
+            required: true
         },
 
         preparationTime: {
             type: Number,
             default: 15,
+            min: 1
         },
 
         isAvailable: {
             type: Boolean,
-            default: true,
+            default: true
         },
 
         isFeatured: {
             type: Boolean,
-            default: false,
+            default: false
         },
 
         rating: {
             type: Number,
             default: 0,
             min: 0,
-            max: 5,
+            max: 5
         },
 
         totalReviews: {
             type: Number,
             default: 0,
-            min: 0,
-        },
+            min: 0
+        }
     },
     {
-        timestamps: true,
+        timestamps: true
     }
 );
 
@@ -126,7 +125,7 @@ foodSchema.index({
 });
 
 const Food =
-    mongoose.models['Food'] ||
+    mongoose.models["Food"] ||
     mongoose.model<IFood>(
         "Food",
         foodSchema
