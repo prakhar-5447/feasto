@@ -24,7 +24,7 @@ import { AppState } from '../../../store/app.state';
 
 import * as AuthActions from '../../../store/auth/auth.actions';
 import { selectUser } from '../../../store/auth/auth.selectors';
-import { LocationActions } from '../../../store/location/location.actions';
+import * as LocationActions from '../../../store/location/location.actions';
 import { selectSelectedLocation } from '../../../store/location/location.selectors';
 
 import { Loader } from '../loader/loader';
@@ -526,7 +526,7 @@ export class Navbar {
 
     this.closeSearchDropdown();
 
-    const restaurantSlug = this.slugPipe.transform(restaurant.slug);;
+    const restaurantSlug = this.slugPipe.transform(restaurant.slug);
 
     const location = this.selectedLocation();
 
