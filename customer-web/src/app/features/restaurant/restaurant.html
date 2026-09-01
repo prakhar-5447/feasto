@@ -1,25 +1,43 @@
 <div class="page">
-    @if(restaurantService.restaurant){
-    @if(showCarousel()){
-    <app-image-carousel></app-image-carousel>
+
+    @if (loading()) {
+
+    <p>Loading...</p>
+
+    } @else if (error()) {
+
+    <p>{{ error() }}</p>
+
+    } @else if (restaurant(); as restaurant) {
+
+    @if (showCarousel()) {
+    <app-image-carousel [images]="restaurant.images" />
     }
+
     <div class="details">
-        <app-restaurant-info></app-restaurant-info>
+
+        <app-restaurant-info [restaurantInfo]="restaurantInfo()!" />
+
     </div>
+
     }
-    <!-- Tabs -->
+
     <div class="tabs">
-        <button routerLink="order" (click)="setTab('order')" [class.active]="activeTab==='order'">
+
+        <button routerLink="order" (click)="setTab('order')" [class.active]="activeTab() === 'order'">
             Order
         </button>
 
-        <button routerLink="reviews" (click)="setTab('reviews')" [class.active]="activeTab==='reviews'">
+        <button routerLink="reviews" (click)="setTab('reviews')" [class.active]="activeTab() === 'reviews'">
             Reviews
         </button>
 
         <button routerLink="cart">
-            Cart ({{ getCartCount }})
+            Cart ({{ cartCount }})
         </button>
+
     </div>
-    <router-outlet></router-outlet>
+
+    <router-outlet />
+
 </div>

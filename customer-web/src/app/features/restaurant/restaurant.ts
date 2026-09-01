@@ -1,85 +1,246 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { signal } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { CartService } from '../../core/services/cart.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal
+} from '@angular/core';
+
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet
+} from '@angular/router';
+
+import { HttpClient } from '@angular/common/http';
+
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import {
   faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
+
+import { CartService } from '../../core/services/cart.service';
+
 import { ImageCarousel } from './image-carousel/image-carousel';
 import { RestaurantInfo } from './restaurant-info/restaurant-info';
-import { RestaurantService } from '../../core/services/restaurant.service';
-import { LocationServicePersistence } from '../../core/services/location.service';
-import { HttpClient } from '@angular/common/http';
+
+import {
+  RestaurantDetail,
+  RestaurantInfoData,
+} from '../../core/restaurant/models/restaurant.model';
+
 
 @Component({
   selector: 'app-restaurant',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, FontAwesomeModule, ImageCarousel, RestaurantInfo],
+
+  imports: [
+    RouterLink,
+    RouterOutlet,
+    FontAwesomeModule,
+    ImageCarousel,
+    RestaurantInfo
+  ],
+
   templateUrl: './restaurant.html',
   styleUrl: './restaurant.sass',
+
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Restaurant {
-  faArrowLeft = faArrowLeft;
-  restaurant = signal<any>(null);
-  id!: string;
-  menu: any;
-  reviews: any[] = [];
-  activeTab: string = 'order';
 
-  constructor(
-    private router: Router,
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    public cartService: CartService,
-    private cdr: ChangeDetectorRef,
-    public restaurantService: RestaurantService,
-    public locationServicePersistence: LocationServicePersistence,
-  ) { }
+  private readonly router =
+    inject(Router);
 
-  showCarousel() {
-    return this.router.url.includes('/order')
+  private readonly route =
+    inject(ActivatedRoute);
+
+  private readonly http =
+    inject(HttpClient);
+
+  private readonly destroyRef =
+    inject(DestroyRef);
+
+
+  readonly cartService =
+    inject(CartService);
+
+
+  readonly faArrowLeft =
+    faArrowLeft;
+
+
+  readonly loading =
+    signal(true);
+
+  readonly error =
+    signal<string | null>(null);
+
+
+  readonly activeTab =
+    signal('order');
+
+
+  // Restaurant page owns the restaurant data
+  readonly restaurant =
+    signal<RestaurantDetail | null>(null);
+
+
+  ngOnInit(): void {
+
+    this.setActiveTab();
+
+    this.loadRestaurant();
+
   }
 
-  ngOnInit() {
-    this.activeTab = this.route.firstChild?.snapshot.routeConfig?.path || 'order'
-    // this.id = this.route.snapshot.paramMap.get('id')!;
-    // this.restaurant = this.restaurants.find((r) => r.id === this.id);
-    // this.restaurantService.restaurant = this.restaurant
-    // this.menu = this.restaurantMenus[this.id];
-    // this.restaurantService.menu = this.menu
-    // this.reviews = this.restaurantReviews[this.id] || [];
-    // this.restaurantService.reviews = this.reviews
 
-    this.route.paramMap.subscribe(params => {
-      const slug = params.get("restaurant");
+  private loadRestaurant(): void {
 
-      if (!slug) {
-        this.router.navigate(["/"]);
-        return;
-      }
+    this.route.paramMap
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(params => {
 
-      this.http.get(
-        `/api/v1/restaurants/slug/${slug}`
-      ).subscribe({
-        next: (res: any) => {
-          this.restaurantService.restaurant = res.data;
-          this.restaurant = res.data;
-          this.cdr.detectChanges();
-          this.id = res.data._id;
-        },
-        error: () => {
-          this.router.navigate(["/"]);
+        const slug =
+          params.get('restaurant');
+
+        if (!slug) {
+
+          this.router.navigate(['/']);
+
+          return;
+
         }
+
+        this.fetchRestaurant(slug);
+
       });
-    });
+
   }
 
-  get getCartCount() {
-  return this.cartService.cartCount();
-}
+  readonly restaurantInfo = computed<RestaurantInfoData | null>(() => {
 
-  setTab(tab: string) {
-    this.activeTab = tab;
+    const restaurant = this.restaurant();
+
+    if (!restaurant) {
+      return null;
+    }
+    console.log(restaurant)
+    return {
+      name: restaurant?.name,
+      cuisine: restaurant?.cuisine,
+      restaurant: restaurant?.restaurant,
+
+      avgRating: restaurant.rating?.average,
+      totalReviews: restaurant.rating?.totalReviews,
+
+      openTime: restaurant.hours?.open,
+      closeTime: restaurant.hours?.close,
+
+      estimatedDeliveryTime:
+        restaurant.delivery?.estimatedTime,
+
+      priceForTwo:
+        restaurant.pricing?.priceForTwo,
+
+      offer: restaurant?.offer,
+
+      location: {
+        coordinates: restaurant?.location.coordinates
+      }
+    };
+
+  });
+
+
+  private fetchRestaurant(
+    slug: string
+  ): void {
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.http
+      .get<{ data: RestaurantDetail }>(
+        `/api/v1/restaurants/slug/${slug}`
+      )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: ({ data }) => {
+
+          this.restaurant.set(data);
+
+          this.loading.set(false);
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to load restaurant:',
+            error
+          );
+
+          this.error.set(
+            'Unable to load restaurant.'
+          );
+
+          this.loading.set(false);
+
+        }
+
+      });
+
   }
+
+
+  private setActiveTab(): void {
+
+    const child =
+      this.route.firstChild;
+
+    const tab =
+      child?.snapshot.routeConfig?.path;
+
+    if (tab) {
+
+      this.activeTab.set(tab);
+
+    }
+
+  }
+
+
+  showCarousel(): boolean {
+
+    return this.activeTab() === 'order';
+
+  }
+
+
+  setTab(tab: string): void {
+
+    this.activeTab.set(tab);
+
+  }
+
+
+  get cartCount(): number {
+
+    return this.cartService.cartCount();
+
+  }
+
 }

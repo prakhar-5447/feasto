@@ -1,4 +1,69 @@
 export interface Restaurant {
+
+    _id: string;
+    name: string;
+
+    restaurant: {
+        _id: string;
+        name: string;
+        slug: string;
+    };
+
+    image: string;
+
+    cuisine: string;
+
+    priceForTwo: number;
+
+    rating: number;
+
+    estimatedDeliveryTime: number;
+
+    location: {
+        city: string;
+        area: string;
+    };
+
+    isAvailable: boolean;
+
+    offer?: string;
+
+    isVeg: boolean;
+
+    distance?: number;
+}
+
+
+export interface RestaurantInfoData {
+    name?: string;
+    cuisine?: string;
+
+    restaurant?: {
+        _id: string;
+        name: string;
+        slug: string;
+    };
+
+    avgRating?: number;
+    totalReviews?: number;
+
+    address?: string;
+
+    openTime?: number;
+    closeTime?: number;
+
+    estimatedDeliveryTime?: number;
+
+    priceForTwo?: number;
+
+    offer?: string;
+
+    location?: {
+        coordinates?: [number, number];
+    };
+}
+
+export interface RestaurantDetail {
     _id: string;
     name: string;
 
@@ -9,28 +74,62 @@ export interface Restaurant {
     };
 
 
-    image: string;
 
+    // Images
+    images: string[];
+
+
+    // Classification
     cuisine: string;
 
-    price: number;
-    rating: number;
 
-    preparationTime: number;
+    // Pricing
+    pricing: {
+        priceForTwo: number;
+    };
 
+
+    // Rating
+    rating: {
+        average: number;
+        totalReviews: number;
+    };
+
+
+    // Delivery
+    delivery: {
+        estimatedTime: number;
+    };
+
+
+    // Location
     location: {
         city: string;
         area: string;
+        address: string;
+
+        coordinates: [
+            number,
+            number
+        ];
     };
 
+
+    // Opening hours
+    hours: {
+        open: number;
+        close: number;
+    };
+
+
+    // Restaurant status
     isAvailable: boolean;
-    isFeatured: boolean;
 
-    priceForTwo: number;
-    distance?: number;
 
+    // Offers
     offer?: string;
 
-    isVeg?: boolean;
 
+    // Food preference
+    isVeg: boolean;
 }

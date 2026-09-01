@@ -1,40 +1,113 @@
 <div class="info">
-    <h1>{{ this.restaurantService.restaurant?.name }}</h1>
-    <p>{{ this.restaurantService.restaurant?.cuisine }}</p>
+
+    <h1>
+        {{ restaurantInfo().name }}
+    </h1>
+
+    <p>
+        {{ restaurantInfo().cuisine }}
+    </p>
+
+
     <div class="rating-container">
+
         <div class="rating">
-            <fa-icon [icon]="faStar"></fa-icon> {{ this.restaurantService.restaurant?.avgRating }}
+
+            <fa-icon [icon]="faStar" />
+
+            {{ restaurantInfo().avgRating }}
+
         </div>
-        <span>{{ this.restaurantService.restaurant?.totalReviews }} reviews</span>
+
+        <span>
+            {{ restaurantInfo().totalReviews }} reviews
+        </span>
+
     </div>
 
+
     <div class="meta">
+
         <span class="address">
-            <fa-icon [icon]="faLocationDot"></fa-icon>
-            {{ this.restaurantService.restaurant?.address }}</span>
+
+            <fa-icon [icon]="faLocationDot" />
+
+            {{ restaurantInfo().address }}
+
+        </span>
+
+
         <span class="time">
-            <fa-icon [icon]="faClock"></fa-icon>
+
+            <fa-icon [icon]="faClock" />
+
             <div class="container">
+
                 <div class="status">
-                    @if(isOpenNow()){
-                    <span class="open">Open Now</span>
-                    - Closes at {{this.restaurantService.restaurant?.closeTime}} : 00
+
+                    @if (isOpenNow()) {
+
+                    <span class="open">
+                        Open Now
+                    </span>
+
+                    - Closes at
+                    {{ restaurantInfo().closeTime }}:00
+
+                    } @else {
+
+                    <span class="close">
+                        Closed
+                    </span>
+
+                    - Opens at
+                    {{ restaurantInfo().openTime }}:00
+
                     }
-                    @if(!isOpenNow()){
-                    <span class="close">Closed</span>
-                    - Opens at {{this.restaurantService.restaurant?.openTime}} : 00
-                    }
+
                 </div>
-                <span class="dot">&#x2022;</span>
-                {{this.restaurantService.restaurant?.estimatedDeliveryTime}} min
-                <span class="dot">&#x2022;</span>
-                {{this.distance}}
+
+
+                <span class="dot">
+                    &#x2022;
+                </span>
+
+
+                {{ restaurantInfo().estimatedDeliveryTime }} min
+
+
+                <span class="dot">
+                    &#x2022;
+                </span>
+
+
+                {{ distance }}
+
             </div>
+
         </span>
-        <span class="price">&#x20B9;{{this.restaurantService.restaurant?.priceForTwo}} for Two</span>
+
+
+        <span class="price">
+
+            &#x20B9;{{ restaurantInfo().priceForTwo }}
+            for Two
+
+        </span>
+
+
+        @if (restaurantInfo().offer) {
+
         <span class="offer">
-            <fa-icon [icon]="faExclamationCircle"></fa-icon>
-            {{this.restaurantService.restaurant?.offer}}
+
+            <fa-icon [icon]="faExclamationCircle" />
+
+            {{ restaurantInfo().offer }}
+
         </span>
+
+        }
+
     </div>
+
 </div>

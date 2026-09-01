@@ -3,13 +3,14 @@
 .info
     display: flex
     flex-direction: column
-    gap:$space-4
-    background: $color-bg-white
+    gap: $space-4
     height: 290px
+    background: $color-bg-white
+
     h1
+        color: $color-text-primary
         font-size: $font-size-32
         font-weight: $font-weight-bold
-        color: $color-text-primary
 
     p
         color: $color-text-secondary
@@ -17,55 +18,71 @@
     .rating-container
         display: flex
         align-items: center
-        gap:$space-8
-        font-size: $font-size-16
+        gap: $space-8
+
         color: $color-text-secondary
-        .rating
-            gap:$space-4
-            background: $color-success
-            color: $color-bg-white
-            padding:$space-4$space-8
-            border-radius: $radius-4
+        font-size: $font-size-16
+
+    .rating
+        display: flex
+        align-items: center
+        gap: $space-4
+
+        padding: $space-4 $space-8
+        border-radius: $radius-4
+
+        background: $color-success
+        color: $color-bg-white
 
     .meta
         display: flex
         flex-direction: column
-        gap:$space-12
-        color: $color-text-secondary
-        font-weight: $font-weight-medium
-        font-size: $font-size-16
-        .address
-            display: flex
-            gap:$space-8
-            font-weight: $font-weight-regular
+        gap: $space-12
 
-        .time
-            display: flex
-            gap:$space-8
-            .container
-                display: flex
-                gap:$space-16
-                font-weight: $font-weight-regular
-                .status
-                    display: flex
-                    gap:$space-8
-                    font-weight: $font-weight-regular
-                    .open
-                        color: $color-success
-                        font-weight: $font-weight-semibold
-                    .close
-                        color: $color-error
-                        font-weight: $font-weight-semibold
-        .price
-            font-size: $font-size-14
-        .offer
-            display: flex
-            align-items: center
-            gap:$space-8
-            border: $border-width-2 $border-style-solid $color-border-primary
-            background: $color-bg-orange-overlay
-            padding:$space-12$space-8
-            border-radius: $radius-12
-            font-size: $font-size-16
-            color: $color-primary
-            font-weight: $font-weight-semibold
+        color: $color-text-secondary
+        font-size: $font-size-16
+        font-weight: $font-weight-regular
+
+    .address
+        display: flex
+        gap: $space-8
+
+    .time
+        display: flex
+        align-items: flex-start
+        gap: $space-8
+
+    .container
+        display: flex
+        align-items: center
+        gap: $space-16
+
+    .status
+        display: flex
+        gap: $space-8
+
+    .open
+        color: $color-success
+        font-weight: $font-weight-semibold
+
+    .close
+        color: $color-error
+        font-weight: $font-weight-semibold
+
+    .price
+        font-size: $font-size-14
+
+    .offer
+        display: flex
+        align-items: center
+        gap: $space-8
+
+        padding: $space-12 $space-8
+        border: $border-width-2 $border-style-solid $color-border-primary
+        border-radius: $radius-12
+
+        background: $color-bg-orange-overlay
+        color: $color-primary
+
+        font-size: $font-size-16
+        font-weight: $font-weight-semibold

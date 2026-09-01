@@ -1,30 +1,68 @@
-import { Component, Input } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faArrowLeft, faArrowRight
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input
+} from '@angular/core';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import {
+  faArrowLeft,
+  faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
+
 import { RestaurantService } from '../../../core/services/restaurant.service';
+
+
 @Component({
   selector: 'app-image-carousel',
+  standalone: true,
   imports: [FontAwesomeModule],
   templateUrl: './image-carousel.html',
   styleUrl: './image-carousel.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageCarousel {
-  currentIndex = 0
-  faArrowLeft = faArrowLeft;
-  faArrowRight = faArrowRight;
 
-  constructor(public restaurantService: RestaurantService
-  ) { }
+  private readonly restaurantService =
+    inject(RestaurantService);
 
-  next() {
+  readonly faArrowLeft = faArrowLeft;
+  readonly faArrowRight = faArrowRight;
+
+  currentIndex = 0;
+
+  readonly images = input<string[]>([]);
+
+
+
+  next(): void {
+
+    const total =
+      this.images().length;
+
+    if (total <= 1) {
+      return;
+    }
+
     this.currentIndex =
-      (this.currentIndex + 1) % this.restaurantService.restaurant?.images.length;
+      (this.currentIndex + 1) % total;
   }
 
-  prev() {
+
+  prev(): void {
+
+    const total =
+      this.images().length;
+
+    if (total <= 1) {
+      return;
+    }
+
     this.currentIndex =
-      (this.currentIndex - 1 + this.restaurantService.restaurant?.images.length) % this.restaurantService.restaurant?.images.length;
+      (this.currentIndex - 1 + total) % total;
   }
+
 }

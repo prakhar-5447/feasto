@@ -1,14 +1,37 @@
 <div class="carousel-wrapper">
-    <div class="container" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-        @for(img of restaurantService.restaurant?.images;track $index){
+
+    <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+
+        @for (
+        image of images();
+        track image
+        ) {
+
         <div class="carousel-slide">
+
             <div class="card">
-                <img loading="lazy" [src]="img" [alt]="img">
+
+                <img loading="lazy" [src]="image" alt="Restaurant image">
+
             </div>
+
         </div>
+
         }
+
     </div>
 
-    <button class="nav prev" (click)="prev()"><fa-icon [icon]="faArrowLeft"></fa-icon></button>
-    <button class="nav next" (click)="next()"><fa-icon [icon]="faArrowRight"></fa-icon></button>
+
+    @if (images().length > 1) {
+
+    <button type="button" class="nav prev" aria-label="Previous image" (click)="prev()">
+        <fa-icon [icon]="faArrowLeft"></fa-icon>
+    </button>
+
+    <button type="button" class="nav next" aria-label="Next image" (click)="next()">
+        <fa-icon [icon]="faArrowRight"></fa-icon>
+    </button>
+
+    }
+
 </div>
