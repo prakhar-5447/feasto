@@ -1,144 +1,322 @@
-<div class="cart-page">
-    <div class="left">
-        <div class="card">
-            <h2>
-                <fa-icon [icon]="faLocationDot"></fa-icon>
-                Delivery Address
-            </h2>
+<main class="checkout-page">
+    <div class="container">
 
-            <div class="address-list">
-                @if(savedAddresses){
-                <h4>Saved Address</h4>
+        <div class="checkout-layout">
 
-                @for(addr of savedAddresses;track addr){
-                <div (click)="selectAddress(addr.id)" [class.active]="selectedAddressId === addr.id"
-                    class="address-card">
-                    <h4>{{ addr.label }}</h4>
-                    <p>{{ addr.street }}, {{ addr.landmark }}</p>
-                    <p>{{ addr.city }} - {{ addr.pincode }}</p>
-                </div>
-                }
-                }
-                <div class="address-card new" [class.selected]="selectedAddressId==null && showNewAddressForm"
-                    (click)="newAddress()">
-                    <fa-icon [icon]="faPlus"></fa-icon> Add New Address
-                </div>
-            </div>
+            <div class="checkout-content">
 
-            @if(showNewAddressForm){<div class="form">
-                <input class="field" placeholder="Street" [(ngModel)]="address.street" />
-                <input class="field" placeholder="Landmark" [(ngModel)]="address.landmark" />
+                <!-- Delivery Address -->
+                <section class="card" aria-labelledby="address-title">
+                    <header class="card-header">
+                        <h1 id="address-title">
+                            <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>
 
-                <div class="row">
-                    <input class="field" placeholder="City" [(ngModel)]="address.city" />
-                    <input class="field" placeholder="Pincode" [(ngModel)]="address.pincode" />
-                </div>
+                            Delivery Address
+                        </h1>
+                    </header>
 
-                <label class="checkbox">
-                    <input type="checkbox" [(ngModel)]="saveAddress" />
-                    <span class="checkmark"></span>
-                    <span>Save this address</span>
-                </label>
-            </div>}
-        </div>
+                    <div class="address-list">
 
-        <div class="card payment-card">
-            <h2>Payment Method</h2>
+                        @if (savedAddresses.length) {
 
-            <label class="payment-method">
-                <input type="radio" value="online" [(ngModel)]="paymentMethod" />
+                        <h2 class="subheading">
+                            Saved Address
+                        </h2>
 
-                <div class="method-content">
-                    <div class="method-info">
-                        <span class="method-title">Online Payment (UPI)</span>
-                        <div class="payment-icons">
-                            <img src="/src/assets/images/gpay.png" alt="Google Pay" />
-                            <img src="/src/assets/images/phonepe.png" alt="PhonePe" />
+                        @for (
+                        addressItem of savedAddresses;
+                        track addressItem.id
+                        ) {
+
+                        <button type="button" class="address-card" [class.active]="
+                                        selectedAddressId === addressItem.id
+                                    " [attr.aria-pressed]="
+                                        selectedAddressId === addressItem.id
+                                    " (click)="selectAddress(addressItem.id)">
+                            <span class="address-label">
+                                {{ addressItem.label }}
+                            </span>
+
+                            <span class="address-line">
+                                {{ addressItem.street }},
+                                {{ addressItem.landmark }}
+                            </span>
+
+                            <span class="address-line">
+                                {{ addressItem.city }}
+                                -
+                                {{ addressItem.pincode }}
+                            </span>
+                        </button>
+
+                        }
+
+                        }
+
+
+                        <button type="button" class="address-card new" [class.selected]="
+                                selectedAddressId === null &&
+                                showNewAddressForm
+                            " [attr.aria-pressed]="
+                                selectedAddressId === null &&
+                                showNewAddressForm
+                            " (click)="newAddress()">
+                            <fa-icon [icon]="faPlus" aria-hidden="true"></fa-icon>
+
+                            <span>
+                                Add New Address
+                            </span>
+                        </button>
+
+                    </div>
+
+
+                    @if (showNewAddressForm) {
+
+                    <form class="address-form" (ngSubmit)="saveNewAddress()">
+
+                        <div class="form-row">
+                            <app-input id="street" name="street" label="Street" placeholder="Enter street address"
+                                [(value)]="address.street" [disabled]="savingAddress" [required]="true" />
+
+                            <app-input id="landmark" name="landmark" label="Landmark" placeholder="Nearby landmark"
+                                [(value)]="address.landmark" [disabled]="savingAddress" />
                         </div>
-                    </div>
-                    <span class="radio"></span>
-                </div>
-            </label>
-            <label class="payment-method">
-                <input type="radio" value="cod" [(ngModel)]="paymentMethod" />
 
-                <div class="method-content">
-                    <div class="method-info">
-                        <span class="method-title">Cash on Delivery</span>
-                        <span class="method-subtitle">Pay when your order arrives</span>
-                    </div>
-                    <span class="radio"></span>
-                </div>
-            </label>
-        </div>
 
-    </div>
-    <!-- BILL -->
-    <div class="billing-section">
-        <div class="bill">
-            <h3>Order Summary</h3>
-            <div class="header">
-                <span>
+                        <div class="form-row">
+
+                            <app-input id="city" name="city" label="City" placeholder="Enter city"
+                                [(value)]="address.city" [disabled]="savingAddress" [required]="true" />
+
+                            <app-input id="pincode" name="pincode" label="Pincode" type="text" inputmode="numeric"
+                                placeholder="6-digit pincode" [(value)]="address.pincode" [digitsOnly]="true"
+                                [maxlength]="6" [disabled]="savingAddress" [required]="true" />
+
+                        </div>
+
+
+                        <label class="checkbox">
+                            <input type="checkbox" name="saveAddress" [(ngModel)]="saveAddress" />
+
+                            <span class="checkmark" aria-hidden="true"></span>
+
+                            <span>
+                                Save this address
+                            </span>
+                        </label>
+
+
+                        <app-button type="submit" variant="primary" size="md" [loading]="savingAddress"
+                            [disabled]="!isAddressValid">
+                            Save Address
+                        </app-button>
+
+                    </form>
+
+                    }
+
+                </section>
+
+
+                <!-- Payment -->
+                <section class="card" aria-labelledby="payment-title">
+                    <header class="card-header">
+                        <h2 id="payment-title">
+                            Payment Method
+                        </h2>
+                    </header>
+
+
+                    <div class="payment-methods" role="radiogroup" aria-label="Payment method">
+
+                        <label class="payment-method">
+
+                            <input type="radio" name="paymentMethod" value="online" [(ngModel)]="paymentMethod" />
+
+                            <span class="method-content">
+
+                                <span class="method-info">
+
+                                    <span class="method-title">
+                                        Online Payment (UPI)
+                                    </span>
+
+                                    <span class="method-subtitle">
+                                        Pay securely using UPI
+                                    </span>
+
+                                    <span class="payment-icons">
+                                        <img src="/assets/images/gpay.png" alt="Google Pay" width="64" height="24" />
+
+                                        <img src="/assets/images/phonepe.png" alt="PhonePe" width="64" height="24" />
+                                    </span>
+
+                                </span>
+
+                                <span class="radio" aria-hidden="true"></span>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="payment-method">
+
+                            <input type="radio" name="paymentMethod" value="cod" [(ngModel)]="paymentMethod" />
+
+                            <span class="method-content">
+
+                                <span class="method-info">
+
+                                    <span class="method-title">
+                                        Cash on Delivery
+                                    </span>
+
+                                    <span class="method-subtitle">
+                                        Pay when your order arrives
+                                    </span>
+
+                                </span>
+
+                                <span class="radio" aria-hidden="true"></span>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- Order Summary -->
+            <aside class="summary-card" aria-labelledby="summary-title">
+
+                <h2 id="summary-title">
+                    Order Summary
+                </h2>
+
+
+                <p class="restaurant-name">
                     {{ restaurantService.restaurant?.name }}
-                </span>
-            </div>
-            <div class="divider">
-                @for(item of cart; track item.food._id){
-                <div class="row">
-                    <span>{{ item.name }} x {{ item.quantity }}</span>
-                    <span>₹{{ item.price * item.quantity }}</span>
-                </div>
-                }
-            </div>
-            @if(appliedCoupon)
-            { <div class="row">
-                <div class="applied">
-                    <div class="info">
-                        <div class="code">{{ appliedCoupon.code }}</div>
-                        <div class="desc">{{appliedCoupon.description}}</div>
+                </p>
+
+
+                <div class="items">
+
+                    @for (
+                    item of cart;
+                    track item.food._id
+                    ) {
+
+                    <div class="summary-row">
+
+                        <span>
+                            {{ item.name }}
+                            ×
+                            {{ item.quantity }}
+                        </span>
+
+                        <span>
+                            ₹{{ item.price * item.quantity }}
+                        </span>
+
                     </div>
+
+                    }
+
                 </div>
-            </div>}
-            <div class="row">
-                <span>Item Total</span>
-                <span>₹{{ summary.itemTotal }}</span>
-            </div>
-            <div class="row">
-                <span>Delivery Fee</span>
-                <span>₹{{ summary.deliveryFee }}</span>
-            </div>
-            <div class="row">
-                <span>Platform Fee</span>
-                <span>₹{{ summary.platformFee }}</span>
-            </div>
-            <div class="row">
-                <span>GST ({{summary.gstRate}}%)</span>
-                <span>₹{{ summary.gst }}</span>
-            </div>
-            <!-- ✅ Discount -->
-            @if(summary.discount>0){
-            <div class="row discount">
-                <span><fa-icon [icon]="faTag"></fa-icon> Discount</span>
-                <span>-₹{{ summary.discount }}</span>
-            </div>
-            }
 
-            <div class="total">
-                <span>Total</span>
-                <span>₹{{ summary.grandTotal }}</span>
-            </div>
 
-            <!-- ✅ Savings Message -->
-            @if(summary.discount>0){
-            <div class="savings">
-                You saved ₹{{ summary.discount }} on this order!
-            </div>
-            }
-            <button class="checkout" (click)="payment()">
-                Place Order<span>
-                    (₹{{ summary.grandTotal }})
-                </span>
-            </button>
+                @if (appliedCoupon) {
+
+                <div class="coupon">
+
+                    <span class="coupon-code">
+                        {{ appliedCoupon.code }}
+                    </span>
+
+                    <span class="coupon-description">
+                        {{ appliedCoupon.description }}
+                    </span>
+
+                </div>
+
+                }
+
+
+                <div class="summary-row">
+                    <span>Item Total</span>
+                    <span>₹{{ summary.itemTotal }}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Delivery Fee</span>
+                    <span>₹{{ summary.deliveryFee }}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Platform Fee</span>
+                    <span>₹{{ summary.platformFee }}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>GST ({{ summary.gstRate }}%)</span>
+                    <span>₹{{ summary.gst }}</span>
+                </div>
+
+
+                @if (summary.discount > 0) {
+
+                <div class="summary-row discount">
+
+                    <span>
+                        <fa-icon [icon]="faTag" aria-hidden="true"></fa-icon>
+
+                        Discount
+                    </span>
+
+                    <span>
+                        -₹{{ summary.discount }}
+                    </span>
+
+                </div>
+
+                }
+
+
+                <div class="grand-total">
+                    <span>Total</span>
+                    <strong>
+                        ₹{{ summary.grandTotal }}
+                    </strong>
+                </div>
+
+
+                @if (summary.discount > 0) {
+
+                <p class="savings">
+                    You saved ₹{{ summary.discount }}
+                    on this order!
+                </p>
+
+                }
+
+
+                <app-button type="button" variant="primary" size="lg" [fullWidth]="true" [loading]="placingOrder"
+                    [disabled]="!canPlaceOrder" (clicked)="placeOrder()">
+                    Place Order
+                    <span>
+                        (₹{{ summary.grandTotal }})
+                    </span>
+                </app-button>
+
+            </aside>
+
         </div>
+
     </div>
-</div>
+</main>

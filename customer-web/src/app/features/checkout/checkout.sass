@@ -1,324 +1,404 @@
 @use '../../../styles/index' as *
 
-.cart-page
+.checkout-page
     min-height: 100vh
-    padding:$space-8$space-16
-    max-width: 1200px
-    margin: 0 auto
-    display: flex
-    gap:$space-20
+    padding: $space-24 0 $space-48
 
-    .left
+    background: $color-bg-light
+
+    .container
+        width: 100%
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
+
+    .checkout-layout
+        display: grid
+        grid-template-columns: 1fr
+        gap: $space-24
+
+    .checkout-content
         display: flex
         flex-direction: column
-        flex: 3
+        gap: $space-24
 
-        .card
-            background: white
-            padding:$space-16
-            border-radius: $radius-8
+.card,
+.summary-card
+    border-radius: $radius-12
+    background: $color-bg-white
+    box-shadow: $shadow-sm
+
+.card
+    padding: $space-24
+
+.card-header
+    margin-bottom: $space-20
+
+    h1,
+    h2
+        display: flex
+        align-items: center
+        gap: $space-8
+
+        margin: 0
+
+        color: $color-text-primary
+        font-size: $font-size-20
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+
+        fa-icon
+            color: $color-primary
+            font-size: $font-size-18
+
+.subheading
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.address-list
+    display: flex
+    flex-direction: column
+    gap: $space-8
+
+.address-card
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    gap: $space-4
+
+    width: 100%
+    padding: $space-16
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-8
+
+    background: $color-bg-white
+
+    color: $color-text-primary
+    text-align: left
+
+    cursor: pointer
+
+    transition: $transition-background, $transition-border, $transition-color, $transition-shadow
+
+    &:hover
+        border-color: $color-primary
+        background: $color-bg-orange-soft
+
+    &:focus-visible
+        outline: none
+        box-shadow: $shadow-focus
+
+    &.active,
+    &.selected
+        border-color: $color-primary
+        background: $color-primary
+        color: $color-text-white
+
+        .address-line
+            color: $color-text-white
+
+    &.new
+        flex-direction: row
+        align-items: center
+
+        color: $color-primary
+        font-weight: $font-weight-medium
+
+.address-label
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold
+
+.address-line
+    color: $color-text-secondary
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+.address-form
+    display: flex
+    flex-direction: column
+    gap: $space-16
+
+    margin-top: $space-20
+    padding-top: $space-20
+
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+.form-row
+    display: grid
+    grid-template-columns: 1fr
+    gap: $space-16
+
+.checkbox
+    display: inline-flex
+    align-items: center
+    gap: $space-8
+
+    width: fit-content
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+    cursor: pointer
+    user-select: none
+
+    input
+        position: absolute
+        width: 1px
+        height: 1px
+        opacity: 0
+        pointer-events: none
+
+    .checkmark
+        position: relative
+
+        width: $space-16
+        height: $space-16
+
+        border: $border-width-2 $border-style-solid $color-border
+        border-radius: $radius-4
+        background: $color-bg-white
+
+        transition: $transition-background, $transition-border
+
+    input:checked + .checkmark
+        border-color: $color-primary
+        background: $color-primary
+
+    input:checked + .checkmark::after
+        position: absolute
+        top: $space-2
+        left: $space-8
+
+        width: $space-4
+        height: $space-8
+
+        content: ''
+
+        border:
+            right: $border-width-2 solid $color-text-white
+            bottom: $border-width-2 solid $color-text-white
+
+        transform: rotate(45deg)
+
+    &:focus-within .checkmark
+        box-shadow: $shadow-focus
+
+.payment-methods
+    display: flex
+    flex-direction: column
+    gap: $space-12
+
+.payment-method
+    display: block
+
+    cursor: pointer
+
+.payment-method > input
+    position: absolute
+
+    width: 1px
+    height: 1px
+
+    opacity: 0
+    pointer-events: none
+
+.method-content
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    padding: $space-16
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+
+    background: $color-bg-white
+
+    transition: $transition-background, $transition-border, $transition-shadow
+
+.payment-method:hover .method-content
+    border-color: $color-primary
+    box-shadow: $shadow-sm
+
+.payment-method > input:focus-visible + .method-content
+    outline: none
+    box-shadow: $shadow-focus
+
+.payment-method > input:checked + .method-content
+    border-color: $color-primary
+    background: $color-bg-orange-soft
+
+.method-info
+    display: flex
+    flex-direction: column
+    gap: $space-4
+
+.method-title
+    color: $color-text-primary
+    font-size: $font-size-16
+    font-weight: $font-weight-medium
+
+.method-subtitle
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+.payment-icons
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    margin-top: $space-4
+
+    img
+        display: block
+        width: auto
+        height: $space-24
+        object-fit: contain
+
+.radio
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-20
+    height: $space-20
+    flex-shrink: 0
+
+    border: $border-width-2 $border-style-solid $color-border
+    border-radius: $radius-circle
+
+.payment-method > input:checked + .method-content .radio
+    border-color: $color-primary
+
+.payment-method > input:checked + .method-content .radio::after
+    width: $space-8
+    height: $space-8
+
+    content: ''
+
+    border-radius: $radius-circle
+    background: $color-primary
+
+.summary-card
+    align-self: start
+
+    padding: $space-24
+
+.summary-card h2
+    margin: 0 0 $space-12
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-semibold
+    line-height: $line-height-tight
+
+.restaurant-name
+    margin: 0 0 $space-16
+
+    color: $color-text-primary
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold
+
+.items
+    margin-bottom: $space-16
+    padding-bottom: $space-16
+
+    border-bottom: $border-width-1 $border-style-solid $color-border-light
+
+.summary-row
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    margin-bottom: $space-8
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+    &:last-child
+        margin-bottom: 0
+
+.coupon
+    display: flex
+    flex-direction: column
+    gap: $space-4
+
+    margin-bottom: $space-16
+    padding: $space-12
+
+    border: $border-width-1 $border-style-solid $color-success
+    border-radius: $radius-8
+
+    background: $color-bg-green-overlay
+
+.coupon-code
+    color: $color-success
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold
+
+.coupon-description
+    color: $color-text-secondary
+    font-size: $font-size-12
+
+.discount
+    color: $color-success
+    font-weight: $font-weight-medium
+
+.grand-total
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    margin-top: $space-16
+    padding-top: $space-16
+
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+    color: $color-text-primary
+    font-size: $font-size-18
+    font-weight: $font-weight-semibold
+
+.savings
+    margin: $space-8 0 $space-20
+
+    color: $color-success
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+@media (min-width: $breakpoint-md)
+    .checkout-page
+        .checkout-layout
+            grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr)
+
+        .form-row
+            grid-template-columns: repeat(2, 1fr)
+
+@media (min-width: $breakpoint-lg)
+    .checkout-page
+        .checkout-layout
+            grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr)
+
+@media (max-width: $breakpoint-xs)
+    .checkout-page
+        padding-top: $space-16
+
+        .container
+            padding: 0 $space-12
+
+        .card,
+        .summary-card
+            padding: $space-16
+
+        .card-header
+            margin-bottom: $space-16
+
+            h1,
             h2
                 font-size: $font-size-18
-                font-weight: $font-weight-semibold
-                margin-bottom:$space-12
-                fa-icon
-                    font-size: $font-size-18
-
-            h4
-                font-size: $font-size-16
-                font-weight: $font-weight-regular
-            .address-list
-                display: flex
-                flex-direction: column
-                gap:$space-8
-
-                .address-card
-                    border: $border-width-1 $border-style-solid #ddd
-                    border-radius: $radius-8
-                    padding:$space-12
-                    cursor: pointer
-                    font-weight: $font-weight-medium
-                    h4
-                        font-weight: $font-weight-semibold
-                        font-size: $font-size-16
-                        margin-bottom:$space-4
-                    p
-                        font-size: $font-size-14
-                        line-height: $line-height-tight
-                        color: $color-text-secondary
-                    &.active
-                        border-color: $color-primary
-                        background: $color-primary
-                        color: $color-bg-white
-                        p
-                            color: $color-bg-white
-
-                    &.new
-                        font-weight: $font-weight-medium
-                        fa-icon
-                            margin-right:$space-8
-                            color: $color-primary
-
-                        &:hover
-                            background-color: $color-primary
-                            color: $color-bg-white
-                            fa-icon
-                                color: $color-bg-white
-                        &.selected
-                            background-color: $color-primary
-                            color: $color-bg-white
-                            fa-icon
-                                color: $color-bg-white
-            .form
-                border-radius: $radius-8
-                padding:$space-8 0px
-                .field
-                    font-weight: $font-weight-regular
-                    border: $border-width-2 $border-style-solid $color-primary
-                    outline: none
-                    border-radius: $radius-8
-                    padding:$space-12$space-12
-                    width: 100%
-                    margin-bottom:$space-8
-                .row
-                    display: flex
-                    gap:$space-8
-                input::placeholder
-                    color: $color-text-secondary
-                .checkbox
-                    display: inline-flex
-                    align-items: center
-                    gap:$space-8
-                    cursor: pointer
-                    user-select: none
-                    font-size: $font-size-14
-                    color: $color-text-secondary
-
-                    input
-                        display: none
-
-                    .checkmark
-                        width:$space-16
-                        height:$space-16
-                        border: $border-width-2 $border-style-solid $color-border
-                        border-radius: $radius-4
-                        background: $color-bg-white
-                        position: relative
-                        transition: .2s ease
-
-                    input:checked + .checkmark
-                        background: $color-primary
-                        border-color: $color-primary
-
-                    input:checked + .checkmark::after
-                        content: ''
-                        position: absolute
-                        left: 5px
-                        top: $border-width-1
-                        width:$space-4
-                        height: 9px
-                        border: $border-style-solid $color-bg-white
-                        border-width: 0 $border-width-2 $border-width-2 0
-                        transform: rotate(45deg)
-
-                    &:hover .checkmark
-                        border-color: $color-primary
-
-    .payment-card
-        display: flex
-        flex-direction: column
-        gap:$space-16
-
-        .payment-method
-            cursor: pointer
-            input[type="radio"]
-                display: none
-
-            input
-                display: none
-
-            .method-content
-                display: flex
-                justify-content: space-between
-                align-items: center
-                padding:$space-16$space-16
-                border: $border-width-1-5 $border-style-solid $color-border-light
-                border-radius: $radius-12
-                transition: .25s ease
-                background: $color-bg-white
-                .radio
-                    width:$space-20
-                    height:$space-20
-                    border-radius: $radius-circle
-                    border: $border-width-2 $border-style-solid $color-border
-                    position: relative
-                    transition: .2s
-                .method-info
-                    display: flex
-                    flex-direction: column
-                    gap:$space-4
-
-                    .method-title
-                        font-size: $font-size-16
-                        font-weight: $font-weight-medium
-                        color: $color-text-primary
-                    .method-subtitle
-                        font-size: $font-size-14
-                        color: $color-text-secondary
-                    .payment-icons
-                        display: none
-                        align-items: center
-                        gap:$space-12
-                        margin-top:$space-8
-
-                        img
-                            height:$space-24
-                            width: auto
-                            object-fit: contain
-                            background: none
-            &:hover .method-content
-                border-color: $color-primary
-                box-shadow: $shadow-sm
-
-            input:checked + .method-content
-                border-color: $color-primary
-                background: rgba(255,107,107,.06)
-                .method-info
-                    .payment-icons
-                        display: flex
-
-        .payment-method input:checked + .method-content .radio
-            border-color: $color-primary
-
-        .payment-method input:checked + .method-content .radio::after
-            content: ''
-            position: absolute
-            width:$space-8
-            height:$space-8
-            border-radius: $radius-circle
-            background: $color-primary
-            top: 50%
-            left: 50%
-            transform: translate(-50%, -50%)
-
-        .payment-options
-            display: flex
-            gap:$space-8
-            margin: -4px 0$space-8 0
-            flex-wrap: wrap
-
-            button
-                padding:$space-8$space-16
-                border: $border-width-1 $border-style-solid $color-border-light
-                background: $color-bg-white
-                border-radius: $radius-pill
-                cursor: pointer
-                transition: .25s
-                font-size: $font-size-14
-                font-weight: $font-weight-medium
-
-                &:hover
-                    border-color: $color-primary
-                    color: $color-primary
-
-                &.active
-                    background: $color-primary
-                    border-color: $color-primary
-                    color: $color-bg-white
-
-    .billing-section
-        flex: 2
-        height: 100%
-        .bill
-            height: auto
-            background: $color-bg-white
-            padding:$space-20
-            border-radius: $radius-8
-            box-shadow: $shadow-sm
-            margin-bottom:$space-24
-
-            h3
-                font-weight: $font-weight-semibold
-                margin-bottom:$space-8
-                font-size: $font-size-24
-            .header
-                margin-bottom:$space-12
-                span
-                    font-weight: $font-weight-semibold
-                    font-size: $font-size-16
-            .divider
-                border-bottom: $border-width-1 $border-style-solid $color-border-light
-                margin-bottom:$space-16
-                padding-bottom:$space-16
-
-            .row
-                display: flex
-                justify-content: space-between
-                margin-bottom:$space-2
-                font-size: $font-size-14
-                font-weight: $font-weight-regular
-                color: $color-text-secondary
-                &.divider
-                    border-bottom: $border-width-1 $border-style-solid $color-border-light
-                    margin-bottom:$space-16
-                    padding-bottom:$space-16
-
-                &.discount
-                    color: $color-success
-                    font-weight: $font-weight-medium
-                    font-size: $font-size-14
-                    fa-icon
-                        font-size: $font-size-14
-
-                .applied
-                    display: flex
-                    justify-content: space-between
-                    width: 100%
-
-                    border-bottom: $border-width-1 $border-style-solid $color-border-light
-                    margin-bottom:$space-16
-                    padding-bottom:$space-16
-                    .info
-                        background: $color-bg-green-overlay
-                        border: $border-width-1 $border-style-solid $color-success
-                        padding:$space-8
-                        border-radius: $radius-8
-                        width: 100%
-                        .code
-                            color: $color-success
-                            font-size: $font-size-16
-                            font-weight: $font-weight-semibold
-
-                        .desc
-                            font-size: $font-size-12
-                            font-weight: $font-weight-medium
-                            color: $color-text-secondary
-
-            .total
-                display: flex
-                justify-content: space-between
-                font-weight: bold
-                font-size: $font-size-18
-                margin-top:$space-16
-                border-top: $border-width-1 $border-style-solid $color-border-light
-                padding-top:$space-12
-                font-weight: $font-weight-semibold
-
-            .savings
-                margin-top:$space-8
-                font-size: $font-size-14
-                color: $color-success
-                font-weight: $font-weight-medium
-            .checkout
-                width: 100%
-                margin-top:$space-20
-                padding:$space-12
-                background: $color-primary
-                color: $color-bg-white
-                border-radius: $radius-4
-                font-size: $font-size-18
-                border: $border-style-none
-                font-weight: $font-weight-semibold
-                cursor: pointer
-                span
-                    font-size: $font-size-16

@@ -1,22 +1,43 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject
+} from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RestaurantService } from '../../core/services/restaurant.service';
-import { CartService } from '../../core/services/cart.service';
-import { LocationServicePersistence } from '../../core/services/location.service';
+
+import {
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  finalize
+} from 'rxjs';
+
+import {
+  Router
+} from '@angular/router';
+
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
-  faTrashCan
-} from '@fortawesome/free-regular-svg-icons';
-
-import {
-  faMinus,
+  faLocationDot,
   faPlus,
-  faTag,
-  faLocationDot
+  faTag
 } from '@fortawesome/free-solid-svg-icons';
-import { HttpClient } from '@angular/common/http';
+
+import { Button } from '../../shared/components/button/button';
+import { Input } from '../../shared/components/input/input';
+
+import { CartService } from '../../core/services/cart.service';
+import { LocationServicePersistence } from '../../core/services/location.service';
+import { RestaurantService } from '../../core/services/restaurant.service';
+
 
 interface Address {
   id: string;
@@ -27,27 +48,77 @@ interface Address {
   pincode: string;
 }
 
+
+interface NewAddress {
+  street: string;
+  landmark: string;
+  city: string;
+  pincode: string;
+}
+
+
+interface CartItem {
+  name: string;
+  quantity: number;
+  price: number;
+  food: {
+    _id: string;
+  };
+}
+
+
+interface Coupon {
+  code: string;
+  description: string;
+}
+
+
+interface OrderSummary {
+  itemTotal: number;
+  discount: number;
+  deliveryFee: number;
+  platformFee: number;
+  gst: number;
+  gstRate: number;
+  grandTotal: number;
+  coupon?: Coupon;
+}
+
+
+interface CartSummaryResponse {
+  data: OrderSummary;
+}
+
+
+interface CreateOrderResponse {
+  data: {
+    _id: string;
+  };
+}
+
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
   imports: [
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    Button,
+    Input
   ],
   templateUrl: './checkout.html',
-  styleUrl: './checkout.sass'
+  styleUrl: './checkout.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Checkout {
 
-  faTrashCan = faTrashCan;
-  faMinus = faMinus;
-  faPlus = faPlus;
-  faTag = faTag;
-  faLocationDot = faLocationDot;
+  readonly faPlus = faPlus;
+  readonly faTag = faTag;
+  readonly faLocationDot = faLocationDot;
 
-  cart: any[] = [];
+  readonly cart: CartItem[] = [];
 
-  summary: any = {
+  summary: OrderSummary = {
     itemTotal: 0,
     discount: 0,
     deliveryFee: 0,
@@ -57,50 +128,25 @@ export class Checkout {
     grandTotal: 0
   };
 
-  paymentMethod = '';
+  paymentMethod: 'online' | 'cod' | '' = '';
 
   selectedAddressId: string | null = null;
 
   showNewAddressForm = false;
-
   saveAddress = false;
 
-  address = {
+  savingAddress = false;
+  placingOrder = false;
+
+  address: NewAddress = {
     street: '',
     landmark: '',
     city: '',
     pincode: ''
   };
 
-  constructor(
-    public cartService: CartService,
-    public restaurantService: RestaurantService,
-    public locationService: LocationServicePersistence,
-    private cdr: ChangeDetectorRef,
-    private router: Router,
-    private http: HttpClient
-  ) { }
 
-  ngOnInit() {
-    this.loadSummary();
-  }
-
-  loadSummary() {
-    this.cartService
-      .getCartSummary()
-      .subscribe({
-        next: (res: any) => {
-          this.summary = res.data;
-          this.cdr.detectChanges()
-        }
-      });
-  }
-
-  get appliedCoupon() {
-    return this.summary?.coupon;
-  }
-
-  savedAddresses: Address[] = [
+  readonly savedAddresses: Address[] = [
     {
       id: '1',
       label: 'Home',
@@ -111,32 +157,114 @@ export class Checkout {
     }
   ];
 
-  selectAddress(id: string) {
+
+  private readonly cartService =
+    inject(CartService);
+
+  readonly restaurantService =
+    inject(RestaurantService);
+
+  private readonly locationService =
+    inject(LocationServicePersistence);
+
+  private readonly http =
+    inject(HttpClient);
+
+  private readonly router =
+    inject(Router);
+
+  private readonly destroyRef =
+    inject(DestroyRef);
+
+
+  ngOnInit(): void {
+    this.loadSummary();
+  }
+
+
+  get appliedCoupon(): Coupon | undefined {
+    return this.summary.coupon;
+  }
+
+
+  get isAddressValid(): boolean {
+
+    return (
+      this.address.street.trim().length > 0 &&
+      this.address.city.trim().length > 0 &&
+      /^\d{6}$/.test(
+        this.address.pincode
+      )
+    );
+  }
+
+
+  get canPlaceOrder(): boolean {
+
+    return (
+      this.isAddressValid &&
+      !!this.paymentMethod &&
+      !!this.restaurantService.restaurant &&
+      !this.placingOrder
+    );
+  }
+
+
+  private loadSummary(): void {
+
+    this.cartService
+      .getCartSummary()
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.summary = response.data;
+        },
+
+        error: () => {
+          this.summary = {
+            itemTotal: 0,
+            discount: 0,
+            deliveryFee: 0,
+            platformFee: 0,
+            gst: 0,
+            gstRate: 0,
+            grandTotal: 0
+          };
+        }
+      });
+  }
+
+
+  selectAddress(id: string): void {
 
     this.selectedAddressId = id;
+    this.showNewAddressForm = false;
 
     const selected =
       this.savedAddresses.find(
-        a => a.id === id
+        address => address.id === id
       );
 
-    if (selected) {
-
-      this.address = {
-        street: selected.street,
-        landmark: selected.landmark,
-        city: selected.city,
-        pincode: selected.pincode
-      };
+    if (!selected) {
+      return;
     }
 
-    this.showNewAddressForm = false;
+    this.address = {
+      street: selected.street,
+      landmark: selected.landmark,
+      city: selected.city,
+      pincode: selected.pincode
+    };
   }
 
-  newAddress() {
+
+  newAddress(): void {
 
     this.selectedAddressId = null;
-
     this.showNewAddressForm = true;
 
     this.address = {
@@ -147,46 +275,87 @@ export class Checkout {
     };
   }
 
-  payment() {
 
-    if (
-      !this.address.street ||
-      !this.address.city ||
-      !this.address.pincode
-    ) {
-      alert('Please select delivery address');
+  saveNewAddress(): void {
+
+    if (!this.isAddressValid) {
       return;
     }
 
-    if (!this.paymentMethod) {
-      alert('Please select payment method');
+    // Replace with your address API later.
+    this.selectedAddressId = null;
+    this.showNewAddressForm = false;
+  }
+
+
+  placeOrder(): void {
+
+    if (!this.canPlaceOrder) {
       return;
     }
 
-    this.http.post(
-      '/api/v1/orders',
-      {
-        deliveryAddress: {
-          fullAddress:
-            `${this.address.street}, ${this.address.landmark}, ${this.address.city} - ${this.address.pincode}`,
-          lat: 33.65,
-          lng: 33.45
-        }
-      }
-    ).subscribe({
-      next: (res: any) => {
-        this.router.navigate([
-          '/india',
-          this.locationService.getCity(),
-          'r',
-          this.restaurantService.restaurant.slug,
-          'payment'
-        ], {
-          queryParams: {
-            orderId: res.data._id
+    const restaurant =
+      this.restaurantService.restaurant;
+
+    if (!restaurant) {
+      return;
+    }
+
+    this.placingOrder = true;
+
+    this.http
+      .post<CreateOrderResponse>(
+        '/api/v1/orders',
+        {
+          restaurantId: restaurant._id,
+
+          paymentMethod:
+            this.paymentMethod,
+
+          deliveryAddress: {
+            street:
+              this.address.street.trim(),
+
+            landmark:
+              this.address.landmark.trim(),
+
+            city:
+              this.address.city.trim(),
+
+            pincode:
+              this.address.pincode
           }
-        });
-      }
-    });
+        }
+      )
+      .pipe(
+        finalize(() => {
+          this.placingOrder = false;
+        }),
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: response => {
+
+          const city =
+            this.locationService
+              .getCity();
+
+          this.router.navigate(
+            ['/india', 'r',
+              restaurant.slug,
+              'payment'
+            ],
+            {
+              queryParams: {
+                city,
+                orderId:
+                  response.data._id
+              }
+            }
+          );
+        }
+      });
   }
 }
