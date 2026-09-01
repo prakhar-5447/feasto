@@ -1,53 +1,222 @@
-<div class="cart-page">
-    <!-- EMPTY CART -->
-    @if(!loading){
-    @if(cart.length === 0){
+<main class="cart-page">
 
-    <div class="empty-cart">
-        <h2>Your cart is empty</h2>
-        <p>Add items to get started</p>
-        <button (click)="goBack()">Browse Restaurants</button>
-    </div>
-    }@else {
-    <!-- Items -->
-    <div class="items">
-        <h2>{{ restaurantName }}</h2>
-        @for(item of cart; track item.food._id){
-        <div class="item">
-            <img [src]="item.food.image" [alt]="item.food.name" />
+    <div class="container">
 
-            <div class="details">
-                <h3>{{ item.food.name }}</h3>
-                <p>₹{{ item.food.price }}</p>
-            </div>
+        @if (loading()) {
 
-            <div class="actions">
+        <div class="cart-loading" aria-live="polite" aria-label="Loading cart">
+            <span class="skeleton cart-skeleton-title"></span>
+            <span class="skeleton cart-skeleton-item"></span>
+            <span class="skeleton cart-skeleton-item"></span>
+        </div>
 
-                <div class="qty-box">
+        } @else if (cart().length === 0) {
 
-                    <button class="btn" (click)="updateQuantity(
-                            item.food._id,
-                            item.quantity - 1
-                        )">
-                        <fa-icon [icon]="faMinus"></fa-icon>
-                    </button>
+        <section class="empty-cart">
 
-                    <span>{{ item.quantity }}</span>
+            <h1>
+                Your cart is empty
+            </h1>
 
-                    <button class="btn" (click)="updateQuantity(
-                            item.food._id,
-                            item.quantity + 1
-                        )">
-                        <fa-icon [icon]="faPlus"></fa-icon>
-                    </button>
+            <p>
+                Add items to get started
+            </p>
+
+            <app-button variant="primary" size="md" (clicked)="browseRestaurants()">
+                Browse Restaurants
+            </app-button>
+
+        </section>
+
+        } @else {
+
+        <div class="cart-layout">
+
+            <!-- Cart Items -->
+
+            <section class="items" aria-labelledby="cart-title">
+
+                <header class="section-header">
+
+                    <h1 id="cart-title">
+                        {{ restaurantName }}
+                    </h1>
+
+                    @if (itemCount) {
+                    <p>
+                        {{ itemCount }} items
+                    </p>
+                    }
+
+                </header>
+
+
+                <div class="cart-items">
+
+                    @for (
+                    item of cart();
+                    track item.food._id
+                    ) {
+
+                    <article class="item">
+
+                        <img [src]="item.food.image" [alt]="item.food.name" width="80" height="80" loading="lazy"
+                            decoding="async" />
+
+
+                        <div class="details">
+
+                            <h2>
+                                {{ item.food.name }}
+                            </h2>
+
+                            <p>
+                                ₹{{ item.food.price }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <div class="qty-box" aria-label="Quantity">
+
+                                <app-button variant="icon" size="sm" [disabled]="
+                                                updatingItemId() === item.food._id ||
+                                                item.quantity <= 1
+                                            " [icon]="faMinus" ariaLabel="Decrease quantity" (clicked)="updateQuantity(
+                                                item.food._id,
+                                                item.quantity - 1
+                                            )"></app-button>
+
+
+                                <span class="quantity" aria-live="polite">
+                                    {{ item.quantity }}
+                                </span>
+
+
+                                <app-button variant="icon" size="sm" [disabled]="
+                                                updatingItemId() === item.food._id
+                                            " [icon]="faPlus" ariaLabel="Increase quantity" (clicked)="updateQuantity(
+                                                item.food._id,
+                                                item.quantity + 1
+                                            )"></app-button>
+
+                            </div>
+
+
+                            <app-button variant="text" size="sm" weight="medium" tone="muted" [loading]="
+                                            removingItemId() === item.food._id
+                                        " ariaLabel="Remove item" (clicked)="removeItem(
+                                            item.food._id
+                                        )">
+                                Remove
+                            </app-button>
+
+                        </div>
+
+                    </article>
+
+                    }
 
                 </div>
 
-                <button class="remove" (click)="removeItem(item.food._id)">
-                    <fa-icon [icon]="faTrashCan"></fa-icon>
-                </button>
+            </section>
 
-            </div>
+
+            <!-- Billing -->
+
+            <aside class="billing-section" aria-labelledby="bill-title">
+
+                <section class="bill">
+
+                    <h2 id="bill-title">
+                        Bill Details
+                    </h2>
+
+
+                    <div class="bill-rows">
+
+                        <div class="row">
+                            <span>Item Total</span>
+                            <span>₹{{ itemTotal }}</span>
+                        </div>
+
+                        <div class="row">
+                            <span>Delivery Fee</span>
+                            <span>₹{{ deliveryFee }}</span>
+                        </div>
+
+                        <div class="row">
+                            <span>Platform Fee</span>
+                            <span>₹{{ platformFee }}</span>
+                        </div>
+
+                        <div class="row">
+                            <span>
+                                GST ({{ gstRate * 100 }}%)
+                            </span>
+
+                            <span>
+                                ₹{{ gst }}
+                            </span>
+                        </div>
+
+
+                        @if (discount > 0) {
+
+                        <div class="row discount">
+
+                            <span>
+                                <fa-icon [icon]="faTag" aria-hidden="true"></fa-icon>
+
+                                Discount
+                            </span>
+
+                            <span>
+                                -₹{{ discount }}
+                            </span>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+
+                    <div class="total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ₹{{ finalTotal }}
+                        </strong>
+
+                    </div>
+
+
+                    @if (discount > 0) {
+
+                    <p class="savings">
+                        You saved ₹{{ discount }}
+                        on this order!
+                    </p>
+
+                    }
+
+
+                    <app-button variant="primary" size="lg" [fullWidth]="true" (clicked)="checkout()">
+                        Proceed to Checkout
+                    </app-button>
+
+                </section>
+
+
+                <app-coupons></app-coupons>
+
+            </aside>
 
         </div>
 
@@ -55,64 +224,4 @@
 
     </div>
 
-    <!-- BILL -->
-    <div class="billing-section">
-
-        <div class="bill">
-
-            <h3>Bill Details</h3>
-
-            <div class="row">
-                <span>Item Total</span>
-                <span>₹{{ itemTotal }}</span>
-            </div>
-
-            <div class="row">
-                <span>Delivery Fee</span>
-                <span>₹{{ deliveryFee }}</span>
-            </div>
-
-            <div class="row">
-                <span>Platform Fee</span>
-                <span>₹{{ platformFee }}</span>
-            </div>
-
-            <div class="row">
-                <span>GST ({{ gstRate * 100 }}%)</span>
-                <span>₹{{ gst }}</span>
-            </div>
-
-            @if(discount > 0){
-            <div class="row discount">
-                <span>
-                    <fa-icon [icon]="faTag"></fa-icon>
-                    Discount
-                </span>
-                <span>-₹{{ discount }}</span>
-            </div>
-            }
-
-            <div class="total">
-                <span>Total</span>
-                <span>₹{{ finalTotal }}</span>
-            </div>
-
-            @if(discount > 0){
-            <div class="savings">
-                You saved ₹{{ discount }} on this order!
-            </div>
-            }
-
-            <button class="checkout" (click)="checkout()">
-                Proceed to Checkout
-            </button>
-
-        </div>
-
-        <app-coupons></app-coupons>
-
-    </div>
-
-    }}
-
-</div>
+</main>

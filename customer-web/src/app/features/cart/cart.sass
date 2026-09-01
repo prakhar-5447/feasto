@@ -2,145 +2,250 @@
 
 .cart-page
     min-height: 100vh
-    padding:$space-8$space-16
-    max-width: 1200px
-    margin: 0 auto
-    display: flex
-    gap:$space-20
+    padding: $space-24 0 $space-48
 
+    background: $color-bg-light
+
+    .container
+        width: 100%
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
+
+.cart-layout
+    display: grid
+    grid-template-columns: 1fr
+    gap: $space-24
+
+.items,
+.bill
+    border-radius: $radius-12
+    background: $color-bg-white
+    box-shadow: $shadow-sm
+
+.items
+    padding: $space-20
+
+.section-header
+    margin-bottom: $space-20
+
+    h1
+        margin: 0
+
+        color: $color-text-primary
+        font-size: $font-size-20
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+
+    p
+        margin: $space-4 0 0
+
+        color: $color-text-muted
+        font-size: $font-size-14
+
+.cart-items
+    display: flex
+    flex-direction: column
+
+.item
+    display: grid
+    grid-template-columns: auto minmax(0, 1fr) auto
+    align-items: center
+    gap: $space-16
+
+    padding: $space-16 0
+
+    &:not(:last-child)
+        border-bottom: $border-width-1 $border-style-solid $color-border-light
+
+    img
+        display: block
+
+        width: $space-80
+        height: $space-80
+
+        border-radius: $radius-8
+        object-fit: cover
+
+.details
+    min-width: 0
+
+    h2
+        overflow: hidden
+
+        margin: 0 0 $space-4
+
+        color: $color-text-primary
+        font-size: $font-size-18
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    p
+        margin: 0
+
+        color: $color-text-secondary
+        font-size: $font-size-16
+        font-weight: $font-weight-medium
+
+.actions
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    gap: $space-8
+
+.qty-box
+    display: inline-flex
+    align-items: center
+    gap: $space-4
+
+    min-height: $space-40
+    padding: $space-4
+
+    border: $border-width-1 $border-style-solid $color-primary
+    border-radius: $radius-8
+
+.quantity
+    min-width: $space-24
+
+    color: $color-text-primary
+    font-size: $font-size-16
+    font-weight: $font-weight-medium
+    text-align: center
+
+.billing-section
+    display: flex
+    flex-direction: column
+    gap: $space-24
+
+    align-self: start
+
+.bill
+    padding: $space-20
+
+    h2
+        margin: 0 0 $space-16
+
+        color: $color-text-primary
+        font-size: $font-size-24
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+
+.bill-rows
+    display: flex
+    flex-direction: column
+    gap: $space-8
+
+.row
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+    &.discount
+        color: $color-success
+        font-weight: $font-weight-medium
+
+        fa-icon
+            margin-right: $space-4
+
+.total
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    margin-top: $space-16
+    margin-bottom: $space-12
+    padding-top: $space-12
+
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+    color: $color-text-primary
+    font-size: $font-size-18
+    font-weight: $font-weight-semibold
+
+.savings
+    margin: $space-8 0 $space-20
+
+    color: $color-success
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+.empty-cart
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+    min-height: 420px
+    padding: $space-40
+
+    border-radius: $radius-12
+    background: $color-bg-white
+    box-shadow: $shadow-sm
+
+    text-align: center
+
+    h1
+        margin: 0 0 $space-8
+
+        color: $color-text-primary
+        font-size: $font-size-24
+        font-weight: $font-weight-semibold
+
+    p
+        margin: 0 0 $space-20
+
+        color: $color-text-secondary
+        font-size: $font-size-16
+
+.cart-loading
+    display: flex
+    flex-direction: column
+    gap: $space-16
+
+    padding: $space-20
+
+.cart-skeleton-title
+    width: 30%
+    height: $space-24
+
+.cart-skeleton-item
+    width: 100%
+    height: $space-80
+
+@media (min-width: $breakpoint-lg)
+    .cart-layout
+        grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr)
+
+@media (max-width: $breakpoint-sm)
+    .cart-page
+        padding: $space-16 0 $space-32
+
+        .container
+            padding: 0 $space-12
 
     .items
-        height: 100%
-        flex: 3
-        background: $color-bg-white
-        padding:$space-20
-        box-shadow: $shadow-sm
-        border-radius: $radius-8
+        padding: $space-16
 
-        h2
-            font-weight: $font-weight-semibold
-            margin-bottom:$space-16
+    .item
+        grid-template-columns: auto minmax(0, 1fr)
+        gap: $space-12
 
-        .item
-            display: flex
-            gap:$space-16
-            &:not(:last-child)
-                padding-bottom:$space-20
-                margin-bottom:$space-20
-                border-bottom: $border-width-1 $border-style-solid #eee
+        img
+            width: $space-64
+            height: $space-64
 
-            img
-                width: $space-80
-                height: $space-80
-                object-fit: cover
-                border-radius: $radius-8
+        .actions
+            grid-column: 1 / -1
+            flex-direction: row
+            align-items: center
+            justify-content: space-between
+            width: 100%
 
-            .details
-                flex: 1
-
-                h3
-                    font-weight: $font-weight-semibold
-                    font-size: $font-size-18
-                p
-                    font-weight: $font-weight-medium
-                    font-size: $font-size-16
-                    color: $color-text-secondary
-
-            .actions
-                display: flex
-                flex-direction: column
-                align-items: flex-end
-                gap:$space-8
-                button
-                    border: $border-style-none
-                    background: transparent
-                    cursor: pointer
-                    color: $color-primary
-                    font-size: $font-size-14
-
-                .qty-box
-                    background: $color-bg-white
-                    border: $border-width-1 $border-style-solid $color-primary
-                    border-radius: $radius-4
-                    font-size: $font-size-14
-                    display: flex
-                    align-items: center
-                    gap:$space-4
-                    margin-bottom:$space-8
-                    .btn
-                        width:$space-24
-                        height:$space-24
-                        border-radius: $radius-4
-                        font-size: $font-size-14
-                    span
-                        font-size: $font-size-16
-
-    .billing-section
-        flex: 2
-        height: 100%
-        .bill
-            height: auto
-            background: $color-bg-white
-            padding:$space-20
-            border-radius: $radius-8
-            box-shadow: $shadow-sm
-            margin-bottom:$space-24
-
-            h3
-                font-weight: $font-weight-semibold
-                margin-bottom:$space-8
-                font-size: $font-size-24
-            .row
-                display: flex
-                justify-content: space-between
-                margin-bottom:$space-4
-                font-size: $font-size-16
-                font-weight: $font-weight-regular
-                color: $color-text-secondary
-                &.discount
-                    color: $color-success
-                    font-weight: $font-weight-medium
-                    font-size: $font-size-14
-                    fa-icon
-                        font-size: $font-size-14
-
-            .total
-                display: flex
-                justify-content: space-between
-                font-weight: bold
-                font-size: $font-size-18
-                margin-top:$space-16
-                border-top: $border-width-1 $border-style-solid $color-border-light
-                padding-top:$space-12
-                font-weight: $font-weight-semibold
-
-            .savings
-                margin-top:$space-8
-                font-size: $font-size-14
-                color: $color-success
-                font-weight: $font-weight-medium
-            .checkout
-                width: 100%
-                margin-top:$space-20
-                padding:$space-12
-                background: $color-primary
-                color: $color-bg-white
-                border-radius: $radius-4
-                font-size: $font-size-18
-                border: $border-style-none
-                font-weight: $font-weight-semibold
-                cursor: pointer
-
-    .empty-cart
-        text-align: center
-        padding: $space-100$space-20
-
-        h2
-            font-size: $font-size-24
-
-        button
-            margin-top:$space-20
-            background: $color-primary
-            color: $color-bg-white
-            padding:$space-8$space-20
-            border-radius: $radius-4
+    .bill
+        padding: $space-16
