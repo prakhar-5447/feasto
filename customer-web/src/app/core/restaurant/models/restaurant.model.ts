@@ -11,7 +11,7 @@ export interface Restaurant {
 
     image: string;
 
-    cuisine: string;
+    cuisine: string[];
 
     priceForTwo: number;
 
@@ -33,36 +33,6 @@ export interface Restaurant {
     distance?: number;
 }
 
-
-export interface RestaurantInfoData {
-    name?: string;
-    cuisine?: string;
-
-    restaurant?: {
-        _id: string;
-        name: string;
-        slug: string;
-    };
-
-    avgRating?: number;
-    totalReviews?: number;
-
-    address?: string;
-
-    openTime?: number;
-    closeTime?: number;
-
-    estimatedDeliveryTime?: number;
-
-    priceForTwo?: number;
-
-    offer?: string;
-
-    location?: {
-        coordinates?: [number, number];
-    };
-}
-
 export interface RestaurantDetail {
     _id: string;
     name: string;
@@ -73,15 +43,11 @@ export interface RestaurantDetail {
         slug: string;
     };
 
-
-
     // Images
     images: string[];
 
-
     // Classification
-    cuisine: string;
-
+    cuisine: string[];
 
     // Pricing
     pricing: {
@@ -95,12 +61,10 @@ export interface RestaurantDetail {
         totalReviews: number;
     };
 
-
     // Delivery
     delivery: {
         estimatedTime: number;
     };
-
 
     // Location
     location: {
@@ -114,21 +78,17 @@ export interface RestaurantDetail {
         ];
     };
 
-
     // Opening hours
     hours: {
         open: number;
         close: number;
     };
 
-
     // Restaurant status
     isAvailable: boolean;
 
-
     // Offers
     offer?: string;
-
 
     // Food preference
     isVeg: boolean;

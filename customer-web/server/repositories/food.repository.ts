@@ -570,7 +570,7 @@ export const filterFoods = async (
 
             cuisine:
                 food.cuisine ||
-                restaurant!.cuisine?.[0] ||
+                restaurant!.cuisine ||
                 "",
 
             priceForTwo:

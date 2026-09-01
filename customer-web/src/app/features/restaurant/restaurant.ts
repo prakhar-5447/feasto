@@ -31,10 +31,7 @@ import { CartService } from '../../core/services/cart.service';
 import { ImageCarousel } from './image-carousel/image-carousel';
 import { RestaurantInfo } from './restaurant-info/restaurant-info';
 
-import {
-  RestaurantDetail,
-  RestaurantInfoData,
-} from '../../core/restaurant/models/restaurant.model';
+import { RestaurantDetail } from '../../core/restaurant/models/restaurant.model';
 
 
 @Component({
@@ -126,41 +123,6 @@ export class Restaurant {
       });
 
   }
-
-  readonly restaurantInfo = computed<RestaurantInfoData | null>(() => {
-
-    const restaurant = this.restaurant();
-
-    if (!restaurant) {
-      return null;
-    }
-    console.log(restaurant)
-    return {
-      name: restaurant?.name,
-      cuisine: restaurant?.cuisine,
-      restaurant: restaurant?.restaurant,
-
-      avgRating: restaurant.rating?.average,
-      totalReviews: restaurant.rating?.totalReviews,
-
-      openTime: restaurant.hours?.open,
-      closeTime: restaurant.hours?.close,
-
-      estimatedDeliveryTime:
-        restaurant.delivery?.estimatedTime,
-
-      priceForTwo:
-        restaurant.pricing?.priceForTwo,
-
-      offer: restaurant?.offer,
-
-      location: {
-        coordinates: restaurant?.location.coordinates
-      }
-    };
-
-  });
-
 
   private fetchRestaurant(
     slug: string
