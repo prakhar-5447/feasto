@@ -52,8 +52,8 @@ export const updateFoodAvailability = (
     );
 };
 
-export const filterFoods = (
-    query: any
+export const filterFoods = async (
+    query: foodRepo.FoodFilterQuery
 ) => {
     return foodRepo.filterFoods(query);
 };

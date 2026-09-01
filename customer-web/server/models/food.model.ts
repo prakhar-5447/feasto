@@ -11,7 +11,9 @@ export interface IFood extends Document {
     description?: string;
     price: number;
     cuisine?: string;
-    foodType: "VEG" | "NON_VEG" | "EGG";
+    foodType: "veg" | "non_veg" | "egg";
+    isVegan: boolean;
+    isHalal: boolean;
     preparationTime: number;
     isAvailable: boolean;
     isFeatured: boolean;
@@ -58,12 +60,24 @@ const foodSchema = new Schema<IFood>(
         foodType: {
             type: String,
             enum: [
-                "VEG",
-                "NON_VEG",
-                "EGG"
+                "veg",
+                "non_veg",
+                "egg"
             ],
-            default: "VEG",
+            default: "veg",
             required: true
+        },
+
+        isVegan: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
+
+        isHalal: {
+            type: Boolean,
+            default: false,
+            index: true
         },
 
         preparationTime: {

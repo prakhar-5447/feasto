@@ -47,13 +47,12 @@ export const addToCart = async (
             items: []
         });
     }
-
     if (cart.items.length) {
-        if (cart.restaurant?.toString() !== food.restaurant.toString()) {
+        if (cart.restaurant.toString() !== food.restaurant._id.toString()) {
             throw new Error("Cart contains items from another restaurant");
         }
     } else {
-        cart.restaurant = food.restaurant;
+        cart.restaurant = food.restaurant._id;
         cart.couponCode = undefined;
     }
 

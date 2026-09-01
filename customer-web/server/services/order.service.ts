@@ -3,10 +3,10 @@ import * as restaurantService from "./restaurant.service";
 import * as cartService from "./cart.service";
 
 type PaymentMethod =
-    | "UPI"
-    | "FAKEUPI"
-    | "RAZORPAY"
-    | "COD";
+    | "upi"
+    | "fakeupi"
+    | "razorpay"
+    | "cod";
 
 export const createOrder = async (
     userId: string,
@@ -87,12 +87,12 @@ export const createOrder = async (
         deliveryAddress: address,
 
         payment: {
-            method: "UPI"
+            method: "upi"
         },
 
-        paymentStatus: "PENDING",
+        paymentStatus: "pending",
 
-        orderStatus: "PENDING_PAYMENT"
+        orderStatus: "pending_payment"
     });
 };
 
@@ -104,9 +104,9 @@ export const markPaid = async (
     return orderRepo.update(
         orderId,
         {
-            paymentStatus: "SUCCESS",
+            paymentStatus: "success",
 
-            orderStatus: "PLACED",
+            orderStatus: "placed",
 
             "payment.method": method,
 

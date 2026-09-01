@@ -14,7 +14,7 @@ router.get("/nearby", restaurantController.getNearbyRestaurants);
 router.post(
     "/",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     upload.array("images", 5),
     validate(createRestaurantSchema),
     restaurantController.createRestaurant
@@ -39,7 +39,7 @@ router.post(
 router.get(
     "/my",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     restaurantController.getMyRestaurant
 );
 
@@ -62,14 +62,14 @@ router.get(
 router.patch(
     "/update",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     restaurantController.updateRestaurant
 );
 
 router.delete(
     "/delete",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     restaurantController.deleteRestaurant
 );
 

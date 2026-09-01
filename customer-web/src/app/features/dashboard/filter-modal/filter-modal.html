@@ -116,6 +116,11 @@
                             Non-Veg
                         </button>
 
+                        <button type="button" class="chip" [class.selected]="draftFilters.egg === true"
+                            (click)="setDietary('egg')">
+                            Egg
+                        </button>
+
                         <button type="button" class="chip" [class.selected]="draftFilters.vegan === true"
                             (click)="setDietary('vegan')">
                             Vegan

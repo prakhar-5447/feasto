@@ -38,25 +38,25 @@ export interface IOrder extends Document {
     };
 
     payment: {
-        method: "UPI" | "FAKEUPI" | "RAZORPAY" | "COD";
+        method: "upi" | "fakeupi" | "razorpay" | "cod";
         transactionId?: string;
         paidAt?: Date;
     };
 
     orderStatus:
-    | "PENDING_PAYMENT"
-    | "PLACED"
-    | "ACCEPTED"
-    | "PREPARING"
-    | "PICKED_UP"
-    | "DELIVERED"
-    | "CANCELLED";
+    | "pending_payment"
+    | "placed"
+    | "accepted"
+    | "preparing"
+    | "picked_up"
+    | "delivered"
+    | "cancelled";
 
     paymentStatus:
-    | "PENDING"
-    | "SUCCESS"
-    | "FAILED"
-    | "REFUNDED";
+    | "pending"
+    | "success"
+    | "failed"
+    | "refunded";
 }
 
 const orderSchema = new Schema<IOrder>(
@@ -191,10 +191,10 @@ const orderSchema = new Schema<IOrder>(
             method: {
                 type: String,
                 enum: [
-                    "UPI",
-                    "FAKEUPI",
-                    "RAZORPAY",
-                    "COD"
+                    "upi",
+                    "fakeupi",
+                    "razorpay",
+                    "cod"
                 ],
                 required: true
             },
@@ -213,26 +213,26 @@ const orderSchema = new Schema<IOrder>(
         paymentStatus: {
             type: String,
             enum: [
-                "PENDING",
-                "SUCCESS",
-                "FAILED",
-                "REFUNDED"
+                "pending",
+                "success",
+                "failed",
+                "refunded"
             ],
-            default: "PENDING"
+            default: "pending"
         },
 
         orderStatus: {
             type: String,
             enum: [
-                "PENDING_PAYMENT",
-                "PLACED",
-                "ACCEPTED",
-                "PREPARING",
-                "PICKED_UP",
-                "DELIVERED",
-                "CANCELLED"
+                "pending_payment",
+                "placed",
+                "accepted",
+                "preparing",
+                "picked_up",
+                "delivered",
+                "cancelled"
             ],
-            default: "PENDING_PAYMENT"
+            default: "pending_payment"
         }
     },
     {

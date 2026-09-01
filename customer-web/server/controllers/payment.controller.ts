@@ -15,10 +15,10 @@ import {
 } from '../middlewares/auth.middleware';
 
 type PaymentMethod =
-    | "UPI"
-    | "FAKEUPI"
-    | "RAZORPAY"
-    | "COD";
+    | "upi"
+    | "fakeupi"
+    | "razorpay"
+    | "cod";
 
 export const createPayment = async (
     req: Request,

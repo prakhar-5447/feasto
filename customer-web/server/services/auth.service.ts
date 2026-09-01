@@ -4,7 +4,7 @@ export interface CompleteSignupData {
     phone: string;
     name: string;
     email?: string;
-    role: "CUSTOMER";
+    role: "customer";
 }
 
 export const phoneAuth = async (phone: string) => {

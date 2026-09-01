@@ -62,7 +62,7 @@ export const restaurantPhoneAuth = async (
             return;
         }
 
-        if (user.role !== "RESTAURANT_PARTNER") {
+        if (user.role !== "restaurant_partner") {
             res.status(403).json({
                 success: false,
                 message: "Only restaurant partners can login here"
@@ -140,7 +140,7 @@ export const restaurantVerifyOtp = async (
             return;
         }
 
-        if (user.role !== "RESTAURANT_PARTNER") {
+        if (user.role !== "restaurant_partner") {
             res.status(403).json({
                 success: false,
                 message: "Only restaurant partners can login here"
@@ -201,7 +201,7 @@ export const restaurantCompleteSignup = async (
         const newUser =
             await authService.completeSignup({
                 ...req.body,
-                role: "RESTAURANT_PARTNER"
+                role: "restaurant_partner"
             });
 
         const accessToken =

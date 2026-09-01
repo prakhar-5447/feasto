@@ -82,7 +82,7 @@ export const phoneAuth = async (
     const { user } =
       await authService.phoneAuth(phone);
 
-    if (user && user.role !== 'CUSTOMER') {
+    if (user && user.role !== 'customer') {
       res.status(403).json({
         success: false,
         message: 'Only customers can login here',
@@ -156,7 +156,7 @@ export const verifyOtp = async (
       await authService.phoneAuth(phone);
 
     if (user) {
-      if (user.role !== 'CUSTOMER') {
+      if (user.role !== 'customer') {
         res.status(403).json({
           success: false,
           message: 'Only customers can login here',
@@ -293,7 +293,7 @@ export const completeSignup = async (
         phone,
         name,
         email,
-        role: 'CUSTOMER'
+        role: 'customer'
       });
 
     signupVerificationStore.delete(

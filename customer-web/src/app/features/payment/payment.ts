@@ -27,15 +27,6 @@ import {
   faClock
 } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  LocationServicePersistence
-} from '../../core/services/location.service';
-
-import {
-  RestaurantService
-} from '../../core/services/restaurant.service';
-
-
 export type PaymentStage =
   | 'qr'
   | 'processing'
@@ -363,7 +354,7 @@ export class Payment
           // =================================================
 
           if (
-            res.data.paymentStatus === 'paid'
+            res.data.paymentStatus === 'success'
           ) {
 
             this.stage =
@@ -519,7 +510,7 @@ export class Payment
           // ===============================================
 
           if (
-            payment.status === 'SUCCESS'
+            payment.status === 'success'
           ) {
 
             this.clearCartAfterPayment();
@@ -541,7 +532,7 @@ export class Payment
           // ===============================================
 
           if (
-            payment.status === 'FAILED'
+            payment.status === 'failed'
           ) {
 
             this.paymentError =
@@ -562,7 +553,7 @@ export class Payment
           // ===============================================
 
           if (
-            payment.status === 'PENDING'
+            payment.status === 'pending'
           ) {
 
             this.stage =
@@ -629,7 +620,7 @@ export class Payment
 
 
     const method =
-      'FAKEUPI';
+      'fakeupi';
 
 
     const transactionId =
@@ -829,7 +820,7 @@ export class Payment
             this.order._id,
 
           method:
-            'FAKEUPI'
+            'fakeupi'
 
         }
 
@@ -1249,7 +1240,7 @@ export class Payment
           // ===============================================
 
           if (
-            payment.status === 'SUCCESS'
+            payment.status === 'success'
           ) {
 
             this.zone.run(() => {
@@ -1284,7 +1275,7 @@ export class Payment
           // ===============================================
 
           if (
-            payment.status === 'FAILED'
+            payment.status === 'failed'
           ) {
 
             this.zone.run(() => {
