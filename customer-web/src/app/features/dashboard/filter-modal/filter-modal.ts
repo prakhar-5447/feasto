@@ -155,6 +155,7 @@ export class FilterModal implements OnChanges {
 
     this.draftFilters.veg = undefined;
     this.draftFilters.nonVeg = undefined;
+    this.draftFilters.egg = undefined;
     this.draftFilters.vegan = undefined;
     this.draftFilters.halal = undefined;
 

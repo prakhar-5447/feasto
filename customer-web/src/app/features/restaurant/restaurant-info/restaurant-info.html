@@ -1,11 +1,11 @@
 <div class="info">
 
     <h1>
-        {{ restaurantInfo().name }}
+        {{ restaurantInfo()?.name }}
     </h1>
 
     <p>
-        {{ restaurantInfo().cuisine }}
+        {{ restaurantInfo()?.cuisine?.join(' • ') }}
     </p>
 
 
@@ -15,12 +15,13 @@
 
             <fa-icon [icon]="faStar" />
 
-            {{ restaurantInfo().avgRating }}
+            {{ restaurantInfo()?.rating?.average }}
 
         </div>
 
         <span>
-            {{ restaurantInfo().totalReviews }} reviews
+            {{ restaurantInfo()?.rating?.totalReviews }}
+            reviews
         </span>
 
     </div>
@@ -32,7 +33,7 @@
 
             <fa-icon [icon]="faLocationDot" />
 
-            {{ restaurantInfo().address }}
+            {{ restaurantInfo()?.location?.address }}
 
         </span>
 
@@ -52,7 +53,7 @@
                     </span>
 
                     - Closes at
-                    {{ restaurantInfo().closeTime }}:00
+                    {{ restaurantInfo()?.hours?.close }}:00
 
                     } @else {
 
@@ -61,7 +62,7 @@
                     </span>
 
                     - Opens at
-                    {{ restaurantInfo().openTime }}:00
+                    {{ restaurantInfo()?.hours?.open }}:00
 
                     }
 
@@ -73,7 +74,8 @@
                 </span>
 
 
-                {{ restaurantInfo().estimatedDeliveryTime }} min
+                {{ restaurantInfo()?.delivery?.estimatedTime }}
+                min
 
 
                 <span class="dot">
@@ -81,7 +83,7 @@
                 </span>
 
 
-                {{ distance }}
+                {{ distance }} km
 
             </div>
 
@@ -90,19 +92,20 @@
 
         <span class="price">
 
-            &#x20B9;{{ restaurantInfo().priceForTwo }}
+            &#x20B9;{{ restaurantInfo()?.pricing?.priceForTwo }}
+
             for Two
 
         </span>
 
 
-        @if (restaurantInfo().offer) {
+        @if (restaurantInfo()?.offer) {
 
         <span class="offer">
 
             <fa-icon [icon]="faExclamationCircle" />
 
-            {{ restaurantInfo().offer }}
+            {{ restaurantInfo()?.offer }}
 
         </span>
 

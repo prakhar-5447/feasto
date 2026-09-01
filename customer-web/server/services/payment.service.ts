@@ -22,10 +22,10 @@ import {
 } from "../providers/cod.provider";
 
 type PaymentMethod =
-    | "UPI"
-    | "FAKEUPI"
-    | "RAZORPAY"
-    | "COD";
+    | "upi"
+    | "fakeupi"
+    | "razorpay"
+    | "cod";
 
 export const createPayment = async (
     orderId: string,
@@ -37,35 +37,35 @@ export const createPayment = async (
         throw new Error("Order not found");
     }
 
-    if (order.paymentStatus === "SUCCESS") {
+    if (order.paymentStatus === "success") {
         throw new Error("Order already paid");
     }
 
     let providerResponse: any;
 
     switch (method) {
-        case "UPI":
+        case "upi":
             providerResponse = await createUpiPayment(
                 order.billing.grandTotal,
                 order.orderId
             );
             break;
 
-        case "RAZORPAY":
+        case "razorpay":
             providerResponse = await createRazorpayPayment(
                 order.billing.grandTotal,
                 order.orderId
             );
             break;
 
-        case "COD":
+        case "cod":
             providerResponse = await createCodPayment(
                 order.billing.grandTotal,
                 order.orderId
             );
             break;
 
-        case "FAKEUPI":
+        case "fakeupi":
             providerResponse = await createFakeUpiPayment(
                 order.billing.grandTotal,
                 order.orderId,
@@ -85,7 +85,7 @@ export const createPayment = async (
         transactionId: providerResponse.transactionId
     });
 
-    if (method === "FAKEUPI") {
+    if (method === "fakeupi") {
         providerResponse.qrData =
             `http://localhost:4200/fake-payment` +
             `?paymentId=${payment._id}`;
@@ -109,35 +109,35 @@ export const verifyPayment = async (
         throw new Error("Payment not found");
     }
 
-    if (payment.status === "SUCCESS") {
+    if (payment.status === "success") {
         return payment;
     }
 
     let verification: any;
 
     switch (method) {
-        case "FAKEUPI":
+        case "fakeupi":
             verification =
                 await verifyFakeUpiPayment({
                     transactionId
                 });
             break;
 
-        case "UPI":
+        case "upi":
             verification =
                 await verifyUpiPayment({
                     transactionId
                 });
             break;
 
-        case "RAZORPAY":
+        case "razorpay":
             verification =
                 await verifyRazorpayPayment({
                     paymentId: transactionId
                 });
             break;
 
-        case "COD":
+        case "cod":
             verification =
                 await verifyCodPayment();
             break;
@@ -150,14 +150,14 @@ export const verifyPayment = async (
         await paymentRepo.updatePayment(
             payment._id.toString(),
             {
-                status: "FAILED"
+                status: "failed"
             }
         );
 
         await orderRepo.update(
             payment.order.toString(),
             {
-                paymentStatus: "FAILED"
+                paymentStatus: "failed"
             }
         );
 
@@ -172,7 +172,7 @@ export const verifyPayment = async (
             {
                 method,
                 transactionId,
-                status: "SUCCESS",
+                status: "success",
                 paidAt: new Date()
             }
         );
@@ -183,8 +183,8 @@ export const verifyPayment = async (
     await orderRepo.update(
         orderId,
         {
-            paymentStatus: "SUCCESS",
-            orderStatus: "PLACED",
+            paymentStatus: "success",
+            orderStatus: "placed",
 
             "payment.method": method,
             "payment.transactionId": transactionId,

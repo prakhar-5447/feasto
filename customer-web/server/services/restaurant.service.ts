@@ -64,8 +64,87 @@ export const getRestaurantsList = () => {
     return restaurantRepo.findAll();
 };
 
-export const getRestaurantBySlug = (slug: string) => {
-    return restaurantRepo.findBySlug(slug);
+export const getRestaurantBySlug = async (
+    slug: string
+): Promise<restaurantRepo.RestaurantDetail | null> => {
+    const restaurant =
+        await restaurantRepo.findBySlug(slug);
+
+    if (!restaurant) {
+        return null;
+    }
+
+    return {
+        _id: restaurant._id.toString(),
+
+        name: restaurant.name,
+
+        restaurant: {
+            _id: restaurant._id.toString(),
+            name: restaurant.name,
+            slug: restaurant.slug
+        },
+
+        images:
+            restaurant.images ?? [],
+
+        cuisine:
+            restaurant.cuisine ?? "",
+
+        pricing: {
+            priceForTwo:
+                restaurant.priceForTwo ?? 0
+        },
+
+        rating: {
+            average:
+                restaurant.avgRating ?? 0,
+
+            totalReviews:
+                restaurant.totalReviews ?? 0
+        },
+
+        delivery: {
+            estimatedTime:
+                restaurant.estimatedDeliveryTime ?? 0
+        },
+
+        location: {
+            city:
+                restaurant.city ?? "",
+
+            area:
+                restaurant.area ?? "",
+
+            address:
+                restaurant.address ?? "",
+
+            coordinates: [
+                restaurant.location?.coordinates?.[0] ?? 0,
+                restaurant.location?.coordinates?.[1] ?? 0
+            ]
+        },
+
+        hours: {
+            open:
+                restaurant.openTime ?? 0,
+
+            close:
+                restaurant.closeTime ?? 0
+        },
+
+        isAvailable:
+            restaurant.isOpen ?? false,
+
+        ...(restaurant.offer
+            ? {
+                offer: restaurant.offer
+            }
+            : {}),
+
+        isVeg:
+            restaurant.isVeg ?? false
+    };
 };
 
 export const getRestaurantInfo = (id: string) => {

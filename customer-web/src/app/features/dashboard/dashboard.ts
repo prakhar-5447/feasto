@@ -144,6 +144,9 @@ export class Dashboard {
           const veg =
             params.get('veg');
 
+          const egg =
+            params.get('egg');
+
           const nonVeg =
             params.get('nonVeg');
 
@@ -218,6 +221,10 @@ export class Dashboard {
 
           if (nonVeg === 'true') {
             filters.nonVeg = true;
+          }
+
+          if (egg === 'true') {
+            filters.egg = true;
           }
 
           if (vegan === 'true') {
@@ -295,6 +302,7 @@ export class Dashboard {
 
         veg: filters.veg || null,
         nonVeg: filters.nonVeg || null,
+        egg: filters.egg || null,
         vegan: filters.vegan || null,
         halal: filters.halal || null,
 
@@ -349,7 +357,9 @@ export class Dashboard {
     this.loading.set(true);
 
     const params: Record<string, string> = {
-      city: location.city
+      city: location.city,
+      longitude: location.longitude.toString(),
+      latitude: location.latitude.toString(),
     };
 
     this.http.get<{ data: Restaurant[] }>(
@@ -384,8 +394,17 @@ export class Dashboard {
   private loadFilteredRestaurants(
     filters: RestaurantFilters
   ): void {
+    const location = this.selectedLocation();
 
-    const params: Record<string, string> = {};
+    if (!location) {
+      return;
+    }
+
+    const params: Record<string, string> = {
+      city: location.city,
+      longitude: location.longitude.toString(),
+      latitude: location.latitude.toString(),
+    };
 
     if (filters.food) {
       params['food'] = filters.food;
@@ -457,7 +476,6 @@ export class Dashboard {
     ).subscribe({
 
       next: response => {
-
         this.filteredRestaurants.set([
           ...response.data
         ]);

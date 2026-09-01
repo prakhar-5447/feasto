@@ -14,6 +14,9 @@ import * as foodService
 import * as restaurantService
     from '../services/restaurant.service';
 
+import * as foodRepo
+    from '../repositories/food.repository';
+
 import {
     validateFoodOwnership
 } from '../utils/food.helper';
@@ -323,23 +326,119 @@ export const updateFoodAvailability = async (
     }
 };
 
+const getSort = (
+    value: unknown
+): foodRepo.FoodSortOption | undefined => {
+    if (
+        value === "relevance" ||
+        value === "rating" ||
+        value === "delivery_time" ||
+        value === "distance" ||
+        value === "price_low_to_high" ||
+        value === "price_high_to_low"
+    ) {
+        return value;
+    }
+
+    return undefined;
+};
+
 export const filterFoods = async (
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
+        const query: foodRepo.FoodFilterQuery = {
+            food:
+                typeof req.query['food'] === "string"
+                    ? req.query['food'].trim()
+                    : undefined,
+
+            cuisine:
+                typeof req.query['cuisine'] === "string"
+                    ? req.query['cuisine'].trim()
+                    : undefined,
+
+            restaurant:
+                typeof req.query['restaurant'] === "string"
+                    ? req.query['restaurant'].trim()
+                    : undefined,
+
+            veg:
+                req.query['veg'] === "true",
+
+            city:
+                typeof req.query['city'] === "string"
+                    ? req.query['city'].trim()
+                    : undefined,
+
+            nonVeg:
+                req.query['nonVeg'] === "true",
+
+            egg:
+                req.query['egg'] === "true",
+
+            vegan:
+                req.query['vegan'] === "true",
+
+            halal:
+                req.query['halal'] === "true",
+
+            rating:
+                req.query['rating'] !== undefined
+                    ? Number(req.query['rating'])
+                    : undefined,
+
+            price:
+                req.query['price'] === "low" ||
+                    req.query['price'] === "medium" ||
+                    req.query['price'] === "high"
+                    ? req.query['price']
+                    : undefined,
+
+            maxDeliveryTime:
+                req.query['maxDeliveryTime'] !== undefined
+                    ? Number(
+                        req.query['maxDeliveryTime']
+                    )
+                    : undefined,
+
+            maxDistance:
+                req.query['maxDistance'] !== undefined
+                    ? Number(
+                        req.query['maxDistance']
+                    )
+                    : 5,
+
+            latitude:
+                req.query['latitude'] !== undefined
+                    ? Number(req.query['latitude'])
+                    : undefined,
+
+            longitude:
+                req.query['longitude'] !== undefined
+                    ? Number(req.query['longitude'])
+                    : undefined,
+
+            offers:
+                req.query['offers'] === "true",
+
+            openNow:
+                req.query['openNow'] === "true",
+
+            sort: getSort(req.query["sort"])
+        };
+
         const foods =
-            await foodService.filterFoods(
-                req.query
-            );
+            await foodService.filterFoods(query);
 
         res.status(200).json({
             success: true,
-            message: 'Foods fetched successfully',
+            message: "Foods fetched successfully",
             data: foods
         });
-    } catch (err) {
-        next(err);
+    } catch (error) {
+        next(error);
     }
 };

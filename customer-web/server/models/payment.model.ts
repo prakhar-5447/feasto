@@ -3,10 +3,10 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 export interface IPayment extends Document {
     order: Types.ObjectId;
     amount: number;
-    method: "UPI" | "FAKEUPI" | "RAZORPAY" | "COD";
+    method: "upi" | "fakeupi" | "razorpay" | "cod";
     provider: string;
     transactionId?: string | null;
-    status: "PENDING" | "SUCCESS" | "FAILED";
+    status: "pending" | "success" | "failed";
     paidAt?: Date | null;
     createdAt: Date;
     updatedAt: Date;
@@ -30,10 +30,10 @@ const paymentSchema = new Schema<IPayment>(
         method: {
             type: String,
             enum: [
-                "UPI",
-                "FAKEUPI",
-                "RAZORPAY",
-                "COD"
+                "upi",
+                "fakeupi",
+                "razorpay",
+                "cod"
             ],
             required: true
         },
@@ -51,11 +51,11 @@ const paymentSchema = new Schema<IPayment>(
         status: {
             type: String,
             enum: [
-                "PENDING",
-                "SUCCESS",
-                "FAILED"
+                "pending",
+                "success",
+                "failed"
             ],
-            default: "PENDING"
+            default: "pending"
         },
 
         paidAt: {

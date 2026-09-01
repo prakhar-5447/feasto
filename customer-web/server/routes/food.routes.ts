@@ -11,7 +11,7 @@ const router = express.Router();
 router.post(
     "/restaurant/menu",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     upload.single("image"),
     validate(createFoodSchema),
     foodController.addFood
@@ -23,26 +23,27 @@ router.get(
 );
 
 router.get("/filter", foodController.filterFoods);
+
 router.get("/:id", foodController.getFood);
 
 router.patch(
     "/:id",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     foodController.updateFood
 );
 
 router.delete(
     "/:id",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     foodController.deleteFood
 );
 
 router.patch(
     "/:id/availability",
     protect,
-    role("RESTAURANT_PARTNER"),
+    role("restaurant_partner"),
     foodController.updateFoodAvailability
 );
 

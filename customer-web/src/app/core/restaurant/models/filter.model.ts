@@ -15,6 +15,7 @@ export type PriceRange =
 export type DietaryOption =
     | 'veg'
     | 'nonVeg'
+    | 'egg'
     | 'vegan'
     | 'halal';
 
@@ -31,6 +32,7 @@ export interface RestaurantFilters {
     // Dietary
     veg?: boolean;
     nonVeg?: boolean;
+    egg?: boolean;
     vegan?: boolean;
     halal?: boolean;
 

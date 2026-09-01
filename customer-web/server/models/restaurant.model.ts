@@ -5,7 +5,7 @@ import mongoose, {
 } from "mongoose";
 
 export interface ILocation {
-    type: "POINT";
+    type: "point";
     coordinates: number[];
 }
 
@@ -16,17 +16,21 @@ export interface IRestaurant extends Document {
     description?: string;
     images?: string[];
     address?: string;
+    area?: string;
+    city?: string;
+    state?: string;
     cuisine: string[];
     priceRange?: number;
     location: ILocation;
     avgRating: number;
     totalReviews: number;
     isOpen: boolean;
+    isVeg: boolean;
     createdAt: Date;
     updatedAt: Date;
     openTime: number;
     closeTime: number;
-    offer?: string[];
+    offer?: string;
     priceForTwo?: number;
     estimatedDeliveryTime?: number;
 }
@@ -68,6 +72,21 @@ const restaurantSchema = new Schema<IRestaurant>(
             default: ""
         },
 
+        area: {
+            type: String,
+            default: ""
+        },
+
+        city: {
+            type: String,
+            default: ""
+        },
+
+        state: {
+            type: String,
+            default: ""
+        },
+
         cuisine: {
             type: [String],
             default: []
@@ -82,8 +101,8 @@ const restaurantSchema = new Schema<IRestaurant>(
         location: {
             type: {
                 type: String,
-                enum: ["POINT"],
-                default: "POINT",
+                enum: ["point"],
+                default: "point",
                 required: true
             },
 
@@ -111,6 +130,11 @@ const restaurantSchema = new Schema<IRestaurant>(
             default: true
         },
 
+        isVeg: {
+            type: Boolean,
+            default: true
+        },
+
         openTime: {
             type: Number,
             required: true,
@@ -124,8 +148,8 @@ const restaurantSchema = new Schema<IRestaurant>(
         },
 
         offer: {
-            type: [String],
-            default: []
+            type: String,
+            default: ""
         },
 
         priceForTwo: {
