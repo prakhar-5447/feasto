@@ -89,6 +89,9 @@ export class TabMenu {
   readonly loading =
     signal(true);
 
+  readonly skeletonCategories = [1, 2, 3];
+
+  readonly skeletonItems = [1, 2, 3];
 
   private readonly HEADER_OFFSET = 340;
 

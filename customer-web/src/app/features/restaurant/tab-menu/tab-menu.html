@@ -1,5 +1,66 @@
 <div class="menu-wrapper">
 
+    @if (loading()) {
+
+    <!-- SIDEBAR SKELETON -->
+    <aside class="sidebar">
+
+        <div class="sidebar-box skeleton-sidebar">
+
+            @for (item of skeletonCategories; track $index) {
+            <div class="skeleton skeleton-category"></div>
+            }
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENT SKELETON -->
+    <main class="content">
+
+        @for (category of skeletonCategories; track $index) {
+
+        <section class="category-section skeleton-section">
+
+            <div class="skeleton skeleton-title"></div>
+
+            @for (item of skeletonItems; track $index) {
+
+            <article class="item skeleton-item">
+
+                <div class="left">
+
+                    <div class="skeleton skeleton-image"></div>
+
+                </div>
+
+
+                <div class="right">
+
+                    <div class="skeleton skeleton-item-title"></div>
+
+                    <div class="skeleton skeleton-description"></div>
+
+                    <div class="skeleton skeleton-price"></div>
+
+                </div>
+
+            </article>
+
+            }
+
+        </section>
+
+        }
+
+    </main>
+
+
+    } @else {
+
+    <!-- ACTUAL MENU -->
+
     <aside class="sidebar">
 
         <div class="sidebar-box">
@@ -66,11 +127,13 @@
                         <div class="qty-box">
 
                             <button type="button" class="btn" (click)="updateQuantity(
-                                                    item._id,
-                                                    getItemQuantity(item._id),
-                                                    false
-                                                )">
+                                                        item._id,
+                                                        getItemQuantity(item._id),
+                                                        false
+                                                    )">
+
                                 <fa-icon [icon]="faMinus" />
+
                             </button>
 
                             <span>
@@ -78,11 +141,13 @@
                             </span>
 
                             <button type="button" class="btn" (click)="updateQuantity(
-                                                    item._id,
-                                                    getItemQuantity(item._id),
-                                                    true
-                                                )">
+                                                        item._id,
+                                                        getItemQuantity(item._id),
+                                                        true
+                                                    )">
+
                                 <fa-icon [icon]="faPlus" />
+
                             </button>
 
                         </div>
@@ -90,7 +155,9 @@
                         } @else {
 
                         <button type="button" class="add-btn" (click)="addToCart(item)">
+
                             ADD
+
                         </button>
 
                         }
@@ -105,11 +172,13 @@
                     <div class="header">
 
                         <div class="type" [ngClass]="{
-                                            'veg': item.foodType === 'veg',
-                                            'egg': item.foodType === 'egg',
-                                            'non_veg': item.foodType === 'non_veg'
-                                        }">
+                                                'veg': item.foodType === 'veg',
+                                                'egg': item.foodType === 'egg',
+                                                'non_veg': item.foodType === 'non_veg'
+                                            }">
+
                             <div class="circle"></div>
+
                         </div>
 
                         <h3>
@@ -142,8 +211,11 @@
         </section>
 
         }
+
         <div class="space"></div>
 
     </main>
+
+    }
 
 </div>
