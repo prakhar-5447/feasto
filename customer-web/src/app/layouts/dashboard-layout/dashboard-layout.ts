@@ -6,7 +6,6 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/ro
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { LocationServicePersistence } from '../../core/services/location.service';
 import { Auth } from '../../features/auth/auth';
 import { Breadcrumb } from '../../shared/components/breadcrumb/breadcrumb';
 import { Footer } from '../../shared/components/footer/footer';
@@ -31,7 +30,6 @@ export class DashboardLayout {
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly locationService = inject(LocationServicePersistence);
 
 
   ngOnInit(): void {
@@ -52,12 +50,6 @@ export class DashboardLayout {
   private updateRouteState(): void {
 
     const activeRoute = this.getActiveRoute();
-
-    const city = activeRoute.snapshot.paramMap.get('city');
-
-    if (city) {
-      this.locationService.setCity(city);
-    }
 
     this.showBreadcrumb = activeRoute.snapshot.data['hideBreadcrumb'] !== true;
   }

@@ -7,7 +7,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '../../../shared/components/button/button';
-import { LocationServicePersistence } from '../../../core/services/location.service';
 
 @Component({
   selector: 'app-hero',
@@ -25,12 +24,6 @@ export class Hero {
 
   private readonly router = inject(Router);
 
-  private readonly locationService = inject(LocationServicePersistence);
-
-  selectCity(city: string): void {
-    this.locationService.setCity(city);
-  }
-
   findFood(): void {
 
     const city = this.locationQuery
@@ -42,8 +35,6 @@ export class Hero {
       this.router.navigate(['/india']);
       return;
     }
-
-    this.locationService.setCity(city);
 
     this.router.navigate([
       '/india',
