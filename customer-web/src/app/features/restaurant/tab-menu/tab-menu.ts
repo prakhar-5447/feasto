@@ -1,241 +1,375 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
+  HostListener,
   QueryList,
   ViewChildren,
-  HostListener,
-  ChangeDetectorRef
+  inject,
+  signal
 } from '@angular/core';
 
-import { CartService } from '../../../core/services/cart.service';
-import { RestaurantService } from '../../../core/services/restaurant.service';
 import { NgClass } from '@angular/common';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faPlus,
-  faMinus
+  FontAwesomeModule
+} from '@fortawesome/angular-fontawesome';
+
+import {
+  faMinus,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
-  ActivatedRoute,
-  Router
+  ActivatedRoute
 } from '@angular/router';
 
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
+
+import {
+  CartService
+} from '../../../core/services/cart.service';
+
+import {
+  FoodItem,
+  MenuCategory,
+  RestaurantMenu
+} from '../../../core/restaurant/models/menu.model';
+
 
 @Component({
   selector: 'app-tab-menu',
   standalone: true,
+
   imports: [
     NgClass,
     FontAwesomeModule
   ],
+
   templateUrl: './tab-menu.html',
   styleUrl: './tab-menu.sass',
+
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabMenu {
 
-  faMinus = faMinus;
-  faPlus = faPlus;
+  private readonly http =
+    inject(HttpClient);
 
-  cartItems: any[] = [];
+  private readonly route =
+    inject(ActivatedRoute);
 
-  activeCategory = 0;
+  private readonly destroyRef =
+    inject(DestroyRef);
 
-  OFFSET = 290 + 50;
+  readonly cartService =
+    inject(CartService);
 
-  observer!: IntersectionObserver;
+
+  readonly faMinus = faMinus;
+  readonly faPlus = faPlus;
+
+
+  readonly menu =
+    signal<RestaurantMenu | null>(null);
+
+  readonly cartItems =
+    signal<any[]>([]);
+
+  readonly activeCategory =
+    signal(0);
+
+  readonly loading =
+    signal(true);
+
+
+  private readonly HEADER_OFFSET = 340;
+
 
   @ViewChildren('categorySection')
-  categorySections!: QueryList<ElementRef>;
+  private categorySections!: QueryList<ElementRef<HTMLElement>>;
 
-  constructor(
-    public cartService: CartService,
-    public restaurantService: RestaurantService,
-    private cdr: ChangeDetectorRef,
-    private http: HttpClient,
-    public route: ActivatedRoute,
-    private router: Router
-  ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
-    this.route.parent?.paramMap.subscribe(
-      params => {
+    const slug =
+      this.route.parent?.snapshot.paramMap.get('restaurant');
 
-        const slug =
-          params.get('restaurant');
+    if (!slug) {
+      return;
+    }
 
-        if (!slug) {
-          this.router.navigate(['/']);
-          return;
-        }
-
-        this.loadCart();
-        this.loadFoods(slug);
-      }
-    );
+    this.loadFoods(slug);
+    this.loadCart();
   }
 
-  loadFoods(slug: string) {
+
+  private loadFoods(slug: string): void {
+
+    this.loading.set(true);
 
     this.http
-      .get(`/api/v1/foods/restaurant/${slug}/foods`)
+      .get<{ data: FoodItem[] }>(
+        `/api/v1/foods/restaurant/${slug}/foods`
+      )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: ({ data }) => {
+          this.menu.set({
+            categories:
+              this.groupByCuisine(data)
+          });
+
+          this.loading.set(false);
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to load restaurant menu:',
+            error
+          );
+
+          this.menu.set({
+            categories: []
+          });
+
+          this.loading.set(false);
+        }
+
+      });
+  }
+
+
+  private loadCart(): void {
+
+    this.cartService
+      .getCart()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
 
         next: (res: any) => {
 
-          const foods = res.data;
+          const items =
+            res.data?.items ?? [];
 
-          this.restaurantService.menu = {
-            categories:
-              this.groupByCuisine(foods)
-          };
+          this.cartItems.set(items);
+
+          const count =
+            items.reduce(
+              (total: number, item: any) =>
+                total + item.quantity,
+              0
+            );
+
+          this.cartService.cartCount.set(count);
         },
 
-        error: (err) => {
+        error: error => {
+
           console.error(
-            'Load foods error:',
-            err
+            'Failed to load cart:',
+            error
           );
+
         }
+
       });
   }
 
-  addToCart(item: any) {
-    this.cartService.addToCart(item._id, 1).subscribe({
-      next: () => {
-        this.loadCart();
-      },
-      error: (err) => {
-        alert(
-          err.error?.message ||
-          'Unable to add item'
-        );
-      }
-    });
+
+  addToCart(item: FoodItem): void {
+
+    this.cartService
+      .addToCart(item._id, 1)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: () => {
+          this.loadCart();
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to add item:',
+            error
+          );
+
+          alert(
+            error.error?.message ??
+            'Unable to add item'
+          );
+        }
+
+      });
   }
+
 
   updateQuantity(
     itemId: string,
-    qty: number,
-    inc: boolean
-  ) {
-    const newQty = inc ? qty + 1 : qty - 1;
+    quantity: number,
+    increase: boolean
+  ): void {
+
+    const newQuantity =
+      increase
+        ? quantity + 1
+        : quantity - 1;
 
     this.cartService
-      .updateQuantity(itemId, newQty)
+      .updateQuantity(
+        itemId,
+        newQuantity
+      )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
+
         next: () => {
           this.loadCart();
+        },
+
+        error: error => {
+          console.error(
+            'Failed to update quantity:',
+            error
+          );
         }
+
       });
   }
 
-  loadCart() {
-    this.cartService.getCart().subscribe({
-      next: (res: any) => {
-        this.cartItems = res.data?.items || [];
-
-        const count = this.cartItems.reduce(
-          (sum: number, item: any) =>
-            sum + item.quantity,
-          0
-        );
-
-        this.cartService.cartCount.set(count);
-        this.cdr.detectChanges();
-
-      }
-    });
-  }
 
   getItemQuantity(
     itemId: string
   ): number {
 
     const item =
-      this.cartItems.find(
-        (i: any) =>
-          i.food._id === itemId
+      this.cartItems().find(
+        cartItem =>
+          cartItem.food._id === itemId
       );
 
-    return item?.quantity || 0;
+    return item?.quantity ?? 0;
   }
 
-  groupByCuisine(
-    foods: any[]
-  ) {
 
-    const grouped: any = {};
+  private groupByCuisine(
+    foods: FoodItem[]
+  ): MenuCategory[] {
 
-    foods.forEach(food => {
+    const grouped =
+      new Map<string, FoodItem[]>();
+
+    for (const food of foods) {
 
       const cuisine =
-        food.cuisine || 'Others';
+        food.cuisine?.trim() ||
+        'Others';
 
-      if (!grouped[cuisine]) {
-        grouped[cuisine] = [];
-      }
+      const items =
+        grouped.get(cuisine) ?? [];
 
-      grouped[cuisine].push(food);
-    });
+      items.push(food);
 
-    return Object.keys(grouped).map(
-      key => ({
-        name: key,
-        items: grouped[key]
+      grouped.set(
+        cuisine,
+        items
+      );
+    }
+
+    return Array.from(
+      grouped,
+      ([name, items]) => ({
+        name,
+        items
       })
     );
   }
 
-  @HostListener(
-    'window:scroll',
-    []
-  )
-  onScroll() {
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+
+    if (!this.categorySections) {
+      return;
+    }
+
+    const sections =
+      this.categorySections.toArray();
 
     let activeIndex = 0;
 
-    this.categorySections.forEach(
-      (section, index) => {
+    for (
+      let index = 0;
+      index < sections.length;
+      index++
+    ) {
 
-        const el =
-          section.nativeElement;
+      const rect =
+        sections[index]
+          .nativeElement
+          .getBoundingClientRect();
 
-        const rect =
-          el.getBoundingClientRect();
+      if (
+        rect.top <= this.HEADER_OFFSET
+      ) {
 
-        if (
-          rect.top - this.OFFSET <= 0
-        ) {
-          activeIndex = index;
-        }
+        activeIndex = index;
+
+      } else {
+
+        break;
+
       }
-    );
+    }
 
-    this.activeCategory =
-      activeIndex;
+    this.activeCategory.set(
+      activeIndex
+    );
   }
 
-  scrollToCategory(index: number) {
 
-    const el =
+  scrollToCategory(
+    index: number
+  ): void {
+
+    const section =
       this.categorySections
-        .toArray()[index]
+        ?.get(index)
         ?.nativeElement;
 
-    if (!el) return;
+    if (!section) {
+      return;
+    }
 
-    const y =
-      el.getBoundingClientRect().top +
+    const top =
+      section.getBoundingClientRect().top +
       window.scrollY -
-      this.OFFSET;
+      this.HEADER_OFFSET;
 
     window.scrollTo({
-      top: y,
-      behavior: 'auto'
+      top,
+      behavior: 'smooth'
     });
+
+    this.activeCategory.set(index);
   }
+
 }

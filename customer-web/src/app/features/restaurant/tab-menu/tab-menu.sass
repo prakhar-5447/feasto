@@ -3,144 +3,165 @@
 .menu-wrapper
     display: flex
     position: relative
-    .sidebar
-        width: 250px
-        border-right: $border-width-1 $border-style-solid #eee
-        background: $color-bg-white
-        .sidebar-box
-            position: sticky
-            top: 3$space-40
-            padding-top:$space-8
 
-            button
-                width: 100%
-                text-align: left
-                padding:$space-16$space-12
-                border: $border-style-none
-                border-right: $border-width-2 $border-style-solid transparent
-                background: transparent
-                cursor: pointer
-                transition: 0.2s
-                font-size: $font-size-16
-                font-weight: $font-weight-light
+.sidebar
+    width: 250px
+    background: $color-bg-white
+    border-right: $border-width-1 $border-style-solid $color-border-light
 
-                &.active
-                    border-color: $color-primary
-                    background: $gradient-menu-active
-                    color: $color-primary
-                    font-weight: $font-weight-semibold
+    .sidebar-box
+        position: sticky
+        top: 335px
+        padding-top: $space-8
 
-    .content
+        button
+            width: 100%
+            padding: $space-16 $space-12
+            border: $border-style-none
+            border-right: $border-width-2 $border-style-solid transparent
+            background: transparent
+            text-align: left
+            cursor: pointer
+            transition: 0.2s
+            font-size: $font-size-16
+            font-weight: $font-weight-light
+
+            &.active
+                border-right-color: $color-primary
+                background: $gradient-menu-active
+                color: $color-primary
+                font-weight: $font-weight-semibold
+
+.content
+    flex: 1
+    padding: $space-20
+
+.space
+    height: $space-100
+
+.category-section
+    margin-bottom: $space-16
+    padding: $space-4 0
+
+    h2
+        margin-bottom: $space-12
+        font-size: $font-size-16
+        font-weight: $font-weight-medium
+
+.item
+    display: flex
+    gap: $space-16
+    background: $color-bg-white
+    border-radius: $radius-12
+    margin-bottom: $space-12
+
+    .left
+        position: relative
+        width: 120px
+        flex-shrink: 0
+
+        img
+            display: block
+            width: 100%
+            height: $space-100
+            object-fit: cover
+            border-radius: $radius-8
+
+    .right
         flex: 1
+
+        .header
+            display: flex
+            align-items: center
+            gap: $space-8
+            margin-bottom: $space-4
+
+            h3
+                font-size: $font-size-18
+                font-weight: $font-weight-semibold
+
+        p
+            margin-bottom: $space-4
+            font-size: $font-size-14
+            color: $color-text-secondary
+
+        > span
+            display: block
+            width: 100%
+            text-align: right
+            font-weight: $font-weight-semibold
+            color: $color-text-primary
+
+.type
+    width: $space-16
+    height: $space-16
+    padding: $space-2
+    border: $border-width-2 $border-style-solid
+    flex-shrink: 0
+
+    .circle
+        width: 100%
         height: 100%
-        padding:$space-20
+        border-radius: $radius-pill
 
-        .category-section
-            padding:$space-4 0px
-            margin-bottom:$space-20
+    &.veg
+        border-color: $color-success
 
-            h2
-                font-size: $font-size-16
-                font-weight: $font-weight-medium
-                margin-bottom:$space-12
+        .circle
+            background: $color-success
 
-            .item
-                display: flex
-                justify-content: space-between
-                gap:$space-16
-                background: #fff
-                border-radius: $radius-12
+    &.non_veg
+        border-color: $color-primary
 
-                .right
-                    flex: 1
+        .circle
+            background: $color-primary
 
-                    .header
-                        margin-bottom:$space-4
-                        display: flex
-                        align-items: center
-                        gap:$space-8
-                        h3
-                            font-size: $font-size-18
-                            font-weight: $font-weight-semibold
-                        .type
-                            width:$space-16
-                            height: 100%
-                            aspect-ratio: 1/1
-                            border-width: $border-width-2
-                            border-style: $border-style-solid
-                            padding:$space-2
-                            .circle
-                                width: 100%
-                                height: 100%
-                                aspect-ratio: 1/1
-                                border-radius: $radius-pill
-                            &.veg
-                                border-color: $color-success
-                                .circle
-                                    background: $color-success
-                            &.non_veg
-                                border-color: $color-primary
-                                .circle
-                                    background: $color-primary
-                            &.egg
-                                border-color: $color-warning
-                                .circle
-                                    background: $color-warning
-                    p
-                        font-size: $font-size-14
-                        color: $color-text-secondary
-                        margin-bottom:$space-4
+    &.egg
+        border-color: $color-warning
 
-                    span
-                        width: 100%
-                        text-align: right
-                        font-weight: $font-weight-semibold
-                        color: $color-text-primary
+        .circle
+            background: $color-warning
 
-                .left
-                    width: 120px
-                    position: relative
+.controls
+    position: absolute
+    bottom: $space-12
+    left: 50%
+    transform: translateX(-50%)
 
-                    img
-                        width: 100%
-                        height: $space-100
-                        object-fit: cover
-                        border-radius: $radius-8
+    button
+        border: $border-style-none
+        background: transparent
+        color: $color-primary
+        cursor: pointer
+        font-size: $font-size-14
 
-                    .controls
-                        position: absolute
-                        bottom:$space-12
-                        left: 50%
-                        transform: translateX(-50%)
+.qty-box
+    display: flex
+    align-items: center
+    gap: $space-4
+    padding: $space-2
+    background: $color-bg-white
+    border: $border-width-1 $border-style-solid $color-primary
+    border-radius: $radius-4
+    font-size: $font-size-14
 
-                        button
-                            border: $border-style-none
-                            background: transparent
-                            cursor: pointer
-                            color: $color-primary
-                            font-size: $font-size-14
-                        .qty-box
-                            background: $color-bg-white
-                            border: $border-width-1 $border-style-solid $color-primary
-                            border-radius: $radius-4
-                            font-size: $font-size-14
-                            display: flex
-                            align-items: center
-                            gap:$space-4
-                            .btn
-                                width:$space-24
-                                height:$space-24
-                                border-radius: $radius-4
-                                font-size: $font-size-14
-                            span
-                                font-size: $font-size-16
+    .btn
+        width: $space-24
+        height: $space-24
+        border-radius: $radius-4
+        font-size: $font-size-14
 
-                        .add-btn
-                            padding:$space-4$space-12
-                            background: $color-bg-white
-                            border: $border-width-1 $border-style-solid $color-primary
-                            border-radius: $radius-4
-                            color: $color-primary
-                            cursor: pointer
-                            font-weight: $font-weight-semibold
-                            font-size: $font-size-16
+    span
+        min-width: $space-16
+        text-align: center
+        font-size: $font-size-16
+
+.add-btn
+    padding: $space-4 $space-12
+    background: $color-primary
+    border: $border-width-1 $border-style-solid $color-primary
+    border-radius: $radius-4
+    color: $color-primary
+    cursor: pointer
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold

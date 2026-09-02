@@ -1,61 +1,149 @@
 <div class="menu-wrapper">
-    <div class="sidebar">
+
+    <aside class="sidebar">
+
         <div class="sidebar-box">
-            @for (category of restaurantService.menu?.categories; track $index){
-            <button (click)="scrollToCategory($index)" [class.active]="activeCategory === $index">
-                <span class="name">{{ category.name }}</span>
-                <span class="count"> ({{ category.items.length }})</span>
+
+            @for (
+            category of menu()?.categories ?? [];
+            track category.name;
+            let i = $index
+            ) {
+
+            <button type="button" [class.active]="activeCategory() === i" (click)="scrollToCategory(i)">
+
+                <span class="name">
+                    {{ category.name }}
+                </span>
+
+                <span class="count">
+                    ({{ category.items.length }})
+                </span>
+
             </button>
+
             }
+
         </div>
-    </div>
 
-    <div class="content">
-        @for (category of restaurantService.menu?.categories;track $index) {
-        <div class="category-section" [attr.data-index]="$index" #categorySection>
-            <h2>{{ category.name }}</h2>
+    </aside>
 
-            @for(item of category.items;track item._id){
-            @if(item.isAvailable){
-            <div class="item">
+
+    <main class="content">
+
+        @for (
+        category of menu()?.categories ?? [];
+        track category.name;
+        let i = $index
+        ) {
+
+        <section class="category-section" #categorySection>
+
+            <h2>
+                {{ category.name }}
+            </h2>
+
+
+            @for (
+            item of category.items;
+            track item._id
+            ) {
+
+            @if (item.isAvailable) {
+
+            <article class="item">
+
                 <div class="left">
-                    <img [src]="item.image" />
+
+                    <img [src]="item.image" [alt]="item.name" loading="lazy" />
 
                     <div class="controls">
-                        @if(getItemQuantity(item._id) > 0){
+
+                        @if (
+                        getItemQuantity(item._id) > 0
+                        ) {
+
                         <div class="qty-box">
-                            <button (click)="updateQuantity(item._id, getItemQuantity(item._id), false)"
-                                class="btn"><fa-icon [icon]="faMinus"></fa-icon></button>
-                            <span>{{ getItemQuantity(item._id) }}</span>
-                            <button (click)="updateQuantity(item._id, getItemQuantity(item._id), true)"
-                                class="btn"><fa-icon [icon]="faPlus"></fa-icon></button>
+
+                            <button type="button" class="btn" (click)="updateQuantity(
+                                                    item._id,
+                                                    getItemQuantity(item._id),
+                                                    false
+                                                )">
+                                <fa-icon [icon]="faMinus" />
+                            </button>
+
+                            <span>
+                                {{ getItemQuantity(item._id) }}
+                            </span>
+
+                            <button type="button" class="btn" (click)="updateQuantity(
+                                                    item._id,
+                                                    getItemQuantity(item._id),
+                                                    true
+                                                )">
+                                <fa-icon [icon]="faPlus" />
+                            </button>
+
                         </div>
+
+                        } @else {
+
+                        <button type="button" class="add-btn" (click)="addToCart(item)">
+                            ADD
+                        </button>
+
                         }
 
-                        @if(getItemQuantity(item._id) <= 0){ <button (click)="addToCart(item)" class="add-btn">
-                            ADD</button>
-                            }
                     </div>
+
                 </div>
+
+
                 <div class="right">
+
                     <div class="header">
-                        <div class="type"
-                            [ngClass]="{'veg': item?.foodType === 'veg','egg': item?.foodType === 'egg','non_veg': item?.foodType === 'non_veg'}">
+
+                        <div class="type" [ngClass]="{
+                                            'veg': item.foodType === 'veg',
+                                            'egg': item.foodType === 'egg',
+                                            'non_veg': item.foodType === 'non_veg'
+                                        }">
                             <div class="circle"></div>
                         </div>
+
                         <h3>
                             {{ item.name }}
                         </h3>
+
                     </div>
-                    <p>{{ item.description }}</p>
-                    <span>₹{{ item.price }}</span>
+
+
+                    @if (item.description) {
+
+                    <p>
+                        {{ item.description }}
+                    </p>
+
+                    }
+
+                    <span>
+                        ₹{{ item.price }}
+                    </span>
+
                 </div>
 
-            </div>}
-            }
-        </div>
-        }
+            </article>
 
-    </div>
+            }
+
+            }
+
+        </section>
+
+        }
+        <div class="space"></div>
+
+    </main>
 
 </div>
