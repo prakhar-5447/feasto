@@ -369,7 +369,6 @@ export class TabMenu {
       behavior: 'smooth'
     });
 
-    this.activeCategory.set(index);
   }
 
 }

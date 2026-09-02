@@ -2,40 +2,42 @@
 
 .page
     min-height: 100vh
-    padding:$space-8$space-16
-    max-width: 1200px
+    max-width: $container-lg
     margin: 0 auto
+    padding: $space-8 $space-16
 
-    .details
-        position: sticky
-        top: 0
-        z-index: $z-30
+.details
+    position: sticky
+    top: 0
+    z-index: $z-30
 
-    .tabs
-        background: #fff
-        border-bottom: $border-width-1 $border-style-solid $color-border-light
-        position: sticky
-        top: 290px
-        height: 50px
-        z-index: $z-30
+.tabs
+    position: sticky
+    top: 290px
+    z-index: $z-30
 
-        .tab-links
-            display: flex
+    display: flex
+    height: 50px
 
-        button
-            padding: 15px$space-24
-            border: $border-style-none
-            background: transparent
-            cursor: pointer
-            font-size: $font-size-16
-            color: $color-text-secondary
-            border-bottom: $border-width-2 $border-style-solid transparent
-            transition: 0.2s
+    background: $color-bg-white
+    border-bottom: $border-width-1 $border-style-solid $color-border-light
 
-            &:hover
-                color: #000
+    button
+        padding: $space-16 $space-24
+        border: $border-style-none
+        border-bottom: $border-width-2 $border-style-solid transparent
+        background: transparent
 
-            &.active
-                color: $color-primary
-                border-bottom: $border-width-2 $border-style-solid $color-primary
-                font-weight: $font-weight-semibold
+        color: $color-text-secondary
+        font-size: $font-size-16
+        cursor: pointer
+
+        transition: $transition-color,$transition-border
+
+        &:hover
+            color: $color-text-primary
+
+        &.active
+            color: $color-primary
+            border-bottom-color: $color-primary
+            font-weight: $font-weight-semibold
