@@ -15,6 +15,7 @@ import { LandingLayout } from './layouts/landing-layout/landing-layout';
 
 import { RestaurantResolver } from './shared/pipes/resolver';
 import { validCityGuard } from './core/guards/valid-city.guard';
+import { restaurantResolver } from './core/resolver/restaurant.resolver';
 
 export const routes: Routes = [
 
@@ -51,7 +52,7 @@ export const routes: Routes = [
     {
         path: 'india/:city',
         loadComponent: () => DashboardLayout,
-        canActivate:[validCityGuard],
+        canActivate: [validCityGuard],
         children: [
 
             // /india/dhanbad
@@ -69,7 +70,9 @@ export const routes: Routes = [
                 data: {
                     breadcrumb: 'restaurant'
                 },
-
+                resolve: {
+                    restaurant: restaurantResolver
+                },
                 children: [
 
                     {
@@ -149,7 +152,7 @@ export const routes: Routes = [
                     hideBreadcrumb: true
                 }
             },
-        
+
         ]
     },
 

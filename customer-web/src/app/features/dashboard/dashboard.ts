@@ -345,7 +345,6 @@ export class Dashboard {
     });
   }
 
-
   private loadRestaurants(): void {
 
     const location = this.selectedLocation();
