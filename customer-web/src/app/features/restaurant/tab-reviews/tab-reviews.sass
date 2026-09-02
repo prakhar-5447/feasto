@@ -2,211 +2,192 @@
 
 .reviews-layout
     display: flex
-    padding:$space-20 0px
-    .review-list
-        flex: 1
-        display: flex
-        flex-direction: column
-        gap:$space-8
-        padding-right:$space-24
-        margin-right:$space-24
-        border-right: $border-width-1 $border-style-solid $color-overlay-black-subtle
-        .review-card
-            background: $color-bg-white
-            border-radius: $radius-8
-            padding:$space-24
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .05)
+    padding: $space-20 0
 
-        .review-header
-            display: flex
-            justify-content: space-between
-            margin-bottom:$space-8
+.review-list
+    flex: 1
+    display: flex
+    flex-direction: column
+    gap: $space-8
+    margin-right: $space-24
+    padding-right: $space-24
+    border-right: $border-width-1 $border-style-solid $color-overlay-black-subtle
 
-            .user-name
-                font-weight: $font-weight-semibold
-                color: $color-text-primary
+.review-card
+    padding: $space-24
+    background: $color-bg-white
+    border-radius: $radius-8
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05)
 
-            .review-meta
-                display: flex
-                align-items: center
-                gap:$space-8
-                margin-top:$space-4
+.review-header
+    display: flex
+    justify-content: space-between
+    margin-bottom: $space-8
 
-                .review-date
-                    font-size: $font-size-14
-                    color: $color-text-secondary
+.user-name
+    color: $color-text-primary
+    font-weight: $font-weight-semibold
 
-                .stars
-                    display: flex
-                    justify-content: center
-                    gap:$space-4
-                    margin:$space-4 0
-                    .star
-                        font-size: $font-size-12
-                        color: $color-neutral-300
+.review-meta
+    display: flex
+    align-items: center
+    gap: $space-8
+    margin-top: $space-4
 
-                        &.filled
-                            color: $color-primary
+.review-date
+    color: $color-text-secondary
+    font-size: $font-size-14
 
-                        &.empty
-                            color: $color-neutral-300
+.stars
+    display: flex
+    align-items: center
+    gap: $space-4
 
-        .review-comment
-            margin-bottom:$space-12
-            color: $color-text-primary
-            line-height: $line-height-normal
+    .star
+        color: $color-neutral-300
 
-        .helpful-btn
-            display: flex
-            align-items: center
-            gap:$space-4
-            background: none
-            border: $border-style-none
-            font-size: $font-size-14
-            color: $color-text-secondary
-            cursor: pointer
+        &.filled
+            color: $color-primary
 
-            &:hover
-                color: $color-text-primary
-    .pagination
-        display: flex
-        justify-content: flex-end
-        align-items: center
-        gap:$space-8
-        margin-top:$space-24
-        .nav-btn
-            min-width:$space-32
-            height:$space-32
-            border: $border-style-none
-            border-radius: $radius-4
-            background: white
-            cursor: pointer
-            font-size: $font-size-14
-            &:hover
-                background: $color-bg-gray
-        .nav-btn:not(:disabled)
-            fa-icon
-                color: $color-primary
+        &.empty
+            color: $color-neutral-300
 
-        .page-btn
-            min-width:$space-32
-            height:$space-32
-            border: $border-style-none
-            border-radius: $radius-4
-            background: white
-            cursor: pointer
-            font-size: $font-size-16
-            transition: all .2s
+.review-meta
+    .star
+        font-size: $font-size-12
 
-            &:hover
-                background: $color-bg-gray
-            &.active
-                background: $color-primary
-                color: $color-bg-white
-    .review-form-container
-        width: 4$space-80
-        display: flex
-        flex-direction: column
-        gap:$space-12
+.review-comment
+    margin-bottom: $space-12
+    color: $color-text-primary
+    line-height: $line-height-normal
 
-        .rating-summary
-            display: flex
-            align-items: center
-            gap:$space-20
-            background: $color-bg-white
-            border-radius: $radius-8
-            padding:$space-24
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .05)
+.helpful-btn
+    display: flex
+    align-items: center
+    gap: $space-4
+    border: $border-style-none
+    background: transparent
+    color: $color-text-secondary
+    font-size: $font-size-14
+    cursor: pointer
 
-            .rating-score
-                text-align: center
+    &:hover
+        color: $color-text-primary
 
-                .rating-number
-                    font-size: $font-size-40
-                    font-weight: $font-weight-bold
-                    color: $color-text-primary
+.pagination
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    gap: $space-8
+    margin-top: $space-24
 
-                .rating-count
-                    font-size: $font-size-14
-                    color: $color-text-secondary
+    button
+        min-width: $space-32
+        height: $space-32
+        border: $border-style-none
+        border-radius: $radius-4
+        background: $color-bg-white
+        cursor: pointer
+        transition: background 0.2s
 
-                .stars
-                    display: flex
-                    justify-content: center
-                    gap:$space-4
-                    margin:$space-4 0
-                    .star
-                        font-size: $font-size-12
-                        color: $color-neutral-300
+        &:hover:not(:disabled)
+            background: $color-bg-gray
 
-                        &.filled
-                            color: $color-primary
+    .nav-btn
+        font-size: $font-size-14
 
-                            &.empty
-                                color: $color-neutral-300
+        &:not(:disabled)
+            color: $color-primary
 
-            .rating-info
-                flex: 1
-                border-left: $border-width-1 $border-style-solid $color-border-light
-                padding-left:$space-16
-                font-size: $font-size-14
-                color: $color-text-secondary
-        .ai-container
-            padding:$space-16 0px
-            .btn
-                text-align: center
-                button
-                    font-size: $font-size-14
-                    font-weight: $font-weight-semibold
-                    border: $border-style-none
-                    background: none
-                    cursor: pointer
-                    color: $color-primary
+        &:disabled
+            cursor: not-allowed
+            opacity: 0.5
 
-        .form-area
-            .form-title
-                font-size: $font-size-18
-                font-weight: $font-weight-medium
-                margin-bottom:$space-8
+    .page-btn
+        font-size: $font-size-16
 
-            .review-textarea
-                width: 100%
-                height: 220px
-                border-radius: $radius-8
-                padding:$space-16
-                resize: none
-                background-color: #f0f0f0
-                border: $border-style-none
-                &:focus
-                    outline: none
+        &.active
+            background: $color-primary
+            color: $color-bg-white
 
-            .form-actions
-                display: flex
-                justify-content: space-between
-                align-items: center
-                margin-top:$space-8
+.review-form-container
+    width: 480px
+    display: flex
+    flex-direction: column
+    gap: $space-12
 
-                .stars
-                    display: flex
-                    justify-content: center
-                    gap:$space-4
-                    margin:$space-4 0
-                    .star
-                        font-size: $font-size-16
-                        color: $color-neutral-300
-                        cursor: pointer
+.rating-summary
+    display: flex
+    align-items: center
+    gap: $space-20
+    padding: $space-24
+    background: $color-bg-white
+    border-radius: $radius-8
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05)
 
-                        &.filled
-                            color: $color-primary
+.rating-score
+    text-align: center
 
-                        &.empty
-                            color: $color-neutral-300
+    .rating-number
+        color: $color-text-primary
+        font-size: $font-size-40
+        font-weight: $font-weight-bold
 
-                .form-button
-                    .save-btn
-                        color: $color-primary
-                        font-size: $font-size-16
-                        font-weight: $font-weight-semibold
-                        background: none
-                        border: $border-style-none
-                        cursor: pointer
+    .rating-count
+        color: $color-text-secondary
+        font-size: $font-size-14
+
+.rating-info
+    flex: 1
+    padding-left: $space-16
+    border-left: $border-width-1 $border-style-solid $color-border-light
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+.rating-summary
+    .stars
+        margin: $space-4 0
+
+        .star
+            font-size: $font-size-12
+
+.ai-container
+    padding: $space-16 0
+    text-align: center
+
+.ai-button
+    border: $border-style-none
+    background: transparent
+    color: $color-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+    cursor: pointer
+
+.form-area
+    .form-title
+        margin-bottom: $space-8
+        font-size: $font-size-18
+        font-weight: $font-weight-medium
+
+.review-textarea
+    width: 100%
+    height: 220px
+    padding: $space-16
+    border: $border-style-none
+    border-radius: $radius-8
+    background: $color-bg-gray
+    resize: none
+
+    &:focus
+        outline: none
+
+.form-actions
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-top: $space-8
+
+.form-actions
+    .star
+        font-size: $font-size-16
+        cursor: pointer
