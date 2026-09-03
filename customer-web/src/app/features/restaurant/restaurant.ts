@@ -17,6 +17,11 @@ import { map } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+import { AppState } from '../../store/app.state';
+import { Store } from '@ngrx/store';
+import { selectCartCount } from '../../store/cart/cart.selectors';
+import * as CartActions from '../../store/cart/cart.actions';
+
 import { CartService } from '../../core/services/cart.service';
 
 import { ImageCarousel } from './image-carousel/image-carousel';
@@ -48,6 +53,9 @@ export class Restaurant {
 
   readonly faArrowLeft = faArrowLeft;
 
+  private readonly store = inject(Store<AppState>);
+  readonly itemCount = this.store.selectSignal(selectCartCount);
+
   readonly restaurant = toSignal(
     this.route.data.pipe(
       map(data => data['restaurant'] as RestaurantDetail)
@@ -65,7 +73,11 @@ export class Restaurant {
     this.activeTab.set(tab);
   }
 
-  get cartCount(): number {
-    return this.cartService.cartCount();
+  ngOnInit(): void {
+
+    this.store.dispatch(
+      CartActions.loadCart()
+    );
+
   }
 }

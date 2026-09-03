@@ -48,7 +48,7 @@ export const addToCart = async (
         });
     }
     if (cart.items.length) {
-        if (cart.restaurant.toString() !== food.restaurant._id.toString()) {
+        if (cart.restaurant._id.toString() !== food.restaurant._id.toString()) {
             throw new Error("Cart contains items from another restaurant");
         }
     } else {
@@ -71,6 +71,9 @@ export const addToCart = async (
 
     await cart.save();
 
+    await cart.populate('items.food');
+    await cart.populate('restaurant');
+
     return cart;
 };
 
@@ -84,7 +87,6 @@ export const updateCartItem = async (
     quantity: number
 ) => {
     const cart = await getCartOrThrow(userId);
-
     const item = cart.items.find(
         (item: any) => item.food._id.toString() === foodId
     );

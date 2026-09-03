@@ -21,6 +21,8 @@ import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 import { SlugPipe } from './shared/pipes/slug.pipe';
 import { LabelPipe } from './shared/pipes/label.pipe';
+import { cartReducer } from './store/cart/cart.reducer';
+import { CartEffects } from './store/cart/cart.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -64,12 +66,14 @@ export const appConfig: ApplicationConfig = {
 
     provideStore({
       auth: authReducer,
-      location: locationReducer
+      location: locationReducer,
+      cart: cartReducer
     }),
 
     provideEffects(
       AuthEffects,
-      LocationEffects
+      LocationEffects,
+      CartEffects
     ),
 
     provideStoreDevtools({

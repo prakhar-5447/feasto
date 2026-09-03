@@ -23,7 +23,7 @@
         </button>
 
         <button routerLink="cart" (click)="setTab('cart')" [class.active]="activeTab() === 'cart'">
-            Cart ({{ cartCount }})
+            Cart ({{ itemCount() }})
         </button>
 
     </div>

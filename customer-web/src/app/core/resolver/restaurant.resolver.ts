@@ -11,8 +11,8 @@ export const restaurantResolver: ResolveFn<RestaurantDetail> = route => {
     const slug = route.paramMap.get('restaurant');
 
     if (!city || !slug) {
-        console.log(city);
-        console.log(slug);
+        // console.log(city);
+        // console.log(slug);
         throw new Error('Invalid restaurant route');
     }
 

@@ -172,7 +172,7 @@ export class TabReviews {
       comment: this.reviewForm.controls.description.value
     };
 
-    console.log(review);
+    // console.log(review);
 
     // POST review here.
 
@@ -182,7 +182,7 @@ export class TabReviews {
 
   markHelpful(review: Review): void {
     // API call can be added here.
-    console.log('Helpful:', review.id);
+    // console.log('Helpful:', review.id);
   }
 
   get roundRating(): number {

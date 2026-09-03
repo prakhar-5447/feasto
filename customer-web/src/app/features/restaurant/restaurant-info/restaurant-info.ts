@@ -54,7 +54,6 @@ export class RestaurantInfo {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.restaurantInfo());
     const location = this.selectedLocation();
 
     if (!location) {

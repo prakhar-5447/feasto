@@ -42,9 +42,9 @@
                         {{ restaurantName }}
                     </h1>
 
-                    @if (itemCount) {
+                    @if (itemCount()) {
                     <p>
-                        {{ itemCount }} items
+                        {{ itemCount() }} items
                     </p>
                     }
 
@@ -81,35 +81,25 @@
 
                             <div class="qty-box" aria-label="Quantity">
 
-                                <app-button variant="icon" size="sm" [disabled]="
-                                                updatingItemId() === item.food._id ||
-                                                item.quantity <= 1
-                                            " [icon]="faMinus" ariaLabel="Decrease quantity" (clicked)="updateQuantity(
-                                                item.food._id,
-                                                item.quantity - 1
-                                            )"></app-button>
-
+                                <app-button variant="icon" size="sm"
+                                    [disabled]="isUpdating(item.food._id) ||item.quantity <= 1" [icon]="faMinus"
+                                    ariaLabel="Decrease quantity"
+                                    (clicked)="decreaseQuantity(item.food._id,item.quantity)"></app-button>
 
                                 <span class="quantity" aria-live="polite">
                                     {{ item.quantity }}
                                 </span>
 
-
-                                <app-button variant="icon" size="sm" [disabled]="
-                                                updatingItemId() === item.food._id
-                                            " [icon]="faPlus" ariaLabel="Increase quantity" (clicked)="updateQuantity(
-                                                item.food._id,
-                                                item.quantity + 1
-                                            )"></app-button>
+                                <app-button variant="icon" size="sm" [disabled]="isUpdating(item.food._id)"
+                                    [icon]="faPlus" ariaLabel="Increase quantity"
+                                    (clicked)="increaseQuantity(item.food._id,item.quantity)"></app-button>
 
                             </div>
 
 
-                            <app-button variant="text" size="sm" weight="medium" tone="muted" [loading]="
-                                            removingItemId() === item.food._id
-                                        " ariaLabel="Remove item" (clicked)="removeItem(
-                                            item.food._id
-                                        )">
+                            <app-button variant="text" size="sm" weight="medium" tone="muted"
+                                [loading]="isRemoving(item.food._id)" ariaLabel="Remove item"
+                                (clicked)="removeItem(item.food._id)">
                                 Remove
                             </app-button>
 

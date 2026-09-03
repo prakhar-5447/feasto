@@ -5,9 +5,10 @@ import {
   ElementRef,
   HostListener,
   QueryList,
-  ViewChildren,
   inject,
-  signal
+  signal,
+  computed,
+  ViewChildren
 } from '@angular/core';
 
 import { NgClass } from '@angular/common';
@@ -34,8 +35,21 @@ import {
 } from '@angular/core/rxjs-interop';
 
 import {
-  CartService
-} from '../../../core/services/cart.service';
+  Store
+} from '@ngrx/store';
+
+import {
+  AppState
+} from '../../../store/app.state';
+
+import * as CartActions
+  from '../../../store/cart/cart.actions';
+
+import {
+  selectCartItems,
+  selectUpdatingItemIds,
+  selectRemovingItemIds
+} from '../../../store/cart/cart.selectors';
 
 import {
   FoodItem,
@@ -69,19 +83,24 @@ export class TabMenu {
   private readonly destroyRef =
     inject(DestroyRef);
 
-  readonly cartService =
-    inject(CartService);
+  private readonly store =
+    inject(Store<AppState>);
 
+
+  // --------------------------------------------------
+  // Icons
+  // --------------------------------------------------
 
   readonly faMinus = faMinus;
   readonly faPlus = faPlus;
 
 
+  // --------------------------------------------------
+  // Menu state
+  // --------------------------------------------------
+
   readonly menu =
     signal<RestaurantMenu | null>(null);
-
-  readonly cartItems =
-    signal<any[]>([]);
 
   readonly activeCategory =
     signal(0);
@@ -89,30 +108,94 @@ export class TabMenu {
   readonly loading =
     signal(true);
 
-  readonly skeletonCategories = [1, 2, 3];
 
-  readonly skeletonItems = [1, 2, 3];
+  readonly skeletonCategories =
+    [1, 2, 3];
+
+  readonly skeletonItems =
+    [1, 2, 3];
+
+
+  // --------------------------------------------------
+  // Cart state
+  // --------------------------------------------------
+
+  readonly cartItems =
+    this.store.selectSignal(selectCartItems);
+
+  readonly updatingItemIds =
+    this.store.selectSignal(selectUpdatingItemIds);
+
+  readonly removingItemIds =
+    this.store.selectSignal(selectRemovingItemIds);
+
+
+  /**
+   * Creates an O(1) lookup for cart quantities.
+   *
+   * Instead of searching the cart array every time
+   * getItemQuantity() is called, we create:
+   *
+   * foodId -> quantity
+   */
+  readonly cartQuantityMap = computed(() => {
+
+    const map =
+      new Map<string, number>();
+
+    for (const item of this.cartItems()) {
+
+      map.set(
+        item.food._id,
+        item.quantity
+      );
+
+    }
+
+    return map;
+  });
+
+
+  // --------------------------------------------------
+  // Constants
+  // --------------------------------------------------
 
   private readonly HEADER_OFFSET = 340;
 
 
-  @ViewChildren('categorySection')
-  private categorySections!: QueryList<ElementRef<HTMLElement>>;
+  // --------------------------------------------------
+  // Category sections
+  // --------------------------------------------------
 
+  @ViewChildren('categorySection')
+  private categorySections!: QueryList<
+    ElementRef<HTMLElement>
+  >;
+
+
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
 
   ngOnInit(): void {
 
     const slug =
-      this.route.parent?.snapshot.paramMap.get('restaurant');
+      this.route.parent
+        ?.snapshot
+        .paramMap
+        .get('restaurant');
 
     if (!slug) {
       return;
     }
 
     this.loadFoods(slug);
-    this.loadCart();
   }
 
+
+  // --------------------------------------------------
+  // Menu API
+  // --------------------------------------------------
 
   private loadFoods(slug: string): void {
 
@@ -128,6 +211,7 @@ export class TabMenu {
       .subscribe({
 
         next: ({ data }) => {
+
           this.menu.set({
             categories:
               this.groupByCuisine(data)
@@ -154,124 +238,138 @@ export class TabMenu {
   }
 
 
-  private loadCart(): void {
+  // --------------------------------------------------
+  // Cart operations
+  // --------------------------------------------------
 
-    this.cartService
-      .getCart()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-
-        next: (res: any) => {
-
-          const items =
-            res.data?.items ?? [];
-
-          this.cartItems.set(items);
-
-          const count =
-            items.reduce(
-              (total: number, item: any) =>
-                total + item.quantity,
-              0
-            );
-
-          this.cartService.cartCount.set(count);
-        },
-
-        error: error => {
-
-          console.error(
-            'Failed to load cart:',
-            error
-          );
-
-        }
-
-      });
-  }
-
-
+  /**
+   * Add a food item to the cart.
+   *
+   * The Cart Store updates optimistically, so the UI
+   * changes immediately. The Cart Effect handles the
+   * actual API request in the background.
+   */
   addToCart(item: FoodItem): void {
+    if (this.isUpdating(item._id)) {
+      return;
+    }
 
-    this.cartService
-      .addToCart(item._id, 1)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-
-        next: () => {
-          this.loadCart();
-        },
-
-        error: error => {
-
-          console.error(
-            'Failed to add item:',
-            error
-          );
-
-          alert(
-            error.error?.message ??
-            'Unable to add item'
-          );
-        }
-
-      });
+    this.store.dispatch(
+      CartActions.addItem({
+        food: item,
+        quantity: 1
+      })
+    );
   }
 
 
+  /**
+   * Increase or decrease the quantity of an item.
+   */
   updateQuantity(
     itemId: string,
     quantity: number,
     increase: boolean
   ): void {
 
+    if (
+      this.isUpdating(itemId) ||
+      this.isRemoving(itemId)
+    ) {
+      return;
+    }
+
     const newQuantity =
       increase
         ? quantity + 1
         : quantity - 1;
 
-    this.cartService
-      .updateQuantity(
-        itemId,
-        newQuantity
-      )
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
 
-        next: () => {
-          this.loadCart();
-        },
+    /**
+     * Quantity should never become zero through
+     * updateQuantity().
+     *
+     * If you want quantity 0 to remove the item,
+     * dispatch removeItem instead.
+     */
+    if (newQuantity < 1) {
+      this.removeItem(itemId);
+      return;
+    }
 
-        error: error => {
-          console.error(
-            'Failed to update quantity:',
-            error
-          );
-        }
 
-      });
+    this.store.dispatch(
+      CartActions.updateQuantity({
+        foodId: itemId,
+        quantity: newQuantity
+      })
+    );
   }
 
 
-  getItemQuantity(
+  /**
+   * Remove an item from the cart.
+   */
+  removeItem(itemId: string): void {
+
+    if (
+      this.isUpdating(itemId) ||
+      this.isRemoving(itemId)
+    ) {
+      return;
+    }
+
+    this.store.dispatch(
+      CartActions.removeItem({
+        foodId: itemId
+      })
+    );
+  }
+
+
+  // --------------------------------------------------
+  // Cart helpers
+  // --------------------------------------------------
+
+  /**
+   * Returns the current quantity of a food item.
+   */
+  getItemQuantity(itemId: string): number {
+    const quantity =
+      this.cartQuantityMap().get(itemId) ?? 0;
+    return quantity;
+  }
+
+
+  /**
+   * Whether this specific item is currently being
+   * updated by the Cart Store.
+   */
+  isUpdating(
     itemId: string
-  ): number {
+  ): boolean {
 
-    const item =
-      this.cartItems().find(
-        cartItem =>
-          cartItem.food._id === itemId
-      );
-
-    return item?.quantity ?? 0;
+    return this.updatingItemIds()
+      .includes(itemId);
   }
 
+
+  /**
+   * Whether this specific item is currently being
+   * removed.
+   */
+  isRemoving(
+    itemId: string
+  ): boolean {
+
+    return this.removingItemIds()
+      .includes(itemId);
+  }
+
+
+  // --------------------------------------------------
+  // Menu helpers
+  // --------------------------------------------------
 
   private groupByCuisine(
     foods: FoodItem[]
@@ -280,22 +378,27 @@ export class TabMenu {
     const grouped =
       new Map<string, FoodItem[]>();
 
+
     for (const food of foods) {
 
       const cuisine =
         food.cuisine?.trim() ||
         'Others';
 
+
       const items =
         grouped.get(cuisine) ?? [];
 
+
       items.push(food);
+
 
       grouped.set(
         cuisine,
         items
       );
     }
+
 
     return Array.from(
       grouped,
@@ -307,6 +410,10 @@ export class TabMenu {
   }
 
 
+  // --------------------------------------------------
+  // Scroll handling
+  // --------------------------------------------------
+
   @HostListener('window:scroll')
   onScroll(): void {
 
@@ -314,10 +421,13 @@ export class TabMenu {
       return;
     }
 
+
     const sections =
       this.categorySections.toArray();
 
+
     let activeIndex = 0;
+
 
     for (
       let index = 0;
@@ -329,6 +439,7 @@ export class TabMenu {
         sections[index]
           .nativeElement
           .getBoundingClientRect();
+
 
       if (
         rect.top <= this.HEADER_OFFSET
@@ -343,11 +454,16 @@ export class TabMenu {
       }
     }
 
+
     this.activeCategory.set(
       activeIndex
     );
   }
 
+
+  // --------------------------------------------------
+  // Category navigation
+  // --------------------------------------------------
 
   scrollToCategory(
     index: number
@@ -358,20 +474,22 @@ export class TabMenu {
         ?.get(index)
         ?.nativeElement;
 
+
     if (!section) {
       return;
     }
+
 
     const top =
       section.getBoundingClientRect().top +
       window.scrollY -
       this.HEADER_OFFSET;
 
+
     window.scrollTo({
       top,
       behavior: 'smooth'
     });
-
   }
 
 }
