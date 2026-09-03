@@ -3,13 +3,13 @@
 
     @if (!last) {
     <a [routerLink]="crumb.url">
-        {{ crumb.label }}
+        {{ crumb.label | restaurantLabel }}
     </a>
 
     <span class="separator">/</span>
     } @else {
     <span class="current">
-        {{ crumb.label }}
+        {{ crumb.label | restaurantLabel }}
     </span>
     }
 

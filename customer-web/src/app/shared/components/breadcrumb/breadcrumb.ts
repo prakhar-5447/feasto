@@ -6,7 +6,8 @@ import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { LoggerService } from '../../../core/services/logger.service';
-
+import { RestaurantLabelPipe } from '../../pipes/restaurant-label.pipe';
+import { LabelPipe } from '../../pipes/label.pipe';
 
 interface BreadcrumbData {
     label: string;
@@ -17,7 +18,7 @@ interface BreadcrumbData {
 @Component({
     selector: 'app-breadcrumb',
     standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink, RestaurantLabelPipe],
     templateUrl: './breadcrumb.html',
     styleUrl: './breadcrumb.sass',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -31,6 +32,7 @@ export class Breadcrumb {
     private readonly destroyRef = inject(DestroyRef);
     private readonly logger = inject(LoggerService);
 
+    readonly labelPipe = inject(LabelPipe);
 
     ngOnInit(): void {
 
@@ -88,7 +90,7 @@ export class Breadcrumb {
 
         if (city) {
             breadcrumbs.push({
-                label: this.formatLabel(city),
+                label: this.labelPipe.transform(city),
                 url: `/india/${city}`
             });
         }
@@ -108,7 +110,7 @@ export class Breadcrumb {
 
         if (restaurant && city) {
             breadcrumbs.push({
-                label: this.formatLabel(restaurant),
+                label: restaurant,
                 url: `/india/${city}/r/${restaurant}`
             });
         }
@@ -172,17 +174,5 @@ export class Breadcrumb {
             label: pages[page],
             path: '/' + segments.join('/')
         };
-    }
-
-
-    private formatLabel(value: string): string {
-        return value
-            .split('-')
-            .filter(Boolean)
-            .map(word =>
-                word.charAt(0).toUpperCase() +
-                word.slice(1).toLowerCase()
-            )
-            .join(' ');
     }
 }
