@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal
 } from '@angular/core';
@@ -19,7 +20,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { AppState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
-import { selectCartCount } from '../../store/cart/cart.selectors';
+import { selectCartCount, selectCartStatus } from '../../store/cart/cart.selectors';
 import * as CartActions from '../../store/cart/cart.actions';
 
 import { CartService } from '../../core/services/cart.service';
@@ -55,6 +56,12 @@ export class Restaurant {
 
   private readonly store = inject(Store<AppState>);
   readonly itemCount = this.store.selectSignal(selectCartCount);
+
+  readonly cartStatus = this.store.selectSignal(selectCartStatus);
+
+  readonly showCartCountSkeleton = computed(
+    () => this.cartStatus() !== 'success'
+  );
 
   readonly restaurant = toSignal(
     this.route.data.pipe(

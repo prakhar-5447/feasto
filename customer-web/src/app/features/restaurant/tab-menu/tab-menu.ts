@@ -56,6 +56,7 @@ import {
   MenuCategory,
   RestaurantMenu
 } from '../../../core/restaurant/models/menu.model';
+import { Button } from '../../../shared/components/button/button';
 
 
 @Component({
@@ -64,7 +65,8 @@ import {
 
   imports: [
     NgClass,
-    FontAwesomeModule
+    FontAwesomeModule,
+    Button
   ],
 
   templateUrl: './tab-menu.html',

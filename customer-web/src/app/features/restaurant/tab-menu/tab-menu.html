@@ -118,22 +118,52 @@
 
                     <img [src]="item.image" [alt]="item.name" loading="lazy" />
 
-                    <div class="controls">
+                </div>
 
-                        @if (
-                        getItemQuantity(item._id) > 0
-                        ) {
+
+                <div class="right">
+
+                    <div class="info">
+
+                        <div class="header">
+
+                            <div class="type" [ngClass]="{
+                    'veg': item.foodType === 'veg',
+                    'egg': item.foodType === 'egg',
+                    'non_veg': item.foodType === 'non_veg'
+                }">
+                                <div class="circle"></div>
+                            </div>
+
+                            <h3>
+                                {{ item.name }}
+                            </h3>
+
+                        </div>
+
+                        @if (item.description) {
+
+                        <p>
+                            {{ item.description }}
+                        </p>
+
+                        }
+
+                    </div>
+
+
+                    <div class="actions">
+
+                        @if (getItemQuantity(item._id) > 0) {
 
                         <div class="qty-box">
 
                             <button type="button" class="btn" (click)="updateQuantity(
-                                                        item._id,
-                                                        getItemQuantity(item._id),
-                                                        false
-                                                    )">
-
+                    item._id,
+                    getItemQuantity(item._id),
+                    false
+                )">
                                 <fa-icon [icon]="faMinus" />
-
                             </button>
 
                             <span>
@@ -141,69 +171,32 @@
                             </span>
 
                             <button type="button" class="btn" (click)="updateQuantity(
-                                                        item._id,
-                                                        getItemQuantity(item._id),
-                                                        true
-                                                    )">
-
+                    item._id,
+                    getItemQuantity(item._id),
+                    true
+                )">
                                 <fa-icon [icon]="faPlus" />
-
                             </button>
 
                         </div>
 
                         } @else {
 
-                        <button type="button" class="add-btn" (click)="addToCart(item)">
-
-                            ADD
-
-                        </button>
+                        <app-button variant="primary" size="sm" weight="semibold" (clicked)="addToCart(item)">
+                            Add
+                        </app-button>
 
                         }
 
-                    </div>
-
-                </div>
-
-
-                <div class="right">
-
-                    <div class="header">
-
-                        <div class="type" [ngClass]="{
-                                                'veg': item.foodType === 'veg',
-                                                'egg': item.foodType === 'egg',
-                                                'non_veg': item.foodType === 'non_veg'
-                                            }">
-
-                            <div class="circle"></div>
-
-                        </div>
-
-                        <h3>
-                            {{ item.name }}
-                        </h3>
+                        <span class="price">
+                            ₹{{ item.price }}
+                        </span>
 
                     </div>
-
-
-                    @if (item.description) {
-
-                    <p>
-                        {{ item.description }}
-                    </p>
-
-                    }
-
-                    <span>
-                        ₹{{ item.price }}
-                    </span>
 
                 </div>
 
             </article>
-
             }
 
             }
