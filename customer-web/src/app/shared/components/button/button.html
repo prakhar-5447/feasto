@@ -1,16 +1,20 @@
 <button [type]="type()" [disabled]="disabled() || loading()" [class]="buttonClasses"
     [attr.aria-label]="ariaLabel() || null" [attr.aria-busy]="loading()" (click)="onClick($event)">
-
     @if (loading()) {
 
     <app-loader [size]="18" [borderSize]="2" color="#ffffff" label="Loading" />
+
+    } @else if (variant() === 'icon') {
+
+    @if (icon()) {
+    <fa-icon [icon]="icon()!" aria-hidden="true" />
+    }
 
     } @else {
 
     @if (icon() && iconPosition() === 'left') {
     <fa-icon [icon]="icon()!" aria-hidden="true" />
     }
-
     <span class="button-content">
         <ng-content />
     </span>

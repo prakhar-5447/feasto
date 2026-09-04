@@ -34,7 +34,7 @@
 
 .button-sm
     min-height: $space-32
-    padding: $space-4 $space-12
+    padding: $space-8 $space-16
 
     font-size: $font-size-14
 
@@ -111,13 +111,16 @@
         background: $color-error-bright
 
 .button-icon
-    width: 40px
-    height: 40px
+    display: flex
+    align-items: center
+    justify-content: center
+    font-size: $font-size-12
+    height: $space-24
+    width: $space-24
     padding: 0
 
-    border-radius: $radius-circle
+    border-radius: $radius-4
     background: transparent
-
     color: $color-text-primary
 
     &:hover:not(:disabled)

@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  effect,
   inject
 } from '@angular/core';
 
@@ -28,10 +30,10 @@ import {
   selectCartItems,
   selectCartSummary,
   selectCartRestaurant,
-  selectCartLoading,
   selectCartCount,
   selectUpdatingItemIds,
-  selectRemovingItemIds
+  selectRemovingItemIds,
+  selectCartStatus
 } from '../../store/cart/cart.selectors';
 
 import { AppState } from '../../store/app.state';
@@ -84,8 +86,9 @@ export class Cart {
     this.store.selectSignal(
       selectCartRestaurant
     );
+
   // Cart UI state
-  readonly loading = this.store.selectSignal(selectCartLoading);
+  readonly cartStatus = this.store.selectSignal(selectCartStatus);
   readonly itemCount = this.store.selectSignal(selectCartCount);
 
   readonly updatingItemIds =
@@ -93,6 +96,28 @@ export class Cart {
 
   readonly removingItemIds =
     this.store.selectSignal(selectRemovingItemIds);
+
+  readonly loading = computed(
+    () => this.cartStatus() === 'idle' ||
+      this.cartStatus() === 'loading'
+  );
+
+  private readonly cartRedirectEffect = effect(() => {
+
+    const status = this.cartStatus();
+    const items = this.cart();
+
+    if (status !== 'success') {
+      return;
+    }
+
+    if (items.length === 0) {
+      this.router.navigate(['../'], {
+        relativeTo: this.route
+      });
+    }
+
+  });
 
   increaseQuantity(
     foodId: string,

@@ -13,8 +13,6 @@ import {
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 
-import { RestaurantService } from '../../../core/services/restaurant.service';
-
 
 @Component({
   selector: 'app-image-carousel',
@@ -25,9 +23,6 @@ import { RestaurantService } from '../../../core/services/restaurant.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageCarousel {
-
-  private readonly restaurantService =
-    inject(RestaurantService);
 
   readonly faArrowLeft = faArrowLeft;
   readonly faArrowRight = faArrowRight;

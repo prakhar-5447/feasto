@@ -25,6 +25,7 @@
 
 .items
     padding: $space-20
+    align-self: start
 
 .section-header
     margin-bottom: $space-20
@@ -175,48 +176,164 @@
     font-size: $font-size-14
     font-weight: $font-weight-medium
 
-.empty-cart
-    display: flex
-    flex-direction: column
-    align-items: center
-    justify-content: center
+.cart-skeleton
 
-    min-height: 420px
-    padding: $space-40
+    // --------------------------------------------------------
+    // Left: Cart Items
+    // --------------------------------------------------------
 
-    border-radius: $radius-12
-    background: $color-bg-white
-    box-shadow: $shadow-sm
+    .items
+        height: fit-content
 
-    text-align: center
+    .section-header
+        display: flex
+        flex-direction: column
+        gap: $space-8
 
-    h1
-        margin: 0 0 $space-8
+    .skeleton-title
+        width: 30%
+        height: $space-24
 
-        color: $color-text-primary
-        font-size: $font-size-24
-        font-weight: $font-weight-semibold
+    .skeleton-count
+        width: $space-64
+        height: $space-16
 
-    p
-        margin: 0 0 $space-20
+    // --------------------------------------------------------
+    // Cart Item
+    // --------------------------------------------------------
 
-        color: $color-text-secondary
-        font-size: $font-size-16
+    .item
 
-.cart-loading
-    display: flex
-    flex-direction: column
-    gap: $space-16
+        .skeleton-image
+            width: $space-80
+            height: $space-80
 
-    padding: $space-20
+            border-radius: $radius-8
 
-.cart-skeleton-title
-    width: 30%
-    height: $space-24
+        .details
+            display: flex
+            flex-direction: column
+            gap: $space-8
 
-.cart-skeleton-item
-    width: 100%
-    height: $space-80
+        .skeleton-name
+            width: 60%
+            height: $space-20
+
+        .skeleton-price
+            width: $space-48
+            height: $space-16
+
+        // ----------------------------------------------------
+        // Quantity + Remove
+        // ----------------------------------------------------
+
+        .actions
+
+            .skeleton-qty
+                width: $space-100
+                height: $space-40
+
+                border-radius: $radius-8
+
+            .skeleton-remove
+                width: $space-64
+                height: $space-16
+
+    // --------------------------------------------------------
+    // Right: Billing
+    // --------------------------------------------------------
+
+    .billing-section
+        align-self: start
+
+    .bill
+
+        .skeleton-bill-title
+            width: 35%
+            height: $space-24
+
+            margin-bottom: $space-20
+
+        .bill-rows
+
+            .row
+
+                .skeleton-bill-label
+                    width: 35%
+                    height: $space-16
+
+                .skeleton-bill-value
+                    width: $space-48
+                    height: $space-16
+
+        // ----------------------------------------------------
+        // Total
+        // ----------------------------------------------------
+
+        .total
+
+            .skeleton-total-label
+                width: $space-48
+                height: $space-20
+
+            .skeleton-total-value
+                width: $space-64
+                height: $space-20
+
+        // ----------------------------------------------------
+        // Checkout Button
+        // ----------------------------------------------------
+
+        .skeleton-checkout
+            width: 100%
+            height: $space-48
+
+            margin-top: $space-20
+
+            border-radius: $radius-8
+
+    // --------------------------------------------------------
+    // Coupon Skeleton
+    // --------------------------------------------------------
+
+    .skeleton-coupon
+        width: 100%
+        height: $space-100
+
+// ============================================================
+// Mobile
+// ============================================================
+
+@media (max-width: $breakpoint-sm)
+
+    .cart-skeleton
+
+        .items
+            padding: $space-16
+
+        .item
+
+            .skeleton-image
+                width: $space-64
+                height: $space-64
+
+            .actions
+                grid-column: 1 / -1
+
+                flex-direction: row
+                align-items: center
+                justify-content: space-between
+
+                width: 100%
+
+        .skeleton-name
+            width: 70%
+
+        .skeleton-price
+            width: $space-48
+
+        .skeleton-bill-title
+            width: 40%
 
 @media (min-width: $breakpoint-lg)
     .cart-layout

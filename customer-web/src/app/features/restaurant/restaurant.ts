@@ -21,9 +21,6 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { AppState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
 import { selectCartCount, selectCartStatus } from '../../store/cart/cart.selectors';
-import * as CartActions from '../../store/cart/cart.actions';
-
-import { CartService } from '../../core/services/cart.service';
 
 import { ImageCarousel } from './image-carousel/image-carousel';
 import { RestaurantInfo } from './restaurant-info/restaurant-info';
@@ -49,8 +46,6 @@ type RestaurantTab = 'order' | 'reviews' | 'cart';
 export class Restaurant {
 
   private readonly route = inject(ActivatedRoute);
-
-  readonly cartService = inject(CartService);
 
   readonly faArrowLeft = faArrowLeft;
 
@@ -78,13 +73,5 @@ export class Restaurant {
 
   setTab(tab: RestaurantTab): void {
     this.activeTab.set(tab);
-  }
-
-  ngOnInit(): void {
-
-    this.store.dispatch(
-      CartActions.loadCart()
-    );
-
   }
 }

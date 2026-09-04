@@ -1,120 +1,157 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal
+} from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
-import { CartService } from '../../../core/services/cart.service';
+
+import { CartService } from '../../../core/cart/services/cart.service';
+import { Input } from '../../../shared/components/input/input';
+import { Button } from '../../../shared/components/button/button';
+import { Coupon } from '../../../core/cart/models/coupon.model';
 
 @Component({
   selector: 'app-coupons',
   standalone: true,
   imports: [
-    FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    Input,
+    Button
   ],
   templateUrl: './coupons.html',
   styleUrl: './coupons.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Coupons {
 
-  faTags = faTags;
+  private readonly cartService = inject(CartService);
 
-  showCoupons = false;
-  couponCode = '';
+  readonly faTags = faTags;
 
-  availableCoupons: any[] = [];
+  readonly showCoupons = signal(false);
+  readonly couponCode = signal('');
 
-  appliedCoupon: any = null;
+  readonly availableCoupons = signal<Coupon[]>([]);
+  readonly appliedCoupon = signal<Coupon | null>(null);
 
-  itemTotal = 0;
+  readonly itemTotal = signal(0);
 
-  constructor(
-    private cartService: CartService
-  ) { }
+  readonly applying = signal(false);
+  readonly removing = signal(false);
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadCoupons();
     this.loadSummary();
   }
 
-  loadCoupons() {
-    this.cartService
-      .getCoupons()
-      .subscribe({
-        next: (res: any) => {
-          this.availableCoupons =
-            res.data || [];
+ private loadCoupons(): void {
+    this.cartService.getCoupons().subscribe({
+        next: response => {
+            this.availableCoupons.set(response.data ?? []);
         }
-      });
+    });
+}
+
+  private loadSummary(): void {
+    this.cartService.getCartSummary().subscribe({
+      next: (response: any) => {
+        const summary = response.data;
+
+        this.itemTotal.set(summary?.itemTotal ?? 0);
+        this.appliedCoupon.set(summary?.coupon ?? null);
+      }
+    });
   }
 
-  loadSummary() {
-    this.cartService
-      .getCartSummary()
-      .subscribe({
-        next: (res: any) => {
-
-          this.itemTotal =
-            res.data.itemTotal || 0;
-
-          this.appliedCoupon =
-            res.data.coupon || null;
-        }
-      });
+  toggleCoupons(): void {
+    this.showCoupons.update(value => !value);
   }
 
-  handleApplyCoupon(coupon: any) {
+  applyCoupon(coupon: Coupon): void {
+    if (this.applying() || this.removing()) {
+      return;
+    }
 
-    this.cartService
-      .applyCoupon(coupon.code)
-      .subscribe({
-        next: () => {
+    if (this.itemTotal() < (coupon.minOrder ?? 0)) {
+      return;
+    }
 
-          this.appliedCoupon = coupon;
+    this.applying.set(true);
 
-          this.couponCode = '';
+    this.cartService.applyCoupon(coupon.code).subscribe({
+      next: () => {
+        this.appliedCoupon.set(coupon);
+        this.couponCode.set('');
+        this.showCoupons.set(false);
 
-          this.showCoupons = false;
-
-          this.loadSummary();
-        },
-        error: (err) => {
-
-          alert(
-            err.error?.message ||
-            'Failed to apply coupon'
-          );
-        }
-      });
+        this.loadSummary();
+      },
+      error: (error) => {
+        alert(
+          error.error?.message ??
+          'Failed to apply coupon'
+        );
+      },
+      complete: () => {
+        this.applying.set(false);
+      }
+    });
   }
 
-  handleApplyCouponCode() {
+  applyCouponCode(): void {
+    const code = this.couponCode().trim();
 
-    const coupon =
-      this.availableCoupons.find(
-        c =>
-          c.code.trim().toLowerCase() ===
-          this.couponCode.trim().toLowerCase()
-      );
+    if (!code || this.applying()) {
+      return;
+    }
+
+    const coupon = this.availableCoupons().find(
+      coupon =>
+        coupon.code.toLowerCase() === code.toLowerCase()
+    );
 
     if (!coupon) {
       alert('Invalid coupon');
       return;
     }
 
-    this.handleApplyCoupon(coupon);
+    this.applyCoupon(coupon);
   }
 
-  removeCoupon() {
+  removeCoupon(): void {
+    if (this.removing() || this.applying()) {
+      return;
+    }
 
-    this.cartService
-      .removeCoupon()
-      .subscribe({
-        next: () => {
+    this.removing.set(true);
 
-          this.appliedCoupon = null;
+    this.cartService.removeCoupon().subscribe({
+      next: () => {
+        this.appliedCoupon.set(null);
+        this.loadSummary();
+      },
+      error: (error) => {
+        alert(
+          error.error?.message ??
+          'Failed to remove coupon'
+        );
+      },
+      complete: () => {
+        this.removing.set(false);
+      }
+    });
+  }
 
-          this.loadSummary();
-        }
-      });
+  isCouponDisabled(coupon: Coupon): boolean {
+    return this.itemTotal() < (coupon.minOrder ?? 0);
+  }
+
+  remainingAmount(coupon: Coupon): number {
+    return Math.max(
+      0,
+      (coupon.minOrder ?? 0) - this.itemTotal()
+    );
   }
 }

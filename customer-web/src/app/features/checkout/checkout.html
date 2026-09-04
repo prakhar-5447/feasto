@@ -147,9 +147,9 @@
                                     </span>
 
                                     <span class="payment-icons">
-                                        <img src="/assets/images/gpay.png" alt="Google Pay" width="64" height="24" />
+                                        <img src="assets/images/gpay.png" alt="Google Pay" width="64" height="24" />
 
-                                        <img src="/assets/images/phonepe.png" alt="PhonePe" width="64" height="24" />
+                                        <img src="assets/images/phonepe.png" alt="PhonePe" width="64" height="24" />
                                     </span>
 
                                 </span>
@@ -201,27 +201,27 @@
 
 
                 <p class="restaurant-name">
-                    {{ restaurantService.restaurant?.name }}
+                    {{ restaurant()?.name | titleCase}}
                 </p>
 
 
                 <div class="items">
 
                     @for (
-                    item of cart;
+                    item of cart();
                     track item.food._id
                     ) {
 
                     <div class="summary-row">
 
                         <span>
-                            {{ item.name }}
+                            {{ item.food.name }}
                             ×
                             {{ item.quantity }}
                         </span>
 
                         <span>
-                            ₹{{ item.price * item.quantity }}
+                            ₹{{ item.food.price * item.quantity }}
                         </span>
 
                     </div>
@@ -247,71 +247,97 @@
 
                 }
 
+                @if (loading()) {
+
+                <div class="summary-loading" aria-live="polite">
+                    <div class="summary-skeleton-row">
+                        <span class="skeleton skeleton-label"></span>
+                        <span class="skeleton skeleton-value"></span>
+                    </div>
+
+                    <div class="summary-skeleton-row">
+                        <span class="skeleton skeleton-label"></span>
+                        <span class="skeleton skeleton-value"></span>
+                    </div>
+
+                    <div class="summary-skeleton-row">
+                        <span class="skeleton skeleton-label"></span>
+                        <span class="skeleton skeleton-value"></span>
+                    </div>
+
+                    <div class="summary-skeleton-row">
+                        <span class="skeleton skeleton-label"></span>
+                        <span class="skeleton skeleton-value"></span>
+                    </div>
+
+                    <div class="summary-skeleton-total">
+                        <span class="skeleton skeleton-total-label"></span>
+                        <span class="skeleton skeleton-total-value"></span>
+                    </div>
+                </div>
+
+                } @else {
 
                 <div class="summary-row">
                     <span>Item Total</span>
-                    <span>₹{{ summary.itemTotal }}</span>
+                    <span>₹{{ summary().itemTotal }}</span>
                 </div>
 
                 <div class="summary-row">
                     <span>Delivery Fee</span>
-                    <span>₹{{ summary.deliveryFee }}</span>
+                    <span>₹{{ summary().deliveryFee }}</span>
                 </div>
 
                 <div class="summary-row">
                     <span>Platform Fee</span>
-                    <span>₹{{ summary.platformFee }}</span>
+                    <span>₹{{ summary().platformFee }}</span>
                 </div>
 
                 <div class="summary-row">
-                    <span>GST ({{ summary.gstRate }}%)</span>
-                    <span>₹{{ summary.gst }}</span>
+                    <span>GST ({{ summary().gstRate * 100 }}%)</span>
+                    <span>₹{{ summary().gst }}</span>
                 </div>
 
-
-                @if (summary.discount > 0) {
+                @if (summary().discount > 0) {
 
                 <div class="summary-row discount">
-
                     <span>
                         <fa-icon [icon]="faTag" aria-hidden="true"></fa-icon>
-
                         Discount
                     </span>
 
                     <span>
-                        -₹{{ summary.discount }}
+                        -₹{{ summary().discount }}
                     </span>
-
                 </div>
 
                 }
-
 
                 <div class="grand-total">
                     <span>Total</span>
+
                     <strong>
-                        ₹{{ summary.grandTotal }}
+                        ₹{{ summary().grandTotal }}
                     </strong>
                 </div>
 
-
-                @if (summary.discount > 0) {
-
+                @if (summary().discount > 0) {
                 <p class="savings">
-                    You saved ₹{{ summary.discount }}
+                    You saved ₹{{ summary().discount }}
                     on this order!
                 </p>
+                }
 
                 }
 
-
                 <app-button type="button" variant="primary" size="lg" [fullWidth]="true" [loading]="placingOrder"
-                    [disabled]="!canPlaceOrder" (clicked)="placeOrder()">
+                    [disabled]="loading() || !canPlaceOrder" (clicked)="placeOrder()">
                     Place Order
+                    @if (!loading()) {
                     <span>
-                        (₹{{ summary.grandTotal }})
+                        (₹{{ summary().grandTotal }})
                     </span>
+                    }
                 </app-button>
 
             </aside>

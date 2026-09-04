@@ -356,7 +356,7 @@
     justify-content: space-between
     gap: $space-16
 
-    margin-top: $space-16
+    margin: $space-16 0
     padding-top: $space-16
 
     border-top: $border-width-1 $border-style-solid $color-border-light
@@ -371,6 +371,42 @@
     color: $color-success
     font-size: $font-size-14
     font-weight: $font-weight-medium
+
+.summary-loading
+    display: flex
+    flex-direction: column
+    gap: $space-16
+
+.summary-skeleton-row
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+.summary-skeleton-total
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+    margin: $space-16 0
+    padding-top: $space-16
+    border-top: $border-width-1 $border-style-solid $color-border
+
+.skeleton-label
+    width: 60%
+    height: $space-16
+
+.skeleton-value
+    width: $space-48
+    height: $space-16
+
+.skeleton-total-label
+    width: $space-64
+    height: $space-20
+
+.skeleton-total-value
+    width: $space-64
+    height: $space-20
 
 @media (min-width: $breakpoint-md)
     .checkout-page

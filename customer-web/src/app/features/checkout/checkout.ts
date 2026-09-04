@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
-  inject
+  inject,
+  signal
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
@@ -12,15 +14,17 @@ import {
 } from '@angular/common/http';
 
 import {
-  finalize
+  delay,
+  finalize,
 } from 'rxjs';
 
 import {
+  ActivatedRoute,
   Router
 } from '@angular/router';
 
 import {
-  takeUntilDestroyed
+  takeUntilDestroyed,
 } from '@angular/core/rxjs-interop';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -34,9 +38,14 @@ import {
 import { Button } from '../../shared/components/button/button';
 import { Input } from '../../shared/components/input/input';
 
-import { CartService } from '../../core/services/cart.service';
-import { LocationServicePersistence } from '../../core/services/location.service';
-import { RestaurantService } from '../../core/services/restaurant.service';
+import { CartService } from '../../core/cart/services/cart.service';
+import { Coupon } from '../../core/cart/models/coupon.model';
+import { CartSummary } from '../../core/cart/models/cart.model';
+import { selectSelectedLocation } from '../../store/location/location.selectors';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.state';
+import { selectCartItems } from '../../store/cart/cart.selectors';
+import { TitleCasePipe } from '../../shared/pipes/title-case.pipe';
 
 
 interface Address {
@@ -54,41 +63,8 @@ interface NewAddress {
   landmark: string;
   city: string;
   pincode: string;
+
 }
-
-
-interface CartItem {
-  name: string;
-  quantity: number;
-  price: number;
-  food: {
-    _id: string;
-  };
-}
-
-
-interface Coupon {
-  code: string;
-  description: string;
-}
-
-
-interface OrderSummary {
-  itemTotal: number;
-  discount: number;
-  deliveryFee: number;
-  platformFee: number;
-  gst: number;
-  gstRate: number;
-  grandTotal: number;
-  coupon?: Coupon;
-}
-
-
-interface CartSummaryResponse {
-  data: OrderSummary;
-}
-
 
 interface CreateOrderResponse {
   data: {
@@ -104,7 +80,8 @@ interface CreateOrderResponse {
     FormsModule,
     FontAwesomeModule,
     Button,
-    Input
+    Input,
+    TitleCasePipe
   ],
   templateUrl: './checkout.html',
   styleUrl: './checkout.sass',
@@ -116,9 +93,33 @@ export class Checkout {
   readonly faTag = faTag;
   readonly faLocationDot = faLocationDot;
 
-  readonly cart: CartItem[] = [];
+  private readonly store =
+    inject(Store<AppState>);
 
-  summary: OrderSummary = {
+  readonly cart =
+    this.store.selectSignal(
+      selectCartItems
+    );
+
+  private readonly route = inject(ActivatedRoute);
+
+  readonly restaurant = computed(() => {
+    const slug = this.route.snapshot.paramMap.get('restaurant');
+
+    if (!slug) {
+      return null;
+    }
+
+    const id = slug.substring(slug.lastIndexOf('-') + 1);
+    const name = slug.substring(0, slug.lastIndexOf('-'));
+
+    return {
+      _id: id,
+      name: name
+    };
+  });
+
+  readonly summary = signal<CartSummary>({
     itemTotal: 0,
     discount: 0,
     deliveryFee: 0,
@@ -126,7 +127,7 @@ export class Checkout {
     gst: 0,
     gstRate: 0,
     grandTotal: 0
-  };
+  });
 
   paymentMethod: 'online' | 'cod' | '' = '';
 
@@ -161,11 +162,9 @@ export class Checkout {
   private readonly cartService =
     inject(CartService);
 
-  readonly restaurantService =
-    inject(RestaurantService);
-
-  private readonly locationService =
-    inject(LocationServicePersistence);
+  selectedLocation = this.store.selectSignal(
+    selectSelectedLocation
+  );
 
   private readonly http =
     inject(HttpClient);
@@ -176,6 +175,7 @@ export class Checkout {
   private readonly destroyRef =
     inject(DestroyRef);
 
+  readonly loading = signal(true);
 
   ngOnInit(): void {
     this.loadSummary();
@@ -183,7 +183,7 @@ export class Checkout {
 
 
   get appliedCoupon(): Coupon | undefined {
-    return this.summary.coupon;
+    return this.summary().coupon;
   }
 
 
@@ -204,28 +204,29 @@ export class Checkout {
     return (
       this.isAddressValid &&
       !!this.paymentMethod &&
-      !!this.restaurantService.restaurant &&
       !this.placingOrder
     );
   }
 
-
   private loadSummary(): void {
+    this.loading.set(true);
 
     this.cartService
       .getCartSummary()
       .pipe(
-        takeUntilDestroyed(
-          this.destroyRef
-        )
+        delay(5000),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.loading.set(false);
+        })
       )
       .subscribe({
-        next: (response: any) => {
-          this.summary = response.data;
+        next: response => {
+          this.summary.set(response.data);
         },
 
         error: () => {
-          this.summary = {
+          this.summary.set({
             itemTotal: 0,
             discount: 0,
             deliveryFee: 0,
@@ -233,7 +234,7 @@ export class Checkout {
             gst: 0,
             gstRate: 0,
             grandTotal: 0
-          };
+          });
         }
       });
   }
@@ -294,10 +295,7 @@ export class Checkout {
       return;
     }
 
-    const restaurant =
-      this.restaurantService.restaurant;
-
-    if (!restaurant) {
+    if (!this.restaurant()) {
       return;
     }
 
@@ -307,7 +305,7 @@ export class Checkout {
       .post<CreateOrderResponse>(
         '/api/v1/orders',
         {
-          restaurantId: restaurant._id,
+          restaurantId: this.restaurant()?._id,
 
           paymentMethod:
             this.paymentMethod,
@@ -339,14 +337,10 @@ export class Checkout {
         next: response => {
 
           const city =
-            this.locationService
-              .getCity();
+            this.selectedLocation()?.city
 
           this.router.navigate(
-            ['/india', 'r',
-              restaurant.slug,
-              'payment'
-            ],
+            ['../payment'],
             {
               queryParams: {
                 city,

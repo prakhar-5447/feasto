@@ -4,29 +4,96 @@
 
         @if (loading()) {
 
-        <div class="cart-loading" aria-live="polite" aria-label="Loading cart">
-            <span class="skeleton cart-skeleton-title"></span>
-            <span class="skeleton cart-skeleton-item"></span>
-            <span class="skeleton cart-skeleton-item"></span>
+        <div class="cart-layout cart-skeleton" aria-live="polite" aria-label="Loading cart">
+
+            <!-- Cart Items Skeleton -->
+
+            <section class="items">
+
+                <header class="section-header">
+
+                    <span class="skeleton skeleton-title"></span>
+                    <span class="skeleton skeleton-count"></span>
+
+                </header>
+
+
+                <div class="cart-items">
+
+                    @for (item of [1, 2, 3, 4]; track item) {
+
+                    <article class="item">
+
+                        <span class="skeleton skeleton-image"></span>
+
+
+                        <div class="details">
+
+                            <span class="skeleton skeleton-name"></span>
+                            <span class="skeleton skeleton-price"></span>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <span class="skeleton skeleton-qty"></span>
+                            <span class="skeleton skeleton-remove"></span>
+
+                        </div>
+
+                    </article>
+
+                    }
+
+                </div>
+
+            </section>
+
+
+            <!-- Billing Skeleton -->
+
+            <aside class="billing-section">
+
+                <section class="bill">
+
+                    <span class="skeleton skeleton-bill-title"></span>
+
+
+                    <div class="bill-rows">
+
+                        @for (row of [1, 2, 3, 4]; track row) {
+
+                        <div class="row">
+
+                            <span class="skeleton skeleton-bill-label"></span>
+                            <span class="skeleton skeleton-bill-value"></span>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+
+                    <div class="total">
+
+                        <span class="skeleton skeleton-total-label"></span>
+                        <span class="skeleton skeleton-total-value"></span>
+
+                    </div>
+
+
+                    <span class="skeleton skeleton-checkout"></span>
+
+                </section>
+
+
+                <section class="skeleton skeleton-coupon"></section>
+
+            </aside>
+
         </div>
-
-        } @else if (cart().length === 0) {
-
-        <section class="empty-cart">
-
-            <h1>
-                Your cart is empty
-            </h1>
-
-            <p>
-                Add items to get started
-            </p>
-
-            <app-button variant="primary" size="md" (clicked)="browseRestaurants()">
-                Browse Restaurants
-            </app-button>
-
-        </section>
 
         } @else {
 
@@ -59,7 +126,7 @@
                     ) {
 
                     <article class="item">
-
+                        
                         <img [src]="item.food.image" [alt]="item.food.name" width="80" height="80" loading="lazy"
                             decoding="async" />
 
@@ -81,8 +148,7 @@
 
                             <div class="qty-box" aria-label="Quantity">
 
-                                <app-button variant="icon" size="sm"
-                                    [disabled]="isUpdating(item.food._id) ||item.quantity <= 1" [icon]="faMinus"
+                                <app-button variant="icon" size="sm" [disabled]="item.quantity <= 1" [icon]="faMinus"
                                     ariaLabel="Decrease quantity"
                                     (clicked)="decreaseQuantity(item.food._id,item.quantity)"></app-button>
 
@@ -90,8 +156,7 @@
                                     {{ item.quantity }}
                                 </span>
 
-                                <app-button variant="icon" size="sm" [disabled]="isUpdating(item.food._id)"
-                                    [icon]="faPlus" ariaLabel="Increase quantity"
+                                <app-button variant="icon" size="sm" [icon]="faPlus" ariaLabel="Increase quantity"
                                     (clicked)="increaseQuantity(item.food._id,item.quantity)"></app-button>
 
                             </div>

@@ -1,55 +1,89 @@
 <div class="coupon">
+
     <div class="header">
         <h3>
-            <fa-icon [icon]="faTags"></fa-icon> Apply Coupon
+            <fa-icon [icon]="faTags" aria-hidden="true" />
+            Apply Coupon
         </h3>
     </div>
 
-    <!-- APPLIED -->
-    @if(appliedCoupon){
+    @if (appliedCoupon(); as coupon) {
+
     <div class="applied">
+
         <div class="info">
-            <div class="code">{{ appliedCoupon.code }}</div>
-            <div class="desc">Coupon applied successfully</div>
+            <div class="code">
+                {{ coupon.code }}
+            </div>
+
+            <div class="desc">
+                Coupon applied successfully
+            </div>
         </div>
 
-        <button class="remove" (click)="removeCoupon()">Remove</button>
-    </div> }
+        <app-button variant="text" size="sm" tone="default" weight="medium" [loading]="removing()"
+            (clicked)="removeCoupon()">
+            Remove
+        </app-button>
 
-    <!-- APPLY -->
-    @else {
-    <div class="input">
-        <input type="text" placeholder="Enter coupon code" [(ngModel)]="couponCode" />
-        <button (click)="handleApplyCouponCode()" [disabled]="!couponCode">
-            Apply
-        </button>
     </div>
-    <button class="toggle" (click)="showCoupons = !showCoupons">
-        View all coupons
-    </button>
 
-    <!-- LIST -->
-    @if(showCoupons){
+    } @else {
+
+    <div class="input">
+
+        <app-input id="coupon-code" name="couponCode" placeholder="Enter coupon code" [(value)]="couponCode"
+            autocomplete="off" />
+
+        <app-button variant="primary" size="md" [loading]="applying()" (clicked)="applyCouponCode()">
+            Apply
+        </app-button>
+
+    </div>
+
+    <app-button variant="text" size="sm" tone="muted" weight="medium" (clicked)="toggleCoupons()">
+        {{ showCoupons() ? 'Hide coupons' : 'View all coupons' }}
+    </app-button>
+
+    @if (showCoupons()) {
+
     <div class="list">
-        @for(coupon of availableCoupons;track coupon.id){
-        <div class="item" [class.disabled]="itemTotal < (coupon.minOrder || 0)">
+
+        @for (coupon of availableCoupons(); track coupon._id) {
+
+        <div class="item" [class.disabled]="isCouponDisabled(coupon)">
+
             <div class="left">
-                <div class="code">{{ coupon.code }}</div>
+
+                <div class="code">
+                    {{ coupon.code }}
+                </div>
 
                 <div class="desc">
                     {{ coupon.description }}
                 </div>
-                @if(itemTotal < (coupon.minOrder || 0)){ <div class="warn">
-                    Add ₹{{ (coupon.minOrder || 0) - itemTotal }} more
+
+                @if (isCouponDisabled(coupon)) {
+                <div class="warn">
+                    Add ₹{{ remainingAmount(coupon) }} more
+                </div>
+                }
+
             </div>
-            }
+
+            <app-button variant="text" size="sm" weight="medium" tone="muted" [disabled]="isCouponDisabled(coupon)"
+                [loading]="applying()" (clicked)="applyCoupon(coupon)">
+                Apply
+            </app-button>
+
         </div>
-        <button (click)="handleApplyCoupon(coupon)" [disabled]="itemTotal < (coupon.minOrder || 0)">
-            Apply
-        </button>
+
+        }
+
     </div>
+
     }
-</div>
-}
-}
+
+    }
+
 </div>

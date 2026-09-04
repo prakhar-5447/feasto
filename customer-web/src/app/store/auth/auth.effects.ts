@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 
 import * as AuthActions from './auth.actions';
+import * as CartActions from '../cart/cart.actions';
 import { AuthService } from '../../core/services/auth.service';
 
 import {
@@ -47,6 +48,13 @@ export class AuthEffects {
                     )
                 )
             ),
+        )
+    );
+
+    loadCartAfterLogin$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.loadUserSuccess),
+            map(() => CartActions.loadCart())
         )
     );
 
