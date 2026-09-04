@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { RestaurantFilters } from '../models/filter.model';
 
@@ -10,8 +10,6 @@ import { RestaurantFilters } from '../models/filter.model';
 export class RestaurantFilterService {
 
     private readonly router = inject(Router);
-
-    private readonly route = inject(ActivatedRoute);
 
     setFilters(filters: RestaurantFilters): void {
 

@@ -8,20 +8,15 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 
 import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  Router,
   RouterOutlet
 } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AppState } from './store/app.state';
 import * as AuthActions from './store/auth/auth.actions';
 import * as LocationActions from './store/location/location.actions';
+import * as CartActions from './store/cart/cart.actions';
 
 
 @Component({
@@ -54,6 +49,8 @@ export class App {
       this.store.dispatch(
         LocationActions.loadSavedLocation()
       );
+
+      this.store.dispatch(CartActions.loadCart());
     }
   }
 }

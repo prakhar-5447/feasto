@@ -2,10 +2,21 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'titleCase',
+  standalone: true
 })
 export class TitleCasePipe implements PipeTransform {
-  transform(value: string | null): string {
-    if (!value) return ''
-    return value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+
+  transform(value: string | null | undefined): string {
+    console.log('BEFORE:', value);
+
+    if (!value) return '';
+
+    const result = value
+      .toLowerCase()
+      .replace(/\b\w/g, char => char.toUpperCase());
+
+    console.log('AFTER:', result);
+
+    return result;
   }
 }

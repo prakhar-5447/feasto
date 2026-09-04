@@ -33,7 +33,7 @@
               {
                 "glob": "**/*",
                 "input": "src/assets",
-                "output": "src/assets"
+                "output": "assets"
               }
             ],
             "styles": ["src/styles.sass"],

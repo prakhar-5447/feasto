@@ -16,6 +16,7 @@ export interface CartSummary {
     gst: number;
     gstRate: number;
     grandTotal: number;
+    coupon?: Coupon;
 }
 
 export interface Cart {
@@ -23,4 +24,8 @@ export interface Cart {
     restaurant?: CartRestaurant;
     summary: CartSummary;
     coupon?: Coupon;
+}
+
+export interface CartSummaryResponse {
+    data: CartSummary;
 }

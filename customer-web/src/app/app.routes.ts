@@ -13,7 +13,6 @@ import { TabReviews } from './features/restaurant/tab-reviews/tab-reviews';
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 import { LandingLayout } from './layouts/landing-layout/landing-layout';
 
-import { RestaurantResolver } from './shared/pipes/resolver';
 import { validCityGuard } from './core/guards/valid-city.guard';
 import { restaurantResolver } from './core/resolver/restaurant.resolver';
 
@@ -110,9 +109,6 @@ export const routes: Routes = [
 
                 loadComponent: () => Cart,
 
-                resolve: {
-                    restaurant: RestaurantResolver
-                },
 
                 data: {
                     breadcrumb: 'Cart'
@@ -126,10 +122,6 @@ export const routes: Routes = [
 
                 loadComponent: () => Checkout,
 
-                resolve: {
-                    restaurant: RestaurantResolver
-                },
-
                 data: {
                     breadcrumb: 'Checkout',
                     hideBreadcrumb: true
@@ -142,10 +134,6 @@ export const routes: Routes = [
                 path: 'r/:restaurant/payment',
 
                 loadComponent: () => Payment,
-
-                resolve: {
-                    restaurant: RestaurantResolver
-                },
 
                 data: {
                     breadcrumb: 'Payment',

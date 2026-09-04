@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Cart } from '../models/cart.model';
+import { Cart, CartSummaryResponse } from '../models/cart.model';
+import { CouponsResponse } from '../models/coupon.model';
 
 interface CartResponse {
     data: Cart;
@@ -59,6 +60,14 @@ export class CartService {
         );
     }
 
+    getCartSummary(): Observable<CartSummaryResponse> {
+        return this.http.get<CartSummaryResponse>(
+            '/api/v1/cart/summary',
+            {
+                withCredentials: true
+            }
+        );
+    }
 
     removeFromCart(
         foodId: string
@@ -84,12 +93,11 @@ export class CartService {
     }
 
 
-    getCoupons() {
-        return this.http.get(
+    getCoupons(): Observable<CouponsResponse> {
+        return this.http.get<CouponsResponse>(
             '/api/v1/coupons'
         );
     }
-
 
     applyCoupon(
         code: string
