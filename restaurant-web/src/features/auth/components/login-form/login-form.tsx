@@ -8,6 +8,8 @@ import {
 import { useRouter } from 'next/navigation';
 
 import Button from '@/shared/components/button/button';
+import Input from '@/shared/components/input/input';
+
 import {
     Eye,
     EyeOff,
@@ -113,48 +115,24 @@ export default function LoginForm() {
 
             {/* Partner ID */}
 
-            <div className={styles.field}>
-
-                <label
-                    className={styles.label}
-                    htmlFor="partner-id"
-                >
-                    Partner ID
-                </label>
-
-
-                <input
-                    className={`${styles.input} ${error
-                        ? styles.inputError
-                        : ''
-                        }`}
-                    id="partner-id"
-                    type="text"
-                    value={partnerId}
-                    onChange={(event) =>
-                        setPartnerId(
-                            event.target.value,
-                        )
-                    }
-                    placeholder="e.g. FEA-MH-00142"
-                    autoComplete="username"
-                    autoCapitalize="characters"
-                    spellCheck={false}
-                    disabled={loading}
-                />
-
-
-                <p className={styles.hint}>
-                    Your Partner ID was emailed to you
-                    when your account was created.
-                </p>
-
-            </div>
+            <Input
+                id="partner-id"
+                name="partnerId"
+                label="Partner ID"
+                value={partnerId}
+                onChange={setPartnerId}
+                placeholder="e.g. FEA-MH-00142"
+                autoComplete="username"
+                autoCapitalize="characters"
+                spellCheck={false}
+                disabled={loading}
+                hint="Your Partner ID was emailed to you when your account was created."
+            />
 
 
             {/* Password */}
 
-            <div className={styles.field}>
+            <div className={styles.passwordField}>
 
                 <div
                     className={
@@ -178,6 +156,7 @@ export default function LoginForm() {
                         onClick={() => {
                             // Add forgot-password flow later
                         }}
+                        disabled={loading}
                     >
                         Forgot password?
                     </button>
@@ -191,24 +170,16 @@ export default function LoginForm() {
                     }
                 >
 
-                    <input
-                        className={`${styles.input} ${styles.passwordInput
-                            } ${error
-                                ? styles.inputError
-                                : ''
-                            }`}
+                    <Input
                         id="password"
+                        name="password"
                         type={
                             showPassword
                                 ? 'text'
                                 : 'password'
                         }
                         value={password}
-                        onChange={(event) =>
-                            setPassword(
-                                event.target.value,
-                            )
-                        }
+                        onChange={setPassword}
                         placeholder="Enter your password"
                         autoComplete="current-password"
                         disabled={loading}
@@ -245,11 +216,9 @@ export default function LoginForm() {
 
             </div>
 
-
             {/* Error */}
 
             {error && (
-
                 <div
                     className={styles.error}
                     role="alert"
@@ -257,9 +226,7 @@ export default function LoginForm() {
                 >
                     {error}
                 </div>
-
             )}
-
 
             {/* Submit */}
 

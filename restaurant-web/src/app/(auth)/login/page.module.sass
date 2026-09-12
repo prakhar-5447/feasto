@@ -1,19 +1,18 @@
 @use '../../../styles/index' as *
-
 .auth
     min-height: 100vh
     display: flex
     background: $color-bg-gray
 
 .branding
-    width: 420px
+    width: $container-sm
     flex-shrink: 0
 
     display: flex
     flex-direction: column
     justify-content: space-between
 
-    padding: 2.5rem
+    padding: $space-40
 
     background: $color-primary
     color: $color-text-white
@@ -21,11 +20,11 @@
 .brandingTop
     display: flex
     align-items: center
-    gap: 0.75rem
+    gap: $space-12
 
 .logo
-    width: 40px
-    height: 40px
+    width: $space-40
+    height: $space-40
 
     display: flex
     align-items: center
@@ -33,70 +32,70 @@
 
     border-radius: $radius-12
 
-    background: rgba(255, 255, 255, 0.2)
+    background: $color-overlay-white-light
 
     span
-        font-size: 1.25rem
-        font-weight: 700
+        font-size: $font-size-20
+        font-weight: $font-weight-bold
 
 .brandName
-    font-size: 1rem
-    font-weight: 700
-    line-height: 1
+    font-size: $font-size-16
+    font-weight: $font-weight-bold
+    line-height: $line-height-none
 
 .brandSubtitle
-    margin-top: 0.125rem
+    margin-top: $space-2
 
-    font-size: 0.6875rem
-    color: rgba(255, 255, 255, 0.7)
+    font-size: $font-size-12
+    color: $color-overlay-white-heavy
 
 .brandingContent
     display: flex
     flex-direction: column
-    gap: 2rem
+    gap: $space-32
 
 .brandingContent h1
-    margin: 0 0 1rem
+    margin: 0 0 $space-16
 
-    font-size: 2rem
-    font-weight: 700
-    line-height: 1.2
+    font-size: $font-size-28
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
 
 .brandingContent p
-    max-width: 320px
+    max-width: $container-xs
 
     margin: 0
 
-    font-size: 0.875rem
-    line-height: 1.7
+    font-size: $font-size-12
+    line-height: $line-height-normal
 
-    color: rgba(255, 255, 255, 0.75)
+    color: $color-overlay-white-heavy
 
 .features
     display: flex
     flex-direction: column
-    gap: 1rem
+    gap: $space-16
 
 .feature
     display: flex
     align-items: center
-    gap: 0.75rem
+    gap: $space-12
 
-    font-size: 0.8125rem
-    color: rgba(255, 255, 255, 0.85)
+    font-size: $font-size-12
+    color: $color-overlay-white-heavy
 
 .featureIcon
-    width: 24px
+    width: $space-24
     flex-shrink: 0
 
-    font-size: 1.25rem
+    font-size: $font-size-20
     text-align: center
 
 .copyright
     margin: 0
 
-    font-size: 0.6875rem
-    color: rgba(255, 255, 255, 0.45)
+    font-size: $font-size-12
+    color: $color-overlay-white-light
 
 .loginSection
     flex: 1
@@ -105,57 +104,57 @@
     align-items: center
     justify-content: center
 
-    padding: 1.5rem
+    padding: $space-24
 
 .loginContainer
     width: 100%
-    max-width: 420px
+    max-width: $container-sm
 
 .mobileBrand
     display: none
 
 .loginCard
-    padding: 2.5rem
+    padding: $space-40
 
-    border-radius: 1rem
+    border-radius: $radius-16
 
     background: $color-bg-white
     box-shadow: $shadow-lg
 
 .header
-    margin-bottom: 2rem
+    margin-bottom: $space-32
 
 .header h2
-    margin: 0 0 0.5rem
+    margin: 0 0 $space-8
 
-    font-size: 1.5rem
-    font-weight: 700
+    font-size: $font-size-20
+    font-weight: $font-weight-bold
     color: $color-text-primary
 
 .header p
     margin: 0
 
-    font-size: 0.875rem
+    font-size: $font-size-12
     color: $color-text-muted
-    line-height: 1.5
+    line-height: $line-height-normal
 
 .support
-    margin: 1.5rem 0 0
+    margin: $space-24 0 0
 
     text-align: center
 
-    font-size: 0.75rem
+    font-size: $font-size-12
     color: $color-text-muted
 
 .support a
     color: $color-primary
-    font-weight: 600
+    font-weight: $font-weight-semibold
     text-decoration: none
 
     &:hover
         text-decoration: underline
 
-@media (max-width: 1023px)
+@media (max-width: $breakpoint-md)
     .branding
         display: none
 
@@ -165,17 +164,17 @@
     .mobileBrand
         display: flex
         align-items: center
-        gap: 0.625rem
+        gap: $space-8
 
-        margin-bottom: 2rem
+        margin-bottom: $space-32
 
-        font-size: 1.125rem
-        font-weight: 700
+        font-size: $font-size-18
+        font-weight: $font-weight-bold
         color: $color-text-primary
 
     .mobileLogo
-        width: 36px
-        height: 36px
+        width: $space-32
+        height: $space-32
 
         display: flex
         align-items: center
@@ -187,18 +186,18 @@
 
         span
             color: $color-text-white
-            font-size: 1rem
-            font-weight: 700
+            font-size: $font-size-16
+            font-weight: $font-weight-bold
 
-@media (max-width: 480px)
+@media (max-width: $breakpoint-xs)
     .loginSection
-        padding: 1rem
+        padding: $space-16
 
     .loginCard
-        padding: 1.5rem
+        padding: $space-24
 
     .header
-        margin-bottom: 1.5rem
+        margin-bottom: $space-24
 
     .header h2
-        font-size: 1.375rem
+        font-size: $font-size-20
