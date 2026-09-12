@@ -1,0 +1,187 @@
+@use '../../../../styles/index' as *
+
+.form
+    display: flex
+    flex-direction: column
+    gap: 1.25rem
+
+    width: 100%
+
+.field
+    display: flex
+    flex-direction: column
+    gap: 0.5rem
+
+.label
+    font-size: 0.8125rem
+    font-weight: 500
+    color: $color-text-primary
+
+.input
+    width: 100%
+    height: 48px
+
+    padding: 0 1rem
+
+    border: 1.5px solid $color-border
+    border-radius: $radius-12
+
+    outline: none
+
+    background: $color-bg-white
+    color: $color-text-primary
+
+    font-family: inherit
+    font-size: 0.875rem
+
+    transition: border-color 150ms ease, box-shadow 150ms ease
+
+    &::placeholder
+        color: $color-text-muted
+
+    &:hover:not(:disabled)
+        border-color: $color-text-secondary
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: 0 0 0 3px $color-overlay-orange-light
+
+    &:disabled
+        cursor: not-allowed
+        background: $color-bg-light
+        opacity: 0.75
+
+input[type='password']::-ms-reveal
+    display: none
+
+.inputError
+    border-color: $color-error
+
+    &:focus
+        border-color: $color-error
+        box-shadow: 0 0 0 3px rgba(214, 33, 33, 0.1)
+
+.hint
+    margin: 0
+
+    font-size: 0.6875rem
+    line-height: 1.5
+
+    color: $color-text-muted
+
+.passwordHeader
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    gap: 1rem
+
+.forgotPassword
+    padding: 0
+
+    border: none
+    background: transparent
+
+    color: $color-primary
+
+    font-family: inherit
+    font-size: 0.75rem
+    font-weight: 600
+
+    cursor: pointer
+
+    &:hover
+        text-decoration: underline
+
+.passwordWrapper
+    position: relative
+
+.passwordInput
+    padding-right: 3rem
+
+.passwordToggle
+    position: absolute
+    top: 50%
+    right: 0.75rem
+
+    width: 32px
+    height: 32px
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: 0
+
+    transform: translateY(-50%)
+
+    border: none
+    border-radius: $radius-8
+
+    background: transparent
+    color: $color-text-muted
+
+    cursor: pointer
+
+    &:hover:not(:disabled)
+        color: $color-text-primary
+        background: $color-bg-gray
+
+    &:disabled
+        cursor: not-allowed
+
+    svg
+        width: 17px
+        height: 17px
+
+.error
+    padding: 0.75rem 1rem
+
+    border: 1px solid $color-bg-red-accent
+    border-radius: $radius-12
+
+    background: $color-bg-red-soft
+    color: $color-error
+
+    font-size: 0.8125rem
+    line-height: 1.5
+
+.demo
+    padding: 0.75rem 1rem
+
+    border: 1px solid $color-border-primary
+    border-radius: $radius-12
+
+    background: $color-bg-orange-soft
+
+.demoTitle
+    margin: 0 0 0.25rem
+
+    font-size: 0.6875rem
+    font-weight: 700
+    letter-spacing: 0.06em
+    text-transform: uppercase
+
+    color: $color-primary
+
+.demoCredentials
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 0.35rem
+
+    margin: 0
+
+    font-family: monospace
+    font-size: 0.75rem
+    color: $color-text-secondary
+
+.demoCredentials span
+    color: $color-text-muted
+
+@media (max-width: 480px)
+    .form
+        gap: 1rem
+
+    .input
+        height: 46px

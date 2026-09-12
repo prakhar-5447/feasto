@@ -1,0 +1,204 @@
+@use '../../../styles/index' as *
+
+.auth
+    min-height: 100vh
+    display: flex
+    background: $color-bg-gray
+
+.branding
+    width: 420px
+    flex-shrink: 0
+
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+
+    padding: 2.5rem
+
+    background: $color-primary
+    color: $color-text-white
+
+.brandingTop
+    display: flex
+    align-items: center
+    gap: 0.75rem
+
+.logo
+    width: 40px
+    height: 40px
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    border-radius: $radius-12
+
+    background: rgba(255, 255, 255, 0.2)
+
+    span
+        font-size: 1.25rem
+        font-weight: 700
+
+.brandName
+    font-size: 1rem
+    font-weight: 700
+    line-height: 1
+
+.brandSubtitle
+    margin-top: 0.125rem
+
+    font-size: 0.6875rem
+    color: rgba(255, 255, 255, 0.7)
+
+.brandingContent
+    display: flex
+    flex-direction: column
+    gap: 2rem
+
+.brandingContent h1
+    margin: 0 0 1rem
+
+    font-size: 2rem
+    font-weight: 700
+    line-height: 1.2
+
+.brandingContent p
+    max-width: 320px
+
+    margin: 0
+
+    font-size: 0.875rem
+    line-height: 1.7
+
+    color: rgba(255, 255, 255, 0.75)
+
+.features
+    display: flex
+    flex-direction: column
+    gap: 1rem
+
+.feature
+    display: flex
+    align-items: center
+    gap: 0.75rem
+
+    font-size: 0.8125rem
+    color: rgba(255, 255, 255, 0.85)
+
+.featureIcon
+    width: 24px
+    flex-shrink: 0
+
+    font-size: 1.25rem
+    text-align: center
+
+.copyright
+    margin: 0
+
+    font-size: 0.6875rem
+    color: rgba(255, 255, 255, 0.45)
+
+.loginSection
+    flex: 1
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: 1.5rem
+
+.loginContainer
+    width: 100%
+    max-width: 420px
+
+.mobileBrand
+    display: none
+
+.loginCard
+    padding: 2.5rem
+
+    border-radius: 1rem
+
+    background: $color-bg-white
+    box-shadow: $shadow-lg
+
+.header
+    margin-bottom: 2rem
+
+.header h2
+    margin: 0 0 0.5rem
+
+    font-size: 1.5rem
+    font-weight: 700
+    color: $color-text-primary
+
+.header p
+    margin: 0
+
+    font-size: 0.875rem
+    color: $color-text-muted
+    line-height: 1.5
+
+.support
+    margin: 1.5rem 0 0
+
+    text-align: center
+
+    font-size: 0.75rem
+    color: $color-text-muted
+
+.support a
+    color: $color-primary
+    font-weight: 600
+    text-decoration: none
+
+    &:hover
+        text-decoration: underline
+
+@media (max-width: 1023px)
+    .branding
+        display: none
+
+    .loginSection
+        min-height: 100vh
+
+    .mobileBrand
+        display: flex
+        align-items: center
+        gap: 0.625rem
+
+        margin-bottom: 2rem
+
+        font-size: 1.125rem
+        font-weight: 700
+        color: $color-text-primary
+
+    .mobileLogo
+        width: 36px
+        height: 36px
+
+        display: flex
+        align-items: center
+        justify-content: center
+
+        border-radius: $radius-12
+
+        background: $color-primary
+
+        span
+            color: $color-text-white
+            font-size: 1rem
+            font-weight: 700
+
+@media (max-width: 480px)
+    .loginSection
+        padding: 1rem
+
+    .loginCard
+        padding: 1.5rem
+
+    .header
+        margin-bottom: 1.5rem
+
+    .header h2
+        font-size: 1.375rem
