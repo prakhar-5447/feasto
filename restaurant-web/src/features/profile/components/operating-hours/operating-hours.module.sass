@@ -1,0 +1,129 @@
+@use '../../../../styles/index' as *
+
+.description
+    margin: 0 0 $space-16
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+.days
+    display: flex
+    flex-direction: column
+    gap: $space-12
+
+.dayRow
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: $space-12
+
+.day
+    width: $space-32
+    flex-shrink: 0
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+.toggle
+    position: relative
+
+    width: $space-32
+    height: $space-20
+
+    flex-shrink: 0
+
+    padding: 0
+
+    border: $border-style-none
+    border-radius: $radius-pill
+
+    cursor: pointer
+
+    transition: $transition-background
+
+.toggleOpen
+    background: $color-success
+
+.toggleClosed
+    background: $color-border
+
+.toggleThumb
+    position: absolute
+    top: $space-2
+
+    width: $space-16
+    height: $space-16
+
+    border-radius: $radius-pill
+
+    background: $color-text-white
+    box-shadow: $shadow-xs
+
+    transition: $transition-transform
+
+.toggleThumbClosed
+    left: $space-2
+
+.toggleThumbOpen
+    left: $space-2
+
+    transform: translateX($space-16)
+
+.status
+    width: $space-48
+    flex-shrink: 0
+
+    font-size: $font-size-12
+    font-weight: $font-weight-medium
+
+.statusOpen
+    color: $color-success
+
+.statusClosed
+    color: $color-text-muted
+
+.timeRange
+    display: flex
+    align-items: center
+    gap: $space-8
+
+.timeInput
+    min-height: $space-32
+
+    padding: $space-4 $space-12
+
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-8
+
+    outline: none
+
+    background: $color-bg-gray
+    color: $color-text-primary
+
+    font-family: monospace
+    font-size: $font-size-14
+
+    transition: $transition-border, $transition-shadow
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus
+
+.to
+    color: $color-text-muted
+    font-size: $font-size-12
+
+.closedMessage
+    color: $color-text-muted
+    font-size: $font-size-12
+    font-style: italic
+
+@media (max-width: $breakpoint-xs)
+    .dayRow
+        align-items: flex-start
+
+    .timeRange
+        width: 100%
+        margin-left: $space-40

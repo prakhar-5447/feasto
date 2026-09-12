@@ -1,0 +1,225 @@
+@use '../../../../styles/index' as *
+
+.profile
+    display: flex
+    flex-direction: column
+    gap: $space-20
+
+    width: 100%
+    max-width: $container-lg
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    gap: $space-16
+
+.header h1
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
+
+.header p
+    margin: $space-2 0 0
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+.saveButton
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    gap: $space-8
+
+    min-height: $space-40
+
+    padding: $space-8 $space-20
+
+    border: $border-style-none
+    border-radius: $radius-12
+
+    background: $color-primary
+    color: $color-text-white
+
+    font-family: inherit
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+    cursor: pointer
+
+    transition: $transition-background, $transition-color, $transition-shadow
+
+    &:hover
+        background: $color-primary-hover
+
+.saveButtonSaved
+    background: $color-success
+
+    &:hover
+        background: $color-success-dark
+
+.formGrid,
+.locationFields
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: $space-16
+
+.fullWidth
+    grid-column: 1 / -1
+
+.textArea
+    width: 100%
+
+    min-height: $space-100
+
+    padding: $space-8 $space-12
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+
+    outline: none
+
+    background: $color-bg-white
+    color: $color-text-primary
+
+    font-family: inherit
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+    resize: vertical
+
+    transition: $transition-border, $transition-shadow
+
+    &:hover
+        border-color: $color-text-secondary
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus
+
+    &::placeholder
+        color: $color-text-muted
+
+.cuisines
+    display: flex
+    flex-wrap: wrap
+    gap: $space-8
+
+    margin-top: $space-2
+
+.cuisine
+    min-height: $space-32
+
+    padding: $space-4 $space-12
+
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-12
+
+    background: $color-bg-white
+    color: $color-text-muted
+
+    font-family: inherit
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+    cursor: pointer
+
+    transition: $transition-background, $transition-border, $transition-color
+
+    &:hover
+        background: $color-bg-gray
+        color: $color-text-primary
+
+.cuisineSelected
+    border-color: transparent
+
+    background: $color-primary
+    color: $color-text-white
+
+    &:hover
+        background: $color-primary-hover
+        color: $color-text-white
+
+.lockedNotice
+    display: flex
+    align-items: flex-start
+    gap: $space-12
+
+    margin-bottom: $space-20
+    padding: $space-16
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+
+    background: $color-bg-gray
+
+.lockedIcon
+    width: $space-32
+    height: $space-32
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    flex-shrink: 0
+
+    margin-top: $space-2
+
+    border-radius: $radius-8
+
+    background: $color-bg-orange-soft
+    color: $color-primary
+
+.lockedTitle
+    margin: 0 0 $space-4
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.lockedDescription
+    margin: 0
+
+    color: $color-text-secondary
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+    a
+        color: $color-primary
+        font-weight: $font-weight-semibold
+        text-decoration: underline
+        text-underline-offset: $space-2
+
+        &:hover
+            color: $color-primary-hover
+
+.locationFields
+    opacity: 0.6
+
+@media (max-width: $breakpoint-md)
+    .profile
+        max-width: 100%
+
+@media (max-width: $breakpoint-sm)
+    .header
+        align-items: flex-start
+
+    .formGrid,
+    .locationFields
+        grid-template-columns: 1fr
+
+    .fullWidth
+        grid-column: auto
+
+@media (max-width: $breakpoint-xs)
+    .header
+        flex-direction: column
+
+        align-items: flex-start
+
+    .saveButton
+        width: 100%
