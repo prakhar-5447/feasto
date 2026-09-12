@@ -1,13 +1,18 @@
 @use '../../styles/index' as *
 
 .sidebar
+    position: sticky
+    top: 0
+
     display: flex
     flex-direction: column
 
-    width: 220px
+    width: $container-xs
     height: 100vh
 
     flex-shrink: 0
+
+    overflow: hidden
 
     border-right: $border-width-1 $border-style-solid $color-border-light
 
@@ -16,19 +21,18 @@
     transition: $transition-width
 
 .collapsed
-    width: 64px
+    width: $space-64
 
 .logoSection
     display: flex
     align-items: center
     gap: $space-12
 
+    min-width: 0
+
     padding: $space-20 $space-16
 
     border-bottom: $border-width-1 $border-style-solid $color-border-light
-
-    &.collapsed
-        justify-content: center
 
 .logo
     width: $space-32
@@ -52,6 +56,8 @@
 .brand
     min-width: 0
 
+    overflow: hidden
+
 .brandName
     overflow: hidden
 
@@ -59,8 +65,9 @@
     font-size: $font-size-14
     font-weight: $font-weight-bold
     line-height: $line-height-none
-    text-overflow: ellipsis
+
     white-space: nowrap
+    text-overflow: ellipsis
 
 .brandSubtitle
     margin-top: $space-2
@@ -69,21 +76,26 @@
 
     color: $color-text-muted
     font-size: $font-size-12
-    text-overflow: ellipsis
+
     white-space: nowrap
+    text-overflow: ellipsis
 
 .restaurantCard
-    margin: $space-12 $space-12 0
+    margin: $space-12
     padding: $space-12
 
     border-radius: $radius-12
 
     background: $color-bg-gray
 
+    transition: $transition-padding, $transition-margin
+
 .restaurantIdentity
     display: flex
     align-items: center
     gap: $space-8
+
+    min-width: 0
 
 .restaurantLogo
     width: $space-32
@@ -106,6 +118,10 @@
 .restaurantInfo
     min-width: 0
 
+    overflow: hidden
+
+    transition: $transition-opacity
+
     p
         margin: 0
 
@@ -115,6 +131,7 @@
         font-size: $font-size-12
         font-weight: $font-weight-semibold
         line-height: $line-height-tight
+
         text-overflow: ellipsis
         white-space: nowrap
 
@@ -127,6 +144,7 @@
 
         color: $color-text-muted
         font-size: $font-size-12
+
         text-overflow: ellipsis
         white-space: nowrap
 
@@ -150,6 +168,7 @@
     gap: $space-12
 
     width: 100%
+    min-width: 0
     min-height: $space-40
 
     padding: $space-8 $space-12
@@ -164,7 +183,7 @@
 
     text-decoration: none
 
-    transition: $transition-background, $transition-color
+    transition: $transition-background, $transition-color, $transition-gap
 
     &:hover
         background: $color-bg-gray
@@ -195,8 +214,16 @@
 
 .navLabel
     flex: 1
+    min-width: 0
+
+    overflow: hidden
 
     text-align: left
+
+    white-space: nowrap
+    text-overflow: ellipsis
+
+    transition: $transition-opacity
 
 .badge
     min-width: $space-20
@@ -207,6 +234,8 @@
     justify-content: center
 
     padding: 0 $space-4
+
+    flex-shrink: 0
 
     border-radius: $radius-pill
 
@@ -225,6 +254,7 @@
     gap: $space-12
 
     width: 100%
+    min-width: 0
 
     padding: $space-12
 
@@ -233,7 +263,7 @@
 
     cursor: pointer
 
-    transition: $transition-background, $transition-border, $transition-color
+    transition: $transition-background, $transition-border, $transition-color, $transition-gap
 
 .statusOpen
     border-color: $color-success-border
@@ -247,19 +277,34 @@
 
 .statusContent
     flex: 1
+    min-width: 0
+
+    overflow: hidden
 
     text-align: left
 
+    transition: $transition-opacity
+
 .statusTitle
+    overflow: hidden
+
     font-size: $font-size-12
     font-weight: $font-weight-bold
     line-height: $line-height-none
 
+    white-space: nowrap
+    text-overflow: ellipsis
+
 .statusDescription
     margin-top: $space-2
 
+    overflow: hidden
+
     font-size: $font-size-12
     opacity: 0.7
+
+    white-space: nowrap
+    text-overflow: ellipsis
 
 .toggle
     position: relative
@@ -273,7 +318,7 @@
 
     background: $color-success
 
-    transition: $transition-background
+    transition: $transition-background, $transition-opacity
 
 .statusClosed .toggle
     background: $color-border
@@ -323,20 +368,87 @@
     font-family: inherit
     font-size: $font-size-12
 
-    transition: $transition-background
+    transition: $transition-background, $transition-color, $transition-gap
 
     &:hover
         background: $color-bg-gray
+        color: $color-text-primary
+
+/* ── Collapsed state ─────────────────────────────────────── */
 
 .collapsed
+
     .logoSection
         justify-content: center
+        gap: 0
+
+        padding-left: $space-16
+        padding-right: $space-16
+
+    .brand
+        display: none
+
+    .restaurantCard
+        margin-left: $space-8
+        margin-right: $space-8
+
+        padding-left: $space-8
+        padding-right: $space-8
+
+    .restaurantIdentity
+        justify-content: center
+
+    .restaurantInfo
+        display: none
+
+    .navigation
+        padding-left: $space-8
+        padding-right: $space-8
 
     .navItem
         justify-content: center
+        gap: 0
+
+        padding-left: $space-8
+        padding-right: $space-8
+
+    .navLabel
+        display: none
+
+    .badge
+        position: absolute
+        top: $space-4
+        right: $space-4
+
+        min-width: $space-16
+        height: $space-16
+
+        padding: 0 $space-2
+
+        font-size: $font-size-12
+
+    .statusSection
+        padding-left: $space-8
+        padding-right: $space-8
 
     .statusButton
         justify-content: center
+        gap: 0
+
+        padding-left: $space-12
+        padding-right: $space-12
+
+    .statusContent
+        display: none
+
+    .toggle
+        display: none
 
     .collapseButton
         justify-content: center
+
+        padding-left: $space-8
+        padding-right: $space-8
+
+    .collapseButton span
+        display: none

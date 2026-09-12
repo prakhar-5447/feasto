@@ -5,6 +5,7 @@ import {
 } from 'react';
 
 import Link from 'next/link';
+
 import {
     usePathname,
 } from 'next/navigation';
@@ -23,6 +24,7 @@ import {
 
 import styles from './sidebar.module.sass';
 
+
 type PageId =
     | 'orders'
     | 'analytics'
@@ -30,6 +32,7 @@ type PageId =
     | 'reviews'
     | 'gallery'
     | 'profile';
+
 
 interface NavItem {
     id: PageId;
@@ -41,6 +44,7 @@ interface NavItem {
     }>;
     badge?: number;
 }
+
 
 const NAV_ITEMS: NavItem[] = [
     {
@@ -83,10 +87,12 @@ const NAV_ITEMS: NavItem[] = [
     },
 ];
 
+
 interface SidebarProps {
     isOpen: boolean;
     onToggleOpen: () => void;
 }
+
 
 export default function Sidebar({
     isOpen,
@@ -125,92 +131,96 @@ export default function Sidebar({
 
             {/* Logo */}
 
-            <div className={styles.logoSection}>
+            <div
+                className={
+                    styles.logoSection
+                }
+            >
 
                 <div className={styles.logo}>
-
                     <span>
                         F
                     </span>
-
                 </div>
 
-                {!collapsed && (
+
+                <div
+                    className={
+                        styles.brand
+                    }
+                >
+
                     <div
                         className={
-                            styles.brand
+                            styles.brandName
                         }
                     >
-                        <div
-                            className={
-                                styles.brandName
-                            }
-                        >
-                            Partner Hub
-                        </div>
-
-                        <div
-                            className={
-                                styles.brandSubtitle
-                            }
-                        >
-                            Restaurant Portal
-                        </div>
+                        Partner Hub
                     </div>
-                )}
+
+                    <div
+                        className={
+                            styles.brandSubtitle
+                        }
+                    >
+                        Restaurant Portal
+                    </div>
+
+                </div>
 
             </div>
 
 
             {/* Restaurant identity */}
 
-            {!collapsed && (
+            <div
+                className={
+                    styles.restaurantCard
+                }
+            >
+
                 <div
                     className={
-                        styles.restaurantCard
+                        styles.restaurantIdentity
                     }
                 >
 
                     <div
                         className={
-                            styles.restaurantIdentity
+                            styles.restaurantLogo
+                        }
+                    >
+                        TB
+                    </div>
+
+
+                    <div
+                        className={
+                            styles.restaurantInfo
                         }
                     >
 
-                        <div
-                            className={
-                                styles.restaurantLogo
-                            }
-                        >
-                            TB
-                        </div>
+                        <p>
+                            The Biryani Co.
+                        </p>
 
-                        <div
-                            className={
-                                styles.restaurantInfo
-                            }
-                        >
-
-                            <p>
-                                The Biryani Co.
-                            </p>
-
-                            <span>
-                                Pune, Maharashtra
-                            </span>
-
-                        </div>
+                        <span>
+                            Pune, Maharashtra
+                        </span>
 
                     </div>
 
                 </div>
-            )}
+
+            </div>
 
 
             {/* Navigation */}
 
             <nav
-                className={styles.navigation}
+                className={
+                    styles.navigation
+                }
                 aria-label="Restaurant navigation"
             >
 
@@ -259,19 +269,20 @@ export default function Sidebar({
                                         />
                                     )}
 
+
                                     <Icon
                                         size={18}
                                     />
 
-                                    {!collapsed && (
-                                        <span
-                                            className={
-                                                styles.navLabel
-                                            }
-                                        >
-                                            {label}
-                                        </span>
-                                    )}
+
+                                    <span
+                                        className={
+                                            styles.navLabel
+                                        }
+                                    >
+                                        {label}
+                                    </span>
+
 
                                     {badge !==
                                         undefined &&
@@ -327,52 +338,49 @@ export default function Sidebar({
                         size={16}
                     />
 
-                    {!collapsed && (
-                        <>
-                            <div
-                                className={
-                                    styles.statusContent
-                                }
-                            >
 
-                                <div
-                                    className={
-                                        styles.statusTitle
-                                    }
-                                >
-                                    {isOpen
-                                        ? 'Restaurant Open'
-                                        : 'Restaurant Closed'}
-                                </div>
+                    <div
+                        className={
+                            styles.statusContent
+                        }
+                    >
 
-                                <div
-                                    className={
-                                        styles.statusDescription
-                                    }
-                                >
-                                    {isOpen
-                                        ? 'Accepting orders'
-                                        : 'Not accepting orders'}
-                                </div>
+                        <div
+                            className={
+                                styles.statusTitle
+                            }
+                        >
+                            {isOpen
+                                ? 'Restaurant Open'
+                                : 'Restaurant Closed'}
+                        </div>
 
-                            </div>
+                        <div
+                            className={
+                                styles.statusDescription
+                            }
+                        >
+                            {isOpen
+                                ? 'Accepting orders'
+                                : 'Not accepting orders'}
+                        </div>
+
+                    </div>
 
 
-                            <span
-                                className={
-                                    styles.toggle
-                                }
-                            >
+                    <span
+                        className={
+                            styles.toggle
+                        }
+                    >
 
-                                <span
-                                    className={
-                                        styles.toggleThumb
-                                    }
-                                />
+                        <span
+                            className={
+                                styles.toggleThumb
+                            }
+                        />
 
-                            </span>
-                        </>
-                    )}
+                    </span>
 
                 </button>
 
