@@ -1,0 +1,132 @@
+@use '../../../../styles/index' as *
+
+.orderManagement
+    display: flex
+    flex-direction: column
+    gap: $space-20
+
+    width: 100%
+    max-width: $space-960
+
+    margin: 0 auto
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+.header h1
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
+
+.header p
+    margin: $space-2 0 0
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+.liveFeed
+    display: inline-flex
+    align-items: center
+    gap: $space-8
+
+    padding: $space-4 $space-12
+
+    border: $border-width-1 $border-style-solid $color-success-border
+    border-radius: $radius-8
+
+    background: $color-success-bg
+    color: $color-success
+
+    font-family: monospace
+    font-size: $font-size-12
+    font-weight: $font-weight-medium
+
+.liveDot
+    width: $space-8
+    height: $space-8
+
+    flex-shrink: 0
+
+    border-radius: $radius-circle
+
+    background: $color-success
+
+    animation: pulse 1.5s infinite
+
+.filtersCard
+    padding: $space-16
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-16
+
+    background: $color-bg-white
+    box-shadow: $shadow-sm
+
+.orderList
+    display: flex
+    flex-direction: column
+    gap: $space-16
+
+.emptyState
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+    padding: $space-64 $space-16
+
+    text-align: center
+
+    color: $color-text-muted
+
+.emptyIcon
+    margin-bottom: $space-12
+
+    font-size: $font-size-36
+
+.emptyTitle
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold
+
+.emptyDescription
+    margin: $space-4 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-14
+
+@keyframes pulse
+    0%,
+    100%
+        opacity: 1
+
+    50%
+        opacity: 0.5
+
+@media (max-width: $breakpoint-md)
+    .orderManagement
+        max-width: 100%
+
+@media (max-width: $breakpoint-sm)
+    .header
+        align-items: flex-start
+
+    .liveFeed
+        padding: $space-4 $space-8
+
+@media (max-width: $breakpoint-xs)
+    .header
+        flex-direction: column
+
+        align-items: flex-start
+
+    .liveFeed
+        align-self: flex-start
