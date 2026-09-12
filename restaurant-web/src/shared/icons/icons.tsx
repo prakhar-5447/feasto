@@ -259,6 +259,46 @@ export const AlertCircle = (
     </Icon>
 );
 
+export const BadgeCheck = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <path
+            d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+        />
+        <path
+            d="m9 12 2 2 4-4"
+        />
+    </Icon>
+);
+
+export const RefreshCw = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <polyline
+            points="23 4 23 10 17 10"
+        /><polyline
+            points="1 20 1 14 7 14"
+        /><path
+            d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+        />
+    </Icon>
+);
+
+export const RotateCcw = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <polyline
+            points="1 4 1 10 7 10"
+        />
+        <path
+            d="M3.51 15a9 9 0 1 0 .49-3.16"
+        />
+    </Icon>
+);
+
 export const CheckCircle = (
     props: IconProps,
 ) => (
@@ -312,6 +352,44 @@ export const Truck = (
         />
     </Icon>
 );
+
+export const TrendingUp = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <polyline
+            points="23 6 13.5 15.5 8.5 10.5 1 18"
+        />
+        <polyline
+            points="17 6 23 6 23 12"
+        />
+    </Icon>
+);
+
+export const XCircle = (
+    props: IconProps
+) => (
+    <Icon {...props}>
+        <circle
+            cx="12"
+            cy="12"
+            r="10"
+        />
+        <line
+            x1="15"
+            y1="9"
+            x2="9"
+            y2="15"
+        />
+        <line
+            x1="9"
+            y1="9"
+            x2="15"
+            y2="15"
+        />
+    </Icon>
+);
+
 
 export const CircleX = (
     props: IconProps,
