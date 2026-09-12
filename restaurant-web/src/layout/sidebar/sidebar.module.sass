@@ -1,0 +1,342 @@
+@use '../../styles/index' as *
+
+.sidebar
+    display: flex
+    flex-direction: column
+
+    width: 220px
+    height: 100vh
+
+    flex-shrink: 0
+
+    border-right: $border-width-1 $border-style-solid $color-border-light
+
+    background: $color-bg-white
+
+    transition: $transition-width
+
+.collapsed
+    width: 64px
+
+.logoSection
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    padding: $space-20 $space-16
+
+    border-bottom: $border-width-1 $border-style-solid $color-border-light
+
+    &.collapsed
+        justify-content: center
+
+.logo
+    width: $space-32
+    height: $space-32
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    flex-shrink: 0
+
+    border-radius: $radius-8
+
+    background: $color-primary
+
+    span
+        color: $color-text-white
+        font-size: $font-size-14
+        font-weight: $font-weight-bold
+
+.brand
+    min-width: 0
+
+.brandName
+    overflow: hidden
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+    line-height: $line-height-none
+    text-overflow: ellipsis
+    white-space: nowrap
+
+.brandSubtitle
+    margin-top: $space-2
+
+    overflow: hidden
+
+    color: $color-text-muted
+    font-size: $font-size-11
+    text-overflow: ellipsis
+    white-space: nowrap
+
+.restaurantCard
+    margin: $space-12 $space-12 0
+    padding: $space-12
+
+    border-radius: $radius-12
+
+    background: $color-bg-gray
+
+.restaurantIdentity
+    display: flex
+    align-items: center
+    gap: $space-8
+
+.restaurantLogo
+    width: $space-32
+    height: $space-32
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    flex-shrink: 0
+
+    border-radius: $radius-8
+
+    background: $color-primary
+    color: $color-text-white
+
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+
+.restaurantInfo
+    min-width: 0
+
+    p
+        margin: 0
+
+        overflow: hidden
+
+        color: $color-text-primary
+        font-size: $font-size-12
+        font-weight: $font-weight-semibold
+        line-height: $line-height-tight
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    span
+        display: block
+
+        margin-top: $space-2
+
+        overflow: hidden
+
+        color: $color-text-muted
+        font-size: $font-size-10
+        text-overflow: ellipsis
+        white-space: nowrap
+
+.navigation
+    flex: 1
+
+    overflow-y: auto
+
+    padding: $space-8
+
+.navigationItems
+    display: flex
+    flex-direction: column
+    gap: $space-2
+
+.navItem
+    position: relative
+
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    width: 100%
+    min-height: $space-40
+
+    padding: $space-8 $space-12
+
+    border-radius: $radius-12
+
+    background: transparent
+    color: $color-text-secondary
+
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+    text-decoration: none
+
+    transition: $transition-background, $transition-color
+
+    &:hover
+        background: $color-bg-gray
+        color: $color-text-primary
+
+.active
+    background: $color-bg-orange-soft
+    color: $color-primary
+    font-weight: $font-weight-semibold
+
+    &:hover
+        background: $color-bg-orange-soft
+        color: $color-primary
+
+.activeIndicator
+    position: absolute
+    top: 50%
+    left: 0
+
+    width: $space-4
+    height: $space-20
+
+    transform: translateY(-50%)
+
+    border-radius: 0 $radius-4 $radius-4 0
+
+    background: $color-primary
+
+.navLabel
+    flex: 1
+
+    text-align: left
+
+.badge
+    min-width: $space-20
+    height: $space-20
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: 0 $space-4
+
+    border-radius: $radius-pill
+
+    background: $color-primary
+    color: $color-text-white
+
+    font-size: $font-size-10
+    font-weight: $font-weight-bold
+
+.statusSection
+    padding: 0 $space-8 $space-8
+
+.statusButton
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    width: 100%
+
+    padding: $space-12
+
+    border: $border-width-1 $border-style-solid
+    border-radius: $radius-12
+
+    cursor: pointer
+
+    transition: $transition-background, $transition-border, $transition-color
+
+.statusOpen
+    border-color: $color-success-border
+    background: $color-success-bg
+    color: $color-success
+
+.statusClosed
+    border-color: $color-bg-red-accent
+    background: $color-bg-red-soft
+    color: $color-error
+
+.statusContent
+    flex: 1
+
+    text-align: left
+
+.statusTitle
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+    line-height: $line-height-none
+
+.statusDescription
+    margin-top: $space-2
+
+    font-size: $font-size-10
+    opacity: 0.7
+
+.toggle
+    position: relative
+
+    width: $space-32
+    height: $space-20
+
+    flex-shrink: 0
+
+    border-radius: $radius-pill
+
+    background: $color-success
+
+    transition: $transition-background
+
+.statusClosed .toggle
+    background: $color-border
+
+.toggleThumb
+    position: absolute
+    top: $space-2
+    left: $space-2
+
+    width: $space-16
+    height: $space-16
+
+    border-radius: $radius-pill
+
+    background: $color-text-white
+    box-shadow: $shadow-xs
+
+    transition: $transition-transform
+
+.statusOpen .toggleThumb
+    transform: translateX($space-12)
+
+.collapseSection
+    padding: $space-8
+
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+.collapseButton
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    gap: $space-8
+
+    width: 100%
+    min-height: $space-32
+
+    padding: $space-8 $space-12
+
+    border: $border-style-none
+    border-radius: $radius-8
+
+    background: transparent
+    color: $color-text-muted
+
+    cursor: pointer
+
+    font-family: inherit
+    font-size: $font-size-12
+
+    transition: $transition-background
+
+    &:hover
+        background: $color-bg-gray
+
+.collapsed
+    .logoSection
+        justify-content: center
+
+    .navItem
+        justify-content: center
+
+    .statusButton
+        justify-content: center
+
+    .collapseButton
+        justify-content: center
