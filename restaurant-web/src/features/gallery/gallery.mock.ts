@@ -1,0 +1,78 @@
+import type {
+    GalleryImage,
+} from './gallery.types';
+
+export const INITIAL_IMAGES: GalleryImage[] = [
+    {
+        id: 1,
+        url: 'https://images.unsplash.com/photo-1563379091339-03246963d8e5?w=600&h=400&fit=crop&auto=format',
+        alt: 'Biryani spread',
+        category: 'Food',
+        featured: true,
+        uploadedAt: 'Aug 28',
+    },
+    {
+        id: 2,
+        url: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&h=400&fit=crop&auto=format',
+        alt: 'Restaurant interior',
+        category: 'Ambiance',
+        featured: false,
+        uploadedAt: 'Aug 25',
+    },
+    {
+        id: 3,
+        url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&h=400&fit=crop&auto=format',
+        alt: 'Pizza plating',
+        category: 'Food',
+        featured: false,
+        uploadedAt: 'Aug 22',
+    },
+    {
+        id: 4,
+        url: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=600&h=400&fit=crop&auto=format',
+        alt: 'Fine dining setup',
+        category: 'Ambiance',
+        featured: false,
+        uploadedAt: 'Aug 20',
+    },
+    {
+        id: 5,
+        url: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&h=400&fit=crop&auto=format',
+        alt: 'Indian curries',
+        category: 'Food',
+        featured: true,
+        uploadedAt: 'Aug 18',
+    },
+    {
+        id: 6,
+        url: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&h=400&fit=crop&auto=format',
+        alt: 'Chef at work',
+        category: 'Staff',
+        featured: false,
+        uploadedAt: 'Aug 15',
+    },
+    {
+        id: 7,
+        url: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&h=400&fit=crop&auto=format',
+        alt: 'Pancake stack',
+        category: 'Food',
+        featured: false,
+        uploadedAt: 'Aug 12',
+    },
+    {
+        id: 8,
+        url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop&auto=format',
+        alt: 'Elegant plating',
+        category: 'Food',
+        featured: false,
+        uploadedAt: 'Aug 10',
+    },
+    {
+        id: 9,
+        url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=400&fit=crop&auto=format',
+        alt: 'Restaurant bar area',
+        category: 'Ambiance',
+        featured: false,
+        uploadedAt: 'Aug 8',
+    },
+];

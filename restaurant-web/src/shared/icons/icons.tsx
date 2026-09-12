@@ -329,6 +329,26 @@ export const Package = (
     </Icon>
 );
 
+
+export const StarOff = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <line
+            x1="2"
+            y1="2"
+            x2="22"
+            y2="22"
+        />
+        <path
+            d="M10.7 10.7 8.91 8.26 12 2l3.09 6.26L22 9.27l-5 4.87"
+        />
+        <path
+            d="m13.54 13.54 1.46 3.46L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.9-1.01"
+        />
+    </Icon>
+);
+
 export const Truck = (
     props: IconProps,
 ) => (
@@ -362,6 +382,22 @@ export const TrendingUp = (
         />
         <polyline
             points="17 6 23 6 23 12"
+        />
+    </Icon>
+);
+
+export const Upload = (
+    props: IconProps
+) => (
+    <Icon {...props}>
+        <polyline
+            points="16 16 12 12 8 16"
+        />
+        <line
+            x1="12" y1="12" x2="12" y2="21"
+        />
+        <path
+            d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"
         />
     </Icon>
 );

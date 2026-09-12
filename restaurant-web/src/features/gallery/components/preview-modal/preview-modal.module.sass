@@ -1,0 +1,151 @@
+@use '../../../../styles/index' as *
+
+.overlay
+    position: fixed
+    inset: 0
+
+    z-index: $z-modal
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: $space-16
+
+    background: $color-overlay-black-heavy
+
+    backdrop-filter: blur($space-2)
+
+.modal
+    width: 100%
+    max-width: $container-md
+
+    overflow: hidden
+
+    border-radius: $radius-16
+
+    background: $color-bg-white
+    box-shadow: $shadow-2xl
+
+.imageWrapper
+    position: relative
+
+.previewImage
+    width: 100%
+    max-height: $container-sm
+
+    display: block
+
+    object-fit: cover
+
+.closeButton
+    position: absolute
+    top: $space-12
+    right: $space-12
+
+    width: $space-32
+    height: $space-32
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: 0
+
+    border: $border-style-none
+    border-radius: $radius-8
+
+    background: $color-overlay-black-medium
+    color: $color-text-white
+
+    cursor: pointer
+
+    transition: $transition-background
+
+    &:hover
+        background: $color-overlay-black-heavy
+
+.footer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    padding: $space-16
+
+.metadata
+    min-width: 0
+
+    p
+        margin: 0
+        overflow: hidden
+
+        color: $color-text-primary
+        font-size: $font-size-14
+        font-weight: $font-weight-semibold
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    span
+        display: block
+
+        margin-top: $space-2
+
+        color: $color-text-muted
+        font-size: $font-size-12
+
+.actions
+    display: flex
+    align-items: center
+    gap: $space-8
+
+    flex-shrink: 0
+
+.secondaryAction,
+.deleteAction
+    display: inline-flex
+    align-items: center
+    gap: $space-4
+
+    min-height: $space-32
+
+    padding: $space-4 $space-12
+
+    border: $border-width-1 $border-style-solid
+    border-radius: $radius-8
+
+    font-family: inherit
+    font-size: $font-size-12
+    font-weight: $font-weight-medium
+
+    cursor: pointer
+
+.secondaryAction
+    border-color: $color-border-light
+
+    background: $color-bg-white
+    color: $color-text-muted
+
+.featuredAction
+    border-color: $color-border-primary
+
+    background: $color-bg-orange-soft
+    color: $color-primary
+
+.deleteAction
+    border-color: $color-bg-red-accent
+
+    background: $color-bg-red-soft
+    color: $color-error
+
+@media (max-width: $breakpoint-xs)
+    .footer
+        align-items: flex-start
+        flex-direction: column
+
+    .actions
+        width: 100%
+
+    .secondaryAction,
+    .deleteAction
+        flex: 1

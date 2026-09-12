@@ -1,0 +1,81 @@
+@use '../../../../styles/index' as *
+
+.gallery
+    display: flex
+    flex-direction: column
+    gap: $space-20
+
+    width: 100%
+    max-width: $container-lg
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+.header h1
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
+
+.header p
+    margin: $space-2 0 0
+
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+.grid
+    display: grid
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+    gap: $space-12
+
+.addCard
+    aspect-ratio: 1
+
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+    gap: $space-4
+
+    padding: 0
+
+    border: $border-width-2 $border-style-dashed $color-border-light
+    border-radius: $radius-12
+
+    background: $color-bg-white
+    color: $color-text-muted
+
+    cursor: pointer
+
+    transition: $transition-border, $transition-background, $transition-color
+
+    &:hover
+        border-color: $color-primary
+        background: $color-bg-orange-soft
+        color: $color-primary
+
+    span
+        font-size: $font-size-20
+
+    small
+        font-size: $font-size-12
+
+@media (max-width: $breakpoint-lg)
+    .grid
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+
+@media (max-width: $breakpoint-sm)
+    .grid
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+
+@media (max-width: $breakpoint-xs)
+    .gallery
+        gap: $space-16
+
+    .grid
+        gap: $space-8
