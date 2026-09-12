@@ -106,16 +106,19 @@ export default function Sidebar({
         setCollapsed,
     ] = useState(false);
 
-
     const isActive = (
-        href: string,
+        item: NavItem,
     ): boolean => {
+
+        if (item.id === 'orders') {
+            return pathname === item.href;
+        }
+
         return (
-            pathname === href ||
-            pathname.startsWith(`${href}/`)
+            pathname === item.href ||
+            pathname.startsWith(`${item.href}/`)
         );
     };
-
 
     return (
         <aside
@@ -240,7 +243,13 @@ export default function Sidebar({
                         }) => {
 
                             const active =
-                                isActive(href);
+                                isActive({
+                                    id,
+                                    label,
+                                    href,
+                                    icon: Icon,
+                                    badge,
+                                });
 
                             return (
                                 <Link
