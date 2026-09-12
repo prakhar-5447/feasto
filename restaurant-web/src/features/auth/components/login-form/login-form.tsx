@@ -44,7 +44,6 @@ export default function LoginForm() {
     ) => {
 
         event.preventDefault();
-
         setError('');
 
 

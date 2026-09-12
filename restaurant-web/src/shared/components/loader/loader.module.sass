@@ -1,0 +1,37 @@
+@use '../../../styles/index' as *
+
+.loaderWrapper
+    display: inline-flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: $space-8
+
+.overlay
+    position: fixed
+    inset: 0
+    display: flex
+    background: $color-overlay-white-heavy
+    z-index: $z-loader-overlay
+
+.spinner
+    display: block
+    flex-shrink: 0
+
+    border-style: $border-style-solid
+    border-color: transparent
+    border-top-color: $color-primary
+    border-radius: $radius-circle
+
+    animation: spin $animation-spin
+
+.loaderText
+    font-size: $font-size-14
+    color: $color-text-secondary
+
+@keyframes spin
+    from
+        transform: rotate(0deg)
+
+    to
+        transform: rotate(360deg)

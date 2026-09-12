@@ -6,6 +6,7 @@ import {
 } from 'react';
 
 import styles from './button.module.sass';
+import Loader from '../loader/loader';
 
 type ButtonVariant =
     | 'primary'
@@ -137,9 +138,9 @@ export default function Button({
             onClick={handleClick}
         >
             {loading ? (
-                <span
-                    className={styles.buttonLoader}
-                    aria-hidden="true"
+                <Loader
+                    size={18}
+                    borderSize={2}
                 />
             ) : variant === 'icon' ? (
                 icon && (

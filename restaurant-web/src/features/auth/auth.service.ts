@@ -1,3 +1,5 @@
+import { firstValueFrom, timer } from 'rxjs';
+
 import type {
     LoginRequest,
     LoginResponse,
@@ -27,6 +29,9 @@ class AuthService {
                 'Unable to sign in.',
             );
         }
+
+        // Development-only delay
+        await firstValueFrom(timer(2000));
 
         return data;
     }
