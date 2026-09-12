@@ -12,6 +12,7 @@ import {
 } from '@/shared/icons';
 
 import styles from './upload-zone.module.sass';
+import Button from '@/shared/components/button/button';
 
 export default function UploadZone() {
 
@@ -119,22 +120,17 @@ export default function UploadZone() {
                 </div>
 
 
-                <button
+                <Button
                     type="button"
-                    className={
-                        styles.browseButton
-                    }
+                    size="md"
+                    icon={<Upload size={14} />}
                     onClick={(event) => {
                         event.stopPropagation();
                         inputRef.current?.click();
                     }}
                 >
-                    <Upload
-                        size={14}
-                    />
-
                     Browse Files
-                </button>
+                </Button>
 
             </div>
 

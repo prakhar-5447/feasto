@@ -24,6 +24,7 @@ import OperatingHours, {
 
 import styles from './profile.module.sass';
 import { Category, RESTAURANT_CATEGORIES } from '../categories.types';
+import Button from '@/shared/components/button/button';
 
 
 const DEFAULT_HOURS: HoursMap = {
@@ -218,39 +219,20 @@ export default function Profile() {
                 </div>
 
 
-                <button
+                <Button
                     type="button"
-                    className={[
-                        styles.saveButton,
-                        saved
-                            ? styles.saveButtonSaved
-                            : '',
-                    ].join(' ')}
-                    onClick={
-                        handleSave
+                    size="md"
+                    icon={
+                        saved ? (
+                            <Check size={16} />
+                        ) : (
+                            <Save size={16} />
+                        )
                     }
+                    onClick={handleSave}
                 >
-
-                    {saved ? (
-                        <>
-                            <Check
-                                size={16}
-                            />
-
-                            Saved!
-                        </>
-                    ) : (
-                        <>
-                            <Save
-                                size={16}
-                            />
-
-                            Save Changes
-                        </>
-                    )}
-
-                </button>
-
+                    {saved ? 'Saved!' : 'Save Changes'}
+                </Button>
             </header>
 
 

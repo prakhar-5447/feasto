@@ -402,83 +402,17 @@
     flex-direction: column
     gap: $space-12
 
-.primaryAction,
-.refundAction,
-.readyButton,
-.acceptButton,
-.declineButton
-    display: flex
-    align-items: center
-    justify-content: center
-    gap: $space-8
-
-    min-height: $space-40
-
-    border: $border-style-none
-    border-radius: $radius-12
-
-    font-family: inherit
-    font-size: $font-size-14
-    font-weight: $font-weight-bold
-
-    cursor: pointer
-
-    transition: $transition-background, $transition-color, $transition-shadow, $transition-opacity
-
-.primaryAction
-    width: 100%
-
-    background: $color-primary
-    color: $color-text-white
-    box-shadow: $shadow-primary
-
-    &:hover
-        background: $color-primary-hover
-
-.refundAction
-    width: 100%
-
-    background: $color-primary
-    color: $color-text-white
-
-    &:hover
-        background: $color-primary-hover
-
-.readyButton
-    width: 100%
-
-    background: $color-warning
-    color: $color-text-white
-
-    &:hover
-        opacity: 0.9
-
 .actionRow
     display: flex
     align-items: center
     gap: $space-8
 
     padding-top: $space-2
+    > button:first-child
+        flex: 1
 
-.acceptButton
-    flex: 1
-
-    background: $color-primary
-    color: $color-text-white
-    box-shadow: $shadow-primary
-
-    &:hover
-        background: $color-primary-hover
-
-.declineButton
-    padding: 0 $space-16
-
-    background: $color-bg-gray
-    color: $color-text-secondary
-
-    &:hover
-        background: $color-bg-red-accent
-        color: $color-error
+    > button:last-child
+        border: $border-width-1 solid $color-border
 
 .delivered
     display: flex
@@ -578,10 +512,3 @@
 
     .actionRow
         flex-direction: column
-
-    .acceptButton,
-    .declineButton
-        width: 100%
-
-    .declineButton
-        padding: 0

@@ -29,39 +29,6 @@
     color: $color-text-secondary
     font-size: $font-size-14
 
-.saveButton
-    display: inline-flex
-    align-items: center
-    justify-content: center
-    gap: $space-8
-
-    min-height: $space-40
-
-    padding: $space-8 $space-20
-
-    border: $border-style-none
-    border-radius: $radius-12
-
-    background: $color-primary
-    color: $color-text-white
-
-    font-family: inherit
-    font-size: $font-size-14
-    font-weight: $font-weight-bold
-
-    cursor: pointer
-
-    transition: $transition-background, $transition-color, $transition-shadow
-
-    &:hover
-        background: $color-primary-hover
-
-.saveButtonSaved
-    background: $color-success
-
-    &:hover
-        background: $color-success-dark
-
 .formGrid,
 .locationFields
     display: grid
@@ -220,6 +187,3 @@
         flex-direction: column
 
         align-items: flex-start
-
-    .saveButton
-        width: 100%

@@ -22,6 +22,8 @@ import {
     Truck,
 } from '@/shared/icons';
 
+import Button from '@/shared/components/button/button';
+
 import type {
     Order,
     OrderStatus,
@@ -31,7 +33,6 @@ import {
     DELIVERY_TIMELINE,
     isAutoRefund,
     REFUND_TIMELINE,
-    needsReturn,
     STATUS_META,
 } from '../../orders.types';
 
@@ -43,8 +44,6 @@ type IconComponent = ComponentType<{
     className?: string;
 }>;
 
-
-/* ── Timeline icons ───────────────────────────────────────── */
 
 const STEP_ICONS: Partial<
     Record<OrderStatus, IconComponent>
@@ -62,8 +61,6 @@ const STEP_ICONS: Partial<
 };
 
 
-/* ── Props ────────────────────────────────────────────────── */
-
 interface OrderCardProps {
     order: Order;
     onAccept: () => void;
@@ -71,45 +68,6 @@ interface OrderCardProps {
     onMarkReady: () => void;
     onMarkReturned: () => void;
     onProcessRefund: () => void;
-}
-
-
-/* ── Status Badge ─────────────────────────────────────────── */
-
-interface StatusBadgeProps {
-    status: OrderStatus;
-}
-
-function StatusBadge({
-    status,
-}: StatusBadgeProps) {
-
-    const meta =
-        STATUS_META[status];
-
-    return (
-        <span
-            className={
-                styles.statusBadge
-            }
-            style={{
-                background: meta.bg,
-                color: meta.text,
-                borderColor: meta.border,
-            }}
-        >
-            <span
-                className={
-                    styles.statusBadgeDot
-                }
-                style={{
-                    background: meta.dot,
-                }}
-            />
-
-            {meta.label}
-        </span>
-    );
 }
 
 
@@ -126,9 +84,7 @@ function Timeline({
 }: TimelineProps) {
 
     const currentIndex =
-        steps.indexOf(
-            currentStatus,
-        );
+        steps.indexOf(currentStatus);
 
     return (
         <div
@@ -136,7 +92,6 @@ function Timeline({
                 styles.timeline
             }
         >
-
             {steps.map(
                 (step, index) => {
 
@@ -145,12 +100,10 @@ function Timeline({
                         AlertCircle;
 
                     const done =
-                        index <=
-                        currentIndex;
+                        index <= currentIndex;
 
                     const active =
-                        index ===
-                        currentIndex;
+                        index === currentIndex;
 
                     const isLast =
                         index ===
@@ -163,7 +116,6 @@ function Timeline({
                                 styles.timelineStep
                             }
                         >
-
                             <div
                                 className={[
                                     styles.timelineNode,
@@ -182,7 +134,6 @@ function Timeline({
                                 />
                             </div>
 
-
                             {!isLast && (
                                 <div
                                     className={
@@ -193,12 +144,10 @@ function Timeline({
                                     }
                                 />
                             )}
-
                         </div>
                     );
                 },
             )}
-
         </div>
     );
 }
@@ -227,7 +176,6 @@ function DriverStrip({
                     : styles.driverStripActive,
             ].join(' ')}
         >
-
             <div
                 className={
                     styles.driverAvatar
@@ -236,13 +184,11 @@ function DriverStrip({
                 {driver[0]}
             </div>
 
-
             <div
                 className={
                     styles.driverInfo
                 }
             >
-
                 <p>
                     {driver}
                 </p>
@@ -250,9 +196,7 @@ function DriverStrip({
                 <span>
                     {phone}
                 </span>
-
             </div>
-
 
             {returning ? (
                 <RotateCcw
@@ -269,7 +213,6 @@ function DriverStrip({
                     }
                 />
             )}
-
         </div>
     );
 }
@@ -335,15 +278,9 @@ function CancelledRefundPanel({
     ) {
         return (
             <Notice
-                background={
-                    '$color-bg-gray'
-                }
-                border={
-                    '$color-border-light'
-                }
-                color={
-                    '$color-text-secondary'
-                }
+                background="var(--color-bg-gray)"
+                border="var(--color-border-light)"
+                color="var(--color-text-secondary)"
             >
                 <CircleX
                     size={14}
@@ -366,22 +303,15 @@ function CancelledRefundPanel({
     ) {
         return (
             <Notice
-                background={
-                    'var(--color-bg-gray)'
-                }
-                border={
-                    'var(--color-border-light)'
-                }
-                color={
-                    'var(--color-text-secondary)'
-                }
+                background="var(--color-bg-gray)"
+                border="var(--color-border-light)"
+                color="var(--color-text-secondary)"
             >
                 <RefreshCw
                     size={14}
                 />
 
                 <div>
-
                     <p
                         className={
                             styles.noticeTitle
@@ -403,9 +333,7 @@ function CancelledRefundPanel({
                         automatically. No action
                         needed.
                     </p>
-
                 </div>
-
             </Notice>
         );
     }
@@ -414,8 +342,7 @@ function CancelledRefundPanel({
     /* Rider returning food */
 
     if (
-        status ===
-        'cancelled_returning'
+        status === 'cancelled_returning'
     ) {
         return (
             <div
@@ -423,19 +350,11 @@ function CancelledRefundPanel({
                     styles.refundPanel
                 }
             >
-
                 <Notice
-                    background={
-                        'var(--color-bg-orange-soft)'
-                    }
-                    border={
-                        'var(--color-border-primary)'
-                    }
-                    color={
-                        '$color-primary'
-                    }
+                    background="var(--color-bg-orange-soft)"
+                    border="var(--color-border-primary)"
+                    color="var(--color-primary)"
                 >
-
                     <RotateCcw
                         size={14}
                         className={
@@ -444,7 +363,6 @@ function CancelledRefundPanel({
                     />
 
                     <div>
-
                         <p
                             className={
                                 styles.noticeTitle
@@ -467,9 +385,7 @@ function CancelledRefundPanel({
                             {order.total} refund
                             for this prepaid order.
                         </p>
-
                     </div>
-
                 </Notice>
 
 
@@ -487,21 +403,22 @@ function CancelledRefundPanel({
                 )}
 
 
-                <button
+                <Button
                     type="button"
-                    className={
-                        styles.primaryAction
+                    variant="primary"
+                    size="md"
+                    fullWidth
+                    icon={
+                        <Package
+                            size={16}
+                        />
                     }
                     onClick={
                         onMarkReturned
                     }
                 >
-                    <Package
-                        size={16}
-                    />
-
                     Confirm Food Received
-                </button>
+                </Button>
 
             </div>
         );
@@ -519,7 +436,6 @@ function CancelledRefundPanel({
                     styles.refundPanel
                 }
             >
-
                 <Timeline
                     steps={
                         REFUND_TIMELINE
@@ -529,25 +445,16 @@ function CancelledRefundPanel({
                     }
                 />
 
-
                 <Notice
-                    background={
-                        '$color-bg-orange-soft'
-                    }
-                    border={
-                        '$color-border-primary'
-                    }
-                    color={
-                        '$color-primary'
-                    }
+                    background="var(--color-bg-orange-soft)"
+                    border="var(--color-border-primary)"
+                    color="var(--color-primary)"
                 >
-
                     <CheckCircle
                         size={14}
                     />
 
                     <div>
-
                         <p
                             className={
                                 styles.noticeTitle
@@ -568,28 +475,27 @@ function CancelledRefundPanel({
                             customer's original
                             payment method.
                         </p>
-
                     </div>
-
                 </Notice>
 
 
-                <button
+                <Button
                     type="button"
-                    className={
-                        styles.refundAction
+                    variant="primary"
+                    size="md"
+                    fullWidth
+                    icon={
+                        <RefreshCw
+                            size={16}
+                        />
                     }
                     onClick={
                         onProcessRefund
                     }
                 >
-                    <RefreshCw
-                        size={16}
-                    />
-
                     Process Refund —
                     ₹{order.total}
-                </button>
+                </Button>
 
             </div>
         );
@@ -608,7 +514,6 @@ function CancelledRefundPanel({
                     styles.refundPanel
                 }
             >
-
                 <Timeline
                     steps={
                         REFUND_TIMELINE
@@ -618,19 +523,11 @@ function CancelledRefundPanel({
                     }
                 />
 
-
                 <Notice
-                    background={
-                        'var(--color-bg-orange-soft)'
-                    }
-                    border={
-                        'var(--color-border-primary)'
-                    }
-                    color={
-                        'var(--color-primary)'
-                    }
+                    background="var(--color-bg-orange-soft)"
+                    border="var(--color-border-primary)"
+                    color="var(--color-primary)"
                 >
-
                     <RefreshCw
                         size={14}
                         className={
@@ -639,7 +536,6 @@ function CancelledRefundPanel({
                     />
 
                     <div>
-
                         <p
                             className={
                                 styles.noticeTitle
@@ -661,11 +557,8 @@ function CancelledRefundPanel({
                             reflect in the
                             customer's account.
                         </p>
-
                     </div>
-
                 </Notice>
-
             </div>
         );
     }
@@ -682,7 +575,6 @@ function CancelledRefundPanel({
                     styles.refundPanel
                 }
             >
-
                 <Timeline
                     steps={
                         REFUND_TIMELINE
@@ -692,19 +584,11 @@ function CancelledRefundPanel({
                     }
                 />
 
-
                 <Notice
-                    background={
-                        '$color-success-bg'
-                    }
-                    border={
-                        '$color-success-border'
-                    }
-                    color={
-                        '$color-success'
-                    }
+                    background="var(--color-success-bg)"
+                    border="var(--color-success-border)"
+                    color="var(--color-success)"
                 >
-
                     <BadgeCheck
                         size={14}
                     />
@@ -715,9 +599,7 @@ function CancelledRefundPanel({
                         {' '}
                         completed successfully.
                     </span>
-
                 </Notice>
-
             </div>
         );
     }
@@ -790,7 +672,7 @@ export default function OrderCard({
             className={cardClassName}
         >
 
-            {/* Status header */}
+            {/* Status Header */}
 
             <div
                 className={
@@ -803,24 +685,20 @@ export default function OrderCard({
                         meta.border,
                 }}
             >
-
                 <div
                     className={
                         styles.statusInfo
                     }
                 >
-
                     <span
-                        className={
-                            [
-                                styles.statusDot,
-                                status === 'new'
-                                    ? styles.statusDotNew
-                                    : '',
-                            ]
-                                .filter(Boolean)
-                                .join(' ')
-                        }
+                        className={[
+                            styles.statusDot,
+                            status === 'new'
+                                ? styles.statusDotNew
+                                : '',
+                        ]
+                            .filter(Boolean)
+                            .join(' ')}
                         style={{
                             background:
                                 meta.dot,
@@ -850,7 +728,6 @@ export default function OrderCard({
                     >
                         · {meta.description}
                     </span>
-
                 </div>
 
 
@@ -859,7 +736,6 @@ export default function OrderCard({
                         styles.statusMeta
                     }
                 >
-
                     <span
                         className={[
                             styles.paymentBadge,
@@ -883,13 +759,11 @@ export default function OrderCard({
                     >
                         {order.placedAt}
                     </span>
-
                 </div>
-
             </div>
 
 
-            {/* Card content */}
+            {/* Card Content */}
 
             <div
                 className={
@@ -897,26 +771,23 @@ export default function OrderCard({
                 }
             >
 
-                {/* Customer + amount */}
+                {/* Customer */}
 
                 <div
                     className={
                         styles.customerSection
                     }
                 >
-
                     <div
                         className={
                             styles.customerInfo
                         }
                     >
-
                         <div
                             className={
                                 styles.customerHeading
                             }
                         >
-
                             <span
                                 className={
                                     styles.customerName
@@ -933,7 +804,6 @@ export default function OrderCard({
                                 {order.id}
                             </span>
 
-
                             {order.cancelledBy && (
                                 <span
                                     className={
@@ -946,7 +816,6 @@ export default function OrderCard({
                                     }
                                 </span>
                             )}
-
                         </div>
 
 
@@ -955,7 +824,6 @@ export default function OrderCard({
                                 styles.contactRow
                             }
                         >
-
                             <a
                                 href={
                                     `tel:${order.phone}`
@@ -982,9 +850,7 @@ export default function OrderCard({
 
                                 ETA {order.eta}
                             </span>
-
                         </div>
-
                     </div>
 
 
@@ -993,7 +859,6 @@ export default function OrderCard({
                             styles.amount
                         }
                     >
-
                         <div
                             className={
                                 styles.total
@@ -1014,37 +879,28 @@ export default function OrderCard({
                                 ? 's'
                                 : ''}
                         </div>
-
                     </div>
-
                 </div>
 
 
-                {/* Order items */}
+                {/* Items */}
 
                 <div
                     className={
                         styles.itemsSection
                     }
                 >
-
                     {order.items.map(
                         (item) => (
                             <div
-                                key={
-                                    `${item.name}-${item.qty}`
-                                }
-                                className={
-                                    styles.itemRow
-                                }
+                                key={`${item.name}-${item.qty}`}
+                                className={styles.itemRow}
                             >
-
                                 <span
                                     className={
                                         styles.itemName
                                     }
                                 >
-
                                     <span
                                         className={
                                             styles.itemQuantity
@@ -1054,21 +910,17 @@ export default function OrderCard({
                                     </span>
 
                                     {' '}
+
                                     {item.name}
-
                                 </span>
-
 
                                 <span
                                     className={
                                         styles.itemPrice
                                     }
                                 >
-                                    ₹
-                                    {item.price *
-                                        item.qty}
+                                    ₹{item.price * item.qty}
                                 </span>
-
                             </div>
                         ),
                     )}
@@ -1080,13 +932,11 @@ export default function OrderCard({
                                 styles.noteContainer
                             }
                         >
-
                             <p
                                 className={
                                     styles.note
                                 }
                             >
-
                                 <Receipt
                                     size={12}
                                 />
@@ -1099,12 +949,9 @@ export default function OrderCard({
                                         order.specialNote
                                     }
                                 </span>
-
                             </p>
-
                         </div>
                     )}
-
                 </div>
 
 
@@ -1115,7 +962,6 @@ export default function OrderCard({
                         styles.address
                     }
                 >
-
                     <MapPin
                         size={14}
                     />
@@ -1123,7 +969,6 @@ export default function OrderCard({
                     <span>
                         {order.address}
                     </span>
-
                 </div>
 
 
@@ -1171,17 +1016,10 @@ export default function OrderCard({
                     'picked_up'
                 ) && (
                         <Notice
-                            background={
-                                'var(--color-bg-gray)'
-                            }
-                            border={
-                                'var(--color-border-light)'
-                            }
-                            color={
-                                'var(--color-text-secondary)'
-                            }
+                            background="var(--color-bg-gray)"
+                            border="var(--color-border-light)"
+                            color="var(--color-text-secondary)"
                         >
-
                             <Bike
                                 size={14}
                             />
@@ -1192,7 +1030,6 @@ export default function OrderCard({
                                 action needed from your
                                 side.
                             </span>
-
                         </Notice>
                     )}
 
@@ -1201,17 +1038,10 @@ export default function OrderCard({
 
                 {status === 'ready' && (
                     <Notice
-                        background={
-                            'var(--color-bg-orange-soft)'
-                        }
-                        border={
-                            'var(--color-border-primary)'
-                        }
-                        color={
-                            'var(--color-primary)'
-                        }
+                        background="var(--color-bg-orange-soft)"
+                        border="var(--color-border-primary)"
+                        color="var(--color-primary)"
                     >
-
                         <Package
                             size={14}
                         />
@@ -1225,7 +1055,6 @@ export default function OrderCard({
                             for the driver app to
                             assign a rider
                         </span>
-
                     </Notice>
                 )}
 
@@ -1238,18 +1067,16 @@ export default function OrderCard({
                             styles.delivered
                         }
                     >
-
                         <CheckCircle
                             size={14}
                         />
 
                         Delivered successfully
-
                     </div>
                 )}
 
 
-                {/* Cancellation / refund */}
+                {/* Refund */}
 
                 {isCancelFamily && (
                     <CancelledRefundPanel
@@ -1264,7 +1091,7 @@ export default function OrderCard({
                 )}
 
 
-                {/* New order actions */}
+                {/* New Order Actions */}
 
                 {status === 'new' && (
                     <div
@@ -1272,66 +1099,65 @@ export default function OrderCard({
                             styles.actionRow
                         }
                     >
-
-                        <button
+                        <Button
                             type="button"
-                            className={
-                                styles.acceptButton
+                            variant="primary"
+                            size="md"
+                            fullWidth
+                            icon={
+                                <CheckCircle
+                                    size={16}
+                                />
                             }
                             onClick={
                                 onAccept
                             }
                         >
-                            <CheckCircle
-                                size={16}
-                            />
-
                             Accept Order
-                        </button>
+                        </Button>
 
 
-                        <button
+                        <Button
                             type="button"
-                            className={
-                                styles.declineButton
+                            variant="ghost"
+                            tone="muted"
+                            size="md"
+                            icon={
+                                <CircleX
+                                    size={16}
+                                />
                             }
                             onClick={
                                 onDecline
                             }
                         >
-                            <CircleX
-                                size={16}
-                            />
-
                             Decline
-                        </button>
-
+                        </Button>
                     </div>
                 )}
 
 
-                {/* Preparing actions */}
+                {/* Preparing Action */}
 
                 {status ===
                     'preparing' && (
-                        <button
+                        <Button
                             type="button"
-                            className={
-                                styles.readyButton
+                            variant="primary"
+                            size="md"
+                            fullWidth
+                            icon={
+                                <Package
+                                    size={16}
+                                />
                             }
                             onClick={
                                 onMarkReady
                             }
                         >
-
-                            <Package
-                                size={16}
-                            />
-
                             Mark as Ready
                             for Pickup
-
-                        </button>
+                        </Button>
                     )}
 
             </div>
