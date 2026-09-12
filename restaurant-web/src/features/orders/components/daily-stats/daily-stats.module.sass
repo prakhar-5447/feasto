@@ -1,0 +1,188 @@
+@use '../../../../styles/index' as *
+
+.dailyStats
+    display: flex
+    flex-direction: column
+    gap: $space-12
+
+.statusBanner
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    padding: $space-16 $space-20
+
+    border-width: $border-width-2
+    border-style: $border-style-solid
+    border-radius: $radius-16
+
+.statusOpen
+    background: $color-success-bg
+    border-color: $color-success-border
+
+.statusClosed
+    background: $color-bg-red-soft
+    border-color: $color-bg-red-accent
+
+.statusContent
+    display: flex
+    align-items: center
+    gap: $space-12
+
+.statusDot
+    width: $space-10
+    height: $space-10
+
+    flex-shrink: 0
+
+    border-radius: $radius-circle
+
+.statusOpen
+    .statusDot
+        background: $color-success
+        animation: pulse 1.5s infinite
+
+.statusClosed
+    .statusDot
+        background: $color-error-bright
+
+.statusTitle
+    margin: 0
+
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+.statusOpen
+    .statusTitle
+        color: $color-success-dark
+
+.statusClosed
+    .statusTitle
+        color: $color-error
+
+.statusDescription
+    margin: $space-2 0 0
+
+    font-size: $font-size-12
+
+.statusOpen
+    .statusDescription
+        color: $color-success
+
+.statusClosed
+    .statusDescription
+        color: $color-error-bright
+
+.businessHours
+    text-align: right
+
+    color: $color-text-secondary
+    font-size: $font-size-12
+
+    p
+        margin: 0
+
+        color: $color-text-primary
+        font-weight: $font-weight-medium
+
+    span
+        display: block
+
+        margin-top: $space-2
+
+.statsGrid
+    display: grid
+    grid-template-columns: repeat(4, 1fr)
+    gap: $space-12
+
+.statCard
+    padding: $space-16
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+
+    background: $color-bg-white
+    box-shadow: $shadow-xs
+
+.statHeader
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+
+.statIcon
+    width: $space-32
+    height: $space-32
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    border-radius: $radius-12
+
+    &.successIcon
+        background: $color-success-bg
+        color: $color-success
+
+    &.driverIcon
+        background: $color-bg-orange-soft
+        color: $color-primary
+
+    &.primaryIcon
+        background: $color-bg-orange-soft
+        color: $color-primary
+
+    &.errorIcon
+        background: $color-bg-red-soft
+        color: $color-error
+
+    &.mutedIcon
+        background: $color-bg-gray
+        color: $color-text-muted
+
+.statValue
+    color: $color-text-primary
+    font-size: $font-size-20
+    font-weight: $font-weight-bold
+
+.statLabel
+    margin: $space-8 0 0
+
+    color: $color-text-primary
+    font-size: $font-size-12
+    font-weight: $font-weight-semibold
+
+.statSub
+    margin: $space-2 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-10
+
+@keyframes pulse
+    0%,
+    100%
+        opacity: 1
+
+    50%
+        opacity: 0.5
+
+@media (max-width: $breakpoint-lg)
+    .statsGrid
+        grid-template-columns: repeat(2, 1fr)
+
+@media (max-width: $breakpoint-sm)
+    .statusBanner
+        align-items: flex-start
+        gap: $space-12
+
+    .businessHours
+        display: none
+
+    .statsGrid
+        grid-template-columns: repeat(2, 1fr)
+
+@media (max-width: $breakpoint-xs)
+    .statsGrid
+        grid-template-columns: 1fr
+
+    .statusBanner
+        padding: $space-12 $space-16
