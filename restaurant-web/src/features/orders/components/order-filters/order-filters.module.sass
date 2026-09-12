@@ -1,0 +1,143 @@
+@use '../../../../styles/index' as *
+
+.filters
+    display: flex
+    flex-direction: column
+    gap: $space-12
+
+.searchWrapper
+    position: relative
+    width: 100%
+
+.searchIcon
+    position: absolute
+    top: 50%
+    left: $space-12
+
+    transform: translateY(-50%)
+
+    color: $color-text-muted
+
+.searchInput
+    width: 100%
+    min-height: $space-40
+
+    padding: $space-8 $space-16
+    padding-left: $space-40
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+
+    outline: none
+
+    background: $color-bg-light
+    color: $color-text-primary
+
+    font-family: inherit
+    font-size: $font-size-14
+
+    transition: $transition-border, $transition-shadow, $transition-background
+
+    &::placeholder
+        color: $color-text-muted
+
+    &:hover
+        border-color: $color-text-secondary
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus
+
+.statusFilters
+    display: flex
+    flex-wrap: wrap
+    gap: $space-4
+
+.filterButton
+    display: inline-flex
+    align-items: center
+    gap: $space-4
+
+    min-height: $space-32
+
+    padding: $space-4 $space-12
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-pill
+
+    background: $color-bg-white
+    color: $color-text-secondary
+
+    font-family: inherit
+    font-size: $font-size-12
+    font-weight: $font-weight-medium
+
+    cursor: pointer
+
+    transition: $transition-background, $transition-border, $transition-color
+
+    &:hover
+        background: $color-bg-gray
+        color: $color-text-primary
+
+.filterButtonActive
+    border-color: transparent
+
+    background: $color-primary
+    color: $color-text-white
+
+    &:hover
+        background: $color-primary-hover
+        color: $color-text-white
+
+.filterDot
+    width: $space-6
+    height: $space-6
+
+    flex-shrink: 0
+
+    border-radius: $radius-circle
+
+.dotNew
+    background: $color-primary
+
+.dotPreparing
+    background: $color-warning
+
+.dotReady
+    background: $color-success
+
+.dotDriver
+    background: $color-info
+
+.dotTransit
+    background: $color-info
+
+.dotDelivered
+    background: $color-success
+
+.dotCancelled
+    background: $color-error
+
+.count
+    display: inline-flex
+    align-items: center
+    justify-content: center
+
+    min-width: $space-20
+    height: $space-20
+
+    padding: 0 $space-4
+
+    border-radius: $radius-pill
+
+    background: $color-bg-gray
+    color: $color-text-secondary
+
+    font-family: monospace
+    font-size: $font-size-10
+    font-weight: $font-weight-bold
+
+.countActive
+    background: $color-overlay-white-light
+    color: $color-text-white
