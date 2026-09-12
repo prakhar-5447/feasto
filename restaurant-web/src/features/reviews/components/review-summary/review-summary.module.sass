@@ -1,0 +1,126 @@
+@use '../../../../styles/index' as *
+
+.summary
+    display: grid
+    grid-template-columns: 1fr 2fr
+    gap: $space-16
+
+.overall
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    padding: $space-24
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border-light
+    border-radius: $radius-12
+    box-shadow: $shadow-xs
+
+.rating
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-40
+    font-weight: $font-weight-bold
+    line-height: 1
+
+.stars
+    display: flex
+    align-items: center
+    gap: $space-2
+    margin-top: $space-8
+
+.starActive
+    color: $color-warning
+    fill: $color-warning
+
+.starInactive
+    color: $color-border
+    fill: $color-border
+
+.total
+    margin: $space-8 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-12
+
+.distribution
+    padding: $space-20
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border-light
+    border-radius: $radius-12
+    box-shadow: $shadow-xs
+
+.rows
+    display: flex
+    flex-direction: column
+    gap: $space-8
+
+.row
+    display: flex
+    align-items: center
+    gap: $space-12
+
+.starNumber
+    width: $space-16
+    flex-shrink: 0
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    text-align: right
+
+.distributionStar
+    flex-shrink: 0
+
+    color: $color-warning
+    fill: $color-warning
+
+.progress
+    flex: 1
+    min-width: 0
+    height: $space-12
+    overflow: hidden
+
+    background: $color-bg-gray
+    border-radius: $radius-pill
+
+.progressFill
+    height: 100%
+
+    background: $color-warning
+    border-radius: $radius-pill
+    transition: $transition-width
+
+.count
+    width: $space-24
+    flex-shrink: 0
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    text-align: right
+
+.percentage
+    width: $space-32
+    flex-shrink: 0
+
+    color: $color-text-muted
+    font-size: $font-size-12
+
+@media (max-width: $breakpoint-md)
+    .summary
+        grid-template-columns: 1fr
+
+@media (max-width: $breakpoint-sm)
+    .overall
+        padding: $space-20
+
+    .distribution
+        padding: $space-16
+
+    .row
+        gap: $space-8
+
+    .percentage
+        display: none

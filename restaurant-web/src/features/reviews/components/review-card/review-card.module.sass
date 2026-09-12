@@ -1,0 +1,214 @@
+@use '../../../../styles/index' as *
+
+.card
+    overflow: hidden
+
+    background: $color-bg-white
+    border: $border-width-1 solid
+    border-radius: $radius-16
+    box-shadow: $shadow-xs
+
+    &:has(.starActive:nth-child(4)),
+    &:has(.starActive:nth-child(5))
+        border-color: $color-success-border
+
+.content
+    padding: $space-20
+
+.header
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    gap: $space-12
+
+.customer
+    display: flex
+    align-items: flex-start
+    min-width: 0
+    gap: $space-12
+
+.avatar
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-32
+    height: $space-32
+    flex-shrink: 0
+
+    color: $color-text-white
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+    background: $color-primary
+    border-radius: $radius-circle
+
+.customerInfo
+    min-width: 0
+
+.customerMeta
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: $space-8
+
+.name
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.stars
+    display: flex
+    align-items: center
+    gap: $space-2
+
+.starActive
+    color: $color-warning
+    fill: $color-warning
+
+.starInactive
+    color: $color-border
+    fill: $color-border
+
+.date
+    color: $color-text-muted
+    font-size: $font-size-12
+
+.order
+    margin: $space-2 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-12
+
+.unreplied
+    flex-shrink: 0
+    padding: $space-2 $space-8
+
+    color: $color-primary
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+    letter-spacing: $space-2
+    line-height: $line-height-normal
+    text-transform: uppercase
+
+    background: $color-bg-orange-soft
+    border: $border-width-1 solid $color-border-primary
+    border-radius: $radius-pill
+
+.reviewText
+    margin: $space-12 0 0
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+.actions
+    display: flex
+    align-items: center
+    gap: $space-16
+    margin-top: $space-12
+
+.helpfulButton,
+.replyButton
+    display: inline-flex
+    align-items: center
+    gap: $space-4
+
+    padding: 0
+
+    font-size: $font-size-12
+    background: transparent
+    border: $border-style-none
+    cursor: pointer
+
+.helpfulButton
+    color: $color-text-secondary
+
+    transition: $transition-color
+
+    &:hover
+        color: $color-text-primary
+
+.replyButton
+    color: $color-primary
+    font-weight: $font-weight-semibold
+
+    transition: $transition-color
+
+    &:hover
+        color: $color-primary-hover
+
+.existingReply
+    margin-top: $space-12
+    padding: $space-12
+
+    background: $color-bg-gray
+    border-left: $border-width-2 solid $color-primary
+    border-radius: $radius-12
+
+.replyTitle
+    margin: 0 0 $space-4
+
+    color: $color-primary
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+
+.replyText
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+.composer
+    display: flex
+    flex-direction: column
+    gap: $space-8
+    margin-top: $space-12
+
+.composer textarea
+    width: 100%
+    min-height: $space-100
+    box-sizing: border-box
+    padding: $space-12
+
+    color: $color-text-primary
+    font-family: inherit
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+    background: $color-bg-orange-soft
+    border: $border-width-1-5 solid $color-primary
+    border-radius: $radius-12
+    outline: none
+    resize: none
+
+    transition: $transition-border, $transition-shadow
+
+    &::placeholder
+        color: $color-text-muted
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus-primary
+
+.composerActions
+    display: flex
+    align-items: center
+    gap: $space-8
+
+@media (max-width: $breakpoint-sm)
+    .content
+        padding: $space-16
+
+    .header
+        align-items: flex-start
+
+    .unreplied
+        font-size: $font-size-12
+
+    .customerMeta
+        gap: $space-4 $space-8
+
+    .date
+        width: 100%

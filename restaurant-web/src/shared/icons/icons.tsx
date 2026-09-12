@@ -526,6 +526,32 @@ export const Trash2 = (
     </Icon>
 );
 
+export const ThumbsUp = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <path
+            d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
+        />
+    </Icon>
+);
+
+export const Send = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <line
+            x1="22"
+            y1="2"
+            x2="11"
+            y2="13"
+        />
+        <polygon
+            points="22 2 15 22 11 13 2 9 22 2"
+        />
+    </Icon>
+);
+
 export const Check = (
     props: IconProps,
 ) => (
