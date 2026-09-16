@@ -1,0 +1,249 @@
+@use '../../../../styles/index' as *
+
+.form
+    padding: $space-20
+
+    background: $color-bg-white
+    border: $border-width-2 solid $color-primary
+    border-radius: $radius-16
+    box-shadow: $shadow-lg
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+.title
+    margin: 0
+
+    color: $color-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+.closeButton
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: $space-4
+
+    color: $color-text-muted
+
+    background: transparent
+    border: $border-style-none
+    border-radius: $radius-8
+    cursor: pointer
+
+    transition: $transition-background, $transition-color
+
+    &:hover
+        color: $color-text-primary
+        background: $color-bg-gray
+
+.fields
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: $space-12
+    margin-top: $space-16
+
+.field
+    min-width: 0
+
+.fullWidth
+    grid-column: 1 / -1
+
+.label
+    display: block
+    margin-bottom: $space-4
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+    letter-spacing: $space-2
+    line-height: $line-height-normal
+    text-transform: uppercase
+
+.input,
+.textarea
+    width: 100%
+    box-sizing: border-box
+
+    color: $color-text-primary
+    font-family: inherit
+    font-size: $font-size-14
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border
+    border-radius: $radius-12
+    outline: none
+
+    transition: $transition-border, $transition-shadow
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus-primary
+
+    &::placeholder
+        color: $color-text-muted
+
+.input
+    padding: $space-12 $space-12
+
+.textarea
+    min-height: $space-48
+    padding: $space-12 $space-12
+
+    resize: none
+
+.mono
+    font-family: $font-family-monospace
+
+.spiceOptions
+    display: flex
+    align-items: center
+    gap: $space-8
+    flex-wrap: wrap
+
+.spiceButton
+    padding: $space-4 $space-12
+
+    color: $color-text-secondary
+    font-size: $font-size-12
+    font-weight: $font-weight-medium
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border
+    border-radius: $radius-8
+    cursor: pointer
+
+    transition: $transition-background, $transition-border, $transition-color
+
+    &:hover
+        background: $color-bg-gray
+
+.spiceButtonActive
+    color: $color-text-white
+    background: $color-primary
+    border-color: transparent
+
+    &:hover
+        background: $color-primary-hover
+
+.selectWrapper
+    position: relative
+
+.foodSelect
+    appearance: none
+    padding-left: $space-32
+
+.foodDot
+    position: absolute
+    top: 50%
+    left: $space-12
+    z-index: 1
+
+    width: $space-8
+    height: $space-8
+
+    border: $border-width-1-5 solid
+    border-radius: $radius-circle
+
+    transform: translateY(-50%)
+    pointer-events: none
+
+.foodDot.veg
+    background: $color-success
+    border-color: $color-success
+
+.foodDot.nonveg
+    background: $color-error
+    border-color: $color-error
+
+.foodDot.halal
+    background: $color-success-dark
+    border-color: $color-success-dark
+
+.foodDot.egg
+    background: $color-warning
+    border-color: $color-warning
+
+.foodDot.vegan
+    background: $color-success
+    border-color: $color-success
+
+.flags
+    display: flex
+    align-items: flex-end
+    gap: $space-20
+    padding-bottom: $space-4
+
+.toggleField
+    display: flex
+    align-items: center
+    gap: $space-8
+
+.toggle
+    position: relative
+
+    width: $space-40
+    height: $space-20
+    flex-shrink: 0
+
+    padding: 0
+
+    background: $color-border
+    border: $border-style-none
+    border-radius: $radius-pill
+    cursor: pointer
+
+    transition: $transition-background
+
+.toggleActive
+    background: $color-primary
+
+.toggleThumb
+    position: absolute
+    top: $space-2
+    left: $space-2
+
+    width: $space-16
+    height: $space-16
+
+    background: $color-bg-white
+    border-radius: $radius-circle
+    box-shadow: $shadow-xs
+
+    transition: $transition-transform
+
+.toggleActive .toggleThumb
+    transform: translateX($space-20)
+
+.toggleLabel
+    color: $color-text-secondary
+    font-size: $font-size-12
+    font-weight: $font-weight-medium
+
+.footer
+    display: flex
+    align-items: center
+    gap: $space-8
+
+    margin-top: $space-16
+    padding-top: $space-12
+
+    border-top: $border-width-1 solid $color-border
+
+@media (max-width: $breakpoint-sm)
+    .form
+        padding: $space-16
+
+    .fields
+        grid-template-columns: 1fr
+
+    .fullWidth
+        grid-column: auto
+
+    .flags
+        grid-column: 1
+        align-items: center
+        flex-wrap: wrap

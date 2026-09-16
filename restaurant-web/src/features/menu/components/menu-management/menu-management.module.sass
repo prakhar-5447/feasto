@@ -1,0 +1,198 @@
+@use '../../../../styles/index' as *
+
+.page
+    display: flex
+    width: 100%
+    min-height: 100%
+
+.categorySidebar
+    width: $container-xs
+    flex-shrink: 0
+    padding: $space-16 $space-0 $space-16 $space-16
+
+.content
+    display: flex
+    flex: 1
+    min-width: 0
+    flex-direction: column
+    gap: $space-16
+    padding: $space-20
+    overflow-x: hidden
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-wrap: wrap
+    gap: $space-12
+
+.title
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
+
+.subtitle
+    margin: $space-2 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+.addButton
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    gap: $space-8
+    padding: $space-12 $space-16
+
+    color: $color-text-white
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+    background: $color-primary
+    border: $border-style-none
+    border-radius: $radius-12
+    cursor: pointer
+
+    transition: $transition-background
+
+    &:hover
+        background: $color-primary-hover
+
+.toolbar
+    display: flex
+    align-items: center
+    gap: $space-8
+    flex-wrap: wrap
+
+.searchWrapper
+    position: relative
+    flex: 1
+    min-width: $container-xs
+
+.searchIcon
+    position: absolute
+    top: 50%
+    left: $space-12
+
+    color: $color-text-muted
+
+    transform: translateY(-50%)
+
+.searchInput
+    width: 100%
+    box-sizing: border-box
+    padding: $space-12 $space-16 $space-12 $space-32
+
+    color: $color-text-primary
+    font-family: inherit
+    font-size: $font-size-14
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border
+    border-radius: $radius-12
+    outline: none
+
+    transition: $transition-border, $transition-shadow
+
+    &::placeholder
+        color: $color-text-muted
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus-primary
+
+.filterButton
+    display: inline-flex
+    align-items: center
+    gap: $space-8
+    padding: $space-12 $space-12
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border
+    border-radius: $radius-12
+    cursor: pointer
+
+    transition: $transition-background, $transition-border, $transition-color
+
+    &:hover
+        background: $color-bg-light
+
+.filterButtonActive
+    color: $color-warning
+
+    background: $color-bg-orange-soft
+    border-color: $color-warning
+
+.items
+    display: flex
+    flex-direction: column
+    gap: $space-8
+
+.itemWrapper
+    min-width: 0
+
+.editForm
+    margin-top: $space-8
+
+.emptyState
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    padding: $space-64 $space-20
+
+    color: $color-text-muted
+    text-align: center
+
+.emptyIcon
+    margin-bottom: $space-8
+
+    font-size: $font-size-32
+    line-height: 1
+
+.emptyTitle
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold
+
+.emptyText
+    margin: $space-4 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-14
+
+@media (max-width: $breakpoint-md)
+    .page
+        flex-direction: column
+
+    .categorySidebar
+        width: auto
+        padding: $space-16 $space-16 0
+
+@media (max-width: $breakpoint-sm)
+    .content
+        padding: $space-16
+
+    .header
+        align-items: flex-start
+        flex-direction: column
+
+    .addButton
+        width: 100%
+
+    .searchWrapper
+        min-width: 100%
+
+    .filterButton
+        width: 100%
+        justify-content: center

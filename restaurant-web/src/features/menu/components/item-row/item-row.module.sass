@@ -1,0 +1,254 @@
+@use '../../../../styles/index' as *
+
+.row
+    display: flex
+    align-items: center
+    gap: $space-16
+    min-width: 0
+    padding: $space-16
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border
+    border-radius: $radius-12
+
+    transition: $transition-background, $transition-border, $transition-opacity
+
+    &:hover
+        background: $color-bg-light
+
+.unavailable
+    background: $color-bg-gray
+    border-color: $color-border
+    opacity: 0.6
+
+    &:hover
+        background: $color-bg-gray
+
+.foodType
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-20
+    height: $space-20
+    flex-shrink: 0
+
+    border: $border-width-2 solid
+    border-radius: $radius-8
+
+.foodTypeDot
+    width: $space-8
+    height: $space-8
+
+    border-radius: $radius-circle
+
+.veg
+    color: $color-success
+    border-color: $color-success
+
+    .foodTypeDot
+        background: $color-success
+
+.nonveg
+    color: $color-error
+    border-color: $color-error
+
+    .foodTypeDot
+        background: $color-error
+
+.halal
+    color: $color-success-dark
+    border-color: $color-success-dark
+
+    .foodTypeDot
+        background: $color-success-dark
+
+.egg
+    color: $color-warning
+    border-color: $color-warning
+
+    .foodTypeDot
+        background: $color-warning
+
+.vegan
+    color: $color-success
+    border-color: $color-success
+
+    .foodTypeDot
+        background: $color-success
+
+.info
+    flex: 1
+    min-width: 0
+
+.titleRow
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: $space-8
+
+.name
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+    line-height: $line-height-normal
+
+.bestseller
+    padding: $space-2 $space-4
+
+    color: $color-warning
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+    letter-spacing: $space-2
+    line-height: $line-height-normal
+    text-transform: uppercase
+
+    background: $color-bg-orange-soft
+    border: $border-width-1 solid $color-warning
+    border-radius: $radius-pill
+
+.spice
+    color: $color-text-muted
+    font-size: $font-size-12
+    line-height: 1
+
+.description
+    margin: $space-2 0 0
+
+    overflow: hidden
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    line-height: $line-height-normal
+    text-overflow: ellipsis
+    white-space: nowrap
+
+.preparationTime
+    display: flex
+    align-items: center
+    gap: $space-4
+    margin-top: $space-2
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+.preparationTime svg
+    flex-shrink: 0
+
+.price
+    flex-shrink: 0
+
+    color: $color-text-primary
+    font-family: $font-family-monospace
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.toggleButton
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-shrink: 0
+
+    padding: 0
+
+    background: transparent
+    border: $border-style-none
+    cursor: pointer
+
+.toggle
+    position: relative
+
+    display: block
+
+    width: $space-40
+    height: $space-20
+
+    border-radius: $radius-pill
+
+    transition: $transition-background
+
+.toggleOn
+    background: $color-success
+
+.toggleOff
+    background: $color-border
+
+.toggleThumb
+    position: absolute
+    top: 50%
+
+    width: $space-16
+    height: $space-16
+
+    background: $color-bg-white
+    border-radius: $radius-circle
+    box-shadow: $shadow-xs
+
+    transform: translateY(-50%)
+    transition: $transition-transform
+
+.toggleOn .toggleThumb
+    left: calc(100% - #{$space-16} - #{$space-2})
+
+.toggleOff .toggleThumb
+    left: $space-2
+
+.actions
+    display: flex
+    align-items: center
+    gap: $space-2
+    flex-shrink: 0
+
+    opacity: 0
+
+    transition: $transition-opacity
+
+.row:hover .actions
+    opacity: 1
+
+.actionButton
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: $space-8
+
+    color: $color-text-muted
+
+    background: transparent
+    border: $border-style-none
+    border-radius: $radius-8
+    cursor: pointer
+
+    transition: $transition-background, $transition-color
+
+    &:hover
+        color: $color-info
+        background: $color-bg-light
+
+.deleteAction
+    &:hover
+        color: $color-error
+        background: $color-bg-red-soft
+
+@media (max-width: $breakpoint-md)
+    .row
+        gap: $space-12
+
+    .description
+        max-width: $container-xs
+
+@media (max-width: $breakpoint-sm)
+    .row
+        flex-wrap: wrap
+
+    .info
+        min-width: calc(100% - $space-32)
+
+    .price
+        margin-left: $space-32
+
+    .actions
+        margin-left: auto
+        opacity: 1

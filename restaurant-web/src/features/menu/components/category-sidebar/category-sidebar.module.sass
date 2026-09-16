@@ -1,0 +1,206 @@
+@use '../../../../styles/index' as *
+
+.sidebar
+    overflow: hidden
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border-light
+    border-radius: $radius-16
+    box-shadow: $shadow-xs
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding: $space-12 $space-16
+
+    border-bottom: $border-width-1 solid $color-border-light
+
+.title
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+    line-height: $line-height-tight
+
+.addButton
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: $space-4
+
+    color: $color-text-muted
+
+    background: transparent
+    border: $border-style-none
+    border-radius: $radius-8
+    cursor: pointer
+
+    transition: $transition-background, $transition-color
+
+    &:hover
+        color: $color-primary
+        background: $color-bg-gray
+
+.categories
+    padding: $space-8
+
+.categoryWrapper
+    position: relative
+
+.categoryButton
+    display: flex
+    width: 100%
+    align-items: center
+    justify-content: space-between
+    gap: $space-8
+    padding: $space-8 $space-12
+
+    color: $color-text-primary
+    text-align: left
+
+    background: transparent
+    border: $border-style-none
+    border-radius: $radius-12
+    cursor: pointer
+
+    transition: $transition-background, $transition-color
+
+    &:hover
+        background: $color-bg-gray
+
+.categoryButtonActive
+    color: $color-primary
+    background: $color-bg-orange-soft
+
+    &:hover
+        background: $color-bg-orange-soft
+
+.categoryInfo
+    min-width: 0
+
+.categoryName
+    overflow: hidden
+
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+    line-height: $line-height-normal
+    text-overflow: ellipsis
+    white-space: nowrap
+
+.categoryButtonActive .categoryName
+    font-weight: $font-weight-semibold
+
+.availability
+    margin-top: $space-2
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+.count
+    flex-shrink: 0
+
+    color: $color-text-muted
+    font-family: $font-family-monospace
+    font-size: $font-size-12
+
+.categoryButtonActive .count
+    color: $color-primary
+
+.deleteButton
+    position: absolute
+    top: 50%
+    right: $space-8
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    padding: $space-4
+
+    color: $color-text-muted
+
+    background: transparent
+    border: $border-style-none
+    border-radius: $radius-8
+
+    cursor: pointer
+    opacity: 0
+    transform: translateY(-50%)
+
+    transition: $transition-background, $transition-color, $transition-opacity
+
+.categoryWrapper:hover .deleteButton
+    opacity: 1
+
+.deleteButton:hover
+    color: $color-error
+    background: $color-bg-red-soft
+
+.addForm
+    padding: $space-8
+
+.input
+    width: 100%
+    box-sizing: border-box
+    padding: $space-8 $space-12
+
+    color: $color-text-primary
+    font-family: inherit
+    font-size: $font-size-14
+
+    background: $color-bg-orange-soft
+    border: $border-width-1-5 solid $color-primary
+    border-radius: $radius-8
+    outline: none
+
+    transition: $transition-border, $transition-shadow
+
+    &::placeholder
+        color: $color-text-muted
+
+    &:focus
+        border-color: $color-primary
+        box-shadow: $shadow-focus-primary
+
+.formActions
+    display: flex
+    gap: $space-4
+    margin-top: $space-4
+
+.confirmButton,
+.cancelButton
+    border: $border-style-none
+    border-radius: $radius-8
+    cursor: pointer
+
+.confirmButton
+    flex: 1
+    padding: $space-4 0
+
+    color: $color-text-white
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+
+    background: $color-primary
+
+    transition: $transition-background
+
+    &:hover
+        background: $color-primary-hover
+
+.cancelButton
+    padding: $space-4 $space-12
+
+    color: $color-text-secondary
+    font-size: $font-size-12
+
+    background: $color-bg-gray
+
+    transition: $transition-background
+
+    &:hover
+        background: $color-bg-light
