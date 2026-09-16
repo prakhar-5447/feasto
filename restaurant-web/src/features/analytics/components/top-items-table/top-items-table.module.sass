@@ -1,0 +1,96 @@
+@use '../../../../styles/index' as *
+
+.card
+    overflow: hidden
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border-light
+    border-radius: $radius-12
+    box-shadow: $shadow-sm
+
+.header
+    padding: $space-16 $space-20
+
+    border-bottom: $border-width-1 solid $color-border-light
+
+.title
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-16
+    font-weight: $font-weight-semibold
+    line-height: $line-height-tight
+
+.tableWrapper
+    width: 100%
+    overflow-x: auto
+
+.table
+    width: 100%
+    min-width: 420px
+
+    border-collapse: collapse
+
+.tableHeader
+    background: $color-bg-gray
+
+.table th
+    padding: $space-12 $space-20
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+    letter-spacing: $space-2
+    line-height: $line-height-normal
+    text-transform: uppercase
+
+.tableRow
+    border-top: $border-width-1 solid $color-border-light
+
+    transition: $transition-background
+
+    &:hover
+        background: $color-bg-gray
+
+.table td
+    padding: $space-12 $space-20
+
+.left
+    text-align: left
+
+.right
+    text-align: right
+
+.item
+    display: flex
+    align-items: center
+    gap: $space-12
+
+.rank
+    width: $space-16
+    flex-shrink: 0
+
+    color: $color-text-muted
+    font-family: $font-family-monospace
+    font-size: $font-size-12
+
+.itemName
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+.data
+    color: $color-text-primary
+    font-family: $font-family-monospace
+    font-size: $font-size-14
+
+.trend
+    font-family: $font-family-monospace
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.trendPositive
+    color: $color-success
+
+.trendNegative
+    color: $color-error-bright

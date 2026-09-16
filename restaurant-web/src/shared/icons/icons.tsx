@@ -536,6 +536,55 @@ export const ThumbsUp = (
     </Icon>
 );
 
+export const TrendingDown = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <polyline
+            points="23 18 13.5 8.5 8.5 13.5 1 6"
+        />
+        <polyline
+            points="17 18 23 18 23 12"
+        />
+    </Icon>
+);
+
+export const DollarSign = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <line
+            x1="12"
+            y1="1"
+            x2="12"
+            y2="23"
+        />
+        <path
+            d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+        />
+    </Icon>
+);
+
+export const Users = (
+    props: IconProps,
+) => (
+    <Icon {...props}>
+        <path
+            d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+        />
+        <circle
+            cx="9"
+            cy="7"
+            r="4"
+        /><path
+            d="M23 21v-2a4 4 0 0 0-3-3.87"
+        />
+        <path
+            d="M16 3.13a4 4 0 0 1 0 7.75"
+        />
+    </Icon>
+);
+
 export const Send = (
     props: IconProps,
 ) => (

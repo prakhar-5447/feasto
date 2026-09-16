@@ -1,0 +1,83 @@
+@use '../../../../styles/index' as *
+
+.page
+    display: flex
+    flex-direction: column
+    gap: $space-20
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-wrap: wrap
+    gap: $space-12
+
+.title
+    margin: 0
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
+
+.subtitle
+    margin: $space-2 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-14
+    line-height: $line-height-normal
+
+.periodSelector
+    display: flex
+    align-items: center
+    gap: $space-2
+    padding: $space-4
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border
+    border-radius: $radius-12
+
+.periodButton
+    padding: $space-4 $space-12
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    font-weight: $font-weight-semibold
+    line-height: $line-height-normal
+
+    background: transparent
+    border: $border-style-none
+    border-radius: $radius-8
+    cursor: pointer
+
+    transition: $transition-background, $transition-color
+
+    &:hover
+        background: $color-bg-light
+
+.periodButtonActive
+    color: $color-text-white
+    background: $color-primary
+
+    &:hover
+        color: $color-text-white
+        background: $color-primary-hover
+
+.chartGrid
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: $space-16
+
+@media (max-width: $breakpoint-md)
+    .chartGrid
+        grid-template-columns: 1fr
+
+@media (max-width: $breakpoint-sm)
+    .header
+        align-items: flex-start
+
+    .periodSelector
+        width: 100%
+
+    .periodButton
+        flex: 1

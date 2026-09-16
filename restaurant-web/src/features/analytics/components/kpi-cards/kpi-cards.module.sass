@@ -1,0 +1,88 @@
+@use '../../../../styles/index' as *
+
+.grid
+    display: grid
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+    gap: $space-16
+
+.card
+    padding: $space-20
+
+    background: $color-bg-white
+    border: $border-width-1 solid $color-border-light
+    border-radius: $radius-12
+    box-shadow: $shadow-sm
+
+.main
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    gap: $space-12
+
+.info
+    min-width: 0
+
+.label
+    margin: 0
+
+    color: $color-text-secondary
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+.value
+    margin: $space-4 0 0
+
+    color: $color-text-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    line-height: $line-height-tight
+
+.sub
+    margin: $space-2 0 0
+
+    color: $color-text-muted
+    font-size: $font-size-12
+    line-height: $line-height-normal
+
+.iconWrapper
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-32
+    height: $space-32
+    flex-shrink: 0
+
+    border-radius: $radius-12
+
+.iconPositive
+    color: $color-success
+    background: $color-success-bg
+
+.iconNegative
+    color: $color-error
+    background: $color-bg-red-soft
+
+.trend
+    display: flex
+    align-items: center
+    gap: $space-4
+    margin-top: $space-12
+
+    font-size: $font-size-12
+    font-weight: $font-weight-semibold
+    line-height: $line-height-normal
+
+.trendPositive
+    color: $color-success
+
+.trendNegative
+    color: $color-error-bright
+
+@media (max-width: $breakpoint-lg)
+    .grid
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+
+@media (max-width: $breakpoint-sm)
+    .grid
+        grid-template-columns: 1fr
