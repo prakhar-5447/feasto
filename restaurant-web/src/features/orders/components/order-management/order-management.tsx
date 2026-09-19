@@ -18,6 +18,10 @@ import {
     INITIAL_ORDERS,
 } from '../../orders.mock';
 
+import {
+    useGetRestaurantQuery,
+} from '@/features/restaurant/restaurant.api';
+
 import type {
     Order,
     OrderStatus,
@@ -45,14 +49,13 @@ const INACTIVE_STATUSES: OrderStatus[] = [
 ];
 
 
-interface OrderManagementProps {
-    isOpen: boolean;
-}
+export default function OrderManagement() {
 
+    const { data: restaurant } =
+        useGetRestaurantQuery();
 
-export default function OrderManagement({
-    isOpen,
-}: OrderManagementProps) {
+    const isOpen =
+        restaurant?.isOpen ?? false;
 
     const [
         orders,

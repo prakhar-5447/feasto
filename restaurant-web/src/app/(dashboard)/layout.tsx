@@ -17,22 +17,10 @@ export default function DashboardLayout({
     children,
 }: DashboardLayoutProps) {
 
-    const [
-        isOpen,
-        setIsOpen,
-    ] = useState(true);
-
     return (
         <div className={styles.dashboard}>
 
-            <Sidebar
-                isOpen={isOpen}
-                onToggleOpen={() =>
-                    setIsOpen(
-                        (value) => !value,
-                    )
-                }
-            />
+            <Sidebar />
 
             <main
                 className={

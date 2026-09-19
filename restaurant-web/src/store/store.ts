@@ -1,11 +1,17 @@
+import { restaurantApi } from '@/features/restaurant/restaurant.api';
 import { configureStore } from '@reduxjs/toolkit';
-import restaurantReducer from '@/features/restaurant/restaurant.slice';
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            restaurant: restaurantReducer,
+            [restaurantApi.reducerPath]:
+                restaurantApi.reducer,
         },
+
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(
+                restaurantApi.middleware
+            ),
     });
 };
 

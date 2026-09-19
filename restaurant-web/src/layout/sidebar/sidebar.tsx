@@ -11,6 +11,11 @@ import {
 } from 'next/navigation';
 
 import {
+    useGetRestaurantQuery,
+    useUpdateRestaurantStatusMutation,
+} from '@/features/restaurant/restaurant.api';
+
+import {
     ShoppingBag,
     BarChart2,
     UtensilsCrossed,
@@ -88,16 +93,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 
-interface SidebarProps {
-    isOpen: boolean;
-    onToggleOpen: () => void;
-}
-
-
-export default function Sidebar({
-    isOpen,
-    onToggleOpen,
-}: SidebarProps) {
+export default function Sidebar() {
 
     const pathname = usePathname();
 
@@ -118,6 +114,34 @@ export default function Sidebar({
             pathname === item.href ||
             pathname.startsWith(`${item.href}/`)
         );
+    };
+
+    const {
+        data: restaurant,
+        isLoading,
+    } = useGetRestaurantQuery();
+
+    const [
+        updateRestaurantStatus,
+        {
+            isLoading: isUpdatingStatus,
+        },
+    ] = useUpdateRestaurantStatusMutation();
+
+    const isOpen =
+        restaurant?.isOpen ?? false;
+
+    const handleToggleOpen = async () => {
+        try {
+            await updateRestaurantStatus({
+                isOpen: !isOpen,
+            }).unwrap();
+        } catch (error) {
+            console.error(
+                'Failed to update restaurant status:',
+                error
+            );
+        }
     };
 
     return (
@@ -324,6 +348,11 @@ export default function Sidebar({
             >
 
                 <button
+                    disabled={
+                        isLoading ||
+                        isUpdatingStatus
+                    }
+
                     type="button"
                     className={[
                         styles.statusButton,
@@ -332,7 +361,7 @@ export default function Sidebar({
                             : styles.statusClosed,
                     ].join(' ')}
                     onClick={
-                        onToggleOpen
+                        handleToggleOpen
                     }
                     title={
                         collapsed
