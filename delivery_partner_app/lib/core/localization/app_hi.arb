@@ -1,0 +1,13 @@
+{
+    "@@locale": "hi",
+    "home": "होम",
+    "orders": "ऑर्डर",
+    "profile": "प्रोफ़ाइल",
+    "todayEarnings": "आज की कमाई",
+    "availableOrders": "उपलब्ध ऑर्डर",
+    "pastOrders": "पिछले ऑर्डर",
+    "account": "खाता",
+    "settings": "सेटिंग्स",
+    "language": "भाषा",
+    "logout": "लॉग आउट"
+}

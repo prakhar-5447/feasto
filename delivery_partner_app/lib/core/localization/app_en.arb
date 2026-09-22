@@ -1,0 +1,13 @@
+{
+    "@@locale": "en",
+    "home": "Home",
+    "orders": "Orders",
+    "profile": "Profile",
+    "todayEarnings": "Today's Earnings",
+    "availableOrders": "Available Orders",
+    "pastOrders": "Past Orders",
+    "account": "Account",
+    "settings": "Settings",
+    "language": "Language",
+    "logout": "Logout"
+}
