@@ -2,6 +2,8 @@ import 'package:delivery_partner_app/features/home/controllers/home_controller.d
 import 'package:delivery_partner_app/features/home/services/home_services.dart';
 import 'package:delivery_partner_app/features/orders/controllers/orders_controller.dart';
 import 'package:delivery_partner_app/features/orders/services/order_service.dart';
+import 'package:delivery_partner_app/features/profile/controllers/profile_controller.dart';
+import 'package:delivery_partner_app/features/profile/services/profile_service.dart';
 import 'package:get/get.dart';
 
 import 'package:delivery_partner_app/core/network/api_client.dart';
@@ -40,6 +42,16 @@ class AppBindings extends Bindings {
 
     Get.lazyPut<OrdersController>(
       () => OrdersController(ordersService: Get.find<OrdersService>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<ProfileService>(
+      () => ProfileService(apiClient: Get.find<ApiClient>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<ProfileController>(
+      () => ProfileController(profileService: Get.find<ProfileService>()),
       fenix: true,
     );
   }

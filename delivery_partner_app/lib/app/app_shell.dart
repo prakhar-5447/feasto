@@ -1,9 +1,8 @@
-import 'package:delivery_partner_app/features/orders/pages/order_page.dart';
 import 'package:flutter/material.dart';
 
 // import '../features/earnings/pages/earnings_page.dart';
-// import '../features/orders/pages/orders_page.dart';
-// import '../features/profile/pages/profile_page.dart';
+import 'package:delivery_partner_app/features/orders/pages/order_page.dart';
+import 'package:delivery_partner_app/features/profile/pages/profile_page.dart';
 import 'package:delivery_partner_app/features/home/pages/home_page.dart';
 
 import 'widgets/app_bottom_navigation_bar.dart';
@@ -23,7 +22,7 @@ class _AppShellState extends State<AppShell> {
     HomePage(),
     OrdersPage(),
     HomePage(),
-    HomePage(),
+    ProfilePage(),
     // OrdersPage(),
     // EarningsPage(),
     // ProfilePage(),
