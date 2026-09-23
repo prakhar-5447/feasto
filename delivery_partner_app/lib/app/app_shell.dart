@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-// import '../features/earnings/pages/earnings_page.dart';
-import 'package:delivery_partner_app/features/orders/pages/order_page.dart';
-import 'package:delivery_partner_app/features/profile/pages/profile_page.dart';
 import 'package:delivery_partner_app/features/home/pages/home_page.dart';
+import 'package:delivery_partner_app/features/orders/pages/order_page.dart';
+import 'package:delivery_partner_app/features/earnings/pages/earnings_page.dart';
+import 'package:delivery_partner_app/features/profile/pages/profile_page.dart';
 
 import 'widgets/app_bottom_navigation_bar.dart';
 import 'widgets/app_drawer.dart';
@@ -21,11 +21,8 @@ class _AppShellState extends State<AppShell> {
   final List<Widget> pages = const [
     HomePage(),
     OrdersPage(),
-    HomePage(),
+    EarningsPage(),
     ProfilePage(),
-    // OrdersPage(),
-    // EarningsPage(),
-    // ProfilePage(),
   ];
 
   void handleNavigate(String page) {

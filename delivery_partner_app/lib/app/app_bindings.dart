@@ -1,3 +1,5 @@
+import 'package:delivery_partner_app/features/earnings/controllers/earnings_controller.dart';
+import 'package:delivery_partner_app/features/earnings/services/earnings_service.dart';
 import 'package:delivery_partner_app/features/home/controllers/home_controller.dart';
 import 'package:delivery_partner_app/features/home/services/home_services.dart';
 import 'package:delivery_partner_app/features/orders/controllers/orders_controller.dart';
@@ -52,6 +54,16 @@ class AppBindings extends Bindings {
 
     Get.lazyPut<ProfileController>(
       () => ProfileController(profileService: Get.find<ProfileService>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<EarningsService>(
+      () => EarningsService(apiClient: Get.find<ApiClient>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<EarningsController>(
+      () => EarningsController(earningsService: Get.find<EarningsService>()),
       fenix: true,
     );
   }
