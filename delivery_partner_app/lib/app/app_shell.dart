@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // import '../features/earnings/pages/earnings_page.dart';
 // import '../features/orders/pages/orders_page.dart';
 // import '../features/profile/pages/profile_page.dart';
-import '../features/home/pages/home_page.dart';
+import 'package:delivery_partner_app/features/home/pages/home_page.dart';
 import 'widgets/app_bottom_navigation_bar.dart';
 import 'widgets/app_drawer.dart';
 

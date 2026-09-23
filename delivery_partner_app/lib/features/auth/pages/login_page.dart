@@ -1,16 +1,16 @@
 import 'dart:async';
 
+import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../widgets/login_hero.dart';
-import '../widgets/otp_login_form.dart';
-import '../widgets/phone_login_form.dart';
+import 'package:delivery_partner_app/core/theme/app_colors.dart';
+import 'package:delivery_partner_app/features/auth/widgets/login_hero.dart';
+import 'package:delivery_partner_app/features/auth/widgets/otp_login_form.dart';
+import 'package:delivery_partner_app/features/auth/widgets/phone_login_form.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.onLogin});
-
-  final VoidCallback onLogin;
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   // -----------------------------
   // State
   // -----------------------------
+  final AuthController authController = Get.find<AuthController>();
 
   bool isOtpStep = false;
   bool loading = false;
@@ -145,27 +146,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void verifyOtp() {
-    if (otp.any((digit) => digit.isEmpty)) {
-      return;
-    }
-
+  Future<void> verifyOtp() async {
     setState(() {
       loading = true;
     });
 
-    // Mock API delay.
-    Future.delayed(const Duration(seconds: 1), () {
-      if (!mounted) return;
-
-      setState(() {
-        loading = false;
-      });
-
-      widget.onLogin();
-    });
+    try {
+      await authController.login(phone: phone, otp: otp.join());
+    } finally {
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
   }
-
   // -----------------------------
   // Resend
   // -----------------------------

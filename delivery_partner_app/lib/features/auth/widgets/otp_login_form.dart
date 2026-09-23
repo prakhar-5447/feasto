@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/app_button.dart';
+import 'package:delivery_partner_app/core/theme/app_colors.dart';
+import 'package:delivery_partner_app/shared/widgets/app_button.dart';
 import 'otp_input.dart';
 
 class OtpLoginForm extends StatelessWidget {
