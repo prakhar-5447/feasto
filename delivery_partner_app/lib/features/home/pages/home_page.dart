@@ -1,47 +1,24 @@
 import 'dart:async';
 
+import 'package:delivery_partner_app/core/utils/string_utils.dart';
+import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
+import 'package:delivery_partner_app/features/home/controllers/home_controller.dart';
+import 'package:delivery_partner_app/features/home/models/incoming_order.dart';
+import 'package:delivery_partner_app/features/home/models/rider_status.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../widgets/document_expiry_alert.dart';
-import '../widgets/home_header.dart';
-import '../widgets/incentive_card.dart';
-import '../widgets/nearby_demand.dart';
-import '../widgets/quick_actions.dart';
-import '../widgets/recent_deliveries.dart';
-import '../widgets/rider_status_card.dart';
-import '../widgets/today_earnings_card.dart';
-import '../widgets/incoming_order_sheet.dart';
+import 'package:delivery_partner_app/core/theme/app_colors.dart';
 
-enum RiderStatus { offline, online, onBreak }
-
-class IncomingOrder {
-  const IncomingOrder({
-    required this.id,
-    required this.restaurant,
-    required this.restaurantArea,
-    required this.pickupDistance,
-    required this.customerName,
-    required this.deliveryArea,
-    required this.deliveryDistance,
-    required this.totalDistance,
-    required this.earnings,
-    required this.items,
-    required this.eta,
-  });
-
-  final String id;
-  final String restaurant;
-  final String restaurantArea;
-  final String pickupDistance;
-  final String customerName;
-  final String deliveryArea;
-  final String deliveryDistance;
-  final String totalDistance;
-  final String earnings;
-  final int items;
-  final String eta;
-}
+import 'package:delivery_partner_app/features/home/widgets/document_expiry_alert.dart';
+import 'package:delivery_partner_app/features/home/widgets/home_header.dart';
+import 'package:delivery_partner_app/features/home/widgets/incentive_card.dart';
+import 'package:delivery_partner_app/features/home/widgets/nearby_demand.dart';
+import 'package:delivery_partner_app/features/home/widgets/quick_actions.dart';
+import 'package:delivery_partner_app/features/home/widgets/recent_deliveries.dart';
+import 'package:delivery_partner_app/features/home/widgets/rider_status_card.dart';
+import 'package:delivery_partner_app/features/home/widgets/today_earnings_card.dart';
+import 'package:delivery_partner_app/features/home/widgets/incoming_order_sheet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -51,187 +28,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  RiderStatus riderStatus = RiderStatus.online;
-
-  IncomingOrder? incomingOrder;
-
-  int orderTimer = 28;
-
-  bool requestExpired = false;
-
-  Timer? incomingOrderTimer;
-  Timer? countdownTimer;
-  Timer? expiredMessageTimer;
-
-  static const mockOrder = IncomingOrder(
-    id: '#FST-29381',
-    restaurant: 'Spice Garden Kitchen',
-    restaurantArea: 'Koramangala',
-    pickupDistance: '1.8 km',
-    customerName: 'Priya S.',
-    deliveryArea: 'HSR Layout, Sec 2',
-    deliveryDistance: '3.4 km',
-    totalDistance: '5.2 km',
-    earnings: '₹74',
-    items: 3,
-    eta: '~18 min',
-  );
-
-  @override
-  void initState() {
-    super.initState();
-
-    _simulateIncomingOrder();
-  }
-
-  @override
-  void dispose() {
-    incomingOrderTimer?.cancel();
-    countdownTimer?.cancel();
-    expiredMessageTimer?.cancel();
-
-    super.dispose();
-  }
-
-  // ------------------------------------------------------------
-  // ORDER SIMULATION
-  // ------------------------------------------------------------
-
-  void _simulateIncomingOrder() {
-    incomingOrderTimer?.cancel();
-
-    if (riderStatus != RiderStatus.online) {
-      return;
-    }
-
-    incomingOrderTimer = Timer(const Duration(seconds: 4), () {
-      if (!mounted || riderStatus != RiderStatus.online) {
-        return;
-      }
-
-      setState(() {
-        incomingOrder = mockOrder;
-        orderTimer = 28;
-        requestExpired = false;
-      });
-
-      _startOrderCountdown();
-    });
-  }
-
-  void _startOrderCountdown() {
-    countdownTimer?.cancel();
-
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-
-      if (orderTimer <= 1) {
-        timer.cancel();
-
-        setState(() {
-          incomingOrder = null;
-          orderTimer = 0;
-          requestExpired = true;
-        });
-
-        _showExpiredMessage();
-
-        return;
-      }
-
-      setState(() {
-        orderTimer--;
-      });
-    });
-  }
-
-  void _showExpiredMessage() {
-    expiredMessageTimer?.cancel();
-
-    expiredMessageTimer = Timer(const Duration(seconds: 3), () {
-      if (!mounted) return;
-
-      setState(() {
-        requestExpired = false;
-      });
-    });
-  }
-
-  // ------------------------------------------------------------
-  // RIDER STATUS
-  // ------------------------------------------------------------
-
-  void changeRiderStatus(RiderStatus status) {
-    setState(() {
-      riderStatus = status;
-
-      if (status != RiderStatus.online) {
-        incomingOrder = null;
-        incomingOrderTimer?.cancel();
-        countdownTimer?.cancel();
-      }
-    });
-
-    if (status == RiderStatus.online) {
-      _simulateIncomingOrder();
-    }
-  }
-
-  // ------------------------------------------------------------
-  // ORDER ACTIONS
-  // ------------------------------------------------------------
-
-  void acceptOrder() {
-    if (incomingOrder == null) {
-      return;
-    }
-
-    final order = incomingOrder!;
-
-    setState(() {
-      incomingOrder = null;
-    });
-
-    countdownTimer?.cancel();
-
-    // Temporary.
-    //
-    // Later this will navigate to:
-    //
-    // MapPage(
-    //   orderData: order,
-    //   phase: DeliveryPhase.goingToRestaurant,
-    // )
-    debugPrint('Accepted order ${order.id}');
-  }
-
-  void declineOrder() {
-    setState(() {
-      incomingOrder = null;
-    });
-
-    countdownTimer?.cancel();
-  }
-
-  // ------------------------------------------------------------
-  // NAVIGATION
-  // ------------------------------------------------------------
-
-  void navigate(String page) {
-    debugPrint('Navigate to: $page');
-
-    // The AppShell currently owns the main navigation.
-    //
-    // Later we will replace this with the actual Flutter
-    // routing solution.
-  }
-
-  // ------------------------------------------------------------
-  // BUILD
-  // ------------------------------------------------------------
+  final authController = Get.find<AuthController>();
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -240,16 +38,20 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            HomeHeader(
-              riderName: 'Rahul Kumar',
-              riderInitials: 'RK',
-              onMenuPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              onNotificationsPressed: () {
-                navigate('notifications');
-              },
-            ),
+            Obx(() {
+              final user = authController.user.value;
+
+              return HomeHeader(
+                riderName: user?.name ?? '',
+                riderInitials: StringUtils.getInitials(user?.name),
+                onMenuPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                onNotificationsPressed: () {
+                  homeController.navigate('notifications');
+                },
+              );
+            }),
 
             Expanded(
               child: SingleChildScrollView(
@@ -260,40 +62,55 @@ class _HomePageState extends State<HomePage> {
                     const DocumentExpiryAlert(),
 
                     const SizedBox(height: 16),
-
-                    RiderStatusCard(
-                      status: riderStatus,
-                      onStatusChanged: changeRiderStatus,
-                    ),
+                    Obx(() {
+                      return RiderStatusCard(
+                        status: homeController.riderStatus.value,
+                        onStatusChanged: homeController.changeRiderStatus,
+                      );
+                    }),
 
                     const SizedBox(height: 16),
 
                     const TodayEarningsCard(),
 
                     const SizedBox(height: 16),
+                    Obx(() {
+                      final status = homeController.riderStatus.value;
+                      final incomingOrder = homeController.incomingOrder.value;
+                      final requestExpired =
+                          homeController.requestExpired.value;
 
-                    if (riderStatus == RiderStatus.online &&
-                        incomingOrder == null)
-                      const _ReadyForDeliveriesCard(),
+                      return Column(
+                        children: [
+                          if (status == RiderStatus.online &&
+                              incomingOrder == null)
+                            const _ReadyForDeliveriesCard(),
 
-                    if (riderStatus == RiderStatus.offline)
-                      _OfflineCard(
-                        onGoOnline: () {
-                          changeRiderStatus(RiderStatus.online);
-                        },
-                      ),
+                          if (status == RiderStatus.offline)
+                            _OfflineCard(
+                              onGoOnline: () {
+                                homeController.changeRiderStatus(
+                                  RiderStatus.online,
+                                );
+                              },
+                            ),
 
-                    if (riderStatus == RiderStatus.onBreak)
-                      _OnBreakCard(
-                        onResume: () {
-                          changeRiderStatus(RiderStatus.online);
-                        },
-                      ),
+                          if (status == RiderStatus.onBreak)
+                            _OnBreakCard(
+                              onResume: () {
+                                homeController.changeRiderStatus(
+                                  RiderStatus.online,
+                                );
+                              },
+                            ),
 
-                    if (requestExpired) ...[
-                      const SizedBox(height: 16),
-                      const _RequestExpiredCard(),
-                    ],
+                          if (requestExpired) ...[
+                            const SizedBox(height: 16),
+                            const _RequestExpiredCard(),
+                          ],
+                        ],
+                      );
+                    }),
 
                     const SizedBox(height: 16),
 
@@ -303,7 +120,7 @@ class _HomePageState extends State<HomePage> {
 
                     NearbyDemand(
                       onViewMap: () {
-                        navigate('demand-map');
+                        homeController.navigate('demand-map');
                       },
                     ),
 
@@ -311,13 +128,13 @@ class _HomePageState extends State<HomePage> {
 
                     QuickActions(
                       onOrders: () {
-                        navigate('orders');
+                        homeController.navigate('orders');
                       },
                       onEarnings: () {
-                        navigate('earnings');
+                        homeController.navigate('earnings');
                       },
                       onHelp: () {
-                        navigate('help');
+                        homeController.navigate('help');
                       },
                     ),
 
@@ -325,7 +142,7 @@ class _HomePageState extends State<HomePage> {
 
                     RecentDeliveries(
                       onViewAll: () {
-                        navigate('orders');
+                        homeController.navigate('orders');
                       },
                     ),
                   ],
@@ -344,12 +161,12 @@ class _HomePageState extends State<HomePage> {
       // flex items-end
       //
       // overlay.
-      bottomSheet: incomingOrder != null
+      bottomSheet: homeController.incomingOrder.value != null
           ? IncomingOrderSheet(
-              order: incomingOrder!,
-              remainingSeconds: orderTimer,
-              onAccept: acceptOrder,
-              onDecline: declineOrder,
+              order: homeController.incomingOrder.value!,
+              remainingSeconds: homeController.orderTimer.value,
+              onAccept: homeController.acceptOrder,
+              onDecline: homeController.declineOrder,
             )
           : null,
     );
