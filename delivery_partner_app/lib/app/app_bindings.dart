@@ -2,6 +2,8 @@ import 'package:delivery_partner_app/features/app_settings/controllers/app_setti
 import 'package:delivery_partner_app/features/app_settings/services/app_settings_service.dart';
 import 'package:delivery_partner_app/features/delivery_preferences/controllers/delivery_preferences_controller.dart';
 import 'package:delivery_partner_app/features/delivery_preferences/services/delivery_preferences_service.dart';
+import 'package:delivery_partner_app/features/demand_map/controllers/nearby_demand_controller.dart';
+import 'package:delivery_partner_app/features/demand_map/services/nearby_demand_service.dart';
 import 'package:delivery_partner_app/features/earnings/controllers/earnings_controller.dart';
 import 'package:delivery_partner_app/features/earnings/services/earnings_service.dart';
 import 'package:delivery_partner_app/features/help/controllers/help_controller.dart';
@@ -156,6 +158,15 @@ class AppBindings extends Bindings {
     Get.lazyPut<NotificationsController>(
       () => NotificationsController(
         notificationsService: Get.find<NotificationsService>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<NearbyDemandService>(() => NearbyDemandService(), fenix: true);
+
+    Get.lazyPut<NearbyDemandController>(
+      () => NearbyDemandController(
+        nearbyDemandService: Get.find<NearbyDemandService>(),
       ),
       fenix: true,
     );

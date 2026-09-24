@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:delivery_partner_app/core/utils/string_utils.dart';
 import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
+import 'package:delivery_partner_app/features/demand_map/pages/nearby_demand_page.dart';
 import 'package:delivery_partner_app/features/home/controllers/home_controller.dart';
-import 'package:delivery_partner_app/features/home/models/incoming_order.dart';
 import 'package:delivery_partner_app/features/home/models/rider_status.dart';
 import 'package:delivery_partner_app/features/notifications/pages/notifications_page.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +119,7 @@ class _HomePageState extends State<HomePage> {
 
                     NearbyDemand(
                       onViewMap: () {
-                        homeController.navigate('demand-map');
+                        Get.to(() => const NearbyDemandPage());
                       },
                     ),
 
