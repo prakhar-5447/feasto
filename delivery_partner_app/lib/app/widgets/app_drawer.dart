@@ -78,6 +78,34 @@ class AppDrawer extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
+                  _buildSectionLabel('SUPPORT'),
+
+                  _buildItem(
+                    icon: Icons.question_mark,
+                    label: 'Help Center',
+                    page: 'help',
+                  ),
+
+                  _buildItem(
+                    icon: Icons.notifications_none_rounded,
+                    label: 'Notifications',
+                    page: 'notifications',
+                  ),
+
+                  _buildItem(
+                    icon: Icons.tune_rounded,
+                    label: 'Delivery Preferences',
+                    page: 'delivery-preferences',
+                  ),
+
+                  _buildItem(
+                    icon: Icons.help_outline_rounded,
+                    label: 'Help & Support',
+                    page: 'help',
+                  ),
+
+                  const SizedBox(height: 12),
+
                   _buildSectionLabel('ACCOUNT'),
 
                   _buildItem(
