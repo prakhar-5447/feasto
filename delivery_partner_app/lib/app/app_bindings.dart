@@ -10,6 +10,8 @@ import 'package:delivery_partner_app/features/home/controllers/home_controller.d
 import 'package:delivery_partner_app/features/home/services/home_services.dart';
 import 'package:delivery_partner_app/features/incentives/controllers/incentives_controller.dart';
 import 'package:delivery_partner_app/features/incentives/services/incentives_service.dart';
+import 'package:delivery_partner_app/features/language/controllers/language_controller.dart';
+import 'package:delivery_partner_app/features/language/services/language_service.dart';
 import 'package:delivery_partner_app/features/orders/controllers/orders_controller.dart';
 import 'package:delivery_partner_app/features/orders/services/order_service.dart';
 import 'package:delivery_partner_app/features/performance/controllers/performance_controller.dart';
@@ -120,6 +122,13 @@ class AppBindings extends Bindings {
       () => AppSettingsController(
         appSettingsService: Get.find<AppSettingsService>(),
       ),
+      fenix: true,
+    );
+
+    Get.lazyPut<LanguageService>(() => LanguageService(), fenix: true);
+
+    Get.lazyPut<LanguageController>(
+      () => LanguageController(languageService: Get.find<LanguageService>()),
       fenix: true,
     );
   }
