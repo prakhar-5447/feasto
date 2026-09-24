@@ -1,3 +1,5 @@
+import 'package:delivery_partner_app/features/app_settings/controllers/app_settings_controller.dart';
+import 'package:delivery_partner_app/features/app_settings/services/app_settings_service.dart';
 import 'package:delivery_partner_app/features/delivery_preferences/controllers/delivery_preferences_controller.dart';
 import 'package:delivery_partner_app/features/delivery_preferences/services/delivery_preferences_service.dart';
 import 'package:delivery_partner_app/features/earnings/controllers/earnings_controller.dart';
@@ -108,6 +110,15 @@ class AppBindings extends Bindings {
     Get.lazyPut<PerformanceController>(
       () => PerformanceController(
         performanceService: Get.find<PerformanceService>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<AppSettingsService>(() => AppSettingsService(), fenix: true);
+
+    Get.lazyPut<AppSettingsController>(
+      () => AppSettingsController(
+        appSettingsService: Get.find<AppSettingsService>(),
       ),
       fenix: true,
     );

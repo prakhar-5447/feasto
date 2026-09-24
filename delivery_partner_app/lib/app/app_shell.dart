@@ -1,3 +1,4 @@
+import 'package:delivery_partner_app/features/app_settings/pages/app_settings_page.dart';
 import 'package:delivery_partner_app/features/delivery_preferences/pages/delivery_preferences_page.dart';
 import 'package:delivery_partner_app/features/incentives/pages/incentives_page.dart';
 import 'package:delivery_partner_app/features/performance/pages/performance_page.dart';
@@ -72,13 +73,10 @@ class _AppShellState extends State<AppShell> {
       case 'delivery-preferences':
         Get.to(() => const DeliveryPreferencesPage());
         break;
-      // Later:
-      // performance
-      // incentives
-      // help
-      // notifications
-      // demand-map
-      // delivery-preferences
+
+      case 'app-settings':
+        Get.to(() => const AppSettingsPage());
+        break;
     }
   }
 
