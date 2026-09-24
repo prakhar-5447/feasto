@@ -5,6 +5,7 @@ import 'package:delivery_partner_app/features/auth/controllers/auth_controller.d
 import 'package:delivery_partner_app/features/home/controllers/home_controller.dart';
 import 'package:delivery_partner_app/features/home/models/incoming_order.dart';
 import 'package:delivery_partner_app/features/home/models/rider_status.dart';
+import 'package:delivery_partner_app/features/notifications/pages/notifications_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                   Scaffold.of(context).openDrawer();
                 },
                 onNotificationsPressed: () {
-                  homeController.navigate('notifications');
+                  Get.to(() => const NotificationsPage());
                 },
               );
             }),
