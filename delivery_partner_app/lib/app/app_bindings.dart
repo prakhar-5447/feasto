@@ -10,6 +10,8 @@ import 'package:delivery_partner_app/features/incentives/controllers/incentives_
 import 'package:delivery_partner_app/features/incentives/services/incentives_service.dart';
 import 'package:delivery_partner_app/features/orders/controllers/orders_controller.dart';
 import 'package:delivery_partner_app/features/orders/services/order_service.dart';
+import 'package:delivery_partner_app/features/performance/controllers/performance_controller.dart';
+import 'package:delivery_partner_app/features/performance/services/performance_service.dart';
 import 'package:delivery_partner_app/features/profile/controllers/profile_controller.dart';
 import 'package:delivery_partner_app/features/profile/services/profile_service.dart';
 import 'package:get/get.dart';
@@ -97,6 +99,15 @@ class AppBindings extends Bindings {
     Get.lazyPut<DeliveryPreferencesController>(
       () => DeliveryPreferencesController(
         deliveryPreferencesService: Get.find<DeliveryPreferencesService>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<PerformanceService>(() => PerformanceService(), fenix: true);
+
+    Get.lazyPut<PerformanceController>(
+      () => PerformanceController(
+        performanceService: Get.find<PerformanceService>(),
       ),
       fenix: true,
     );

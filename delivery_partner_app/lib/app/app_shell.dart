@@ -1,5 +1,6 @@
 import 'package:delivery_partner_app/features/delivery_preferences/pages/delivery_preferences_page.dart';
 import 'package:delivery_partner_app/features/incentives/pages/incentives_page.dart';
+import 'package:delivery_partner_app/features/performance/pages/performance_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -56,18 +57,21 @@ class _AppShellState extends State<AppShell> {
         });
         break;
 
-      case 'help':
-        Get.to(() => const HelpPage());
+      case 'performance':
+        Get.to(() => const PerformancePage());
         break;
 
       case 'incentives':
         Get.to(() => const IncentivesPage());
         break;
 
+      case 'help':
+        Get.to(() => const HelpPage());
+        break;
+
       case 'delivery-preferences':
         Get.to(() => const DeliveryPreferencesPage());
         break;
-
       // Later:
       // performance
       // incentives
