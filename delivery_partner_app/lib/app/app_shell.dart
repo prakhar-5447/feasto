@@ -1,3 +1,4 @@
+import 'package:delivery_partner_app/features/delivery_preferences/pages/delivery_preferences_page.dart';
 import 'package:delivery_partner_app/features/incentives/pages/incentives_page.dart';
 import 'package:flutter/material.dart';
 
@@ -61,6 +62,10 @@ class _AppShellState extends State<AppShell> {
 
       case 'incentives':
         Get.to(() => const IncentivesPage());
+        break;
+
+      case 'delivery-preferences':
+        Get.to(() => const DeliveryPreferencesPage());
         break;
 
       // Later:

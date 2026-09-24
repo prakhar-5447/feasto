@@ -1,3 +1,5 @@
+import 'package:delivery_partner_app/features/delivery_preferences/controllers/delivery_preferences_controller.dart';
+import 'package:delivery_partner_app/features/delivery_preferences/services/delivery_preferences_service.dart';
 import 'package:delivery_partner_app/features/earnings/controllers/earnings_controller.dart';
 import 'package:delivery_partner_app/features/earnings/services/earnings_service.dart';
 import 'package:delivery_partner_app/features/help/controllers/help_controller.dart';
@@ -83,6 +85,18 @@ class AppBindings extends Bindings {
     Get.lazyPut<IncentivesController>(
       () => IncentivesController(
         incentivesService: Get.find<IncentivesService>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<DeliveryPreferencesService>(
+      () => DeliveryPreferencesService(),
+      fenix: true,
+    );
+
+    Get.lazyPut<DeliveryPreferencesController>(
+      () => DeliveryPreferencesController(
+        deliveryPreferencesService: Get.find<DeliveryPreferencesService>(),
       ),
       fenix: true,
     );

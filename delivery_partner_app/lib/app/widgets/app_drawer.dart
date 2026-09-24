@@ -26,7 +26,7 @@ class AppDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            _buildHeader(),
+            _buildHeader(context),
 
             const SizedBox(height: 12),
 
@@ -86,16 +86,9 @@ class AppDrawer extends StatelessWidget {
                     page: 'help',
                   ),
 
-
                   const SizedBox(height: 12),
 
                   _buildSectionLabel('ACCOUNT'),
-
-                  _buildItem(
-                    icon: Icons.person_outline_rounded,
-                    label: 'Profile',
-                    page: 'profile',
-                  ),
 
                   _buildItem(
                     icon: Icons.notifications_none_rounded,
@@ -104,7 +97,7 @@ class AppDrawer extends StatelessWidget {
                   ),
 
                   _buildItem(
-                    icon: Icons.pin_drop,
+                    icon: Icons.location_pin,
                     label: 'Delivery Preferences',
                     page: 'delivery-preferences',
                   ),
@@ -133,89 +126,98 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.border)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: const LinearGradient(
-                colors: [AppColors.primary, Color(0xFFFF9A5C)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              riderInitials,
-              style: const TextStyle(
-                color: AppColors.primaryForeground,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+  Widget _buildHeader(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pop();
+          onNavigate('profile');
+        },
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: AppColors.border)),
           ),
-
-          const SizedBox(width: 12),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  riderName,
+          child: Row(
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, Color(0xFFFF9A5C)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  riderInitials,
                   style: const TextStyle(
-                    color: AppColors.foreground,
+                    color: AppColors.primaryForeground,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+              ),
 
-                const SizedBox(height: 4),
+              const SizedBox(width: 12),
 
-                Row(
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isOnline
-                            ? AppColors.success
-                            : AppColors.mutedForeground,
+                    Text(
+                      riderName,
+                      style: const TextStyle(
+                        color: AppColors.foreground,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
 
-                    const SizedBox(width: 6),
+                    const SizedBox(height: 4),
 
-                    Text(
-                      isOnline ? 'Online' : 'Offline',
-                      style: TextStyle(
-                        color: isOnline
-                            ? AppColors.success
-                            : AppColors.mutedForeground,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isOnline
+                                ? AppColors.success
+                                : AppColors.mutedForeground,
+                          ),
+                        ),
+
+                        const SizedBox(width: 6),
+
+                        Text(
+                          isOnline ? 'Online' : 'Offline',
+                          style: TextStyle(
+                            color: isOnline
+                                ? AppColors.success
+                                : AppColors.mutedForeground,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
 
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: AppColors.mutedForeground,
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.mutedForeground,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
