@@ -71,9 +71,9 @@ class AppDrawer extends StatelessWidget {
                   ),
 
                   _buildItem(
-                    icon: Icons.local_fire_department_outlined,
-                    label: 'Demand Map',
-                    page: 'demand-map',
+                    icon: Icons.delivery_dining,
+                    label: 'Delivery History',
+                    page: 'delivery-history',
                   ),
 
                   const SizedBox(height: 12),
@@ -86,23 +86,6 @@ class AppDrawer extends StatelessWidget {
                     page: 'help',
                   ),
 
-                  _buildItem(
-                    icon: Icons.notifications_none_rounded,
-                    label: 'Notifications',
-                    page: 'notifications',
-                  ),
-
-                  _buildItem(
-                    icon: Icons.tune_rounded,
-                    label: 'Delivery Preferences',
-                    page: 'delivery-preferences',
-                  ),
-
-                  _buildItem(
-                    icon: Icons.help_outline_rounded,
-                    label: 'Help & Support',
-                    page: 'help',
-                  ),
 
                   const SizedBox(height: 12),
 
@@ -121,15 +104,21 @@ class AppDrawer extends StatelessWidget {
                   ),
 
                   _buildItem(
-                    icon: Icons.tune_rounded,
+                    icon: Icons.pin_drop,
                     label: 'Delivery Preferences',
                     page: 'delivery-preferences',
                   ),
 
                   _buildItem(
-                    icon: Icons.help_outline_rounded,
-                    label: 'Help & Support',
-                    page: 'help',
+                    icon: Icons.language,
+                    label: 'Language',
+                    page: 'language',
+                  ),
+
+                  _buildItem(
+                    icon: Icons.settings,
+                    label: 'App Settings',
+                    page: 'app-settings',
                   ),
                 ],
               ),

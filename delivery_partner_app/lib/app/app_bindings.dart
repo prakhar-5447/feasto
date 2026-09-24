@@ -4,6 +4,8 @@ import 'package:delivery_partner_app/features/help/controllers/help_controller.d
 import 'package:delivery_partner_app/features/help/services/help_service.dart';
 import 'package:delivery_partner_app/features/home/controllers/home_controller.dart';
 import 'package:delivery_partner_app/features/home/services/home_services.dart';
+import 'package:delivery_partner_app/features/incentives/controllers/incentives_controller.dart';
+import 'package:delivery_partner_app/features/incentives/services/incentives_service.dart';
 import 'package:delivery_partner_app/features/orders/controllers/orders_controller.dart';
 import 'package:delivery_partner_app/features/orders/services/order_service.dart';
 import 'package:delivery_partner_app/features/profile/controllers/profile_controller.dart';
@@ -73,6 +75,15 @@ class AppBindings extends Bindings {
 
     Get.lazyPut<HelpController>(
       () => HelpController(helpService: Get.find<HelpService>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<IncentivesService>(() => IncentivesService(), fenix: true);
+
+    Get.lazyPut<IncentivesController>(
+      () => IncentivesController(
+        incentivesService: Get.find<IncentivesService>(),
+      ),
       fenix: true,
     );
   }

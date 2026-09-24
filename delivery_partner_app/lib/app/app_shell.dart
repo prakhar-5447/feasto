@@ -1,3 +1,4 @@
+import 'package:delivery_partner_app/features/incentives/pages/incentives_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -56,6 +57,10 @@ class _AppShellState extends State<AppShell> {
 
       case 'help':
         Get.to(() => const HelpPage());
+        break;
+
+      case 'incentives':
+        Get.to(() => const IncentivesPage());
         break;
 
       // Later:
