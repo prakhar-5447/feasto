@@ -93,7 +93,7 @@ class AppDrawer extends StatelessWidget {
                   _buildItem(
                     icon: Icons.notifications_none_rounded,
                     label: 'Notifications',
-                    page: 'notifications',
+                    page: 'notification-settings',
                   ),
 
                   _buildItem(

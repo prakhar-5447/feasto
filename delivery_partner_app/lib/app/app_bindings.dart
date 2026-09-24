@@ -12,6 +12,8 @@ import 'package:delivery_partner_app/features/incentives/controllers/incentives_
 import 'package:delivery_partner_app/features/incentives/services/incentives_service.dart';
 import 'package:delivery_partner_app/features/language/controllers/language_controller.dart';
 import 'package:delivery_partner_app/features/language/services/language_service.dart';
+import 'package:delivery_partner_app/features/notification_settings/controllers/notification_settings_controller.dart';
+import 'package:delivery_partner_app/features/notification_settings/services/notification_settings_service.dart';
 import 'package:delivery_partner_app/features/orders/controllers/orders_controller.dart';
 import 'package:delivery_partner_app/features/orders/services/order_service.dart';
 import 'package:delivery_partner_app/features/performance/controllers/performance_controller.dart';
@@ -129,6 +131,18 @@ class AppBindings extends Bindings {
 
     Get.lazyPut<LanguageController>(
       () => LanguageController(languageService: Get.find<LanguageService>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<NotificationSettingsService>(
+      () => NotificationSettingsService(),
+      fenix: true,
+    );
+
+    Get.lazyPut<NotificationSettingsController>(
+      () => NotificationSettingsController(
+        notificationSettingsService: Get.find<NotificationSettingsService>(),
+      ),
       fenix: true,
     );
   }

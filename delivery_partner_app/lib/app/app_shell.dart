@@ -2,6 +2,7 @@ import 'package:delivery_partner_app/features/app_settings/pages/app_settings_pa
 import 'package:delivery_partner_app/features/delivery_preferences/pages/delivery_preferences_page.dart';
 import 'package:delivery_partner_app/features/incentives/pages/incentives_page.dart';
 import 'package:delivery_partner_app/features/language/pages/language_page.dart';
+import 'package:delivery_partner_app/features/notification_settings/pages/notification_settings_page.dart';
 import 'package:delivery_partner_app/features/performance/pages/performance_page.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +70,10 @@ class _AppShellState extends State<AppShell> {
 
       case 'help':
         Get.to(() => const HelpPage());
+        break;
+
+      case 'notification-settings':
+        Get.to(() => const NotificationSettingsPage());
         break;
 
       case 'delivery-preferences':
