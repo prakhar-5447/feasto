@@ -160,14 +160,20 @@ class _HomePageState extends State<HomePage> {
       // flex items-end
       //
       // overlay.
-      bottomSheet: homeController.incomingOrder.value != null
-          ? IncomingOrderSheet(
-              order: homeController.incomingOrder.value!,
-              remainingSeconds: homeController.orderTimer.value,
-              onAccept: homeController.acceptOrder,
-              onDecline: homeController.declineOrder,
-            )
-          : null,
+      bottomSheet: Obx(() {
+        final order = homeController.incomingOrder.value;
+
+        if (order == null) {
+          return const SizedBox.shrink();
+        }
+
+        return IncomingOrderSheet(
+          order: order,
+          remainingSeconds: homeController.orderTimer.value,
+          onAccept: () => homeController.acceptOrder(order),
+          onDecline: homeController.declineOrder,
+        );
+      }),
     );
   }
 }

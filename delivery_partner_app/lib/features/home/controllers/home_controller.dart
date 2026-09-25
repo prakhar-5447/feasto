@@ -1,3 +1,5 @@
+import 'package:delivery_partner_app/features/active_delivery/models/delivery_order.dart';
+import 'package:delivery_partner_app/features/active_delivery/pages/active_delivery_page.dart';
 import 'package:get/get.dart';
 
 import 'package:delivery_partner_app/features/home/models/incoming_order.dart';
@@ -9,8 +11,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 class HomeController extends GetxController {
-  HomeController({required HomeService homeService})
-    : _homeService = homeService;
+  HomeController({required this._homeService});
 
   final HomeService _homeService;
 
@@ -177,18 +178,19 @@ class HomeController extends GetxController {
   // ORDER ACTIONS
   // ------------------------------------------------------------
 
-  void acceptOrder() {
-    final order = incomingOrder.value;
+  void acceptOrder(IncomingOrder incomingOrder) {
+    final deliveryOrder = DeliveryOrder(
+      id: incomingOrder.id,
+      restaurant: incomingOrder.restaurant,
+      restaurantArea: incomingOrder.restaurantArea,
+      customerName: incomingOrder.customerName,
+      deliveryArea: incomingOrder.deliveryArea,
+      distance: '${incomingOrder.totalDistance} km',
+      earnings: '₹${incomingOrder.earnings}',
+      items: incomingOrder.items,
+    );
 
-    if (order == null) {
-      return;
-    }
-
-    incomingOrder.value = null;
-
-    countdownTimer?.cancel();
-
-    debugPrint('Accepted order ${order.id}');
+    Get.to(() => ActiveDeliveryPage(order: deliveryOrder));
 
     // Later:
     //
