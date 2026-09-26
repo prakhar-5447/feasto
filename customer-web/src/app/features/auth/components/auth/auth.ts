@@ -2,8 +2,6 @@ import { Component, DestroyRef, ElementRef, EventEmitter, Output, QueryList, Vie
 
 import { FormsModule } from '@angular/forms';
 
-import { HttpClient } from '@angular/common/http';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { faMobileScreen, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -16,38 +14,13 @@ import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 
-import * as AuthActions from '../../store/auth/auth.actions';
-import { AppState } from '../../store/app.state';
-import { selectUser } from '../../store/auth/auth.selectors';
+import * as AuthActions from '@/app/store/auth/auth.actions';
+import { AppState } from '@/app/store/app.state';
+import { selectUser } from '@/app/store/auth/auth.selectors';
 
-import { Button } from '../../shared/components/button/button';
-import { Input } from '../../shared/components/input/input';
-
-
-type AuthStep =
-  | 'phone'
-  | 'otp'
-  | 'details';
-
-
-interface PhoneAuthResponse {
-  success: boolean;
-  message: string;
-  data: any;
-}
-
-interface VerifyOtpResponse {
-  success: boolean;
-  message: string;
-  data: any;
-}
-
-interface CompleteProfileResponse {
-  success: boolean;
-  message: string;
-  data: any;
-}
-
+import { Input } from '@/app/shared/components/input/input';
+import { Button } from '@/app/shared/components/button/button';
+import { AuthService } from '@/app/features/auth/services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -87,7 +60,7 @@ export class Auth {
   otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   private readonly router = inject(Router);
-  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
 
@@ -107,16 +80,8 @@ export class Auth {
 
     this.loading = true;
 
-    this.http
-      .post<PhoneAuthResponse>(
-        '/api/v1/auth/phone-auth',
-        {
-          phone: this.phoneNumber
-        },
-        {
-          withCredentials: true
-        }
-      )
+    this.authService
+      .phoneAuth(this.phoneNumber)
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -138,12 +103,12 @@ export class Auth {
             '',
             ''
           ];
+
           this.otpValues = res.data.otp
             .toString()
             .padStart(6, '0')
             .slice(0, 6)
             .split('');
-
 
           this.startResendTimer();
 
@@ -161,7 +126,6 @@ export class Auth {
       });
   }
 
-
   verifyOTP(): void {
 
     if (this.loading || this.otp.length !== 6)
@@ -169,16 +133,10 @@ export class Auth {
 
     this.loading = true;
 
-    this.http
-      .post<VerifyOtpResponse>(
-        '/api/v1/auth/verify-otp',
-        {
-          phone: this.phoneNumber,
-          otp: this.otp
-        },
-        {
-          withCredentials: true
-        }
+    this.authService
+      .verifyOtp(
+        this.phoneNumber,
+        this.otp
       )
       .pipe(
         finalize(() => {
@@ -250,7 +208,6 @@ export class Auth {
 
     return /^[a-z0-9._%+-]+$/.test(email);
   }
-
   completeSignup(): void {
 
     if (this.loading)
@@ -265,9 +222,8 @@ export class Auth {
     if (!this.isNameValid || !this.isEmailValid)
       return;
 
-    if (!this.signupToken) {
+    if (!this.signupToken)
       return;
-    }
 
     const email =
       emailUsername
@@ -276,17 +232,11 @@ export class Auth {
 
     this.loading = true;
 
-    this.http
-      .post<CompleteProfileResponse>(
-        '/api/v1/auth/complete-profile',
-        {
-          signupToken: this.signupToken,
-          name,
-          email
-        },
-        {
-          withCredentials: true
-        }
+    this.authService
+      .completeProfile(
+        this.signupToken,
+        name,
+        email
       )
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -310,10 +260,7 @@ export class Auth {
 
       });
   }
-
-
   resendOtp(): void {
-
 
     if (
       this.resendDisabled() ||
@@ -324,16 +271,8 @@ export class Auth {
 
     this.loading = true;
 
-    this.http
-      .post<PhoneAuthResponse>(
-        '/api/v1/auth/phone-auth',
-        {
-          phone: this.phoneNumber
-        },
-        {
-          withCredentials: true
-        }
-      )
+    this.authService
+      .phoneAuth(this.phoneNumber)
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -352,6 +291,7 @@ export class Auth {
             '',
             ''
           ];
+
           this.otpValues = res.data.otp
             .toString()
             .padStart(6, '0')
@@ -366,7 +306,6 @@ export class Auth {
 
       });
   }
-
 
   startResendTimer(): void {
 

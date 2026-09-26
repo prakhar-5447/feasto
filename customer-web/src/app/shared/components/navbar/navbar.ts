@@ -36,7 +36,7 @@ import { LocationSearchResult, ReverseGeocodeResult } from '../../../core/locati
 import { SelectedLocation } from '../../../core/location/models/location.model';
 
 import { LocationService } from '../../../core/location/services/location.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../features/auth/services/auth.service';
 
 import * as LocationActions from '../../../store/location/location.actions';
 import { selectSelectedLocation } from '../../../store/location/location.selectors';

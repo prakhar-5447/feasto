@@ -6,7 +6,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/ro
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { Auth } from '../../features/auth/auth';
+import { Auth } from '@/app/features/auth/components/auth/auth';
 import { Breadcrumb } from '../../shared/components/breadcrumb/breadcrumb';
 import { Footer } from '../../shared/components/footer/footer';
 import { Modal } from '../../shared/components/modal/modal';

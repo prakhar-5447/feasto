@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import * as AuthActions from './auth.actions';
 import * as CartActions from '../cart/cart.actions';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../features/auth/services/auth.service';
 
 import {
     catchError,
