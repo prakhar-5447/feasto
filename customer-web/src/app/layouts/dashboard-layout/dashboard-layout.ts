@@ -7,10 +7,10 @@ import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Auth } from '@/app/features/auth/components/auth/auth';
-import { Breadcrumb } from '../../shared/components/breadcrumb/breadcrumb';
-import { Footer } from '../../shared/components/footer/footer';
-import { Modal } from '../../shared/components/modal/modal';
-import { Navbar } from '../../shared/components/navbar/navbar';
+import { Breadcrumb } from '@/app/shared/components/breadcrumb/breadcrumb';
+import { Footer } from '@/app/shared/components/footer/footer';
+import { Modal } from '@/app/shared/components/modal/modal';
+import { Navbar } from '@/app/shared/components/navbar/navbar';
 
 
 @Component({
