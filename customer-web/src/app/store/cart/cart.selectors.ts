@@ -1,9 +1,12 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+    createFeatureSelector,
+    createSelector
+} from '@ngrx/store';
+
 import { CartState } from './cart.state';
 
 export const selectCartState =
     createFeatureSelector<CartState>('cart');
-
 
 export const selectCart =
     createSelector(
@@ -11,13 +14,11 @@ export const selectCart =
         state => state.cart
     );
 
-
 export const selectCartItems =
     createSelector(
         selectCart,
         cart => cart?.items ?? []
     );
-
 
 export const selectCartSummary =
     createSelector(
@@ -25,20 +26,17 @@ export const selectCartSummary =
         cart => cart?.summary ?? null
     );
 
-
 export const selectCartRestaurant =
     createSelector(
         selectCart,
         cart => cart?.restaurant ?? null
     );
 
-
 export const selectCartCoupon =
     createSelector(
         selectCart,
         cart => cart?.coupon ?? null
     );
-
 
 export const selectCartCount =
     createSelector(
@@ -50,10 +48,8 @@ export const selectCartCount =
             )
     );
 
-
 export const selectCartItemCount =
     selectCartCount;
-
 
 export const selectCartStatus =
     createSelector(
@@ -61,13 +57,11 @@ export const selectCartStatus =
         state => state.status
     );
 
-
 export const selectCartLoading =
     createSelector(
         selectCartStatus,
         status => status === 'loading'
     );
-
 
 export const selectCartError =
     createSelector(
@@ -75,13 +69,11 @@ export const selectCartError =
         state => state.error
     );
 
-
 export const selectUpdatingItemIds =
     createSelector(
         selectCartState,
         state => state.updatingItemIds
     );
-
 
 export const selectRemovingItemIds =
     createSelector(
@@ -89,14 +81,12 @@ export const selectRemovingItemIds =
         state => state.removingItemIds
     );
 
-
 export const selectIsUpdatingItem =
     (foodId: string) =>
         createSelector(
             selectUpdatingItemIds,
             ids => ids.includes(foodId)
         );
-
 
 export const selectIsRemovingItem =
     (foodId: string) =>

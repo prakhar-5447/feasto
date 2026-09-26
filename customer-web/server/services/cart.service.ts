@@ -23,6 +23,90 @@ const resetEmptyCart = (cart: any) => {
     }
 };
 
+const calculateSummary = async (cart: any) => {
+    const itemTotal = cart.items.reduce(
+        (total: number, item: any) =>
+            total + item.food.price * item.quantity,
+        0
+    );
+
+    let discount = 0;
+
+    if (cart.couponCode) {
+        const coupon = await Coupon.findOne({
+            code: cart.couponCode,
+            isActive: true
+        });
+
+        if (coupon) {
+            discount =
+                coupon.discountType === "flat"
+                    ? coupon.discount
+                    : (itemTotal * coupon.discount) / 100;
+
+            if (
+                coupon.discountType === "percentage" &&
+                coupon.maxDiscount
+            ) {
+                discount = Math.min(
+                    discount,
+                    coupon.maxDiscount
+                );
+            }
+
+            discount = Math.min(discount, itemTotal);
+        }
+    }
+
+    const taxableAmount = Math.max(
+        itemTotal - discount,
+        0
+    );
+
+    const gst = Math.round(
+        taxableAmount * GST_RATE
+    );
+
+    const grandTotal =
+        taxableAmount +
+        gst +
+        DELIVERY_FEE +
+        PLATFORM_FEE;
+
+    return {
+        itemTotal,
+        discount,
+        deliveryFee: DELIVERY_FEE,
+        platformFee: PLATFORM_FEE,
+        gstRate: GST_RATE,
+        gst,
+        grandTotal
+    };
+};
+
+const buildCartResponse = async (cart: any) => {
+    await cart.populate("items.food");
+    await cart.populate("restaurant");
+
+    const summary = await calculateSummary(cart);
+
+    let coupon = undefined;
+
+    if (cart.couponCode) {
+        coupon = await Coupon.findOne({
+            code: cart.couponCode,
+            isActive: true
+        });
+    }
+
+    return {
+        items: cart.items,
+        restaurant: cart.restaurant,
+        summary,
+        coupon: coupon ?? undefined
+    };
+};
+
 export const addToCart = async (
     userId: string,
     foodId: string,
@@ -47,9 +131,15 @@ export const addToCart = async (
             items: []
         });
     }
+
     if (cart.items.length) {
-        if (cart.restaurant._id.toString() !== food.restaurant._id.toString()) {
-            throw new Error("Cart contains items from another restaurant");
+        if (
+            cart.restaurant._id.toString() !==
+            food.restaurant._id.toString()
+        ) {
+            throw new Error(
+                "Cart contains items from another restaurant"
+            );
         }
     } else {
         cart.restaurant = food.restaurant._id;
@@ -57,7 +147,8 @@ export const addToCart = async (
     }
 
     const item = cart.items.find(
-        (item: any) => item.food.toString() === foodId
+        (item: any) =>
+            item.food.toString() === foodId
     );
 
     if (item) {
@@ -71,14 +162,13 @@ export const addToCart = async (
 
     await cart.save();
 
-    await cart.populate('items.food');
-    await cart.populate('restaurant');
-
-    return cart;
+    return buildCartResponse(cart);
 };
 
 export const getCart = async (userId: string) => {
-    return getCartOrThrow(userId);
+    const cart = await getCartOrThrow(userId);
+
+    return buildCartResponse(cart);
 };
 
 export const updateCartItem = async (
@@ -87,8 +177,10 @@ export const updateCartItem = async (
     quantity: number
 ) => {
     const cart = await getCartOrThrow(userId);
+
     const item = cart.items.find(
-        (item: any) => item.food._id.toString() === foodId
+        (item: any) =>
+            item.food._id.toString() === foodId
     );
 
     if (!item) {
@@ -97,7 +189,8 @@ export const updateCartItem = async (
 
     if (quantity <= 0) {
         cart.items = cart.items.filter(
-            (item: any) => item.food._id.toString() !== foodId
+            (item: any) =>
+                item.food._id.toString() !== foodId
         );
     } else {
         item.quantity = quantity;
@@ -107,7 +200,7 @@ export const updateCartItem = async (
 
     await cart.save();
 
-    return cart;
+    return buildCartResponse(cart);
 };
 
 export const removeCartItem = async (
@@ -117,14 +210,15 @@ export const removeCartItem = async (
     const cart = await getCartOrThrow(userId);
 
     cart.items = cart.items.filter(
-        (item: any) => item.food._id.toString() !== foodId
+        (item: any) =>
+            item.food._id.toString() !== foodId
     );
 
     resetEmptyCart(cart);
 
     await cart.save();
 
-    return cart;
+    return buildCartResponse(cart);
 };
 
 export const clearCart = async (userId: string) => {
@@ -156,68 +250,23 @@ export const applyCoupon = async (
 
     await cart.save();
 
-    return coupon;
+    return buildCartResponse(cart);
 };
 
-export const removeCoupon = async (userId: string) => {
+export const removeCoupon = async (
+    userId: string
+) => {
     const cart = await getCartOrThrow(userId);
 
     cart.couponCode = undefined;
 
     await cart.save();
+
+    return buildCartResponse(cart);
 };
 
 export const getSummary = async (userId: string) => {
     const cart = await getCartOrThrow(userId);
 
-    const itemTotal = cart.items.reduce(
-        (total: number, item: any) =>
-            total + item.food.price * item.quantity,
-        0
-    );
-
-    let discount = 0;
-
-    if (cart.couponCode) {
-        const coupon = await Coupon.findOne({
-            code: cart.couponCode,
-            isActive: true
-        });
-
-        if (coupon) {
-            discount =
-                coupon.discountType === "flat"
-                    ? coupon.discount
-                    : (itemTotal * coupon.discount) / 100;
-
-            if (
-                coupon.discountType === "percentage" &&
-                coupon.maxDiscount
-            ) {
-                discount = Math.min(
-                    discount,
-                    coupon.maxDiscount
-                );
-            }
-        }
-    }
-
-    const taxableAmount = itemTotal - discount;
-    const gst = Math.round(taxableAmount * GST_RATE);
-
-    const grandTotal =
-        taxableAmount +
-        gst +
-        DELIVERY_FEE +
-        PLATFORM_FEE;
-
-    return {
-        itemTotal,
-        discount,
-        deliveryFee: DELIVERY_FEE,
-        platformFee: PLATFORM_FEE,
-        gstRate: GST_RATE,
-        gst,
-        grandTotal
-    };
+    return calculateSummary(cart);
 };
