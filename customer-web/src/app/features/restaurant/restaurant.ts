@@ -24,7 +24,7 @@ import { selectCartCount, selectCartStatus } from '../../store/cart/cart.selecto
 
 import { ImageCarousel } from './image-carousel/image-carousel';
 import { RestaurantInfo } from './restaurant-info/restaurant-info';
-import { RestaurantDetail } from '../../core/restaurant/models/restaurant.model';
+import { RestaurantDetail } from '../dashboard/models/restaurant.model';
 
 
 type RestaurantTab = 'order' | 'reviews' | 'cart';

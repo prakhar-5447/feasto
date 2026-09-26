@@ -19,7 +19,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons';
 
 import {
   RestaurantDetail
-} from '../../../core/restaurant/models/restaurant.model';
+} from '../../dashboard/models/restaurant.model';
 
 import { selectSelectedLocation } from '../../../store/location/location.selectors';
 import { AppState } from '../../../store/app.state';

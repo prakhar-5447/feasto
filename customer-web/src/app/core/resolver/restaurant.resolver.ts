@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { RestaurantDetail } from '../../core/restaurant/models/restaurant.model';
+import { RestaurantDetail } from '../../features/dashboard/models/restaurant.model';
 import { map } from 'rxjs';
 
 export const restaurantResolver: ResolveFn<RestaurantDetail> = route => {

@@ -55,7 +55,7 @@ import {
   FoodItem,
   MenuCategory,
   RestaurantMenu
-} from '../../../core/restaurant/models/menu.model';
+} from '../../dashboard/models/menu.model';
 import { Button } from '../../../shared/components/button/button';
 
 
