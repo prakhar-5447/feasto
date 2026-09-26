@@ -14,7 +14,7 @@ export const cartReducer = createReducer(
 
     initialCartState,
 
-    // LOAD
+    // LOAD CART
 
     on(
         CartActions.loadCart,
@@ -46,12 +46,12 @@ export const cartReducer = createReducer(
         })
     ),
 
-
     // ADD ITEM
 
     on(
         CartActions.addItem,
         (state, { food, quantity }) => {
+
             if (!state.cart) {
                 return state;
             }
@@ -97,23 +97,12 @@ export const cartReducer = createReducer(
 
     on(
         CartActions.addItemSuccess,
-        (state, { cart }) => {
-
-            const addedFoodId =
-                '6a8ac55cdce5b544dd0f81b1';
-
-            const item =
-                cart.items.find(
-                    item => item.food._id === addedFoodId
-                );
-
-            return {
-                ...state,
-                cart,
-                status: 'success',
-                error: null
-            };
-        }
+        (state, { cart }) => ({
+            ...state,
+            cart,
+            status: 'success',
+            error: null
+        })
     ),
 
     on(
@@ -125,7 +114,7 @@ export const cartReducer = createReducer(
         })
     ),
 
-    // UPDATE QUANTITY - OPTIMISTIC
+    // UPDATE QUANTITY
 
     on(
         CartActions.updateQuantity,
@@ -137,22 +126,25 @@ export const cartReducer = createReducer(
 
             const items = state.cart.items.map(item =>
                 item.food._id === foodId
-                    ? { ...item, quantity }
+                    ? {
+                        ...item,
+                        quantity
+                    }
                     : item
             );
 
             return {
                 ...state,
-
                 cart: {
                     ...state.cart,
                     items
                 },
-
                 updatingItemIds: state.updatingItemIds.includes(foodId)
                     ? state.updatingItemIds
-                    : [...state.updatingItemIds, foodId],
-
+                    : [
+                        ...state.updatingItemIds,
+                        foodId
+                    ],
                 error: null
             };
         }
@@ -173,15 +165,15 @@ export const cartReducer = createReducer(
         CartActions.updateQuantityFailure,
         (state, { foodId, error }) => ({
             ...state,
-            updatingItemIds: state.updatingItemIds.filter(
-                id => id !== foodId
-            ),
+            updatingItemIds:
+                state.updatingItemIds.filter(
+                    id => id !== foodId
+                ),
             error
         })
     ),
 
-
-    // REMOVE ITEM - OPTIMISTIC
+    // REMOVE ITEM
 
     on(
         CartActions.removeItem,
@@ -193,20 +185,19 @@ export const cartReducer = createReducer(
 
             return {
                 ...state,
-
                 cart: {
                     ...state.cart,
-
                     items: state.cart.items.filter(
                         item => item.food._id !== foodId
                     )
                 },
-
-                removingItemIds: [
-                    ...state.removingItemIds,
-                    foodId
-                ],
-
+                removingItemIds:
+                    state.removingItemIds.includes(foodId)
+                        ? state.removingItemIds
+                        : [
+                            ...state.removingItemIds,
+                            foodId
+                        ],
                 error: null
             };
         }
@@ -217,9 +208,10 @@ export const cartReducer = createReducer(
         (state, { cart, foodId }) => ({
             ...state,
             cart,
-            removingItemIds: state.removingItemIds.filter(
-                id => id !== foodId
-            ),
+            removingItemIds:
+                state.removingItemIds.filter(
+                    id => id !== foodId
+                ),
             status: 'success',
             error: null
         })
@@ -236,7 +228,6 @@ export const cartReducer = createReducer(
             error
         })
     ),
-
 
     // CLEAR CART
 
@@ -274,14 +265,22 @@ export const cartReducer = createReducer(
         })
     ),
 
+    // APPLY COUPON
 
-    // COUPON
+    on(
+        CartActions.applyCoupon,
+        state => ({
+            ...state,
+            error: null
+        })
+    ),
 
     on(
         CartActions.applyCouponSuccess,
         (state, { cart }) => ({
             ...state,
             cart,
+            status: 'success',
             error: null
         })
     ),
@@ -294,11 +293,22 @@ export const cartReducer = createReducer(
         })
     ),
 
+    // REMOVE COUPON
+
+    on(
+        CartActions.removeCoupon,
+        state => ({
+            ...state,
+            error: null
+        })
+    ),
+
     on(
         CartActions.removeCouponSuccess,
         (state, { cart }) => ({
             ...state,
             cart,
+            status: 'success',
             error: null
         })
     ),

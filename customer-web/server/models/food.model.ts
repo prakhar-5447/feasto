@@ -1,22 +1,41 @@
 import mongoose, {
     Document,
     Schema,
-    Types
+    Types,
 } from "mongoose";
+
+export type FoodType =
+    | "veg"
+    | "non_veg"
+    | "egg";
+
+export type SpiceLevel =
+    | "mild"
+    | "medium"
+    | "hot";
 
 export interface IFood extends Document {
     restaurant: Types.ObjectId;
+
     name: string;
-    image?: string;
-    description?: string;
+    image: string;
+    description: string;
+
+    category: string;
+    cuisine: string;
+
     price: number;
-    cuisine?: string;
-    foodType: "veg" | "non_veg" | "egg";
+
+    foodType: FoodType;
     isVegan: boolean;
     isHalal: boolean;
+
+    spiceLevel: SpiceLevel;
     preparationTime: number;
+
     isAvailable: boolean;
     isFeatured: boolean;
+
     rating: number;
     totalReviews: number;
 }
@@ -26,35 +45,44 @@ const foodSchema = new Schema<IFood>(
         restaurant: {
             type: Schema.Types.ObjectId,
             ref: "Restaurant",
-            required: true
+            required: true,
+            index: true,
         },
 
         name: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
         },
 
         image: {
             type: String,
-            default: ""
+            default: "",
         },
 
         description: {
             type: String,
-            default: ""
+            default: "",
+            trim: true,
         },
 
-        price: {
-            type: Number,
+        category: {
+            type: String,
             required: true,
-            min: 0
+            trim: true,
+            index: true,
         },
 
         cuisine: {
             type: String,
             default: "",
-            trim: true
+            trim: true,
+        },
+
+        price: {
+            type: Number,
+            required: true,
+            min: 0,
         },
 
         foodType: {
@@ -62,80 +90,96 @@ const foodSchema = new Schema<IFood>(
             enum: [
                 "veg",
                 "non_veg",
-                "egg"
+                "egg",
             ],
             default: "veg",
-            required: true
+            required: true,
         },
 
         isVegan: {
             type: Boolean,
             default: false,
-            index: true
+            index: true,
         },
 
         isHalal: {
             type: Boolean,
             default: false,
-            index: true
+            index: true,
+        },
+
+        spiceLevel: {
+            type: String,
+            enum: [
+                "mild",
+                "medium",
+                "hot",
+            ],
+            default: "mild",
         },
 
         preparationTime: {
             type: Number,
             default: 15,
-            min: 1
+            min: 1,
         },
 
         isAvailable: {
             type: Boolean,
-            default: true
+            default: true,
         },
 
         isFeatured: {
             type: Boolean,
-            default: false
+            default: false,
         },
 
         rating: {
             type: Number,
             default: 0,
             min: 0,
-            max: 5
+            max: 5,
         },
 
         totalReviews: {
             type: Number,
             default: 0,
-            min: 0
-        }
+            min: 0,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
 foodSchema.index({
     name: "text",
-    cuisine: "text"
-});
-
-foodSchema.index({
-    restaurant: 1
-});
-
-foodSchema.index({
-    restaurant: 1,
-    isAvailable: 1
+    cuisine: "text",
+    category: "text",
 });
 
 foodSchema.index({
     restaurant: 1,
-    cuisine: 1
 });
 
 foodSchema.index({
     restaurant: 1,
-    foodType: 1
+    isAvailable: 1,
+});
+
+foodSchema.index({
+    restaurant: 1,
+    category: 1,
+});
+
+foodSchema.index({
+    restaurant: 1,
+    cuisine: 1,
+});
+
+foodSchema.index({
+    restaurant: 1,
+    foodType: 1,
 });
 
 const Food =

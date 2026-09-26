@@ -1,6 +1,16 @@
 import { Injectable, inject } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, map, of, tap } from 'rxjs';
+import {
+  Actions,
+  createEffect,
+  ofType
+} from '@ngrx/effects';
+
+import {
+  catchError,
+  concatMap,
+  map,
+  of
+} from 'rxjs';
 
 import * as CartActions from './cart.actions';
 import { CartService } from '../../core/cart/services/cart.service';
@@ -9,10 +19,12 @@ import { CartService } from '../../core/cart/services/cart.service';
 export class CartEffects {
 
   private readonly actions$ = inject(Actions);
-  private readonly cartService = inject(CartService);
 
+  private readonly cartService =
+    inject(CartService);
 
   // LOAD CART
+
   loadCart$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CartActions.loadCart),
@@ -40,34 +52,33 @@ export class CartEffects {
     )
   );
 
+  // ADD ITEM
+
   addItem$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CartActions.addItem),
 
       concatMap(({ food, quantity }) =>
-        this.cartService.addToCart(food._id, quantity).pipe(
+        this.cartService
+          .addToCart(food._id, quantity)
+          .pipe(
 
-          map(response =>
-            CartActions.addItemSuccess({
-              cart: response.data
-            })
-          ),
-
-          catchError(error => {
-            console.error(
-              'ADD ITEM ERROR:',
-              error
-            );
-
-            return of(
-              CartActions.addItemFailure({
-                error:
-                  error?.error?.message ??
-                  'Unable to add item'
+            map(response =>
+              CartActions.addItemSuccess({
+                cart: response.data
               })
-            );
-          })
-        )
+            ),
+
+            catchError(error =>
+              of(
+                CartActions.addItemFailure({
+                  error:
+                    error?.error?.message ??
+                    'Unable to add item'
+                })
+              )
+            )
+          )
       )
     )
   );
@@ -104,8 +115,6 @@ export class CartEffects {
     )
   );
 
-
-
   // REMOVE ITEM
 
   removeItem$ = createEffect(() =>
@@ -113,31 +122,28 @@ export class CartEffects {
       ofType(CartActions.removeItem),
 
       concatMap(({ foodId }) =>
-        this.cartService.removeFromCart(foodId).pipe(
+        this.cartService
+          .removeFromCart(foodId)
+          .pipe(
 
-          map(response =>
-            CartActions.removeItemSuccess({
-              foodId,
-              cart: response.data
-            })
-          ),
-
-          catchError(error => {
-            console.error(
-              'REMOVE ITEM ERROR:',
-              error
-            );
-
-            return of(
-              CartActions.removeItemFailure({
+            map(response =>
+              CartActions.removeItemSuccess({
                 foodId,
-                error:
-                  error?.error?.message ??
-                  'Unable to remove item'
+                cart: response.data
               })
-            );
-          })
-        )
+            ),
+
+            catchError(error =>
+              of(
+                CartActions.removeItemFailure({
+                  foodId,
+                  error:
+                    error?.error?.message ??
+                    'Unable to remove item'
+                })
+              )
+            )
+          )
       )
     )
   );
@@ -149,26 +155,27 @@ export class CartEffects {
       ofType(CartActions.clearCart),
 
       concatMap(() =>
-        this.cartService.clearCart().pipe(
+        this.cartService
+          .clearCart()
+          .pipe(
 
-          map(() =>
-            CartActions.clearCartSuccess()
-          ),
+            map(() =>
+              CartActions.clearCartSuccess()
+            ),
 
-          catchError(error =>
-            of(
-              CartActions.clearCartFailure({
-                error:
-                  error?.error?.message ??
-                  'Unable to clear cart'
-              })
+            catchError(error =>
+              of(
+                CartActions.clearCartFailure({
+                  error:
+                    error?.error?.message ??
+                    'Unable to clear cart'
+                })
+              )
             )
           )
-        )
       )
     )
   );
-
 
   // APPLY COUPON
 
@@ -177,28 +184,29 @@ export class CartEffects {
       ofType(CartActions.applyCoupon),
 
       concatMap(({ code }) =>
-        this.cartService.applyCoupon(code).pipe(
+        this.cartService
+          .applyCoupon(code)
+          .pipe(
 
-          map(response =>
-            CartActions.applyCouponSuccess({
-              cart: response.data
-            })
-          ),
-
-          catchError(error =>
-            of(
-              CartActions.applyCouponFailure({
-                error:
-                  error?.error?.message ??
-                  'Unable to apply coupon'
+            map(response =>
+              CartActions.applyCouponSuccess({
+                cart: response.data
               })
+            ),
+
+            catchError(error =>
+              of(
+                CartActions.applyCouponFailure({
+                  error:
+                    error?.error?.message ??
+                    'Unable to apply coupon'
+                })
+              )
             )
           )
-        )
       )
     )
   );
-
 
   // REMOVE COUPON
 
@@ -207,24 +215,26 @@ export class CartEffects {
       ofType(CartActions.removeCoupon),
 
       concatMap(() =>
-        this.cartService.removeCoupon().pipe(
+        this.cartService
+          .removeCoupon()
+          .pipe(
 
-          map(response =>
-            CartActions.removeCouponSuccess({
-              cart: response.data
-            })
-          ),
-
-          catchError(error =>
-            of(
-              CartActions.removeCouponFailure({
-                error:
-                  error?.error?.message ??
-                  'Unable to remove coupon'
+            map(response =>
+              CartActions.removeCouponSuccess({
+                cart: response.data
               })
+            ),
+
+            catchError(error =>
+              of(
+                CartActions.removeCouponFailure({
+                  error:
+                    error?.error?.message ??
+                    'Unable to remove coupon'
+                })
+              )
             )
           )
-        )
       )
     )
   );

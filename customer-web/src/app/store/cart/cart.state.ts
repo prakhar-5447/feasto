@@ -1,11 +1,10 @@
-import { Cart } from "../../core/cart/models/cart.model";
+import { Cart } from '../../core/cart/models/cart.model';
 
 export type CartStatus =
     | 'idle'
     | 'loading'
     | 'success'
     | 'error';
-
 
 export interface CartState {
     cart: Cart | null;

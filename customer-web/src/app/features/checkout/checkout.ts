@@ -290,38 +290,45 @@ export class Checkout {
 
 
   placeOrder(): void {
-
     if (!this.canPlaceOrder) {
       return;
     }
 
-    if (!this.restaurant()) {
+    const restaurant = this.restaurant();
+
+    if (!restaurant) {
+      return;
+    }
+
+    const location = this.selectedLocation();
+
+    if (!location) {
       return;
     }
 
     this.placingOrder = true;
 
+    const fullAddress = [
+      this.address.street.trim(),
+      this.address.landmark.trim(),
+      this.address.city.trim(),
+      this.address.pincode
+    ]
+      .filter(Boolean)
+      .join(', ');
+
     this.http
       .post<CreateOrderResponse>(
         '/api/v1/orders',
         {
-          restaurantId: this.restaurant()?._id,
+          restaurantId: restaurant._id,
 
-          paymentMethod:
-            this.paymentMethod,
+          paymentMethod: this.paymentMethod,
 
           deliveryAddress: {
-            street:
-              this.address.street.trim(),
-
-            landmark:
-              this.address.landmark.trim(),
-
-            city:
-              this.address.city.trim(),
-
-            pincode:
-              this.address.pincode
+            fullAddress,
+            lat: location.latitude,
+            lng: location.longitude
           }
         }
       )
@@ -329,23 +336,18 @@ export class Checkout {
         finalize(() => {
           this.placingOrder = false;
         }),
-        takeUntilDestroyed(
-          this.destroyRef
-        )
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: response => {
-
-          const city =
-            this.selectedLocation()?.city
+          const city = location.city;
 
           this.router.navigate(
             ['../payment'],
             {
               queryParams: {
                 city,
-                orderId:
-                  response.data._id
+                orderId: response.data._id
               }
             }
           );

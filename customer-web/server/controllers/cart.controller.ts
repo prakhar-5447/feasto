@@ -136,7 +136,7 @@ export const applyCoupon = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const coupon =
+        const cart =
             await cartService.applyCoupon(
                 getUserId(req),
                 req.body.code
@@ -145,7 +145,7 @@ export const applyCoupon = async (
         res.json({
             success: true,
             message: 'Coupon applied successfully',
-            data: coupon
+            data: cart
         });
     } catch (err) {
         next(err);
@@ -158,14 +158,15 @@ export const removeCoupon = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        await cartService.removeCoupon(
-            getUserId(req)
-        );
+        const cart =
+            await cartService.removeCoupon(
+                getUserId(req)
+            );
 
         res.json({
             success: true,
             message: 'Coupon removed successfully',
-            data: null
+            data: cart
         });
     } catch (err) {
         next(err);

@@ -1,10 +1,36 @@
-import mongoose, {
-    Document,
-    Schema
-} from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
+
+export type OrderStatus =
+    | "pending_payment"
+    | "placed"
+    | "accepted"
+    | "preparing"
+    | "ready"
+    | "driver_assigned"
+    | "picked_up"
+    | "delivered"
+    | "cancelled"
+    | "cancelled_returning"
+    | "return_received"
+    | "refund_processing"
+    | "refunded";
+
+export type PaymentStatus =
+    | "pending"
+    | "success"
+    | "failed"
+    | "refunding"
+    | "refunded";
+
+export type PaymentMethod =
+    | "upi"
+    | "fakeupi"
+    | "razorpay"
+    | "cod";
 
 export interface IOrder extends Document {
     orderId: string;
+
     customer: mongoose.Types.ObjectId;
     restaurant: mongoose.Types.ObjectId;
 
@@ -14,7 +40,7 @@ export interface IOrder extends Document {
     };
 
     items: {
-        food: mongoose.Types.ObjectId;
+        food?: mongoose.Types.ObjectId;
         name: string;
         image: string;
         price: number;
@@ -38,26 +64,78 @@ export interface IOrder extends Document {
     };
 
     payment: {
-        method: "upi" | "fakeupi" | "razorpay" | "cod";
+        method: PaymentMethod;
         transactionId?: string;
         paidAt?: Date;
     };
 
-    orderStatus:
-    | "pending_payment"
-    | "placed"
-    | "accepted"
-    | "preparing"
-    | "picked_up"
-    | "delivered"
-    | "cancelled";
+    orderStatus: OrderStatus;
 
-    paymentStatus:
-    | "pending"
-    | "success"
-    | "failed"
-    | "refunded";
+    paymentStatus: PaymentStatus;
+
+    driver?: mongoose.Types.ObjectId | null;
+
+    driverSnapshot?: {
+        name: string;
+        phone: string;
+    } | null;
+
+    cancelledFrom?: OrderStatus;
+
+    cancelledBy?: "customer" | "restaurant";
+
+    cancelledAt?: Date;
+
+    cancellationReason?: string;
+
+    pickedUpAt?: Date;
+
+    deliveredAt?: Date;
+
+    refundedAt?: Date;
+
+    refundTransactionId?: string;
 }
+
+const orderItemSchema = new Schema(
+    {
+        food: {
+            type: Schema.Types.ObjectId,
+            ref: "Food",
+            required: false,
+        },
+
+        // Snapshot
+        name: {
+            type: String,
+            required: true,
+        },
+
+        image: {
+            type: String,
+            required: true,
+        },
+
+        price: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
+
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1,
+        },
+
+        total: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
+    },
+    { _id: false }
+);
 
 const orderSchema = new Schema<IOrder>(
     {
@@ -65,160 +143,113 @@ const orderSchema = new Schema<IOrder>(
             type: String,
             required: true,
             unique: true,
-            index: true
+            index: true,
         },
 
         customer: {
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
-            index: true
+            index: true,
         },
 
         restaurant: {
             type: Schema.Types.ObjectId,
             ref: "Restaurant",
             required: true,
-            index: true
+            index: true,
         },
 
         restaurantSnapshot: {
             name: {
                 type: String,
-                required: true
+                required: true,
             },
 
             address: {
                 type: String,
-                required: true
-            }
+                required: true,
+            },
         },
 
-        items: [
-            {
-                food: {
-                    type: Schema.Types.ObjectId,
-                    ref: "Food",
-                    required: true
-                },
-
-                name: {
-                    type: String,
-                    required: true
-                },
-
-                image: {
-                    type: String,
-                    default: ""
-                },
-
-                price: {
-                    type: Number,
-                    required: true,
-                    min: 0
-                },
-
-                quantity: {
-                    type: Number,
-                    required: true,
-                    min: 1
-                },
-
-                total: {
-                    type: Number,
-                    required: true,
-                    min: 0
-                }
-            }
-        ],
+        items: {
+            type: [orderItemSchema],
+            required: true,
+            validate: {
+                validator: (items: unknown[]) => items.length > 0,
+                message: "Order must contain at least one item",
+            },
+        },
 
         billing: {
             itemTotal: {
                 type: Number,
                 required: true,
-                min: 0
+                min: 0,
             },
 
             discount: {
                 type: Number,
-                default: 0,
-                min: 0
+                required: true,
+                min: 0,
             },
 
             deliveryFee: {
                 type: Number,
-                default: 0,
-                min: 0
+                required: true,
+                min: 0,
             },
 
             platformFee: {
                 type: Number,
-                default: 0,
-                min: 0
+                required: true,
+                min: 0,
             },
 
             gst: {
                 type: Number,
-                default: 0,
-                min: 0
+                required: true,
+                min: 0,
             },
 
             grandTotal: {
                 type: Number,
                 required: true,
-                min: 0
-            }
+                min: 0,
+            },
         },
 
         deliveryAddress: {
             fullAddress: {
                 type: String,
-                required: true
+                required: true,
             },
 
             lat: {
                 type: Number,
-                required: true
+                required: true,
             },
 
             lng: {
                 type: Number,
-                required: true
-            }
+                required: true,
+            },
         },
 
         payment: {
             method: {
                 type: String,
-                enum: [
-                    "upi",
-                    "fakeupi",
-                    "razorpay",
-                    "cod"
-                ],
-                required: true
+                enum: ["upi", "fakeupi", "razorpay", "cod"],
+                required: true,
             },
 
             transactionId: {
                 type: String,
-                default: null
             },
 
             paidAt: {
                 type: Date,
-                default: null
-            }
-        },
-
-        paymentStatus: {
-            type: String,
-            enum: [
-                "pending",
-                "success",
-                "failed",
-                "refunded"
-            ],
-            default: "pending"
+            },
         },
 
         orderStatus: {
@@ -228,26 +259,115 @@ const orderSchema = new Schema<IOrder>(
                 "placed",
                 "accepted",
                 "preparing",
+                "ready",
+                "driver_assigned",
                 "picked_up",
                 "delivered",
-                "cancelled"
+                "cancelled",
+                "cancelled_returning",
+                "return_received",
+                "refund_processing",
+                "refunded",
             ],
-            default: "pending_payment"
-        }
+            default: "pending_payment",
+            index: true,
+        },
+
+        paymentStatus: {
+            type: String,
+            enum: [
+                "pending",
+                "success",
+                "failed",
+                "refunding",
+                "refunded",
+            ],
+            default: "pending",
+        },
+
+        driver: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            default: null,
+        },
+
+        driverSnapshot: {
+            name: {
+                type: String,
+            },
+
+            phone: {
+                type: String,
+            },
+        },
+
+        cancelledFrom: {
+            type: String,
+            enum: [
+                "pending_payment",
+                "placed",
+                "accepted",
+                "preparing",
+                "ready",
+                "driver_assigned",
+                "picked_up",
+                "delivered",
+                "cancelled",
+                "cancelled_returning",
+                "return_received",
+                "refund_processing",
+                "refunded",
+            ],
+        },
+
+        cancelledBy: {
+            type: String,
+            enum: ["customer", "restaurant"],
+        },
+
+        cancelledAt: {
+            type: Date,
+        },
+
+        cancellationReason: {
+            type: String,
+        },
+
+        pickedUpAt: {
+            type: Date,
+        },
+
+        deliveredAt: {
+            type: Date,
+        },
+
+        refundedAt: {
+            type: Date,
+        },
+
+        refundTransactionId: {
+            type: String,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
 orderSchema.index({
     customer: 1,
-    createdAt: -1
+    createdAt: -1,
 });
 
 orderSchema.index({
     restaurant: 1,
-    createdAt: -1
+    createdAt: -1,
+});
+
+orderSchema.index({
+    restaurant: 1,
+    orderStatus: 1,
+    createdAt: -1,
 });
 
 const Order =
