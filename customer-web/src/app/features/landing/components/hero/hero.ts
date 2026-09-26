@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from '../../../shared/components/button/button';
+import { Button } from '@/app/shared/components/button/button';
 
 @Component({
   selector: 'app-hero',

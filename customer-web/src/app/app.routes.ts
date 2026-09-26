@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { Cart } from './features/cart/cart';
 import { Checkout } from './features/checkout/checkout';
 import { Dashboard } from './features/dashboard/dashboard';
-import { Landing } from './features/landing/landing';
+import { Landing } from './features/landing/components/landing/landing';
 import { Location } from './features/location/location';
 import { Payment } from './features/payment/payment';
 import { Restaurant } from './features/restaurant/restaurant';
