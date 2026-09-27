@@ -5,7 +5,7 @@ import { Checkout } from '@/app/features/checkout/components/checkout/checkout';
 import { Dashboard } from '@/app/features/dashboard/components/dashboard/dashboard';
 import { Landing } from '@/app/features/landing/components/landing/landing';
 import { Location } from '@/app/features/location/components/location/location';
-import { Payment } from '@/app/features/payment/payment';
+import { Payment } from '@/app/features/payment/components/payment/payment';
 import { Restaurant } from '@/app/features/restaurant/components/restaurant/restaurant';
 import { TabMenu } from '@/app/features/restaurant/components/tab-menu/tab-menu';
 import { TabReviews } from '@/app/features/restaurant/components/tab-reviews/tab-reviews';

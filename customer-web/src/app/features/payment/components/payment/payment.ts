@@ -5,7 +5,8 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectorRef,
-  NgZone
+  NgZone,
+  inject
 } from '@angular/core';
 
 import QRCode from 'qrcode';
@@ -26,44 +27,9 @@ import {
   faAngleRight,
   faClock
 } from '@fortawesome/free-solid-svg-icons';
-
-export type PaymentStage =
-  | 'qr'
-  | 'processing'
-  | 'confirmed';
-
-
-export interface OrderItem {
-  name: string;
-  quantity: number;
-  price: number;
-}
-
-
-export interface OrderMeta {
-
-  total: number;
-
-  itemTotal: number;
-
-  discount: number;
-
-  deliveryFee: number;
-
-  platformFee: number;
-
-  gst: number;
-
-  address: string;
-
-  restaurantName: string;
-
-  items: OrderItem[];
-
-  couponCode?: string;
-
-}
-
+import { OrderMeta } from '@/app/features/payment/models/order-meta.model';
+import { PaymentStage } from '@/app/features/payment/models/payment-stage.model';
+import { PaymentService } from '../../services/payment.service';
 
 @Component({
 
@@ -102,6 +68,11 @@ export class Payment
 
   faClock = faClock;
 
+  private readonly paymentService = inject(PaymentService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly zone = inject(NgZone);
 
   // =========================================================
   // CONSTANTS
@@ -258,25 +229,6 @@ export class Payment
 
   ];
 
-
-  // =========================================================
-  // CONSTRUCTOR
-  // =========================================================
-
-  constructor(
-
-    private route: ActivatedRoute,
-
-    private router: Router,
-
-    private http: HttpClient,
-
-    private cdr: ChangeDetectorRef,
-
-    private zone: NgZone,
-  ) { }
-
-
   // =========================================================
   // INIT
   // =========================================================
@@ -307,91 +259,43 @@ export class Payment
   // LOAD ORDER
   // =========================================================
 
-  private loadOrder(
-    orderId: string
-  ): void {
-
-    this.http
-
-      .get<any>(
-        `/api/v1/orders/${orderId}`
-      )
-
+  private loadOrder(orderId: string): void {
+    this.paymentService
+      .getOrder(orderId)
       .subscribe({
-
         next: (res) => {
-
-          if (
-            !res?.success ||
-            !res?.data
-          ) {
-
+          if (!res?.success || !res?.data) {
             this.router.navigate(['/']);
-
             return;
-
           }
 
+          this.order = res.data;
+          this.orderId = res.data._id;
 
-          this.order =
-            res.data;
-
-
-          this.orderId =
-            res.data._id;
-
-
-          this.setOrderMeta(
-            res.data
-          );
-
-
+          this.setOrderMeta(res.data);
           this.calculateEstimatedTime();
 
-
-          // =================================================
-          // ORDER ALREADY PAID
-          // =================================================
-
-          if (
-            res.data.paymentStatus === 'success'
-          ) {
-
-            this.stage =
-              'confirmed';
+          if (res.data.paymentStatus === 'success') {
+            this.stage = 'confirmed';
 
             this.clearCartAfterPayment();
-
             this.cdr.detectChanges();
 
             return;
-
           }
 
-
-          // =================================================
-          // CHECK EXISTING PAYMENT
-          // =================================================
-
           this.loadExistingPayment();
-
         },
 
-
         error: (error) => {
-
           console.error(
             'Load order failed:',
             error
           );
 
-
           this.router.navigate(['/']);
-
-        }
-
+        },
       });
-
   }
 
 
@@ -455,140 +359,71 @@ export class Payment
   // =========================================================
 
   private loadExistingPayment(): void {
-
     if (!this.order?._id) {
-
       this.createPayment();
-
       return;
-
     }
 
-
-    this.http
-
-      .get<any>(
-        `/api/v1/payments/${this.order._id}`
-      )
-
+    this.paymentService
+      .getPayment(this.order._id)
       .subscribe({
-
         next: (res) => {
-
-          if (
-            !res?.success ||
-            !res?.data
-          ) {
-
+          if (!res?.success || !res?.data) {
             this.createPayment();
-
             return;
-
           }
 
+          const payment = res.data;
 
-          const payment =
-            res.data;
-
-
-          this.paymentId =
-            payment._id ?? '';
-
-
-          this.qrTxnId =
-            payment.transactionId ?? '';
-
+          this.paymentId = payment._id ?? '';
+          this.qrTxnId = payment.transactionId ?? '';
 
           console.log(
             'Existing payment:',
             payment.status
           );
 
-
-          // ===============================================
-          // PAYMENT SUCCESS
-          // ===============================================
-
-          if (
-            payment.status === 'success'
-          ) {
-
+          if (payment.status === 'success') {
             this.clearCartAfterPayment();
 
-            this.stage =
-              'processing';
-
+            this.stage = 'processing';
             this.startProcessingUI();
 
             this.cdr.detectChanges();
 
             return;
-
           }
 
-
-          // ===============================================
-          // PAYMENT FAILED
-          // ===============================================
-
-          if (
-            payment.status === 'failed'
-          ) {
-
+          if (payment.status === 'failed') {
             this.paymentError =
               'Payment failed. Please generate a new QR.';
 
-            this.stage =
-              'qr';
+            this.stage = 'qr';
 
             this.cdr.detectChanges();
 
             return;
-
           }
 
-
-          // ===============================================
-          // PAYMENT STILL PENDING
-          // ===============================================
-
-          if (
-            payment.status === 'pending'
-          ) {
-
-            this.stage =
-              'qr';
-
+          if (payment.status === 'pending') {
+            this.stage = 'qr';
             this.startPaymentPolling();
 
             return;
-
           }
 
-
-          // ===============================================
-          // NO USABLE PAYMENT
-          // ===============================================
-
           this.createPayment();
-
         },
 
-
         error: (error) => {
-
           console.error(
             'Existing payment lookup failed:',
             error
           );
 
-
           this.createPayment();
-
-        }
-
+        },
       });
-
   }
 
 
@@ -603,121 +438,69 @@ export class Payment
   // =========================================================
 
   openFakePayment(): void {
-
     if (
       !this.paymentId ||
       this.paymentVerifying
     ) {
-
       return;
-
     }
 
-
     this.paymentVerifying = true;
-
     this.paymentError = '';
 
-
-    const method =
-      'fakeupi';
-
+    const method = 'fakeupi';
 
     const transactionId =
       this.qrTxnId ||
       'KEKII8FSAKN33';
 
-
-    this.http
-
-      .patch<any>(
-
-        `/api/v1/payments/${this.paymentId}/verify` +
-
-        `?method=${encodeURIComponent(method)}` +
-
-        `&transactionId=${encodeURIComponent(transactionId)}`,
-
-        {}
-
+    this.paymentService
+      .verifyPayment(
+        this.paymentId,
+        method,
+        transactionId
       )
-
       .subscribe({
-
         next: (res) => {
-
           this.paymentVerifying = false;
 
-
-          if (
-            !res?.success
-          ) {
-
+          if (!res?.success) {
             this.paymentError =
               'Payment failed.';
 
             this.cdr.detectChanges();
-
             return;
-
           }
 
-
-          // ===============================================
-          // PAYMENT SUCCESS
-          // ===============================================
-
           this.zone.run(() => {
-
             this.stopExpiryTimer();
-
             this.stopPaymentPolling();
-
-
-            // Clear cart immediately after
-            // backend confirms successful payment.
 
             this.clearCartAfterPayment();
 
-
-            // Move UI to processing.
-
-            this.stage =
-              'processing';
-
+            this.stage = 'processing';
 
             this.startProcessingUI();
 
-
             this.cdr.detectChanges();
-
           });
-
         },
 
-
         error: (error) => {
-
           this.paymentVerifying = false;
-
 
           console.error(
             'Payment verification failed:',
             error
           );
 
-
           this.paymentError =
             error?.error?.message ??
             'Payment failed.';
 
-
           this.cdr.detectChanges();
-
-        }
-
+        },
       });
-
   }
 
 
@@ -787,149 +570,88 @@ export class Payment
   // =========================================================
 
   private createPayment(): void {
-
     if (
       !this.order?._id ||
       this.paymentCreating
     ) {
-
       return;
-
     }
 
-
     this.paymentCreating = true;
-
     this.paymentError = '';
 
-
     this.stopExpiryTimer();
-
     this.stopPaymentPolling();
 
-
-    this.http
-
-      .post<any>(
-
-        '/api/v1/payments',
-
-        {
-
-          orderId:
-            this.order._id,
-
-          method:
-            'fakeupi'
-
-        }
-
-      )
-
+    this.paymentService
+      .createPayment({
+        orderId: this.order._id,
+        method: 'fakeupi',
+      })
       .subscribe({
-
         next: (res) => {
-
           this.paymentCreating = false;
 
-
-          if (
-            !res?.success ||
-            !res?.data
-          ) {
-
+          if (!res?.success || !res?.data) {
             this.paymentError =
               'Unable to create payment.';
-
             return;
-
           }
-
 
           const payment =
             res.data.payment;
 
-
           const providerResponse =
             res.data.providerResponse;
 
-
           if (!payment) {
-
             this.paymentError =
               'Payment information missing.';
-
             return;
-
           }
 
-
-          if (
-            !providerResponse?.qrData
-          ) {
-
+          if (!providerResponse?.qrData) {
             this.paymentError =
               'QR data missing.';
-
             return;
-
           }
-
 
           this.paymentId =
             payment._id;
 
-
           this.qrTxnId =
             payment.transactionId ?? '';
 
-
           this.fakePaymentUrl =
             providerResponse.qrData;
-
 
           this.generateQR(
             providerResponse.qrData
           );
 
-
-          this.stage =
-            'qr';
-
+          this.stage = 'qr';
 
           this.startExpiryCountdown();
-
           this.startPaymentPolling();
-
         },
 
-
         error: (error) => {
-
           this.paymentCreating = false;
-
 
           console.error(
             'Payment creation failed:',
             error
           );
 
-
           this.paymentError =
             error?.error?.message ??
             'Unable to create payment.';
 
-
-          this.qrImage =
-            null;
-
+          this.qrImage = null;
 
           this.cdr.detectChanges();
-
-        }
-
+        },
       });
-
   }
 
 
@@ -1193,120 +915,62 @@ export class Payment
   // =========================================================
 
   private checkPaymentStatus(): void {
-
-    if (
-      !this.order?._id
-    ) {
-
+    if (!this.order?._id) {
       return;
-
     }
 
-
-    this.http
-
-      .get<any>(
-
-        `/api/v1/payments/${this.order._id}`
-
-      )
-
+    this.paymentService
+      .getPayment(this.order._id)
       .subscribe({
-
         next: (res) => {
-
           if (
             !res?.success ||
             !res?.data
           ) {
-
             return;
-
           }
 
-
-          const payment =
-            res.data;
-
+          const payment = res.data;
 
           console.log(
             'Payment status:',
             payment.status
           );
 
-
-          // ===============================================
-          // SUCCESS
-          // ===============================================
-
-          if (
-            payment.status === 'success'
-          ) {
-
+          if (payment.status === 'success') {
             this.zone.run(() => {
-
               this.stopExpiryTimer();
-
               this.stopPaymentPolling();
-
-
-              // Clear cart exactly after
-              // successful payment.
 
               this.clearCartAfterPayment();
 
-
-              this.stage =
-                'processing';
-
+              this.stage = 'processing';
 
               this.startProcessingUI();
 
-
               this.cdr.detectChanges();
-
             });
-
           }
 
-
-          // ===============================================
-          // FAILED
-          // ===============================================
-
-          if (
-            payment.status === 'failed'
-          ) {
-
+          if (payment.status === 'failed') {
             this.zone.run(() => {
-
               this.paymentError =
                 'Payment failed. Please generate a new QR.';
 
-
               this.stopPaymentPolling();
 
-
               this.cdr.detectChanges();
-
             });
-
           }
-
         },
 
-
         error: (error) => {
-
           console.log(
             'Payment polling error:',
             error
           );
-
-        }
-
+        },
       });
-
   }
 
 
@@ -1531,11 +1195,14 @@ export class Payment
   // =========================================================
 
   goHome(): void {
+    const city = this.route.snapshot.queryParamMap.get('city');
 
-    this.router.navigate([
-      '/dashboard'
-    ]);
+    if (!city) {
+      this.router.navigate(['/india']);
+      return;
+    }
 
+    this.router.navigate(['/india', city]);
   }
 
 
