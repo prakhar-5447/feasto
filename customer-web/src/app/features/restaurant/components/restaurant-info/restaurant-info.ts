@@ -19,10 +19,10 @@ import { faClock } from '@fortawesome/free-regular-svg-icons';
 
 import {
   RestaurantDetail
-} from '../../dashboard/models/restaurant.model';
+} from '@/app/features/restaurant/models/restaurant.model';
 
-import { selectSelectedLocation } from '../../../store/location/location.selectors';
-import { AppState } from '../../../store/app.state';
+import { selectSelectedLocation } from '@/app/store/location/location.selectors';
+import { AppState } from '@/app/store/app.state';
 
 @Component({
   selector: 'app-restaurant-info',

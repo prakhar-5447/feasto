@@ -18,13 +18,13 @@ import { map } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-import { AppState } from '../../store/app.state';
+import { AppState } from '@/app/store/app.state';
 import { Store } from '@ngrx/store';
-import { selectCartCount, selectCartStatus } from '../../store/cart/cart.selectors';
+import { selectCartCount, selectCartStatus } from '@/app/store/cart/cart.selectors';
 
-import { ImageCarousel } from './image-carousel/image-carousel';
-import { RestaurantInfo } from './restaurant-info/restaurant-info';
-import { RestaurantDetail } from '../dashboard/models/restaurant.model';
+import { ImageCarousel } from '@/app/features/restaurant/components/image-carousel/image-carousel';
+import { RestaurantInfo } from '@/app/features/restaurant/components/restaurant-info/restaurant-info';
+import { RestaurantDetail } from '@/app/features/restaurant/models/restaurant.model';
 
 
 type RestaurantTab = 'order' | 'reviews' | 'cart';
@@ -55,7 +55,7 @@ export class Restaurant {
   readonly cartStatus = this.store.selectSignal(selectCartStatus);
 
   readonly showCartCountSkeleton = computed(
-    () => this.cartStatus() !== 'success'
+    () => this.cartStatus() === 'loading'
   );
 
   readonly restaurant = toSignal(

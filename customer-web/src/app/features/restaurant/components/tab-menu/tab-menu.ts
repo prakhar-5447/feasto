@@ -40,23 +40,23 @@ import {
 
 import {
   AppState
-} from '../../../store/app.state';
+} from '@/app/store/app.state';
 
 import * as CartActions
-  from '../../../store/cart/cart.actions';
+  from '@/app/store/cart/cart.actions';
 
 import {
   selectCartItems,
   selectUpdatingItemIds,
   selectRemovingItemIds
-} from '../../../store/cart/cart.selectors';
+} from '@/app/store/cart/cart.selectors';
 
 import {
   FoodItem,
   MenuCategory,
   RestaurantMenu
-} from '../../dashboard/models/menu.model';
-import { Button } from '../../../shared/components/button/button';
+} from '@/app/features/dashboard/models/menu.model';
+import { Button } from '@/app/shared/components/button/button';
 
 
 @Component({

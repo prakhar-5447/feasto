@@ -6,15 +6,15 @@ import { Dashboard } from '@/app/features/dashboard/components/dashboard/dashboa
 import { Landing } from '@/app/features/landing/components/landing/landing';
 import { Location } from '@/app/features/location/location';
 import { Payment } from '@/app/features/payment/payment';
-import { Restaurant } from '@/app/features/restaurant/restaurant';
-import { TabMenu } from '@/app/features/restaurant/tab-menu/tab-menu';
-import { TabReviews } from '@/app/features/restaurant/tab-reviews/tab-reviews';
+import { Restaurant } from '@/app/features/restaurant/components/restaurant/restaurant';
+import { TabMenu } from '@/app/features/restaurant/components/tab-menu/tab-menu';
+import { TabReviews } from '@/app/features/restaurant/components/tab-reviews/tab-reviews';
 
-import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
-import { LandingLayout } from './layouts/landing-layout/landing-layout';
+import { DashboardLayout } from '@/app/layouts/dashboard-layout/dashboard-layout';
+import { LandingLayout } from '@/app/layouts/landing-layout/landing-layout';
 
-import { validCityGuard } from './core/guards/valid-city.guard';
-import { restaurantResolver } from './core/resolver/restaurant.resolver';
+import { validCityGuard } from '@/app/core/guards/valid-city.guard';
+import { restaurantResolver } from '@/app/core/resolver/restaurant.resolver';
 
 export const routes: Routes = [
 

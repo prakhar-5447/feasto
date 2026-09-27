@@ -23,7 +23,7 @@ import {
   faStar,
   faThumbsUp
 } from '@fortawesome/free-solid-svg-icons';
-import { Button } from '../../../shared/components/button/button';
+import { Button } from '@/app/shared/components/button/button';
 
 interface Review {
   id: string;
