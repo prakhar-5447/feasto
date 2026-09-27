@@ -7,10 +7,10 @@ import {
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
 
-import { CartService } from '../../../core/cart/services/cart.service';
-import { Input } from '../../../shared/components/input/input';
-import { Button } from '../../../shared/components/button/button';
-import { Coupon } from '../../../core/cart/models/coupon.model';
+import { CartService } from '@/app/features/cart/services/cart.service';
+import { Input } from '@/app/shared/components/input/input';
+import { Button } from '@/app/shared/components/button/button';
+import { Coupon } from '@/app/features/cart/models/coupon.model';
 
 @Component({
   selector: 'app-coupons',
@@ -46,13 +46,13 @@ export class Coupons {
     this.loadSummary();
   }
 
- private loadCoupons(): void {
+  private loadCoupons(): void {
     this.cartService.getCoupons().subscribe({
-        next: response => {
-            this.availableCoupons.set(response.data ?? []);
-        }
+      next: response => {
+        this.availableCoupons.set(response.data ?? []);
+      }
     });
-}
+  }
 
   private loadSummary(): void {
     this.cartService.getCartSummary().subscribe({

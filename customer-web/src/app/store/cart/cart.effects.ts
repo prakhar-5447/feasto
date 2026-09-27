@@ -13,7 +13,7 @@ import {
 } from 'rxjs';
 
 import * as CartActions from './cart.actions';
-import { CartService } from '../../core/cart/services/cart.service';
+import { CartService } from '../../features/cart/services/cart.service';
 
 @Injectable()
 export class CartEffects {

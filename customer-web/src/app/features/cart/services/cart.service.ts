@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Cart, CartSummaryResponse } from '../models/cart.model';
-import { CouponsResponse } from '../models/coupon.model';
+import { Cart, CartSummaryResponse } from '@/app/features/cart/models/cart.model';
+import { CouponsResponse } from '@/app/features/cart/models/coupon.model';
 
 interface CartResponse {
     data: Cart;

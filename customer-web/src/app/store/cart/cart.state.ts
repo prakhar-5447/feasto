@@ -1,4 +1,4 @@
-import { Cart } from '../../core/cart/models/cart.model';
+import { Cart } from '../../features/cart/models/cart.model';
 
 export type CartStatus =
     | 'idle'

@@ -21,10 +21,10 @@ import {
 
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-import { Button } from '../../shared/components/button/button';
-import { Coupons } from './coupons/coupons';
+import { Button } from '@/app/shared/components/button/button';
+import { Coupons } from '@/app/features/cart/components/coupons/coupons';
 
-import * as CartActions from '../../store/cart/cart.actions';
+import * as CartActions from '@/app/store/cart/cart.actions';
 
 import {
   selectCartItems,
@@ -34,9 +34,9 @@ import {
   selectUpdatingItemIds,
   selectRemovingItemIds,
   selectCartStatus
-} from '../../store/cart/cart.selectors';
+} from '@/app/store/cart/cart.selectors';
 
-import { AppState } from '../../store/app.state';
+import { AppState } from '@/app/store/app.state';
 
 @Component({
   selector: 'app-cart',

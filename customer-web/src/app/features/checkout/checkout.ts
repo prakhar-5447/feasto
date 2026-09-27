@@ -38,9 +38,9 @@ import {
 import { Button } from '../../shared/components/button/button';
 import { Input } from '../../shared/components/input/input';
 
-import { CartService } from '../../core/cart/services/cart.service';
-import { Coupon } from '../../core/cart/models/coupon.model';
-import { CartSummary } from '../../core/cart/models/cart.model';
+import { CartService } from '../cart/services/cart.service';
+import { Coupon } from '../cart/models/coupon.model';
+import { CartSummary } from '../cart/models/cart.model';
 import { selectSelectedLocation } from '../../store/location/location.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
