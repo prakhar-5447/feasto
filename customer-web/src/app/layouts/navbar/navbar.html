@@ -1,0 +1,67 @@
+<header class="header">
+    <div class="container">
+
+        <div class="left">
+
+            <a class="logo" routerLink="/" aria-label="Feasto home">
+                Feasto
+            </a>
+
+            <div class="search">
+
+                <div class="location-box">
+                    <app-location-picker />
+                </div>
+
+                <div class="restaurant-box">
+                    <app-restaurant-picker />
+                </div>
+
+            </div>
+
+        </div>
+
+        <nav class="nav" aria-label="Main navigation">
+
+            @if (authInitialized$ | async) {
+
+            @let user = user$ | async;
+
+            @if (user) {
+
+            <button type="button" class="navbar-user" (click)="goToProfile(user.name)">
+
+                <span class="avatar" aria-hidden="true">
+                    {{ user.name?.charAt(0) }}
+                </span>
+
+                <span class="info">
+                    <span class="name">
+                        {{ user.name }}
+                    </span>
+                </span>
+
+            </button>
+
+            <app-button variant="primary" size="md" weight="semibold" (clicked)="logout()">
+                Log out
+            </app-button>
+
+            } @else {
+
+            <app-button variant="text" size="md" weight="medium" tone="muted">
+                Support
+            </app-button>
+
+            <app-button variant="primary" size="md" weight="semibold" (clicked)="openAuth.emit()">
+                Log in
+            </app-button>
+
+            }
+
+            }
+
+        </nav>
+
+    </div>
+</header>

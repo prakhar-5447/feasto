@@ -1,4 +1,4 @@
-@use '../../../styles/index' as *
+@use '../../../../../styles/index' as *
 
 .location
     padding: $space-40 0 $space-64
@@ -10,8 +10,7 @@
         padding: 0 $space-16
 
     .page-header
-        margin-bottom: $space-40
-
+        margin-bottom: $space-16
         text-align: center
 
         h1
@@ -28,6 +27,16 @@
 
             color: $color-text-secondary
             line-height: $line-height-normal
+
+    .location-picker-container
+        width: 100%
+        max-width: $container-md
+        padding: $space-16 $space-32
+        margin: 0 auto
+        margin-bottom: $space-48
+
+        background: $color-bg-white
+        box-shadow: $shadow-lg
 
     .cities
         & + .cities

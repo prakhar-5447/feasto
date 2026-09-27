@@ -1,0 +1,124 @@
+<div class="restaurant-picker" appClickOutside (appClickOutside)="closeDropdown()">
+    <div class="display">
+
+        <fa-icon [icon]="faMagnifyingGlass" aria-hidden="true" />
+
+        <label class="sr-only" for="restaurant-search">
+            Search restaurants, cuisines or dishes
+        </label>
+
+        <input id="restaurant-search" name="restaurantSearch" type="search"
+            placeholder="Search for restaurant, cuisine or a dish" [(ngModel)]="restaurantQuery"
+            (ngModelChange)="onQueryChange($event)" (focus)="showDropdown = true" autocomplete="off"
+            spellcheck="false" />
+
+    </div>
+
+    @if (showDropdown) {
+
+    <div class="dropdown">
+
+        @if (restaurantLoading) {
+
+        <div class="suggestions">
+
+            @for (
+            item of [1, 2, 3, 4, 5];
+            track item
+            ) {
+
+            <div class="skeleton-layout">
+                <span class="skeleton skeleton-title"></span>
+            </div>
+
+            }
+
+        </div>
+
+        } @else {
+
+        @if (
+        restaurantSearchCompleted &&
+        restaurantResults.length === 0 &&
+        foodResults.length === 0 &&
+        cuisineResults.length === 0
+        ) {
+
+        <div class="no-results">
+
+            <span class="no-results-title">
+                No results found
+            </span>
+
+            <span class="no-results-message">
+                Try a different restaurant, dish, or cuisine.
+            </span>
+
+        </div>
+
+        } @else {
+
+        <div class="suggestions">
+
+            @for (
+            restaurant of restaurantResults;
+            track restaurant._id
+            ) {
+
+            <button type="button" class="suggestion suggestion-result" (click)="selectRestaurant(restaurant)">
+                <span>
+                    {{ restaurant.name }}
+                </span>
+
+                <small>
+                    Restaurant
+                </small>
+            </button>
+
+            }
+
+            @for (
+            food of foodResults;
+            track food._id
+            ) {
+
+            <button type="button" class="suggestion suggestion-result" (click)="selectFood(food)">
+                <span>
+                    {{ food.name }}
+                </span>
+
+                <small>
+                    Food
+                </small>
+            </button>
+
+            }
+
+            @for (
+            cuisine of cuisineResults;
+            track cuisine
+            ) {
+
+            <button type="button" class="suggestion suggestion-result" (click)="selectCuisine(cuisine)">
+                <span>
+                    {{ cuisine }}
+                </span>
+
+                <small>
+                    Cuisine
+                </small>
+            </button>
+
+            }
+
+        </div>
+
+        }
+
+        }
+
+    </div>
+
+    }
+
+</div>

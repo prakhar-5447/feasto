@@ -1,0 +1,116 @@
+@use '../../../styles/index' as *
+
+.header
+    width: 100%
+    background: $color-bg-white
+
+.container
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    width: 100%
+    max-width: $container-xl
+    height: 86px
+    margin: 0 auto
+    padding: 0 $space-16
+
+.left
+    display: flex
+    align-items: center
+    gap: $space-32
+
+    min-width: 0
+    flex: 1
+
+.logo
+    flex-shrink: 0
+
+    color: $color-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    text-decoration: none
+
+    &:focus-visible
+        outline: 2px solid $color-primary
+        outline-offset: $space-4
+        border-radius: $radius-4
+
+.search
+    display: flex
+    align-items: center
+
+    width: 100%
+    max-width: $container-lg
+    padding: $space-12 0
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-4
+    background: $color-bg-white
+    box-shadow: $shadow-sm
+
+.location-box
+    position: relative
+
+    width: 240px
+    padding: 0 $space-8
+
+    border-right: $border-width-1 $border-style-solid $color-border
+
+.restaurant-box
+    position: relative
+
+    flex: 1
+    min-width: 0
+    padding: 0 $space-8
+
+.nav
+    display: flex
+    align-items: center
+    gap: $space-16
+
+    flex-shrink: 0
+
+.navbar-user
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    padding: $space-4 $space-8
+
+    border: $border-style-none
+    background: transparent
+
+    cursor: pointer
+
+    &:focus-visible
+        outline: 2px solid $color-primary
+        outline-offset: $space-4
+        border-radius: $radius-4
+
+.avatar
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-32
+    height: $space-32
+
+    border-radius: $radius-circle
+    background: $color-primary
+
+    color: $color-text-white
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.info
+    .name
+        color: $color-text-primary
+        font-size: $font-size-16
+        font-weight: $font-weight-semibold
+
+@media (max-width: $breakpoint-md)
+    .left
+        .search
+            display: none

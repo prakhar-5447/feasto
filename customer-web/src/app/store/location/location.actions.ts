@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { SelectedLocation } from '../../core/location/models/location.model';
+import { SelectedLocation } from '../../features/location/models/location.model';
 
 export const selectLocation = createAction(
     '[Location] Select Location',

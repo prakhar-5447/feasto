@@ -3,10 +3,10 @@ import { CanActivateFn, Router } from '@angular/router';
 
 import { catchError, map, of } from 'rxjs';
 
-import { LocationService } from '../../core/location/services/location.service';
+import { LocationService } from '../../features/location/services/location.service';
 
 import { Store } from '@ngrx/store';
-import { SelectedLocation } from '../location/models/location.model';
+import { SelectedLocation } from '../../features/location/models/location.model';
 import * as LocationActions from '../../store/location/location.actions';
 
 import { SlugPipe } from '../../shared/pipes/slug.pipe';

@@ -5,32 +5,17 @@ import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRight, faLineChart, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
-import { SlugPipe } from '../../shared/pipes/slug.pipe';
-
-
-interface PopularCity {
-  id: string;
-  name: string;
-  slug: string;
-  subtitle: string;
-  image: string;
-  imageSrcSet: string;
-  imageSizes: string;
-  areas: string[];
-}
-
-interface City {
-  name: string;
-  slug: string;
-}
-
+import { SlugPipe } from '@/app/shared/pipes/slug.pipe';
+import { City, PopularCity } from '@/app/features/location/models/city.model';
+import { LocationPicker } from '../location-picker/location-picker';
 
 @Component({
   selector: 'app-location',
   standalone: true,
   imports: [
     FontAwesomeModule,
-    RouterLink
+    RouterLink,
+    LocationPicker
   ],
   templateUrl: './location.html',
   styleUrl: './location.sass',

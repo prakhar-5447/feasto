@@ -10,7 +10,7 @@ import { Auth } from '@/app/features/auth/components/auth/auth';
 import { Breadcrumb } from '@/app/shared/components/breadcrumb/breadcrumb';
 import { Footer } from '@/app/shared/components/footer/footer';
 import { Modal } from '@/app/shared/components/modal/modal';
-import { Navbar } from '@/app/shared/components/navbar/navbar';
+import { Navbar } from '@/app/layouts/navbar/navbar';
 
 
 @Component({

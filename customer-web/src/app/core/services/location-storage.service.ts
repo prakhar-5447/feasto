@@ -4,7 +4,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
 
-import { SelectedLocation } from '../models/location.model';
+import { SelectedLocation } from '../../features/location/models/location.model';
 
 @Injectable({
     providedIn: 'root'

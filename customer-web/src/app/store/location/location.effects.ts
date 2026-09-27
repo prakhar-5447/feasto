@@ -6,7 +6,7 @@ import { catchError, map, of, tap } from 'rxjs';
 
 import * as LocationActions from './location.actions';
 
-import { LocationStorageService } from '../../core/location/services/location-storage.service';
+import { LocationStorageService } from '../../core/services/location-storage.service';
 
 @Injectable()
 export class LocationEffects {

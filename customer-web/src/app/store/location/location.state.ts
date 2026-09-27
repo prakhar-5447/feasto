@@ -1,6 +1,6 @@
 import {
     SelectedLocation
-} from '../../core/location/models/location.model';
+} from '../../features/location/models/location.model';
 
 
 export type LocationStatus =

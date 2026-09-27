@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { LocationSearchResult, ReverseGeocodeResult } from '../models/location-api.model';
+import { LocationSearchResult, ReverseGeocodeResult } from '@/app/features/location/models/location-api.model';
 
 @Injectable({
     providedIn: 'root'
