@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { Cart } from '@/app/features/cart/components/cart/cart';
-import { Checkout } from '@/app/features/checkout/checkout';
+import { Checkout } from '@/app/features/checkout/components/checkout/checkout';
 import { Dashboard } from '@/app/features/dashboard/components/dashboard/dashboard';
 import { Landing } from '@/app/features/landing/components/landing/landing';
 import { Location } from '@/app/features/location/location';

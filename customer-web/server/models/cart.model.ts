@@ -28,7 +28,7 @@ const cartSchema = new Schema<ICart>(
     restaurant: {
       type: Schema.Types.ObjectId,
       ref: "Restaurant",
-      required: true,
+      required: false,
     },
 
     items: [

@@ -35,43 +35,20 @@ import {
   faTag
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from '../../shared/components/button/button';
-import { Input } from '../../shared/components/input/input';
+import { Button } from '@/app/shared/components/button/button';
+import { Input } from '@/app/shared/components/input/input';
 
-import { CartService } from '../cart/services/cart.service';
-import { Coupon } from '../cart/models/coupon.model';
-import { CartSummary } from '../cart/models/cart.model';
-import { selectSelectedLocation } from '../../store/location/location.selectors';
+import { CartService } from '@/app/features/cart/services/cart.service';
+import { Coupon } from '@/app/features/cart/models/coupon.model';
+import { Address, NewAddress } from '@/app/features/checkout/models/address.model';
+import { CreateOrderRequest } from '@/app/features/checkout/models/order.model';
+import { CartSummary } from '@/app/features/cart/models/cart.model';
+import { selectSelectedLocation } from '@/app/store/location/location.selectors';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app.state';
-import { selectCartItems } from '../../store/cart/cart.selectors';
-import { TitleCasePipe } from '../../shared/pipes/title-case.pipe';
-
-
-interface Address {
-  id: string;
-  label: string;
-  street: string;
-  landmark: string;
-  city: string;
-  pincode: string;
-}
-
-
-interface NewAddress {
-  street: string;
-  landmark: string;
-  city: string;
-  pincode: string;
-
-}
-
-interface CreateOrderResponse {
-  data: {
-    _id: string;
-  };
-}
-
+import { AppState } from '@/app/store/app.state';
+import { selectCartItems } from '@/app/store/cart/cart.selectors';
+import { TitleCasePipe } from '@/app/shared/pipes/title-case.pipe';
+import { CheckoutService } from '../../services/checkout.service';
 
 @Component({
   selector: 'app-checkout',
@@ -158,6 +135,7 @@ export class Checkout {
     }
   ];
 
+  private readonly checkoutService = inject(CheckoutService);
 
   private readonly cartService =
     inject(CartService);
@@ -317,21 +295,20 @@ export class Checkout {
       .filter(Boolean)
       .join(', ');
 
-    this.http
-      .post<CreateOrderResponse>(
-        '/api/v1/orders',
-        {
-          restaurantId: restaurant._id,
+    const request: CreateOrderRequest = {
+      restaurantId: restaurant._id,
 
-          paymentMethod: this.paymentMethod,
+      paymentMethod: this.paymentMethod,
 
-          deliveryAddress: {
-            fullAddress,
-            lat: location.latitude,
-            lng: location.longitude
-          }
-        }
-      )
+      deliveryAddress: {
+        fullAddress,
+        lat: location.latitude,
+        lng: location.longitude
+      }
+    };
+
+    this.checkoutService
+      .createOrder(request)
       .pipe(
         finalize(() => {
           this.placingOrder = false;
@@ -340,16 +317,15 @@ export class Checkout {
       )
       .subscribe({
         next: response => {
-          const city = location.city;
-
           this.router.navigate(
             ['../payment'],
             {
               queryParams: {
-                city,
+                city: location.city,
                 orderId: response.data._id
-              }
-            }
+              },
+              relativeTo: this.route
+            },
           );
         }
       });
