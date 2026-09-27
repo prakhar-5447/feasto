@@ -15,6 +15,12 @@ import { AppState } from '@/app/store/app.state';
 import * as AuthActions from '@/app/store/auth/auth.actions';
 
 import {
+  faUser,
+  faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import {
   selectAuthInitialized,
   selectUser,
 } from '@/app/store/auth/auth.selectors';
@@ -34,12 +40,18 @@ import { RestaurantPicker } from '@/app/features/restaurant/components/restauran
     Button,
     LocationPicker,
     RestaurantPicker,
+    FontAwesomeModule,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.sass',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
+  readonly faUser = faUser;
+  readonly faRightFromBracket = faRightFromBracket;
+
+  profileMenuOpen = false;
+
   @Output()
   readonly openAuth = new EventEmitter<void>();
   private readonly store = inject(Store<AppState>);
@@ -50,7 +62,14 @@ export class Navbar {
 
   readonly authInitialized$ =
     this.store.select(selectAuthInitialized);
-  constructor() { }
+
+  toggleProfileMenu(): void {
+    this.profileMenuOpen = !this.profileMenuOpen;
+  }
+
+  closeProfileMenu(): void {
+    this.profileMenuOpen = false;
+  }
 
   logout(): void {
     this.store.dispatch(

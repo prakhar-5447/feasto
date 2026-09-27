@@ -82,12 +82,6 @@ export class AuthEffects {
                     )
                 )
             ),
-            tap(() => {
-                this.router.navigate(
-                    ['/'],
-                    { replaceUrl: true }
-                );
-            }),
         )
     );
 }

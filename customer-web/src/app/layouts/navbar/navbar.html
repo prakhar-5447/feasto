@@ -29,23 +29,36 @@
 
             @if (user) {
 
-            <button type="button" class="navbar-user" (click)="goToProfile(user.name)">
+            <div class="profile-menu" appClickOutside (clickOutside)="closeProfileMenu()">
 
-                <span class="avatar" aria-hidden="true">
-                    {{ user.name?.charAt(0) }}
-                </span>
-
-                <span class="info">
-                    <span class="name">
-                        {{ user.name }}
+                <button type="button" class="profile-trigger" aria-label="Open profile menu" aria-haspopup="menu"
+                    [attr.aria-expanded]="profileMenuOpen" (click)="toggleProfileMenu()">
+                    <span class="avatar" aria-hidden="true">
+                        {{ user.name?.charAt(0) }}
                     </span>
-                </span>
+                </button>
 
-            </button>
+                @if (profileMenuOpen) {
+                <div class="profile-dropdown" role="menu">
 
-            <app-button variant="primary" size="md" weight="semibold" (clicked)="logout()">
-                Log out
-            </app-button>
+                    <button type="button" class="profile-menu-item" role="menuitem"
+                        (click)="goToProfile(user.name); closeProfileMenu()">
+                        <fa-icon [icon]="faUser"></fa-icon>
+                        <span>Profile</span>
+                    </button>
+
+                    <div class="profile-divider"></div>
+
+                    <button type="button" class="profile-menu-item logout" role="menuitem"
+                        (click)="logout(); closeProfileMenu()">
+                        <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                        <span>Log out</span>
+                    </button>
+
+                </div>
+                }
+
+            </div>
 
             } @else {
 
