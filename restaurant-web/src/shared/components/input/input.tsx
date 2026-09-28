@@ -228,12 +228,8 @@ export default function Input({
                                 ? `hint-${id}`
                                 : undefined
                     }
-                    onBeforeInput={
-                        handleBeforeInput
-                    }
-                    onChange={
-                        handleChange
-                    }
+                    onBeforeInput={handleBeforeInput}
+                    onChange={handleChange}
                 />
 
                 {suffix && (

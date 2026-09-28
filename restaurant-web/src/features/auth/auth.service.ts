@@ -1,40 +1,89 @@
-import { firstValueFrom, timer } from 'rxjs';
-
 import type {
-    LoginRequest,
-    LoginResponse,
+    SendOtpRequest,
+    SendOtpResponse,
+    VerifyOtpRequest,
+    VerifyOtpResponse,
 } from './auth.types';
 
+
 class AuthService {
-    async login(
-        credentials: LoginRequest,
-    ): Promise<LoginResponse> {
+
+    async sendOtp(
+        data: SendOtpRequest,
+    ): Promise<SendOtpResponse> {
+
         const response = await fetch(
-            '/api/auth/login',
+            '/api/v1/restaurant/phone-auth',
             {
                 method: 'POST',
+
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type':
+                        'application/json',
                 },
-                body: JSON.stringify(credentials),
+
+                credentials: 'include',
+
+                body: JSON.stringify(data),
             },
         );
 
-        const data =
-            (await response.json()) as LoginResponse;
+
+        const result =
+            await response.json() as SendOtpResponse;
+
 
         if (!response.ok) {
+
             throw new Error(
-                data.message ||
-                'Unable to sign in.',
+                result.message ||
+                'Unable to send OTP.',
             );
         }
 
-        // Development-only delay
-        await firstValueFrom(timer(2000));
 
-        return data;
+        return result;
+    }
+
+
+    async verifyOtp(
+        data: VerifyOtpRequest,
+    ): Promise<VerifyOtpResponse> {
+
+        const response = await fetch(
+            '/api/v1/restaurant/verify-otp',
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type':
+                        'application/json',
+                },
+
+                credentials: 'include',
+
+                body: JSON.stringify(data),
+            },
+        );
+
+
+        const result =
+            await response.json() as VerifyOtpResponse;
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.message ||
+                'Unable to verify OTP.',
+            );
+        }
+
+
+        return result;
     }
 }
 
-export const authService = new AuthService();
+
+export const authService =
+    new AuthService();

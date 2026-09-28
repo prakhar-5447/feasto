@@ -1,54 +1,110 @@
 import { NextResponse } from 'next/server';
-import type { LoginRequest } from '@/features/auth/auth.types';
 
-const DEMO_ID = 'FEA-MH-00142';
-const DEMO_PASS = 'partner@123';
+import type {
+    LoginRequest,
+    LoginResponse,
+} from '@/features/auth/auth.types';
 
-export async function POST(request: Request) {
+const BACKEND_URL =
+    process.env.BACKEND_URL;
+
+export async function POST(
+    request: Request,
+) {
     try {
+
+        if (!BACKEND_URL) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        'Backend URL is not configured.',
+                },
+                { status: 500 },
+            );
+        }
+
+
         const body =
             (await request.json()) as LoginRequest;
 
-        const partnerId = body.partnerId?.trim();
-        const password = body.password;
+
+        const partnerId =
+            body.partnerId?.trim();
+
+        const password =
+            body.password;
+
 
         if (!partnerId || !password) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: 'Partner ID and password are required.',
+                    message:
+                        'Partner ID and password are required.',
                 },
                 { status: 400 },
             );
         }
 
-        if (
-            partnerId.toUpperCase() !== DEMO_ID ||
-            password !== DEMO_PASS
-        ) {
-            return NextResponse.json(
+
+        const backendResponse =
+            await fetch(
+                `${BACKEND_URL}/api/v1/auth/restaurant/login`,
                 {
-                    success: false,
-                    message:
-                        'Invalid Partner ID or password. Check your credentials and try again.',
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json',
+                    },
+
+                    body: JSON.stringify({
+                        partnerId,
+                        password,
+                    }),
+
+                    cache: 'no-store',
                 },
-                { status: 401 },
+            );
+
+
+        const data =
+            (await backendResponse.json()) as LoginResponse;
+
+
+        if (!backendResponse.ok) {
+            return NextResponse.json(
+                data,
+                {
+                    status:
+                        backendResponse.status,
+                },
             );
         }
 
-        console.log('Restaurant partner authenticated:', partnerId);
 
-        return NextResponse.json({
-            success: true,
-            message: 'Login successful',
-        });
-    } catch {
+        return NextResponse.json(
+            data,
+            {
+                status: backendResponse.status,
+            },
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Restaurant login error:',
+            error,
+        );
+
         return NextResponse.json(
             {
                 success: false,
-                message: 'Invalid request.',
+                message:
+                    'Unable to connect to the backend.',
             },
-            { status: 400 },
+            { status: 500 },
         );
     }
 }

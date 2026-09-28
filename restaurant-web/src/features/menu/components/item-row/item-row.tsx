@@ -3,14 +3,23 @@ import {
     Trash2,
     Clock,
 } from '@/shared/icons';
+
 import type { MenuItem } from '@/features/menu/menu.types';
+
 import styles from './item-row.module.sass';
 
 interface ItemRowProps {
     item: MenuItem;
-    onEdit: () => void;
-    onDelete: () => void;
-    onToggleAvailability: () => void;
+
+    onEdit: (item: MenuItem) => void;
+
+    onDelete: (id: string) => void;
+
+    onToggleAvailability: (
+        item: MenuItem
+    ) => void;
+
+    isDeleting?: boolean;
 }
 
 const SPICE_EMOJI: Record<
@@ -27,21 +36,13 @@ const FOOD_TYPE_CONFIG = {
         dot: 'veg',
         label: 'Veg',
     },
-    nonveg: {
+    non_veg: {
         dot: 'nonveg',
         label: 'Non-Veg',
-    },
-    halal: {
-        dot: 'halal',
-        label: 'Halal',
     },
     egg: {
         dot: 'egg',
         label: 'Egg',
-    },
-    vegan: {
-        dot: 'vegan',
-        label: 'Vegan',
     },
 } as const;
 
@@ -52,30 +53,35 @@ export default function ItemRow({
     onToggleAvailability,
 }: ItemRowProps) {
     const foodType =
-        FOOD_TYPE_CONFIG[item.foodType] ??
-        FOOD_TYPE_CONFIG.nonveg;
+        FOOD_TYPE_CONFIG[item.foodType];
 
     return (
         <div
             className={`${styles.row} ${item.available
                     ? ''
                     : styles.unavailable
-                } `}
+                }`}
         >
             {/* Food Type Indicator */}
             <div
                 className={`${styles.foodType} ${styles[foodType.dot]
-                    } `}
+                    }`}
                 title={foodType.label}
                 aria-label={foodType.label}
             >
-                <div className={styles.foodTypeDot} />
+                <div
+                    className={
+                        styles.foodTypeDot
+                    }
+                />
             </div>
 
             {/* Main Info */}
             <div className={styles.info}>
                 <div className={styles.titleRow}>
-                    <span className={styles.name}>
+                    <span
+                        className={styles.name}
+                    >
                         {item.name}
                     </span>
 
@@ -92,7 +98,7 @@ export default function ItemRow({
                     {item.spiceLevel && (
                         <span
                             className={styles.spice}
-                            aria-label={`Spice level: ${item.spiceLevel} `}
+                            aria-label={`Spice level: ${item.spiceLevel}`}
                         >
                             {
                                 SPICE_EMOJI[
@@ -103,7 +109,11 @@ export default function ItemRow({
                     )}
                 </div>
 
-                <p className={styles.description}>
+                <p
+                    className={
+                        styles.description
+                    }
+                >
                     {item.description}
                 </p>
 
@@ -114,8 +124,12 @@ export default function ItemRow({
                         }
                     >
                         <Clock size={10} />
+
                         <span>
-                            {item.preparationTime} min
+                            {
+                                item.preparationTime
+                            }{' '}
+                            min
                         </span>
                     </div>
                 )}
@@ -129,7 +143,9 @@ export default function ItemRow({
             {/* Availability */}
             <button
                 type="button"
-                className={styles.toggleButton}
+                className={
+                    styles.toggleButton
+                }
                 title={
                     item.available
                         ? 'Mark unavailable'
@@ -140,14 +156,20 @@ export default function ItemRow({
                         ? 'Mark unavailable'
                         : 'Mark available'
                 }
-                aria-pressed={item.available}
-                onClick={onToggleAvailability}
+                aria-pressed={
+                    item.available
+                }
+                onClick={() =>
+                    onToggleAvailability(
+                        item
+                    )
+                }
             >
                 <span
                     className={`${styles.toggle} ${item.available
                             ? styles.toggleOn
                             : styles.toggleOff
-                        } `}
+                        }`}
                 >
                     <span
                         className={
@@ -161,18 +183,24 @@ export default function ItemRow({
             <div className={styles.actions}>
                 <button
                     type="button"
-                    className={styles.actionButton}
-                    onClick={onEdit}
-                    aria-label={`Edit ${item.name} `}
+                    className={
+                        styles.actionButton
+                    }
+                    onClick={() =>
+                        onEdit(item)
+                    }
+                    aria-label={`Edit ${item.name}`}
                 >
                     <Pencil size={14} />
                 </button>
 
                 <button
                     type="button"
-                    className={`${styles.actionButton} ${styles.deleteAction} `}
-                    onClick={onDelete}
-                    aria-label={`Delete ${item.name} `}
+                    className={`${styles.actionButton} ${styles.deleteAction}`}
+                    onClick={() =>
+                        onDelete(item.id)
+                    }
+                    aria-label={`Delete ${item.name}`}
                 >
                     <Trash2 size={14} />
                 </button>
