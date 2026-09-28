@@ -1,63 +1,127 @@
 import {
     createApi,
     fetchBaseQuery,
+    type BaseQueryFn,
+    type FetchArgs,
+    type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 
-import type { Restaurant } from './restaurant.types';
+import type {
+    GetRestaurantResponse,
+    UpdateRestaurantRequest,
+    UpdateRestaurantResponse,
+} from './restaurant.types';
 
-interface ApiResponse<T> {
-    success: boolean;
-    data: T;
-    message?: string;
-}
+const baseQuery = fetchBaseQuery({
+    baseUrl:
+        process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api/v1',
 
-export const restaurantApi = createApi({
-    reducerPath: 'restaurantApi',
+    credentials: 'include',
+});
 
-    baseQuery: fetchBaseQuery({
-        baseUrl:
-            process.env.NEXT_PUBLIC_API_BASE_URL ??
-            '/api/v1',
-        credentials: 'include',
-    }),
+const baseQueryWithReauth: BaseQueryFn<
+    string | FetchArgs,
+    unknown,
+    FetchBaseQueryError
+> = async (
+    args,
+    api,
+    extraOptions,
+) => {
 
-    tagTypes: ['Restaurant'],
+        let result = await baseQuery(
+            args,
+            api,
+            extraOptions,
+        );
 
-    endpoints: (builder) => ({
-        getRestaurant: builder.query<
-            Restaurant,
-            void
-        >({
-            query: () => '/restaurant',
+        if (result.error?.status === 401) {
 
-            transformResponse: (
-                response: ApiResponse<Restaurant>
-            ) => response.data,
+            const refreshResult =
+                await baseQuery(
+                    {
+                        url: '/auth/refresh',
+                        method: 'POST',
+                    },
+                    api,
+                    extraOptions,
+                );
 
-            providesTags: ['Restaurant'],
-        }),
+            if (refreshResult.data) {
 
-        updateRestaurantStatus:
-            builder.mutation<
-                Restaurant,
-                { isOpen: boolean }
+                result = await baseQuery(
+                    args,
+                    api,
+                    extraOptions,
+                );
+
+            } else {
+
+                api.dispatch(
+                    restaurantApi.util.resetApiState(),
+                );
+
+                if (
+                    typeof window !== 'undefined'
+                ) {
+                    window.location.href =
+                        '/login';
+                }
+            }
+        }
+
+        return result;
+    };
+
+
+export const restaurantApi =
+    createApi({
+
+        reducerPath: 'restaurantApi',
+
+        baseQuery:
+            baseQueryWithReauth,
+
+        tagTypes: [
+            'Restaurant',
+            'Auth',
+            'Order',
+        ],
+
+        endpoints: (builder) => ({
+
+            getRestaurant: builder.query<
+                any,
+                void
             >({
-                query: (body) => ({
-                    url: '/restaurant/status',
-                    method: 'PATCH',
-                    body,
+                query: () => ({
+                    url: '/restaurant/my',
+                    method: 'GET',
                 }),
 
-                transformResponse: (
-                    response: ApiResponse<Restaurant>
-                ) => response.data,
+                providesTags: [
+                    'Restaurant',
+                ],
+            }),
 
+
+            updateRestaurant: builder.mutation<
+                UpdateRestaurantResponse,
+                UpdateRestaurantRequest
+            >({
+                query: (data) => ({
+                    url: '/restaurant/update',
+                    method: 'PATCH',
+                    body: data,
+                }),
                 invalidatesTags: ['Restaurant'],
             }),
-    }),
-});
+
+        }),
+    });
+
 
 export const {
     useGetRestaurantQuery,
-    useUpdateRestaurantStatusMutation,
+    useUpdateRestaurantMutation,
 } = restaurantApi;

@@ -15,8 +15,13 @@ import OrderCard
     from '../order-card/order-card';
 
 import {
-    INITIAL_ORDERS,
-} from '../../orders.mock';
+    useAcceptOrderMutation,
+    useDeclineOrderMutation,
+    useGetRestaurantOrdersQuery,
+    useMarkOrderReadyMutation,
+    useMarkReturnReceivedMutation,
+    useProcessRefundMutation,
+} from '../../orders.api';
 
 import {
     useGetRestaurantQuery,
@@ -27,13 +32,15 @@ import type {
     OrderStatus,
 } from '../../orders.types';
 
-import styles from './order-management.module.sass';
+import {
+    mapOrderToUi,
+} from '../../orders.mapper';
 
+import styles from './order-management.module.sass';
 
 type OrderFilter =
     | 'all'
     | OrderStatus;
-
 
 const CANCEL_FAMILY: OrderStatus[] = [
     'cancelled',
@@ -48,20 +55,61 @@ const INACTIVE_STATUSES: OrderStatus[] = [
     ...CANCEL_FAMILY,
 ];
 
-
 export default function OrderManagement() {
+    const {
+        data: restaurantResponse,
+    } = useGetRestaurantQuery();
 
-    const { data: restaurant } =
-        useGetRestaurantQuery();
-
-    const isOpen =
-        restaurant?.isOpen ?? false;
+    const {
+        data: ordersResponse,
+        isLoading,
+        isError,
+    } = useGetRestaurantOrdersQuery();
 
     const [
-        orders,
-        setOrders,
-    ] = useState<Order[]>(
-        INITIAL_ORDERS,
+        acceptOrder,
+        {
+            isLoading: isAccepting,
+        },
+    ] = useAcceptOrderMutation();
+
+    const [
+        declineOrder,
+        {
+            isLoading: isDeclining,
+        },
+    ] = useDeclineOrderMutation();
+
+    const [
+        markOrderReady,
+        {
+            isLoading: isMarkingReady,
+        },
+    ] = useMarkOrderReadyMutation();
+
+    const [
+        markReturnReceived,
+        {
+            isLoading: isReceivingReturn,
+        },
+    ] = useMarkReturnReceivedMutation();
+
+    const [
+        processRefund,
+        {
+            isLoading: isRefunding,
+        },
+    ] = useProcessRefundMutation();
+
+    const isOpen =
+        restaurantResponse?.data?.isOpen ?? false;
+
+    const orders = useMemo<Order[]>(
+        () =>
+            ordersResponse?.data?.map(
+                mapOrderToUi,
+            ) ?? [],
+        [ordersResponse],
     );
 
     const [
@@ -74,94 +122,8 @@ export default function OrderManagement() {
         setSearch,
     ] = useState('');
 
-
-    const updateOrder = (
-        id: string,
-        patch: Partial<Order>,
-    ) => {
-        setOrders(
-            (previous) =>
-                previous.map(
-                    (order) =>
-                        order.id === id
-                            ? {
-                                ...order,
-                                ...patch,
-                            }
-                            : order,
-                ),
-        );
-    };
-
-
-    const acceptOrder = (
-        id: string,
-    ) => {
-        updateOrder(
-            id,
-            {
-                status: 'preparing',
-            },
-        );
-    };
-
-
-    const declineOrder = (
-        id: string,
-        order: Order,
-    ) => {
-        updateOrder(
-            id,
-            {
-                status: 'cancelled',
-                cancelledFrom:
-                    order.status,
-                cancelledBy:
-                    'restaurant',
-            },
-        );
-    };
-
-
-    const markReady = (
-        id: string,
-    ) => {
-        updateOrder(
-            id,
-            {
-                status: 'ready',
-            },
-        );
-    };
-
-
-    const markReturned = (
-        id: string,
-    ) => {
-        updateOrder(
-            id,
-            {
-                status: 'return_received',
-            },
-        );
-    };
-
-
-    const processRefund = (
-        id: string,
-    ) => {
-        updateOrder(
-            id,
-            {
-                status: 'refund_processing',
-            },
-        );
-    };
-
-
     const filteredOrders =
         useMemo(() => {
-
             const query =
                 search
                     .trim()
@@ -169,12 +131,10 @@ export default function OrderManagement() {
 
             return orders.filter(
                 (order) => {
-
                     const matchesFilter =
                         filter === 'all' ||
                         (
-                            filter ===
-                                'cancelled'
+                            filter === 'cancelled'
                                 ? CANCEL_FAMILY.includes(
                                     order.status,
                                 )
@@ -189,6 +149,9 @@ export default function OrderManagement() {
                             .includes(query) ||
                         order.id
                             .toLowerCase()
+                            .includes(query) ||
+                        order.phone
+                            .toLowerCase()
                             .includes(query);
 
                     return (
@@ -197,17 +160,14 @@ export default function OrderManagement() {
                     );
                 },
             );
-
         }, [
             orders,
             filter,
             search,
         ]);
 
-
     const counts =
         useMemo(() => {
-
             return orders.reduce<
                 Record<string, number>
             >(
@@ -215,11 +175,8 @@ export default function OrderManagement() {
                     accumulator,
                     order,
                 ) => {
-
                     accumulator.all =
-                        (accumulator.all ??
-                            0) + 1;
-
+                        (accumulator.all ?? 0) + 1;
 
                     const bucket =
                         CANCEL_FAMILY.includes(
@@ -230,18 +187,15 @@ export default function OrderManagement() {
 
                     accumulator[bucket] =
                         (
-                            accumulator[
-                            bucket
-                            ] ?? 0
+                            accumulator[bucket] ??
+                            0
                         ) + 1;
 
                     return accumulator;
                 },
                 {},
             );
-
         }, [orders]);
-
 
     const liveCount =
         orders.filter(
@@ -251,6 +205,138 @@ export default function OrderManagement() {
                 ),
         ).length;
 
+    const handleAccept = async (
+        orderId: string,
+    ) => {
+        try {
+            await acceptOrder(
+                orderId,
+            ).unwrap();
+        } catch (error) {
+            console.error(
+                'Accept order failed:',
+                error,
+            );
+        }
+    };
+
+    const handleDecline = async (
+        orderId: string,
+        reason?: string,
+    ) => {
+        try {
+            await declineOrder({
+                orderId,
+                reason,
+            }).unwrap();
+        } catch (error) {
+            console.error(
+                'Decline order failed:',
+                error,
+            );
+        }
+    };
+
+    const handleMarkReady = async (
+        orderId: string,
+    ) => {
+        try {
+            await markOrderReady(
+                orderId,
+            ).unwrap();
+        } catch (error) {
+            console.error(
+                'Mark order ready failed:',
+                error,
+            );
+        }
+    };
+
+    const handleMarkReturned = async (
+        orderId: string,
+    ) => {
+        try {
+            await markReturnReceived(
+                orderId,
+            ).unwrap();
+        } catch (error) {
+            console.error(
+                'Mark return received failed:',
+                error,
+            );
+        }
+    };
+
+    const handleProcessRefund = async (
+        orderId: string,
+    ) => {
+        try {
+            await processRefund(
+                orderId,
+            ).unwrap();
+        } catch (error) {
+            console.error(
+                'Process refund failed:',
+                error,
+            );
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <section
+                className={
+                    styles.orderManagement
+                }
+            >
+                <div
+                    className={
+                        styles.emptyState
+                    }
+                >
+                    <p
+                        className={
+                            styles.emptyTitle
+                        }
+                    >
+                        Loading orders...
+                    </p>
+                </div>
+            </section>
+        );
+    }
+
+    if (isError) {
+        return (
+            <section
+                className={
+                    styles.orderManagement
+                }
+            >
+                <div
+                    className={
+                        styles.emptyState
+                    }
+                >
+                    <p
+                        className={
+                            styles.emptyTitle
+                        }
+                    >
+                        Failed to load orders
+                    </p>
+
+                    <p
+                        className={
+                            styles.emptyDescription
+                        }
+                    >
+                        Please try again later.
+                    </p>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section
@@ -258,15 +344,11 @@ export default function OrderManagement() {
                 styles.orderManagement
             }
         >
-
-            {/* Header */}
-
             <header
                 className={
                     styles.header
                 }
             >
-
                 <div>
                     <h1>
                         Order Management
@@ -281,13 +363,11 @@ export default function OrderManagement() {
                     </p>
                 </div>
 
-
                 <div
                     className={
                         styles.liveFeed
                     }
                 >
-
                     <span
                         className={
                             styles.liveDot
@@ -296,28 +376,19 @@ export default function OrderManagement() {
                     />
 
                     Live Feed
-
                 </div>
-
             </header>
-
-
-            {/* Daily statistics */}
 
             <DailyStats
                 orders={orders}
                 isOpen={isOpen}
             />
 
-
-            {/* Filters */}
-
             <div
                 className={
                     styles.filtersCard
                 }
             >
-
                 <OrderFilters
                     filter={filter}
                     onFilter={setFilter}
@@ -325,20 +396,14 @@ export default function OrderManagement() {
                     onSearch={setSearch}
                     counts={counts}
                 />
-
             </div>
 
-
-            {/* Orders */}
-
-            {filteredOrders.length ===
-                0 ? (
+            {filteredOrders.length === 0 ? (
                 <div
                     className={
                         styles.emptyState
                     }
                 >
-
                     <div
                         className={
                             styles.emptyIcon
@@ -363,7 +428,6 @@ export default function OrderManagement() {
                         Try a different filter
                         or search term
                     </p>
-
                 </div>
             ) : (
                 <div
@@ -371,45 +435,31 @@ export default function OrderManagement() {
                         styles.orderList
                     }
                 >
-
                     {filteredOrders.map(
                         (order) => (
                             <OrderCard
                                 key={order.id}
                                 order={order}
-                                onAccept={() =>
-                                    acceptOrder(
-                                        order.id,
-                                    )
+                                onAccept={
+                                    handleAccept
                                 }
-                                onDecline={() =>
-                                    declineOrder(
-                                        order.id,
-                                        order,
-                                    )
+                                onDecline={
+                                    handleDecline
                                 }
-                                onMarkReady={() =>
-                                    markReady(
-                                        order.id,
-                                    )
+                                onMarkReady={
+                                    handleMarkReady
                                 }
-                                onMarkReturned={() =>
-                                    markReturned(
-                                        order.id,
-                                    )
+                                onMarkReturned={
+                                    handleMarkReturned
                                 }
-                                onProcessRefund={() =>
-                                    processRefund(
-                                        order.id,
-                                    )
+                                onProcessRefund={
+                                    handleProcessRefund
                                 }
                             />
                         ),
                     )}
-
                 </div>
             )}
-
         </section>
     );
 }

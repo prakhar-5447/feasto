@@ -1,14 +1,20 @@
 'use client';
 
 import {
-    useState,
-} from 'react';
-
-import {
     Check,
     MapPin,
     Save,
 } from '@/shared/icons';
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    useGetRestaurantProfileQuery,
+    useUpdateRestaurantProfileMutation,
+} from '@/features/profile/profile.api';
 
 import Input from '@/shared/components/input/input';
 
@@ -129,12 +135,112 @@ export default function Profile() {
         setSaved,
     ] = useState(false);
 
+    const {
+        data,
+        isLoading,
+        isError,
+    } =
+        useGetRestaurantProfileQuery();
+
+
+    const [
+        updateRestaurantProfile,
+    ] =
+        useUpdateRestaurantProfileMutation();
+
+    useEffect(() => {
+
+        if (!data?.data) {
+            return;
+        }
+
+
+        const restaurant =
+            data.data;
+
+
+        setProfile({
+            name:
+                restaurant.name ?? '',
+
+            tagline:
+                restaurant.tagline ?? '',
+
+            description:
+                restaurant.description ?? '',
+
+            email:
+                restaurant.email ?? '',
+
+            phone:
+                restaurant.phone ?? '',
+
+            altPhone:
+                restaurant.altPhone ?? '',
+
+            website:
+                restaurant.website ?? '',
+
+            instagram:
+                restaurant.instagram ?? '',
+
+            facebook:
+                restaurant.facebook ?? '',
+
+            address:
+                restaurant.address ?? '',
+
+            landmark:
+                restaurant.landmark ?? '',
+
+            city:
+                restaurant.city ?? '',
+
+            state:
+                restaurant.state ?? '',
+
+            pincode:
+                restaurant.pincode ?? '',
+
+            minOrder:
+                String(
+                    restaurant.minOrder ?? 0,
+                ),
+
+            avgCookTime:
+                String(
+                    restaurant.avgCookTime ?? 0,
+                ),
+
+            cuisines:
+                restaurant.cuisine ?? [],
+
+            fssai:
+                restaurant.fssai ?? '',
+
+            gstin:
+                restaurant.gstin ?? '',
+        });
+
+
+        if (
+            restaurant.operatingHours
+        ) {
+            setHours(
+                restaurant.operatingHours,
+            );
+        }
+
+    }, [data]);
+
+
     const [
         hours,
         setHours,
     ] = useState<HoursMap>(
         DEFAULT_HOURS,
     );
+
 
     const [
         profile,
@@ -180,15 +286,75 @@ export default function Profile() {
     };
 
 
-    const handleSave = () => {
-        setSaved(true);
+    const handleSave = async () => {
 
-        window.setTimeout(
-            () => {
-                setSaved(false);
-            },
-            2500,
-        );
+        try {
+
+            await updateRestaurantProfile({
+                name: profile.name,
+
+                tagline: profile.tagline,
+
+                description:
+                    profile.description,
+
+                email: profile.email,
+
+                phone: profile.phone,
+
+                altPhone:
+                    profile.altPhone,
+
+                website:
+                    profile.website,
+
+                instagram:
+                    profile.instagram,
+
+                facebook:
+                    profile.facebook,
+
+                minOrder:
+                    Number(
+                        profile.minOrder,
+                    ),
+
+                avgCookTime:
+                    Number(
+                        profile.avgCookTime,
+                    ),
+
+                cuisine:
+                    profile.cuisines,
+
+                fssai:
+                    profile.fssai,
+
+                gstin:
+                    profile.gstin,
+
+                operatingHours:
+                    hours,
+            }).unwrap();
+
+
+            setSaved(true);
+
+
+            window.setTimeout(
+                () => {
+                    setSaved(false);
+                },
+                2500,
+            );
+
+        } catch (error) {
+
+            console.error(
+                'SAVE PROFILE:',
+                error,
+            );
+        }
     };
 
 
