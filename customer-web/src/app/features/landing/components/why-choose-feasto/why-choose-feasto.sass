@@ -1,0 +1,94 @@
+@use '../../../../../styles/index' as *
+
+.features
+    padding: $space-80 0
+    background: $color-bg-white
+
+    .container
+        max-width: $container-xl
+        margin: 0 auto
+        padding: 0 $space-16
+
+    .features-header
+        margin-bottom: $space-48
+        text-align: center
+
+        h2
+            margin-bottom: $space-12
+
+            color: $color-text-primary
+            font-size: $font-size-32
+            font-weight: $font-weight-bold
+            line-height: $line-height-tight
+
+        p
+            max-width: $container-md
+            margin: 0 auto
+
+            color: $color-text-secondary
+            line-height: $line-height-normal
+
+    .features-grid
+        display: grid
+        grid-template-columns: 1fr
+        gap: $space-24
+
+        margin: 0
+        padding: 0
+
+        list-style: none
+
+    .feature-card
+        padding: $space-24
+
+        border-radius: $radius-12
+
+        text-align: center
+
+        transition: $transition-background
+
+        &:hover
+            background: $color-bg-orange-soft
+
+        .icon-wrapper
+            display: flex
+            align-items: center
+            justify-content: center
+
+            width: $space-64
+            height: $space-64
+            margin: 0 auto
+
+            border-radius: $radius-circle
+            background: $color-primary-light
+
+            fa-icon
+                color: $color-primary
+                font-size: $font-size-24
+
+        h3
+            margin: $space-12 0
+
+            color: $color-text-primary
+            font-size: $font-size-20
+            font-weight: $font-weight-semibold
+            line-height: $line-height-tight
+
+        p
+            max-width: $container-xs
+            margin: 0 auto
+
+            color: $color-text-secondary
+            line-height: $line-height-normal
+
+@media (min-width: $breakpoint-md)
+    .features
+        .features-grid
+            grid-template-columns: repeat(2, 1fr)
+            gap: $space-32
+
+@media (min-width: $breakpoint-lg)
+    .features
+        .features-grid
+            grid-template-columns: repeat(4, 1fr)
+            gap: $space-24

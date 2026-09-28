@@ -1,0 +1,579 @@
+@use '../../../../../styles/index' as *
+
+.payment
+    min-height: 60vh
+    padding: $space-48$space-16
+    display: flex
+    align-items: center
+    justify-content: center
+    .payment-page
+        .top-bar
+            width: 100%
+            max-width: 430px
+            display: flex
+            justify-content: space-between
+            align-items: flex-start
+            margin-bottom: $space-12
+
+            .amount-section
+                .payment-type
+                    font-size: $font-size-14
+                    font-weight: $font-weight-semibold
+                    text-transform: uppercase
+                    letter-spacing: $letter-spacing-spaced
+                    color: $color-text-secondary
+                    margin-bottom: $space-8
+
+                .amount
+                    font-size: $font-size-24
+                    font-weight: $font-weight-bold
+                    color: $color-text-primary
+                    margin: 0
+                    line-height: $line-height-normal
+
+                .restaurant-name
+                    font-size: $font-size-14
+                    color: $color-text-secondary
+
+            .secured-badge
+                display: flex
+                align-items: center
+                gap: $space-8
+                background: $color-success-bg
+                color: $color-success
+                border: $border-width-1 $border-style-solid $color-success-border
+                padding: $space-4$space-12
+                border-radius: $radius-pill
+                font-size: $font-size-12
+                font-weight: $font-weight-semibold
+
+                fa-icon
+                    font-size: $font-size-12
+
+        .qr-card
+            width: 100%
+            max-width: 430px
+            background: white
+            border-radius: $radius-24
+            overflow: hidden
+            box-shadow: $shadow-lg
+
+            .card-header
+                background: $gradient-primary
+                color: white
+                min-height: 120px
+                padding: $space-16
+
+                .title
+                    font-size: $font-size-18
+                    font-weight: $font-weight-bold
+                    margin-bottom: $space-2
+
+                .subtitle
+                    font-size: $font-size-14
+                    opacity: .8
+                    line-height: $line-height-normal
+
+            .card-body
+                margin-top: -36px
+                padding: 0$space-24
+                display: flex
+                flex-direction: column
+                align-items: center
+
+                .qr-frame
+                    background: white
+                    border-radius: $radius-16
+                    padding: $space-16
+                    border: $border-width-1 $border-style-solid $color-border-subtle
+                    box-shadow: $shadow-lg
+                    margin-bottom: $space-24
+
+                //     .qr-wrapper
+                //         position: relative
+
+                //         .qr-grid
+                //             width: 192px
+                //             height: 192px
+                //             display: grid
+
+                //             .qr-cell
+                //                 background: white
+
+                //                 &.filled
+                //                     background: $color-bg-black
+
+                    .qr-logo
+                        position: absolute
+                        top: 50%
+                        left: 50%
+                        transform: translate(-50%,-50%)
+                        width: $space-32
+                        height: $space-32
+                        background: $color-primary
+                        color: white
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        border-radius: $radius-8
+                        font-weight: $font-weight-bold
+                        box-shadow: $shadow-xl
+
+                .qr-image
+                    width: 260px
+                    height: 260px
+                    object-fit: contain
+
+                .upi-apps
+                    display: flex
+                    flex-wrap: wrap
+                    justify-content: center
+                    gap: $space-8
+                    margin-bottom: $space-24
+
+                    .app-chip
+                        background: $color-bg-light
+                        border: $border-width-1 $border-style-solid $color-border-light
+                        padding: $space-4$space-12
+                        border-radius: $radius-8
+                        font-size: $font-size-12
+                        font-weight: $font-weight-semibold
+                        color: $color-text-secondary
+
+            .card-footer
+                padding: $space-24
+
+                .expiry-row
+                    display: flex
+                    justify-content: space-between
+                    align-items: center
+                    margin-bottom: $space-16
+
+                    .expiry-left
+                        display: flex
+                        align-items: center
+                        gap: $space-4
+                        color: $color-text-secondary
+                        font-size: $font-size-16
+                        fa-icon
+                            font-size: $font-size-14
+
+                    .expiry-time
+                        font-weight: $font-weight-bold
+                        font-size: $font-size-16
+                        color: $color-text-primary
+
+                        &.expired
+                            color: $color-error-bright
+
+                .supported-text
+                    display: flex
+                    justify-content: center
+                    align-items: center
+                    color: $color-text-muted
+                    font-size: $font-size-12
+
+    .processing-page
+        .processing-container
+            width: 100%
+            max-width: 420px
+            text-align: center
+
+            .loader-wrapper
+                position: relative
+                width: $space-100
+                height: $space-100
+                margin: 0 auto$space-24
+
+                .ring
+                    position: absolute
+                    inset: 0
+                    border-radius: $radius-circle
+                    animation: pulse 1.5s infinite linear
+
+                    @keyframes pulse
+                        0%
+                            transform: scale(.5)
+                            opacity: 0
+                        20%
+                            transform: scale(.8)
+                            opacity: 1
+                        60%
+                            transform: scale(1.3)
+                            opacity: 0
+                        100%
+                            transform: scale(1.3)
+                            opacity: 0
+
+                .ring-1
+                    border: $space-4 $border-style-solid $color-overlay-orange-light
+                    animation-delay: 0s
+                .ring-2
+                    border: $space-4 $border-style-solid $color-overlay-orange-medium
+                    animation-delay: 0.5s
+                .ring-3
+                    border: $space-4 $border-style-solid $color-overlay-orange-medium
+                    animation-delay: 1s
+
+                .loader-circle
+                    position: absolute
+                    inset: $space-24
+                    display: flex
+                    justify-content: center
+                    align-items: center
+                    border-radius: $radius-circle
+                    background: $gradient-primary-red
+                    color: $color-bg-white
+                    box-shadow: $shadow-primary-strong
+
+            .processing-text
+                margin-bottom: $space-32
+                h2
+                    font-size: $font-size-28
+                    font-weight: $font-weight-semibold
+                    color: $color-text-primary
+
+                p
+                    color: $color-text-secondary
+                    font-size: $font-size-16
+
+            .steps-card
+                background: $color-bg-white
+                border-radius: $radius-16
+                padding: $space-24
+                width: 3$space-80
+                border: $border-width-1 $border-style-solid $color-border-light
+
+                .step
+                    display: flex
+                    align-items: center
+                    gap: $space-16
+
+                    &:not(:last-child)
+                        margin-bottom: $space-16
+
+                    .step-icon
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        flex-shrink: 0
+                        color: $color-success
+                        width: 30px
+                        fa-icon
+                            font-size: $font-size-18
+                        span
+                            width: $space-16
+                            height: $space-16
+                            background: $color-bg-neutral
+                            border-radius: $radius-circle
+
+                    p
+                        color: $color-text-secondary
+                        font-size: $font-size-16
+                        font-weight: $font-weight-medium
+
+                        &.completed
+                            color: $color-text-primary
+                            font-weight: $font-weight-semibold
+
+    .success-page
+        margin: auto
+        width: 100%
+        display: flex
+        justify-content: center
+        gap: $space-32
+        max-width: 992px
+
+        .section-left
+            flex: 5
+            display: flex
+            flex-direction: column
+            .success-card
+                flex: 1
+                width: 100%
+                background: $gradient-success
+                color: $color-bg-white
+                border-radius: $radius-24
+                display: flex
+                flex-direction: column
+                gap: $space-4
+                padding: $space-24
+                box-shadow: $shadow-success
+                margin-bottom: $space-24
+                .card-top
+                    flex: 1
+                    text-align: center
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    flex-direction: column
+                    .success-icon
+                        width: 70px
+                        height: 70px
+                        margin: $space-16
+                        background: $color-overlay-white-light
+                        border-radius: $radius-circle
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        fa-icon
+                            font-size: $font-size-32
+                    h1
+                        font-size: $font-size-32
+                        font-weight: $font-weight-semibold
+
+                    p
+                        color: rgba(255,255,255,.9)
+                        font-size: $font-size-16
+
+                .order-id
+                    margin-top: $space-24
+                    display: inline-flex
+                    width: 100%
+                    text-align: center
+                    flex-direction: column
+                    background: $color-overlay-white-light
+                    padding: $space-12$space-16
+                    border-radius: $radius-12
+
+                    .label
+                        font-size: $font-size-12
+                        letter-spacing: $letter-spacing-spaced
+                        text-transform: uppercase
+                        font-weight: $font-weight-medium
+                        color: $color-overlay-white-heavy
+
+                    .value
+                        font-size: $font-size-18
+                        font-weight: $font-weight-semibold
+
+            .eta-card
+                border-radius: $radius-16
+                border: $border-width-1 $border-style-solid $color-border-light
+                overflow: hidden
+
+            .eta-card
+                margin: 0
+                padding: $space-24
+
+                .eta-header
+                    display: flex
+                    align-items: center
+                    gap: $space-16
+                    margin-bottom: $space-24
+
+                    .bike
+                        width: $space-48
+                        height: $space-48
+                        background: $color-bg-orange-soft
+                        color: $color-primary
+                        border-radius: $radius-circle
+                        display: flex
+                        justify-content: center
+                        align-items: center
+                        fa-icon
+                            font-size: $font-size-18
+
+                    .small
+                        font-size: $font-size-12
+                        color: $color-text-secondary
+                        text-transform: uppercase
+
+                    h3
+                        font-size: $font-size-18
+                        color: $color-text-primary
+                        font-weight: $font-weight-semibold
+
+            .delivery-progress
+                display: flex
+                justify-content: space-between
+                gap: $space-8
+
+                .progress-step
+                    flex: 1
+                    text-align: center
+
+                    .dot
+                        width: $space-12
+                        height: $space-12
+                        background: $color-bg-neutral
+                        border-radius: $radius-circle
+                        margin: $space-4 auto
+
+                        &.active
+                            background: $color-primary
+                            box-shadow: $shadow-focus-primary
+
+                    span
+                        font-size: $font-size-12
+                        color: $color-text-secondary
+                        font-weight: $font-weight-regular
+        .section-right
+            flex: 4
+            .summary-card
+                border-radius: $radius-16
+                border: $border-width-1 $border-style-solid $color-border-light
+                margin-bottom: $space-16
+                overflow: hidden
+                padding: $space-16$space-24
+                .summary-header
+                    display: flex
+                    align-items: center
+                    gap: $space-12
+                    border-bottom: $border-width-1 $border-style-solid #f3f4f6
+                    font-weight: $font-weight-medium
+                    margin-bottom: $space-12
+                    fa-icon
+                        font-size: $font-size-16
+
+                .items
+                    margin-bottom: $space-12
+                    .item-row
+                        display: flex
+                        justify-content: space-between
+                        align-items: center
+
+                        &:not(:last-child)
+                            margin-bottom: $space-12
+
+                        .left
+                            display: flex
+                            align-items: center
+                            gap: $space-12
+
+                            .qty
+                                background: $color-bg-light
+                                border: $border-width-1 $border-style-solid $color-border-light
+                                border-radius: $radius-4
+                                padding: $space-2$space-8
+                                font-size: $font-size-12
+                                font-weight: $font-weight-semibold
+
+                            .name
+                                font-size: $font-size-14
+                                font-weight: $font-weight-medium
+                                color: $color-text-secondary
+
+                        .price
+                            font-size: $font-size-14
+                            font-weight: $font-weight-semibold
+
+                .bill
+                    background: $color-bg-light
+                    border-top: $border-width-1 $border-style-solid $color-border-light
+                    padding-top: $space-16
+
+                    .bill-row
+                        display: flex
+                        justify-content: space-between
+                        margin-bottom: $space-8
+                        font-size: $font-size-14
+                        color: $color-text-secondary
+
+                        &.discount
+                            color: $color-success
+                            font-weight: $font-weight-semibold
+
+                        &.total
+                            margin-top: $space-16
+                            padding-top: $space-16
+                            border-top: $border-width-1 $border-style-solid $color-border
+                            color: $color-text-primary
+                            font-weight: $font-weight-bold
+                            font-size: $font-size-16
+
+            .address-card
+                border-radius: $radius-16
+                border: $border-width-1 $border-style-solid $color-border-light
+                margin-bottom: $space-16
+                overflow: hidden
+                padding: $space-16$space-24
+                display: flex
+                align-items: flex-start
+                gap: $space-12
+
+                fa-icon
+                    font-size: $font-size-16
+                    color: $color-text-secondary
+
+                .label
+                    font-size: $font-size-12
+                    font-weight: $font-weight-medium
+                    text-transform: uppercase
+                    color: $color-text-muted
+
+                .value
+                    font-size: $font-size-16
+                    color: $color-text-secondary
+                    font-weight: $font-weight-medium
+
+            .home-button
+                width: 100%
+                height: 56px
+                border: $border-style-none
+                border-radius: $radius-12
+                background: $color-primary
+                color: white
+                font-size: $font-size-16
+                font-weight: $font-weight-bold
+                cursor: pointer
+                display: flex
+                justify-content: center
+                align-items: center
+                gap: $space-8
+                transition: .25s
+                box-shadow: $shadow-primary
+
+                &:hover
+                    background: $color-primary-hover
+
+                &:active
+                    transform: scale(.98)
+                fa-icon
+                    color: $color-bg-white
+                    font-size: $font-size-14
+            .support-text
+                margin-top: $space-16
+                text-align: center
+                color: $color-text-secondary
+                font-size: $font-size-12
+                font-weight: $font-weight-medium
+
+                span
+                    color: $color-text-secondary
+                    font-weight: $font-weight-bold
+                    font-family: $font-family-monospace
+
+// @media (max-width: 4$space-80)
+
+// .payment-page,
+// .success-page
+//     padding-left: .75rem
+//     padding-right: .75rem
+
+// .processing-page
+
+//     .processing-container
+
+//     .processing-text
+
+//         h2
+//             font-size: 1.7rem
+
+// .success-page
+
+//     .success-container
+
+//     .success-card
+
+//         h1
+//             font-size: 1.7rem
+
+//     .eta-card
+
+//         .delivery-progress
+
+//         .progress-step
+
+//             span
+//                 font-size: .55rem

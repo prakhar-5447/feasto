@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { Cart } from '../../core/cart/models/cart.model';
-import { FoodItem } from '../../core/restaurant/models/menu.model';
+import { Cart } from '../../features/cart/models/cart.model';
+import { FoodItem } from '../../features/dashboard/models/menu.model';
 
 export const loadCart = createAction(
     '[Cart] Load Cart'

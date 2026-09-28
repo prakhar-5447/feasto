@@ -1,20 +1,20 @@
 import { Routes } from '@angular/router';
 
-import { Cart } from './features/cart/cart';
-import { Checkout } from './features/checkout/checkout';
-import { Dashboard } from './features/dashboard/dashboard';
-import { Landing } from './features/landing/landing';
-import { Location } from './features/location/location';
-import { Payment } from './features/payment/payment';
-import { Restaurant } from './features/restaurant/restaurant';
-import { TabMenu } from './features/restaurant/tab-menu/tab-menu';
-import { TabReviews } from './features/restaurant/tab-reviews/tab-reviews';
+import { Cart } from '@/app/features/cart/components/cart/cart';
+import { Checkout } from '@/app/features/checkout/components/checkout/checkout';
+import { Dashboard } from '@/app/features/dashboard/components/dashboard/dashboard';
+import { Landing } from '@/app/features/landing/components/landing/landing';
+import { Location } from '@/app/features/location/components/location/location';
+import { Payment } from '@/app/features/payment/components/payment/payment';
+import { Restaurant } from '@/app/features/restaurant/components/restaurant/restaurant';
+import { TabMenu } from '@/app/features/restaurant/components/tab-menu/tab-menu';
+import { TabReviews } from '@/app/features/restaurant/components/tab-reviews/tab-reviews';
 
-import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
-import { LandingLayout } from './layouts/landing-layout/landing-layout';
+import { DashboardLayout } from '@/app/layouts/dashboard-layout/dashboard-layout';
+import { LandingLayout } from '@/app/layouts/landing-layout/landing-layout';
 
-import { validCityGuard } from './core/guards/valid-city.guard';
-import { restaurantResolver } from './core/resolver/restaurant.resolver';
+import { validCityGuard } from '@/app/core/guards/valid-city.guard';
+import { restaurantResolver } from '@/app/core/resolver/restaurant.resolver';
 
 export const routes: Routes = [
 

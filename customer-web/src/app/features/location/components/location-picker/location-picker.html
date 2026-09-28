@@ -1,0 +1,92 @@
+<div class="location-picker" appClickOutside (appClickOutside)="closeDropdown()">
+    <div class="display">
+
+        <fa-icon [icon]="faLocationDot" aria-hidden="true" />
+
+        <label class="sr-only" for="location-search">
+            Delivery location
+        </label>
+
+        <input id="location-search" name="location" type="text" [placeholder]="
+        selectedLocation()?.city ||
+        'Select location'
+      " [(ngModel)]="locationQuery" (ngModelChange)="onQueryChange($event)" (focus)="showDropdown = true"
+            autocomplete="off" spellcheck="false" />
+
+    </div>
+
+    @if (showDropdown) {
+
+    <div class="dropdown">
+
+        @if (locationLoading()) {
+
+        <div class="suggestions">
+
+            @for (item of [1, 2, 3, 4]; track item) {
+
+            <div class="skeleton-layout">
+                <span class="skeleton skeleton-title"></span>
+            </div>
+
+            }
+
+        </div>
+
+        } @else {
+
+        @if (locationResults.length === 0) {
+
+        <button type="button" class="gps-btn" (click)="detectLocation()">
+            <span class="loader-area" aria-hidden="true">
+
+                @if (detectLocationLoader()) {
+
+                <app-loader [size]="18" />
+
+                } @else {
+
+                <fa-icon [icon]="faLocationCrosshairs" />
+
+                }
+
+            </span>
+
+            <span class="gps-text">
+
+                <span>
+                    Detect current location
+                </span>
+
+                <small>
+                    Using GPS
+                </small>
+
+            </span>
+
+        </button>
+
+        }
+
+        <div class="suggestions">
+
+            @for (
+            item of locationResults;
+            track item.place_name
+            ) {
+
+            <button type="button" class="suggestion" (click)="selectLocation(item)">
+                {{ item.place_name }}
+            </button>
+
+            }
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+</div>

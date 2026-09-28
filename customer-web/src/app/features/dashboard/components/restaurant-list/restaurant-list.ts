@@ -1,0 +1,54 @@
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+
+import { RestaurantCard } from '../restaurant-card/restaurant-card';
+
+import { Restaurant } from '@/app/features/dashboard/models/restaurant.model';
+import { RestaurantFilters } from '@/app/features/dashboard/models/filter.model';
+
+import { LabelPipe } from '@/app/shared/pipes/label.pipe';
+
+
+@Component({
+  selector: 'app-restaurant-list',
+  standalone: true,
+  imports: [RestaurantCard,],
+  templateUrl: './restaurant-list.html',
+  styleUrl: './restaurant-list.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class RestaurantList {
+
+  private readonly labelPipe = inject(LabelPipe);
+
+  readonly restaurants = input<Restaurant[]>([]);
+  readonly city = input('');
+  readonly area = input('');
+  readonly filters = input<RestaurantFilters>({});
+
+  readonly mode = input<'location' | 'filtered'>('location');
+
+  readonly heading = computed(() => {
+
+    const filters = this.filters();
+    const city = this.city();
+
+    if (this.mode() === 'filtered') {
+
+      if (filters.cuisine) {
+        return `Top ${this.labelPipe.transform(filters.cuisine)} Restaurants Near You`;
+      }
+
+      if (filters.food) {
+        return `Best ${this.labelPipe.transform(filters.food)} Near You`;
+      }
+
+    }
+
+    // Default location-based heading
+    if (city) {
+      return `Top Restaurants in ${this.labelPipe.transform(city)}`;
+    }
+
+    return 'Top Restaurants Near You';
+  });
+}

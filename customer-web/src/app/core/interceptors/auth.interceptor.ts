@@ -23,7 +23,7 @@ import {
   throwError
 } from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../features/auth/services/auth.service';
 import * as AuthActions from '../../store/auth/auth.actions';
 import { AppState } from '../../store/app.state';
 

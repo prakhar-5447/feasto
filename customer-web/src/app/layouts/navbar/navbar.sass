@@ -1,0 +1,177 @@
+@use '../../../styles/index' as *
+
+.header
+    width: 100%
+    background: $color-bg-white
+
+.container
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+    width: 100%
+    max-width: $container-xl
+    height: 86px
+    margin: 0 auto
+    padding: 0 $space-16
+
+.left
+    display: flex
+    align-items: center
+    gap: $space-32
+
+    min-width: 0
+    flex: 1
+
+.logo
+    flex-shrink: 0
+
+    color: $color-primary
+    font-size: $font-size-24
+    font-weight: $font-weight-bold
+    text-decoration: none
+
+    &:focus-visible
+        outline: 2px solid $color-primary
+        outline-offset: $space-4
+        border-radius: $radius-4
+
+.search
+    display: flex
+    align-items: center
+
+    width: 100%
+    max-width: $container-md
+    padding: $space-12 0
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-4
+    background: $color-bg-white
+    box-shadow: $shadow-sm
+
+.location-box
+    position: relative
+
+    width: 240px
+    padding: 0 $space-8
+
+    border-right: $border-width-1 $border-style-solid $color-border
+
+.restaurant-box
+    position: relative
+
+    flex: 1
+    min-width: 0
+    padding: 0 $space-8
+
+.nav
+    display: flex
+    align-items: center
+    gap: $space-16
+
+    flex-shrink: 0
+
+.profile-menu
+    position: relative
+
+.profile-trigger
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-40
+    height: $space-40
+    padding: 0
+
+    border: $border-style-none
+    border-radius: $radius-circle
+    background: transparent
+
+    cursor: pointer
+
+    &:focus-visible
+        outline: 2px solid $color-primary
+        outline-offset: $space-4
+
+.avatar
+    display: flex
+    align-items: center
+    justify-content: center
+
+    width: $space-40
+    height: $space-40
+
+    border-radius: $radius-circle
+    background: $color-bg-neutral
+
+    color: $color-text-secondary
+    font-size: $font-size-18
+    font-weight: $font-weight-medium
+
+.profile-dropdown
+    position: absolute
+    top: calc(100% + $space-8)
+    right: 0
+    z-index: $z-modal
+
+    width: 180px
+    padding: $space-8
+
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-8
+    background: $color-bg-white
+    box-shadow: $shadow-lg
+
+.profile-menu-item
+    display: flex
+    align-items: center
+    gap: $space-12
+
+    width: 100%
+    padding: $space-12 $space-12
+
+    border: $border-style-none
+    border-radius: $radius-4
+    background: transparent
+
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+    text-align: left
+
+    cursor: pointer
+    transition: $transition-background, $transition-color
+
+    fa-icon
+        width: $space-16
+
+        color: $color-text-secondary
+
+    &:hover,
+    &:focus-visible
+        background: $color-bg-gray-soft
+
+    &:focus-visible
+        outline: none
+
+    &.logout
+        color: $color-error
+
+        fa-icon
+            color: $color-error
+
+        &:hover,
+        &:focus-visible
+            background: $color-bg-red-soft
+
+.profile-divider
+    height: $border-width-1
+    margin: $space-8 0
+
+    background: $color-border-light
+
+@media (max-width: $breakpoint-md)
+    .left
+        .search
+            display: none
