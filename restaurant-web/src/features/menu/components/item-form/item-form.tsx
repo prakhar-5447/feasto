@@ -21,24 +21,14 @@ const FOOD_TYPES: {
             className: 'veg',
         },
         {
-            value: 'nonveg',
+            value: 'non_veg',
             label: 'Non-Veg',
             className: 'nonveg',
-        },
-        {
-            value: 'halal',
-            label: 'Halal',
-            className: 'halal',
         },
         {
             value: 'egg',
             label: 'Egg',
             className: 'egg',
-        },
-        {
-            value: 'vegan',
-            label: 'Vegan',
-            className: 'vegan',
         },
     ];
 
@@ -68,6 +58,8 @@ type EditableField =
     | 'description'
     | 'available'
     | 'foodType'
+    | 'vegan'
+    | 'halal'
     | 'bestseller'
     | 'spiceLevel'
     | 'preparationTime';
@@ -392,9 +384,7 @@ export default function ItemForm({
                 <div className={styles.flags}>
                     <ToggleField
                         label="Bestseller"
-                        checked={
-                            data.bestseller
-                        }
+                        checked={data.bestseller}
                         onChange={() =>
                             setField(
                                 'bestseller',
@@ -405,13 +395,33 @@ export default function ItemForm({
 
                     <ToggleField
                         label="Available"
-                        checked={
-                            data.available
-                        }
+                        checked={data.available}
                         onChange={() =>
                             setField(
                                 'available',
                                 !data.available
+                            )
+                        }
+                    />
+
+                    <ToggleField
+                        label="Vegan"
+                        checked={data.vegan}
+                        onChange={() =>
+                            setField(
+                                'vegan',
+                                !data.vegan
+                            )
+                        }
+                    />
+
+                    <ToggleField
+                        label="Halal"
+                        checked={data.halal}
+                        onChange={() =>
+                            setField(
+                                'halal',
+                                !data.halal
                             )
                         }
                     />

@@ -10,14 +10,14 @@ import { useRouter } from 'next/navigation';
 import Button from '@/shared/components/button/button';
 import Input from '@/shared/components/input/input';
 
-import {
-    Eye,
-    EyeOff,
-} from '@/shared/icons';
-
 import { authService } from '../../auth.service';
 
 import styles from './login-form.module.sass';
+
+
+type LoginStep =
+    | 'phone'
+    | 'otp';
 
 
 export default function LoginForm() {
@@ -25,40 +25,46 @@ export default function LoginForm() {
     const router = useRouter();
 
 
-    const [partnerId, setPartnerId] =
+    const [step, setStep] =
+        useState<LoginStep>('phone');
+
+
+    const [phone, setPhone] =
         useState('');
 
-    const [password, setPassword] =
+
+    const [otp, setOtp] =
         useState('');
 
-    const [showPassword, setShowPassword] =
-        useState(false);
 
     const [error, setError] =
         useState('');
+
 
     const [loading, setLoading] =
         useState(false);
 
 
-    const handleSubmit = async (
+    const handleSendOtp = async (
         event: FormEvent<HTMLFormElement>,
     ) => {
 
         event.preventDefault();
+
         setError('');
 
 
-        const trimmedPartnerId =
-            partnerId.trim();
+        const trimmedPhone =
+            phone.trim();
 
 
         if (
-            !trimmedPartnerId ||
-            !password
+            !trimmedPhone ||
+            !/^\d{10}$/.test(trimmedPhone)
         ) {
+
             setError(
-                'Please enter your Partner ID and password.',
+                'Please enter a valid 10-digit phone number.',
             );
 
             return;
@@ -71,11 +77,8 @@ export default function LoginForm() {
 
 
             const response =
-                await authService.login({
-                    partnerId:
-                        trimmedPartnerId,
-
-                    password,
+                await authService.sendOtp({
+                    phone: trimmedPhone,
                 });
 
 
@@ -83,21 +86,39 @@ export default function LoginForm() {
 
                 setError(
                     response.message ||
-                    'Unable to sign in.',
+                    'Unable to send OTP.',
                 );
 
                 return;
             }
 
 
-            router.push('/dashboard');
+            /*
+             * Development only.
+             *
+             * Backend currently returns
+             * the OTP in the response.
+             *
+             * Remove this when real SMS
+             * integration is added.
+             */
+
+            if (response.data?.otp) {
+
+                setOtp(
+                    response.data.otp,
+                );
+            }
+
+
+            setStep('otp');
 
         } catch (error) {
 
             setError(
                 error instanceof Error
                     ? error.message
-                    : 'Unable to sign in.',
+                    : 'Unable to send OTP.',
             );
 
         } finally {
@@ -107,161 +128,235 @@ export default function LoginForm() {
     };
 
 
+    const handleVerifyOtp = async (
+        event: FormEvent<HTMLFormElement>,
+    ) => {
+
+        event.preventDefault();
+
+        setError('');
+
+
+        const trimmedPhone =
+            phone.trim();
+
+        const trimmedOtp =
+            otp.trim();
+
+
+        if (
+            !/^\d{10}$/.test(trimmedPhone)
+        ) {
+
+            setError(
+                'Invalid phone number.',
+            );
+
+            return;
+        }
+
+
+        if (
+            !/^\d{6}$/.test(trimmedOtp)
+        ) {
+
+            setError(
+                'Please enter the 6-digit OTP.',
+            );
+
+            return;
+        }
+
+
+        try {
+
+            setLoading(true);
+
+
+            const response =
+                await authService.verifyOtp({
+                    phone: trimmedPhone,
+                    otp: trimmedOtp,
+                });
+
+
+            if (!response.success) {
+
+                setError(
+                    response.message ||
+                    'Invalid OTP.',
+                );
+
+                return;
+            }
+
+
+            /*
+             * Backend sets:
+             *
+             * accessToken
+             * refreshToken
+             *
+             * as HTTP-only cookies.
+             *
+             * We don't store tokens
+             * in localStorage.
+             */
+
+
+            if (
+                response.data?.isNewUser
+            ) {
+
+                router.push(
+                    `/complete-profile?phone=${encodeURIComponent(
+                        trimmedPhone,
+                    )}`,
+                );
+
+                return;
+            }
+
+
+            router.push(
+                '/dashboard',
+            );
+
+        } catch (error) {
+
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : 'Unable to verify OTP.',
+            );
+
+        } finally {
+
+            setLoading(false);
+        }
+    };
+
+
+    const handleChangePhone = () => {
+
+        setStep('phone');
+
+        setOtp('');
+
+        setError('');
+    };
+
+
     return (
         <form
             className={styles.form}
-            onSubmit={handleSubmit}
+            onSubmit={
+                step === 'phone'
+                    ? handleSendOtp
+                    : handleVerifyOtp
+            }
         >
 
-            {/* Partner ID */}
+            {step === 'phone' && (
 
-            <Input
-                id="partner-id"
-                name="partnerId"
-                label="Partner ID"
-                value={partnerId}
-                onChange={setPartnerId}
-                placeholder="e.g. FEA-MH-00142"
-                autoComplete="username"
-                autoCapitalize="characters"
-                spellCheck={false}
-                disabled={loading}
-                hint="Your Partner ID was emailed to you when your account was created."
-            />
-
-
-            {/* Password */}
-
-            <div className={styles.passwordField}>
-
-                <div
-                    className={
-                        styles.passwordHeader
-                    }
-                >
-
-                    <label
-                        className={styles.label}
-                        htmlFor="password"
-                    >
-                        Password
-                    </label>
-
-
-                    <button
-                        className={
-                            styles.forgotPassword
-                        }
-                        type="button"
-                        onClick={() => {
-                            // Add forgot-password flow later
-                        }}
-                        disabled={loading}
-                    >
-                        Forgot password?
-                    </button>
-
-                </div>
-
-
-                <div
-                    className={
-                        styles.passwordWrapper
-                    }
-                >
-
+                <>
                     <Input
-                        id="password"
-                        name="password"
-                        type={
-                            showPassword
-                                ? 'text'
-                                : 'password'
-                        }
-                        value={password}
-                        onChange={setPassword}
-                        placeholder="Enter your password"
-                        autoComplete="current-password"
+                        id="phone"
+                        name="phone"
+                        label="Phone Number"
+                        value={phone}
+                        onChange={setPhone}
+                        placeholder="Enter your 10-digit phone number"
+                        autoComplete="tel"
+                        inputMode="numeric"
+                        maxLength={10}
                         disabled={loading}
+                        hint="Use the phone number registered with your restaurant partner account."
                     />
 
 
+                    {error && (
+                        <div
+                            className={
+                                styles.error
+                            }
+                            role="alert"
+                            aria-live="polite"
+                        >
+                            {error}
+                        </div>
+                    )}
+
+
+                    <Button
+                        type="submit"
+                        size="lg"
+                        fullWidth
+                        loading={loading}
+                    >
+                        Send OTP
+                    </Button>
+                </>
+
+            )}
+
+
+            {step === 'otp' && (
+
+                <>
+                    <Input
+                        id="otp"
+                        name="otp"
+                        label="OTP"
+                        value={otp}
+                        onChange={setOtp}
+                        placeholder="Enter 6-digit OTP"
+                        autoComplete="one-time-code"
+                        inputMode="numeric"
+                        maxLength={6}
+                        disabled={loading}
+                        hint={`OTP sent to ${phone}`}
+                    />
+
+
+                    {error && (
+                        <div
+                            className={
+                                styles.error
+                            }
+                            role="alert"
+                            aria-live="polite"
+                        >
+                            {error}
+                        </div>
+                    )}
+
+
+                    <Button
+                        type="submit"
+                        size="lg"
+                        fullWidth
+                        loading={loading}
+                    >
+                        Verify OTP
+                    </Button>
+
+
                     <button
-                        className={
-                            styles.passwordToggle
-                        }
                         type="button"
-                        onClick={() =>
-                            setShowPassword(
-                                (value) => !value,
-                            )
+                        className={
+                            styles.changePhone
                         }
-                        aria-label={
-                            showPassword
-                                ? 'Hide password'
-                                : 'Show password'
+                        onClick={
+                            handleChangePhone
                         }
                         disabled={loading}
                     >
-
-                        {showPassword ? (
-                            <EyeOff size={20} />
-                        ) : (
-                            <Eye size={20} />
-                        )}
-
+                        Change phone number
                     </button>
+                </>
 
-                </div>
-
-            </div>
-
-            {/* Error */}
-
-            {error && (
-                <div
-                    className={styles.error}
-                    role="alert"
-                    aria-live="polite"
-                >
-                    {error}
-                </div>
             )}
-
-            {/* Submit */}
-
-            <Button
-                type="submit"
-                size="lg"
-                fullWidth
-                loading={loading}
-            >
-                Sign In
-            </Button>
-
-
-            {/* Demo credentials */}
-
-            <div className={styles.demo}>
-
-                <p className={styles.demoTitle}>
-                    Demo credentials
-                </p>
-
-
-                <p
-                    className={
-                        styles.demoCredentials
-                    }
-                >
-                    ID: FEA-MH-00142
-
-                    <span>·</span>
-
-                    Password: partner@123
-                </p>
-
-            </div>
 
         </form>
     );

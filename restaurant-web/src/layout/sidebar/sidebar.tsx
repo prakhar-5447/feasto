@@ -12,7 +12,7 @@ import {
 
 import {
     useGetRestaurantQuery,
-    useUpdateRestaurantStatusMutation,
+    useUpdateRestaurantMutation,
 } from '@/features/restaurant/restaurant.api';
 
 import {
@@ -117,30 +117,28 @@ export default function Sidebar() {
     };
 
     const {
-        data: restaurant,
+        data,
         isLoading,
     } = useGetRestaurantQuery();
 
-    const [
-        updateRestaurantStatus,
-        {
-            isLoading: isUpdatingStatus,
-        },
-    ] = useUpdateRestaurantStatusMutation();
+    const [updateRestaurant, { isLoading: isUpdatingStatus }] =
+        useUpdateRestaurantMutation();
+
+    const restaurant =
+        data?.data;
 
     const isOpen =
         restaurant?.isOpen ?? false;
 
     const handleToggleOpen = async () => {
         try {
-            await updateRestaurantStatus({
+            const result = await updateRestaurant({
                 isOpen: !isOpen,
             }).unwrap();
+
+            console.log('Restaurant updated:', result);
         } catch (error) {
-            console.error(
-                'Failed to update restaurant status:',
-                error
-            );
+            console.error('Failed to update restaurant:', error);
         }
     };
 
@@ -228,11 +226,13 @@ export default function Sidebar() {
                     >
 
                         <p>
-                            The Biryani Co.
+                            {restaurant?.name ?? 'Restaurant'}
                         </p>
 
                         <span>
-                            Pune, Maharashtra
+                            {[restaurant?.address]
+                                .filter(Boolean)
+                                .join(', ') || 'Location unavailable'}
                         </span>
 
                     </div>
