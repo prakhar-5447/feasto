@@ -1,0 +1,32 @@
+<section class="section-stack">
+    @for (review of reviews; track review.id) {
+    <article class="card review-card">
+        <div class="review-thumb">
+            <img [src]="review.restaurantImage" [alt]="review.restaurantName" />
+        </div>
+
+        <div class="review-content">
+            <div class="review-heading">
+                <strong>{{ review.restaurantName }}</strong>
+                <span>{{ review.date }}</span>
+            </div>
+
+            <div class="stars">
+                @for (star of stars(review.rating); track star) {
+                <fa-icon [icon]="faStar" class="filled"></fa-icon>
+                }
+                @for (star of emptyStars(review.rating); track star) {
+                <fa-icon [icon]="faStar" class="empty"></fa-icon>
+                }
+            </div>
+
+            <p>{{ review.comment }}</p>
+
+            <div class="review-actions">
+                <button type="button"><fa-icon [icon]="faEdit"></fa-icon> Edit</button>
+                <button type="button" class="danger"><fa-icon [icon]="faTrash"></fa-icon> Delete</button>
+            </div>
+        </div>
+    </article>
+    }
+</section>

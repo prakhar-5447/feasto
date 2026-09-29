@@ -1,0 +1,50 @@
+<section class="section-stack">
+    @for (order of orders; track order.id) {
+    <article class="order-card">
+        <div class="order-main">
+            <div class="restaurant-thumb">
+                <img [src]="order.restaurantImage" [alt]="order.restaurantName" />
+            </div>
+
+            <div class="order-info">
+                <div class="order-top">
+                    <p class="restaurant-name">{{ order.restaurantName }}</p>
+
+                    <span class="status-pill" [class.delivered]="order.status === 'Delivered'"
+                        [class.cancelled]="order.status === 'Cancelled'"
+                        [class.processing]="order.status === 'Processing'">
+                        {{ order.status }}
+                    </span>
+                </div>
+
+                <p class="order-date">{{ order.date }}</p>
+
+                <p class="order-items">
+                    @for (item of order.items; track item.name) {
+                    {{ item.name }}{{ !$last ? ', ' : '' }}
+                    }
+                </p>
+            </div>
+
+            <div class="order-amount">
+                <strong>₹{{ order.total }}</strong>
+                <span>{{ getItemCount(order) }} items</span>
+            </div>
+        </div>
+
+        <div class="order-actions">
+            <button type="button" (click)="viewOrder.emit(order)">
+                View Details
+                <fa-icon [icon]="faChevronRight"></fa-icon>
+            </button>
+
+            <span class="action-divider"></span>
+
+            <button type="button">
+                <fa-icon [icon]="faRotateLeft"></fa-icon>
+                Reorder
+            </button>
+        </div>
+    </article>
+    }
+</section>

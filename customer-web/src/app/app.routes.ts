@@ -15,6 +15,7 @@ import { LandingLayout } from '@/app/layouts/landing-layout/landing-layout';
 
 import { validCityGuard } from '@/app/core/guards/valid-city.guard';
 import { restaurantResolver } from '@/app/core/resolver/restaurant.resolver';
+import { Profile } from './features/profile/components/profile/profile';
 
 export const routes: Routes = [
 
@@ -39,6 +40,14 @@ export const routes: Routes = [
             {
                 path: 'india',
                 loadComponent: () => Location
+            },
+
+            // ============================================================
+            // Profile
+            // ============================================================
+            {
+                path: 'profile',
+                loadComponent: () => Profile
             }
         ]
     },

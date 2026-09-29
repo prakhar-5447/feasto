@@ -1,0 +1,148 @@
+@use '../../../../../styles/index' as *
+@use '../profile-shared' as shared
+
+:host
+    display: block
+
+.section-stack
+    @include shared.section-stack
+
+.order-card
+    overflow: hidden
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+    background: $color-bg-white
+
+    &:hover
+        border-color: rgba(255, 90, 31, 0.3)
+        box-shadow: $shadow-sm
+
+.order-main
+    display: flex
+    align-items: center
+    gap: $space-16
+    padding: $space-16
+
+.restaurant-thumb
+    overflow: hidden
+    width: 56px
+    height: 56px
+    flex-shrink: 0
+    border-radius: $radius-8
+    background: $color-bg-gray-soft
+
+    img
+        width: 100%
+        height: 100%
+        object-fit: cover
+
+.order-info
+    flex: 1
+    min-width: 0
+
+.order-top
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    gap: $space-8
+
+.restaurant-name
+    margin: 0
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+.order-date
+    margin: $space-2 0 0
+    color: $color-text-secondary
+    font-size: $font-size-12
+
+.order-items
+    margin: $space-4 0 0
+    overflow: hidden
+    color: $color-text-secondary
+    font-size: $font-size-12
+    text-overflow: ellipsis
+    white-space: nowrap
+
+.status-pill
+    padding: $space-4 $space-8
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-circle
+    background: $color-bg-gray-soft
+    color: $color-text-secondary
+    font-size: $font-size-12
+    font-weight: $font-weight-semibold
+
+    &.delivered
+        border-color: rgba(34, 197, 94, 0.2)
+        background: rgba(34, 197, 94, 0.08)
+        color: $color-success
+
+    &.cancelled
+        border-color: rgba(239, 68, 68, 0.2)
+        background: rgba(239, 68, 68, 0.08)
+        color: $color-error
+
+    &.processing
+        border-color: rgba(234, 179, 8, 0.2)
+        background: rgba(234, 179, 8, 0.08)
+        color: #a16207
+
+.order-amount
+    flex-shrink: 0
+    text-align: right
+
+    strong
+        display: block
+        color: $color-text-primary
+        font-size: $font-size-16
+        font-weight: $font-weight-bold
+
+    span
+        display: block
+        margin-top: $space-2
+        color: $color-text-secondary
+        font-size: $font-size-12
+
+.order-actions
+    display: flex
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+    button
+        display: flex
+        align-items: center
+        justify-content: center
+        gap: $space-8
+        flex: 1
+        padding: $space-12
+        border: 0
+        background: transparent
+        color: $color-text-secondary
+        font-size: $font-size-12
+        font-weight: $font-weight-semibold
+        cursor: pointer
+
+        &:first-child
+            color: $color-primary
+
+        &:hover
+            background: $color-bg-gray-soft
+
+.action-divider
+    width: $border-width-1
+    background: $color-border-light
+
+@media (max-width: $breakpoint-sm)
+    .order-main
+        align-items: flex-start
+
+    .order-amount
+        display: none
+
+    .order-top
+        flex-direction: column
+
+    .order-actions
+        button
+            padding: $space-12 $space-8

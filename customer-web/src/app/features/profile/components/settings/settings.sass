@@ -1,0 +1,75 @@
+@use '../../../../../styles/index' as *
+@use '../profile-shared' as shared
+
+:host
+    display: block
+
+.section-stack
+    @include shared.section-stack
+
+.card
+    @include shared.card
+    padding: $space-20
+
+.settings-title,
+.danger-title
+    display: flex
+    align-items: center
+    gap: $space-8
+    margin: 0 0 $space-12
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+
+.settings-card > button,
+.danger-card > button
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    padding: $space-12 0
+    border: 0
+    border-top: $border-width-1 $border-style-solid $color-border-light
+    background: transparent
+    color: $color-text-primary
+    font-size: $font-size-14
+    text-align: left
+    cursor: pointer
+
+.setting-row
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+    padding: $space-12 0
+    border-top: $border-width-1 $border-style-solid $color-border-light
+
+    span
+        color: $color-text-primary
+        font-size: $font-size-14
+
+    select
+        min-width: 130px
+        height: 36px
+        padding: 0 $space-8
+        border: $border-width-1 $border-style-solid $color-border
+        border-radius: $radius-4
+        background: $color-bg-white
+        color: $color-text-primary
+
+.danger-card
+    border-color: rgba(239, 68, 68, 0.2)
+
+.danger-title
+    color: $color-error
+
+.danger-card > button
+    color: $color-error
+
+    &.logout-button
+        color: $color-text-primary
+
+        > span
+            display: inline-flex
+            align-items: center
+            gap: $space-8

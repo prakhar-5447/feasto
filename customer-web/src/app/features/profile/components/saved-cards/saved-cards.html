@@ -1,0 +1,31 @@
+<section class="section-stack">
+    @for (card of cards; track card.id) {
+    <article class="card saved-card">
+        <div class="card-brand" [class.visa]="card.type === 'Visa'" [class.mastercard]="card.type === 'Mastercard'">
+            {{ card.type === 'Visa' ? 'VISA' : 'MC' }}
+        </div>
+
+        <div class="saved-card-info">
+            <div>
+                <strong>{{ card.type }} •••• {{ card.lastFour }}</strong>
+                @if (card.isDefault) {
+                <span class="default-pill">Default</span>
+                }
+            </div>
+            <span>Expires {{ card.expiry }}</span>
+        </div>
+
+        <div class="card-actions">
+            <button type="button">Edit</button>
+            <button type="button" class="delete-button" aria-label="Delete payment method">
+                <fa-icon [icon]="faTrash"></fa-icon>
+            </button>
+        </div>
+    </article>
+    }
+
+    <button type="button" class="dashed-add">
+        <fa-icon [icon]="faPlus"></fa-icon>
+        Add Payment Method
+    </button>
+</section>

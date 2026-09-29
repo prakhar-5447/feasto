@@ -1,0 +1,92 @@
+@use '../../../../../styles/index' as *
+
+:host
+    display: block
+    flex: 0 0 208px
+    position: sticky
+    top: $space-24
+
+.sidebar
+    overflow: hidden
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+    background: $color-bg-white
+
+.nav-group
+    padding: $space-4 0 $space-8
+
+    &.with-border
+        border-top: $border-width-1 $border-style-solid $color-border-light
+
+.group-title
+    margin: 0
+    padding: $space-12 $space-16 $space-4
+    color: $color-text-secondary
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+    letter-spacing: 0.12em
+    text-transform: uppercase
+
+.nav-item
+    display: flex
+    align-items: center
+    gap: $space-12
+    width: 100%
+    padding: $space-12 $space-16
+    border: 0
+    border-right: 2px solid transparent
+    background: transparent
+    color: $color-text-secondary
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+    text-align: left
+    cursor: pointer
+
+    fa-icon
+        width: $space-16
+        flex-shrink: 0
+
+    &:hover
+        background: $color-bg-gray-soft
+        color: $color-text-primary
+
+    &.active
+        border-right-color: $color-primary
+        background: rgba(255, 90, 31, 0.07)
+        color: $color-primary
+        font-weight: $font-weight-bold
+
+@media (max-width: $breakpoint-md)
+    :host
+        width: 100%
+        margin-bottom: $space-16
+
+    .sidebar
+        position: static
+        display: flex
+        width: 100%
+        overflow-x: auto
+        border-radius: $radius-8
+
+    .nav-group
+        display: flex
+        flex-shrink: 0
+        padding: 0
+
+        &.with-border
+            border-top: 0
+            border-left: $border-width-1 $border-style-solid $color-border-light
+
+    .group-title
+        display: none
+
+    .nav-item
+        width: auto
+        min-height: 44px
+        white-space: nowrap
+        border-right: 0
+        border-bottom: 2px solid transparent
+
+        &.active
+            border-right: 0
+            border-bottom-color: $color-primary

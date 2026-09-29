@@ -1,0 +1,119 @@
+<section class="section-stack">
+    <button type="button" class="back-button" (click)="back.emit()">
+        <fa-icon [icon]="faArrowLeft"></fa-icon>
+        Back to Orders
+    </button>
+
+    <article class="card order-detail-card">
+        <div class="order-success-header">
+            <div class="success-heading">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                <div>
+                    <p>Order Delivered</p>
+                    <span>{{ order.date }}</span>
+                </div>
+            </div>
+
+            <div class="order-id">
+                <span>Order ID</span>
+                <strong>{{ order.id }}</strong>
+            </div>
+        </div>
+
+        <div class="restaurant-row">
+            <div class="small-restaurant-thumb">
+                <img [src]="order.restaurantImage" [alt]="order.restaurantName" />
+            </div>
+            <div>
+                <p>{{ order.restaurantName }}</p>
+                <span>Restaurant</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <p class="detail-label">
+                <fa-icon [icon]="faPackage"></fa-icon>
+                Items Ordered
+            </p>
+
+            @for (item of order.items; track item.name) {
+            <div class="detail-item">
+                <div>
+                    <span class="quantity">{{ item.qty }}×</span>
+                    <span>{{ item.name }}</span>
+                </div>
+                <strong>₹{{ item.price * item.qty }}</strong>
+            </div>
+            }
+        </div>
+
+        <div class="bill-section">
+            <div>
+                <span>Item total</span>
+                <span>₹{{ getItemTotal(order) }}</span>
+            </div>
+            <div>
+                <span>Delivery fee</span>
+                @if (order.deliveryFee === 0) {
+                <span class="free">Free</span>
+                } @else {
+                <span>₹{{ order.deliveryFee }}</span>
+                }
+            </div>
+            <div class="total-row">
+                <strong>Total paid</strong>
+                <strong>₹{{ order.total }}</strong>
+            </div>
+            <p>Paid via {{ order.paymentMethod }}</p>
+        </div>
+
+        <div class="delivery-address">
+            <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+            <div>
+                <span>Delivered to</span>
+                <p>{{ order.address }}</p>
+            </div>
+        </div>
+    </article>
+
+    <article class="card timeline-card">
+        <p class="detail-label">
+            <fa-icon [icon]="faBike"></fa-icon>
+            Delivery Timeline
+        </p>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span>Order placed</span>
+                <small>{{ order.date }}</small>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span>Restaurant accepted</span>
+                <small>2 min later</small>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span>Out for delivery</span>
+                <small>25 min later</small>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span>Delivered</span>
+                <small>38 min later</small>
+            </div>
+        </div>
+    </article>
+
+    <div class="detail-actions">
+        <button type="button" class="primary-button">
+            <fa-icon [icon]="faRotateLeft"></fa-icon>
+            Reorder
+        </button>
+        <button type="button" class="secondary-button">
+            <fa-icon [icon]="faStar"></fa-icon>
+            Rate Order
+        </button>
+    </div>
+</section>

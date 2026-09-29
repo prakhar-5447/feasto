@@ -1,0 +1,25 @@
+<section class="favorites-grid">
+    @for (restaurant of favorites; track restaurant.id) {
+    <article class="favorite-card">
+        <div class="favorite-image">
+            <img [src]="restaurant.image" [alt]="restaurant.name" />
+            <button type="button" aria-label="Remove favorite">
+                <fa-icon [icon]="faHeart"></fa-icon>
+            </button>
+        </div>
+
+        <div class="favorite-content">
+            <strong>{{ restaurant.name }}</strong>
+            <span>{{ restaurant.cuisine }}</span>
+
+            <div class="favorite-footer">
+                <div class="rating">
+                    <fa-icon [icon]="faStar"></fa-icon>
+                    {{ restaurant.rating }}
+                </div>
+                <button type="button">Order Now</button>
+            </div>
+        </div>
+    </article>
+    }
+</section>

@@ -1,0 +1,14 @@
+<aside class="sidebar">
+    @for (group of navigation; track group.group; let first = $first) {
+    <div class="nav-group" [class.with-border]="!first">
+        <p class="group-title">{{ group.group }}</p>
+
+        @for (item of group.items; track item.id) {
+        <button type="button" class="nav-item" [class.active]="isActive(item.id)" (click)="selectSection(item.id)">
+            <fa-icon [icon]="item.icon"></fa-icon>
+            <span>{{ item.label }}</span>
+        </button>
+        }
+    </div>
+    }
+</aside>

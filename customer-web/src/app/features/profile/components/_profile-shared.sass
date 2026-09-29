@@ -1,0 +1,59 @@
+@use '../../../../styles/index' as *
+
+@mixin card
+    border: $border-width-1 $border-style-solid $color-border-light
+    border-radius: $radius-12
+    background: $color-bg-white
+
+@mixin section-stack
+    display: flex
+    flex-direction: column
+    gap: $space-12
+
+@mixin primary-button
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    gap: $space-8
+    min-height: 40px
+    padding: $space-8 $space-16
+    border: $border-width-1 $border-style-solid $color-primary
+    border-radius: $radius-8
+    background: $color-primary
+    color: $color-text-white
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+    cursor: pointer
+    transition: $transition-background
+
+    &:hover
+        background: $color-primary-hover
+
+@mixin secondary-button
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    gap: $space-8
+    min-height: 40px
+    padding: $space-8 $space-16
+    border: $border-width-1 $border-style-solid $color-border
+    border-radius: $radius-8
+    background: $color-bg-white
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-bold
+    cursor: pointer
+
+    &:hover
+        background: $color-bg-gray-soft
+
+@mixin text-button
+    border: $border-style-none
+    background: transparent
+    color: $color-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+    cursor: pointer
+
+    &:hover
+        color: $color-primary-hover

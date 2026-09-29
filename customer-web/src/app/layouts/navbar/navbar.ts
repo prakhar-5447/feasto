@@ -77,10 +77,10 @@ export class Navbar {
     );
   }
 
-  goToProfile(user: string): void {
+  goToProfile(): void {
+
     this.router.navigate([
-      '/users',
-      user,
+      '/profile',
     ]);
   }
 }

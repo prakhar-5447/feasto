@@ -1,0 +1,64 @@
+<section class="section-stack">
+    <article class="card settings-card">
+        <p class="settings-title">
+            <fa-icon [icon]="faLock"></fa-icon>
+            Security
+        </p>
+
+        <button type="button">
+            Change Password
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+        </button>
+
+        <button type="button">
+            Two-Factor Authentication
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+        </button>
+
+        <button type="button">
+            Active Sessions
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+        </button>
+    </article>
+
+    <article class="card settings-card">
+        <p class="settings-title">
+            <fa-icon [icon]="faGlobe"></fa-icon>
+            Preferences
+        </p>
+
+        <div class="setting-row">
+            <span>Language</span>
+            <select>
+                <option>English</option>
+                <option>Hindi</option>
+                <option>Kannada</option>
+            </select>
+        </div>
+
+        <div class="setting-row">
+            <span>Currency</span>
+            <select>
+                <option>INR (₹)</option>
+                <option>USD ($)</option>
+            </select>
+        </div>
+    </article>
+
+    <article class="card danger-card">
+        <p class="danger-title">Danger Zone</p>
+
+        <button type="button">
+            Delete Account
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+        </button>
+
+        <button type="button" class="logout-button" (click)="logout.emit()">
+            <span>
+                <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                Log Out
+            </span>
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+        </button>
+    </article>
+</section>

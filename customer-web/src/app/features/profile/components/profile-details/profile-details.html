@@ -1,0 +1,80 @@
+<section class="section-stack">
+    <article class="card">
+        <h3>Profile Photo</h3>
+
+        <div class="profile-photo-row">
+            <div class="large-avatar">
+                <img [src]="user.avatar" [alt]="user.name" />
+                <button type="button" class="avatar-action" aria-label="Change profile photo">
+                    <fa-icon [icon]="faCamera"></fa-icon>
+                </button>
+            </div>
+
+            <div>
+                <p class="profile-name">{{ user.name }}</p>
+                <p class="member-since">Member since {{ user.joinedDate }}</p>
+                <button type="button" class="link-button">Change photo</button>
+            </div>
+        </div>
+    </article>
+
+    <article class="card">
+        <h3>Personal Information</h3>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label for="profile-name">Full Name</label>
+                <div class="input-wrapper">
+                    <fa-icon [icon]="faUser"></fa-icon>
+                    <input id="profile-name" type="text" [(ngModel)]="user.name" />
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="profile-email">Email Address</label>
+                <div class="input-wrapper">
+                    <fa-icon [icon]="faEnvelope"></fa-icon>
+                    <input id="profile-email" type="email" [(ngModel)]="user.email" />
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="profile-phone">Phone Number</label>
+                <div class="input-wrapper">
+                    <fa-icon [icon]="faPhone"></fa-icon>
+                    <input id="profile-phone" type="tel" [(ngModel)]="user.phone" />
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="profile-dob">Date of Birth</label>
+                <div class="input-wrapper">
+                    <fa-icon [icon]="faCalendar"></fa-icon>
+                    <input id="profile-dob" type="date" [(ngModel)]="user.dob" />
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="profile-gender">Gender</label>
+                <select id="profile-gender" [(ngModel)]="user.gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Prefer not to say</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="save-row">
+            @if (saved) {
+            <p class="saved-message">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Changes saved
+            </p>
+            }
+
+            <button type="button" class="primary-button" (click)="save.emit()">
+                Save Changes
+            </button>
+        </div>
+    </article>
+</section>

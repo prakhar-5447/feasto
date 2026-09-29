@@ -1,0 +1,33 @@
+<section class="section-stack">
+    @for (address of addresses; track address.id) {
+    <article class="card address-card">
+        <div class="address-content">
+            <div class="address-icon">
+                <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+            </div>
+
+            <div>
+                <div class="address-heading">
+                    <strong>{{ address.type }}</strong>
+                    @if (address.isDefault) {
+                    <span class="default-pill">Default</span>
+                    }
+                </div>
+                <p>{{ address.address }}</p>
+            </div>
+        </div>
+
+        <div class="card-actions">
+            <button type="button">Edit</button>
+            <button type="button" class="delete-button" aria-label="Delete address">
+                <fa-icon [icon]="faTrash"></fa-icon>
+            </button>
+        </div>
+    </article>
+    }
+
+    <button type="button" class="dashed-add">
+        <fa-icon [icon]="faPlus"></fa-icon>
+        Add New Address
+    </button>
+</section>

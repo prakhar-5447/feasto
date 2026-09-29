@@ -1,0 +1,86 @@
+@use '../../../../../styles/index' as *
+@use '../profile-shared' as shared
+
+:host
+    display: block
+
+.section-stack
+    @include shared.section-stack
+
+.card
+    @include shared.card
+
+.review-card
+    display: flex
+    align-items: center
+    gap: $space-16
+    padding: $space-16
+
+.review-thumb
+    overflow: hidden
+    width: 56px
+    height: 56px
+    flex-shrink: 0
+    border-radius: $radius-8
+
+    img
+        width: 100%
+        height: 100%
+        object-fit: cover
+
+.review-content
+    flex: 1
+    min-width: 0
+
+.review-heading
+    display: flex
+    justify-content: space-between
+    gap: $space-8
+
+    strong
+        color: $color-text-primary
+        font-size: $font-size-14
+
+    span
+        color: $color-text-secondary
+        font-size: $font-size-12
+
+.stars
+    margin-top: $space-4
+
+    .filled
+        color: $color-primary
+
+    .empty
+        color: $color-border
+
+.review-content > p
+    margin: $space-8 0
+    color: $color-text-secondary
+    font-size: $font-size-14
+
+.review-actions
+    display: flex
+    gap: $space-8
+
+    button
+        display: inline-flex
+        align-items: center
+        gap: $space-4
+        padding: 0
+        border: 0
+        background: transparent
+        color: $color-text-secondary
+        font-size: $font-size-12
+        cursor: pointer
+
+        &.danger
+            color: $color-error
+
+@media (max-width: $breakpoint-sm)
+    .review-card
+        align-items: flex-start
+
+    .review-heading
+        flex-direction: column
+        gap: $space-2

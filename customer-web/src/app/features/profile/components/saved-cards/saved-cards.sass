@@ -1,0 +1,97 @@
+@use '../../../../../styles/index' as *
+@use '../profile-shared' as shared
+
+:host
+    display: block
+
+.section-stack
+    @include shared.section-stack
+
+.card
+    @include shared.card
+    padding: $space-20
+
+.saved-card
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: $space-16
+
+.card-brand
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 48px
+    height: 32px
+    border-radius: $radius-4
+    background: #1a1f71
+    color: $color-text-white
+    font-size: $font-size-12
+    font-weight: $font-weight-bold
+
+    &.mastercard
+        background: #222
+
+.saved-card-info
+    flex: 1
+    min-width: 0
+
+    > div
+        display: flex
+        align-items: center
+        gap: $space-8
+
+    strong
+        color: $color-text-primary
+        font-size: $font-size-14
+
+    > span
+        display: block
+        margin-top: $space-4
+        color: $color-text-secondary
+        font-size: $font-size-12
+
+.default-pill
+    padding: 2px $space-8
+    border-radius: $radius-circle
+    background: rgba(255, 90, 31, 0.08)
+    color: $color-primary
+    font-size: $font-size-12
+
+.card-actions
+    display: flex
+    gap: $space-8
+    flex-shrink: 0
+
+    button
+        padding: $space-8 $space-12
+        border: $border-width-1 $border-style-solid $color-border
+        border-radius: $radius-8
+        background: $color-bg-white
+        color: $color-text-secondary
+        cursor: pointer
+
+    .delete-button
+        color: $color-error
+
+.dashed-add
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: $space-8
+    min-height: 56px
+    border: 1px dashed $color-border
+    border-radius: $radius-12
+    background: transparent
+    color: $color-primary
+    font-weight: $font-weight-semibold
+    cursor: pointer
+
+@media (max-width: $breakpoint-sm)
+    .saved-card
+        align-items: flex-start
+        flex-direction: column
+
+    .card-actions
+        width: 100%
+        justify-content: flex-end

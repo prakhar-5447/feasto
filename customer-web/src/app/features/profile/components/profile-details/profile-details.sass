@@ -1,0 +1,150 @@
+@use '../../../../../styles/index' as *
+@use '../profile-shared' as shared
+
+:host
+    display: block
+
+.section-stack
+    @include shared.section-stack
+
+.card
+    @include shared.card
+    padding: $space-20
+
+    h3
+        margin: 0 0 $space-20
+        color: $color-text-primary
+        font-size: $font-size-16
+        font-weight: $font-weight-bold
+
+.profile-photo-row
+    display: flex
+    align-items: center
+    gap: $space-20
+
+.large-avatar
+    position: relative
+    width: 80px
+    height: 80px
+    flex-shrink: 0
+    border: 2px solid $color-primary
+    border-radius: $radius-circle
+
+    img
+        width: 100%
+        height: 100%
+        object-fit: cover
+        border-radius: inherit
+
+.avatar-action
+    position: absolute
+    right: -2px
+    bottom: -2px
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 24px
+    height: 24px
+    padding: 0
+    border: 0
+    border-radius: $radius-circle
+    background: $color-primary
+    color: $color-text-white
+    cursor: pointer
+
+.profile-name
+    margin: 0
+    color: $color-text-primary
+    font-size: $font-size-14
+    font-weight: $font-weight-semibold
+
+.member-since
+    margin: $space-2 0 0
+    color: $color-text-secondary
+    font-size: $font-size-12
+
+.link-button
+    @include shared.text-button
+    margin-top: $space-8
+    padding: 0
+    font-size: $font-size-12
+
+.form-grid
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: $space-16
+
+.form-field
+    label
+        display: block
+        margin-bottom: $space-8
+        color: $color-text-secondary
+        font-size: $font-size-12
+        font-weight: $font-weight-medium
+        letter-spacing: 0.04em
+        text-transform: uppercase
+
+.input-wrapper
+    position: relative
+
+    fa-icon
+        position: absolute
+        top: 50%
+        left: $space-12
+        z-index: 1
+        color: $color-text-secondary
+        font-size: $font-size-14
+        transform: translateY(-50%)
+
+    input
+        width: 100%
+        height: 40px
+        padding: 0 $space-12 0 $space-32
+        border: $border-width-1 $border-style-solid $color-border
+        border-radius: $radius-4
+        background: $color-bg-white
+        color: $color-text-primary
+        font-size: $font-size-14
+        outline: none
+
+        &:focus
+            border-color: $color-primary
+
+.form-field
+    select
+        width: 100%
+        height: 40px
+        padding: 0 $space-12
+        border: $border-width-1 $border-style-solid $color-border
+        border-radius: $radius-4
+        background: $color-bg-white
+        color: $color-text-primary
+        font-size: $font-size-14
+        outline: none
+
+.save-row
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    gap: $space-16
+    margin-top: $space-20
+
+.saved-message
+    display: flex
+    align-items: center
+    gap: $space-8
+    margin: 0
+    color: $color-success
+    font-size: $font-size-14
+    font-weight: $font-weight-medium
+
+.primary-button
+    @include shared.primary-button
+
+@media (max-width: $breakpoint-md)
+    .form-grid
+        grid-template-columns: 1fr
+
+@media (max-width: $breakpoint-sm)
+    .profile-photo-row
+        align-items: flex-start

@@ -1,0 +1,53 @@
+<div class="profile-page">
+    <app-profile-hero [user]="user" [ordersCount]="orders.length" [reviewsCount]="reviews.length"
+        [favoritesCount]="favorites.length" />
+
+    <div class="container profile-body">
+        <div class="profile-layout">
+            <app-profile-sidebar [navigation]="navigation" [activeSection]="activeSection"
+                (sectionChange)="selectSection($event)" />
+
+            <main class="content">
+                @switch (activeSection) {
+                @case ('details') {
+                <app-profile-details [user]="user" [saved]="saved" (save)="saveProfile()" />
+                }
+
+                @case ('orders') {
+                <app-order-history [orders]="orders" (viewOrder)="viewOrder($event)" />
+                }
+
+                @case ('order-details') {
+                @if (selectedOrder) {
+                <app-order-details [order]="selectedOrder" (back)="backToOrders()" />
+                }
+                }
+
+                @case ('reviews') {
+                <app-reviews [reviews]="reviews" />
+                }
+
+                @case ('favorites') {
+                <app-favorites [favorites]="favorites" />
+                }
+
+                @case ('addresses') {
+                <app-addresses [addresses]="addresses" />
+                }
+
+                @case ('cards') {
+                <app-saved-cards [cards]="cards" />
+                }
+
+                @case ('notifications') {
+                <app-notifications />
+                }
+
+                @case ('settings') {
+                <app-settings (logout)="logout()" />
+                }
+                }
+            </main>
+        </div>
+    </div>
+</div>
