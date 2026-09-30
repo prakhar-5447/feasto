@@ -2,9 +2,7 @@ import { Component, DestroyRef, ElementRef, EventEmitter, Output, QueryList, Vie
 
 import { FormsModule } from '@angular/forms';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-import { faMobileScreen, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {  LucideSmartphone, LucideX } from '@lucide/angular';
 
 import { Observable, finalize, interval, map, take, } from 'rxjs';
 
@@ -25,16 +23,13 @@ import { AuthService } from '@/app/features/auth/services/auth.service';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule, FontAwesomeModule, Button, Input],
+  imports: [FormsModule, Button, Input, LucideSmartphone, LucideX],
   templateUrl: './auth.html',
   styleUrl: './auth.sass'
 })
 export class Auth {
 
   @Output() readonly closeAuth = new EventEmitter<void>();
-
-  readonly faMobileScreen = faMobileScreen;
-  readonly faXmark = faXmark;
 
   readonly step = signal<AuthStep>('phone');
 

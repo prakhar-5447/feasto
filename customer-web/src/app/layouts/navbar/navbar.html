@@ -43,7 +43,7 @@
 
                     <button type="button" class="profile-menu-item" role="menuitem"
                         (click)="goToProfile(); closeProfileMenu()">
-                        <fa-icon [icon]="faUser"></fa-icon>
+                        <svg lucideUser class="icon" aria-hidden="true"></svg>
                         <span>Profile</span>
                     </button>
 
@@ -51,7 +51,7 @@
 
                     <button type="button" class="profile-menu-item logout" role="menuitem"
                         (click)="logout(); closeProfileMenu()">
-                        <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                        <svg lucideLogOut class="icon" aria-hidden="true"></svg>
                         <span>Log out</span>
                     </button>
 

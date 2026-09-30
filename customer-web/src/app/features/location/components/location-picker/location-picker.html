@@ -1,7 +1,7 @@
 <div class="location-picker" appClickOutside (appClickOutside)="closeDropdown()">
     <div class="display">
 
-        <fa-icon [icon]="faLocationDot" aria-hidden="true" />
+        <svg lucideMapPin class="icon" aria-hidden="true"></svg>
 
         <label class="sr-only" for="location-search">
             Delivery location
@@ -46,7 +46,7 @@
 
                 } @else {
 
-                <fa-icon [icon]="faLocationCrosshairs" />
+                <svg lucideNavigation class="icon" aria-hidden="true"></svg>
 
                 }
 

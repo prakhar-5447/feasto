@@ -7,8 +7,7 @@ import {
 
 import { FormsModule } from '@angular/forms';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { LucideSearch } from '@lucide/angular';
 
 import {
   debounceTime,
@@ -45,16 +44,14 @@ import { ClickOutsideDirective } from '@/app/shared/directive/clickOutside.direc
   standalone: true,
   imports: [
     FormsModule,
-    FontAwesomeModule,
     ClickOutsideDirective,
+    LucideSearch
   ],
   templateUrl: './restaurant-picker.html',
   styleUrl: './restaurant-picker.sass',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RestaurantPicker {
-  readonly faMagnifyingGlass = faMagnifyingGlass;
-
   restaurantQuery = '';
 
   restaurantResults: RestaurantResult[] = [];

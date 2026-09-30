@@ -6,11 +6,7 @@ import {
   signal,
 } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faLocationCrosshairs,
-  faLocationDot,
-} from '@fortawesome/free-solid-svg-icons';
+import { LucideNavigation, LucideMapPin } from '@lucide/angular';
 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -51,8 +47,9 @@ import { SlugPipe } from '@/app/shared/pipes/slug.pipe';
   standalone: true,
   imports: [
     FormsModule,
-    FontAwesomeModule,
     ClickOutsideDirective,
+    LucideMapPin,
+    LucideNavigation,
     Loader,
   ],
   templateUrl: './location-picker.html',
@@ -63,9 +60,6 @@ import { SlugPipe } from '@/app/shared/pipes/slug.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LocationPicker {
-  readonly faLocationDot = faLocationDot;
-  readonly faLocationCrosshairs = faLocationCrosshairs;
-
   readonly locationLoading = signal(false);
   readonly detectLocationLoader = signal(false);
 
