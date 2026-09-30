@@ -95,6 +95,12 @@ export interface IOrder extends Document {
     refundedAt?: Date;
 
     refundTransactionId?: string;
+
+    deliveryOtpHash?: string;
+
+    deliveryOtpExpiresAt?: Date;
+
+    deliveryOtpVerifiedAt?: Date;
 }
 
 const orderItemSchema = new Schema(
@@ -348,6 +354,18 @@ const orderSchema = new Schema<IOrder>(
         refundTransactionId: {
             type: String,
         },
+
+        deliveryOtpHash: {
+            type: String,
+        },
+
+        deliveryOtpExpiresAt: {
+            type: Date,
+        },
+
+        deliveryOtpVerifiedAt: {
+            type: Date,
+        },
     },
     {
         timestamps: true,
@@ -371,7 +389,7 @@ orderSchema.index({
 });
 
 const Order =
-    mongoose.models.Order ||
+    mongoose.models["Order"] ||
     mongoose.model<IOrder>("Order", orderSchema);
 
 export default Order;

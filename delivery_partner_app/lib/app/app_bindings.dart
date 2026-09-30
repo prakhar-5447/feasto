@@ -29,6 +29,7 @@ import 'package:get/get.dart';
 import 'package:delivery_partner_app/core/network/api_client.dart';
 import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
 import 'package:delivery_partner_app/features/auth/services/auth_service.dart';
+import 'package:delivery_partner_app/core/storage/token_storage.dart';
 
 class AppBindings extends Bindings {
   @override
@@ -36,7 +37,7 @@ class AppBindings extends Bindings {
     Get.lazyPut<ApiClient>(() => ApiClient());
 
     Get.lazyPut<AuthService>(
-      () => AuthService(apiClient: Get.find<ApiClient>()),
+      () => AuthService(tokenStorage: Get.find<TokenStorage>()),
       fenix: true,
     );
 

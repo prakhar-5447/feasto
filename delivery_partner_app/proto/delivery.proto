@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package delivery;
+
+option go_package = "delivery_partner_backend/gen";
+
+service DeliveryService {
+
+    rpc GetAvailableOrders(GetAvailableOrdersRequest)
+        returns (GetAvailableOrdersResponse);
+
+    rpc AcceptOrder(AcceptOrderRequest)
+        returns (AcceptOrderResponse);
+
+    rpc RejectOrder(RejectOrderRequest)
+        returns (RejectOrderResponse);
+
+    rpc PickupOrder(PickupOrderRequest)
+        returns (PickupOrderResponse);
+
+    rpc RequestDeliveryOTP(RequestDeliveryOTPRequest)
+        returns (RequestDeliveryOTPResponse);
+
+    rpc VerifyDeliveryOTP(VerifyDeliveryOTPRequest)
+        returns (VerifyDeliveryOTPResponse);
+
+    rpc GetCurrentOrder(GetCurrentOrderRequest)
+        returns (GetCurrentOrderResponse);
+
+    rpc GetDeliveryHistory(GetDeliveryHistoryRequest)
+        returns (GetDeliveryHistoryResponse);
+}
+
+message GetAvailableOrdersRequest {}
+
+message GetAvailableOrdersResponse {
+    bool success = 1;
+    string message = 2;
+    repeated DeliveryOrder orders = 3;
+}
+
+message AcceptOrderRequest {
+    string order_id = 1;
+}
+
+message AcceptOrderResponse {
+    bool success = 1;
+    string message = 2;
+    DeliveryOrder order = 3;
+}
+
+message RejectOrderRequest {
+    string order_id = 1;
+    string reason = 2;
+}
+
+message RejectOrderResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message PickupOrderRequest {
+    string order_id = 1;
+}
+
+message PickupOrderResponse {
+    bool success = 1;
+    string message = 2;
+    DeliveryOrder order = 3;
+}
+
+message RequestDeliveryOTPRequest {
+    string order_id = 1;
+}
+
+message RequestDeliveryOTPResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message VerifyDeliveryOTPRequest {
+    string order_id = 1;
+    string otp = 2;
+}
+
+message VerifyDeliveryOTPResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message GetCurrentOrderRequest {}
+
+message GetCurrentOrderResponse {
+    bool success = 1;
+    string message = 2;
+    DeliveryOrder order = 3;
+}
+
+message GetDeliveryHistoryRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetDeliveryHistoryResponse {
+    bool success = 1;
+    string message = 2;
+    repeated DeliveryOrder orders = 3;
+}
+
+message DeliveryOrder {
+    string id = 1;
+    string order_id = 2;
+
+    Restaurant restaurant = 3;
+    Customer customer = 4;
+    DeliveryAddress delivery_address = 5;
+
+    double grand_total = 6;
+    string order_status = 7;
+    string created_at = 8;
+}
+
+message Restaurant {
+    string name = 1;
+    string address = 2;
+}
+
+message Customer {
+    string name = 1;
+    string phone = 2;
+}
+
+message DeliveryAddress {
+    string full_address = 1;
+    double lat = 2;
+    double lng = 3;
+}

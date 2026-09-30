@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:delivery_partner_app/core/theme/app_colors.dart';
+import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
+import 'package:delivery_partner_app/features/auth/services/auth_service.dart';
 import 'package:delivery_partner_app/features/auth/widgets/login_hero.dart';
 import 'package:delivery_partner_app/features/auth/widgets/otp_login_form.dart';
 import 'package:delivery_partner_app/features/auth/widgets/phone_login_form.dart';
@@ -17,9 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // -----------------------------
-  // State
-  // -----------------------------
   final AuthController authController = Get.find<AuthController>();
 
   bool isOtpStep = false;
@@ -42,10 +40,6 @@ class _LoginPageState extends State<LoginPage> {
   int resendTimer = 0;
   Timer? resendTimerController;
 
-  // -----------------------------
-  // Lifecycle
-  // -----------------------------
-
   @override
   void dispose() {
     phoneController.dispose();
@@ -63,11 +57,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // -----------------------------
-  // Phone
-  // -----------------------------
-
-  void handleSendOtp() {
+  Future<void> handleSendOtp() async {
     final value = phoneController.text.trim();
 
     if (value.length != 10 || !RegExp(r'^\d+$').hasMatch(value)) {
@@ -83,8 +73,11 @@ class _LoginPageState extends State<LoginPage> {
       loading = true;
     });
 
-    // Mock API delay.
-    Future.delayed(const Duration(milliseconds: 1200), () {
+    try {
+      final authService = Get.find<AuthService>();
+
+      await authService.sendOtp(phone);
+
       if (!mounted) return;
 
       setState(() {
@@ -99,12 +92,26 @@ class _LoginPageState extends State<LoginPage> {
           otpFocusNodes[0].requestFocus();
         }
       });
-    });
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        loading = false;
+        phoneError = _cleanError(error);
+      });
+    }
   }
 
-  // -----------------------------
-  // Phone
-  // -----------------------------
+  String _cleanError(Object error) {
+    final message = error.toString();
+
+    if (message.startsWith('Exception: ')) {
+      return message.substring(11);
+    }
+
+    return message;
+  }
+
   void handlePhoneChanged(String value) {
     final cleaned = value.replaceAll(RegExp(r'\D'), '');
 
@@ -119,10 +126,6 @@ class _LoginPageState extends State<LoginPage> {
       phoneError = '';
     });
   }
-
-  // -----------------------------
-  // OTP
-  // -----------------------------
 
   void handleOtpChanged(int index, String value) {
     if (value.isNotEmpty && !RegExp(r'^\d$').hasMatch(value)) {
@@ -153,6 +156,33 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await authController.login(phone: phone, otp: otp.join());
+
+      // Do NOT navigate here.
+      //
+      // AuthController changes:
+      // AuthStatus.unauthenticated
+      //          ↓
+      // AuthStatus.authenticated
+      //
+      // _AppRoot in app.dart observes that change
+      // and automatically shows AppShell.
+    } catch (error) {
+      if (!mounted) return;
+
+      for (final controller in otpControllers) {
+        controller.clear();
+      }
+
+      setState(() {
+        for (var i = 0; i < otp.length; i++) {
+          otp[i] = '';
+        }
+      });
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(_cleanError(error))));
+
+      otpFocusNodes[0].requestFocus();
     } finally {
       if (mounted) {
         setState(() {
@@ -161,9 +191,46 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-  // -----------------------------
-  // Resend
-  // -----------------------------
+
+  Future<void> handleResend() async {
+    if (resendTimer > 0 || loading) {
+      return;
+    }
+
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      final authService = Get.find<AuthService>();
+
+      await authService.sendOtp(phone);
+
+      if (!mounted) return;
+
+      for (var i = 0; i < otp.length; i++) {
+        otp[i] = '';
+        otpControllers[i].clear();
+      }
+
+      setState(() {
+        loading = false;
+      });
+
+      startResendTimer();
+
+      otpFocusNodes[0].requestFocus();
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        loading = false;
+      });
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(_cleanError(error))));
+    }
+  }
 
   void startResendTimer() {
     resendTimerController?.cancel();
@@ -192,42 +259,20 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void handleResend() {
-    if (resendTimer > 0) {
-      return;
-    }
-
-    for (var i = 0; i < otp.length; i++) {
-      otp[i] = '';
-      otpControllers[i].clear();
-    }
-
-    setState(() {});
-
-    startResendTimer();
-
-    otpFocusNodes[0].requestFocus();
-  }
-
-  // -----------------------------
-  // Back to phone
-  // -----------------------------
-
   void backToPhone() {
     for (var i = 0; i < otp.length; i++) {
       otp[i] = '';
       otpControllers[i].clear();
     }
 
+    resendTimerController?.cancel();
+
     setState(() {
       isOtpStep = false;
       loading = false;
+      resendTimer = 0;
     });
   }
-
-  // -----------------------------
-  // Build
-  // -----------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -260,38 +305,23 @@ class _LoginPageState extends State<LoginPage> {
                   child: isOtpStep
                       ? OtpLoginForm(
                           key: const ValueKey('otp'),
-
                           phone: phone,
-
                           otp: otp,
-
                           otpControllers: otpControllers,
-
                           otpFocusNodes: otpFocusNodes,
-
                           resendTimer: resendTimer,
-
                           loading: loading,
-
                           onOtpChanged: handleOtpChanged,
-
                           onVerify: verifyOtp,
-
                           onResend: handleResend,
-
                           onBack: backToPhone,
                         )
                       : PhoneLoginForm(
                           key: const ValueKey('phone'),
-
                           phoneController: phoneController,
-
                           phoneError: phoneError,
-
                           loading: loading,
-
                           onPhoneChanged: handlePhoneChanged,
-
                           onSendOtp: handleSendOtp,
                         ),
                 ),
