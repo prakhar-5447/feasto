@@ -5,7 +5,7 @@ import mongoose, {
 
 export interface IUser extends Document {
     name?: string;
-    role: "customer" | "restaurant_partner";
+    role: "customer" | "restaurant_partner" | "delivery_partner";
     phone: string;
     email?: string;
     avatar?: string | null;
@@ -28,7 +28,8 @@ const userSchema = new Schema<IUser>(
             type: String,
             enum: [
                 "customer",
-                "restaurant_partner"
+                "restaurant_partner",
+                "delivery_partner"
             ],
             default: "customer",
             required: true

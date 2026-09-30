@@ -20,6 +20,7 @@ class FeastoDeliveryPartnerApp extends StatelessWidget {
       title: 'Feasto Delivery Partner',
 
       theme: AppTheme.dark,
+
       initialBinding: AppBindings(),
 
       supportedLocales: AppLocalizations.supportedLocales,
@@ -42,6 +43,7 @@ class _AppRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
+
     return Obx(() {
       switch (authController.authStatus.value) {
         case AuthStatus.unknown:

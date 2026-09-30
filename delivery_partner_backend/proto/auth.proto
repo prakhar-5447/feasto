@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "delivery_partner_backend/gen";
+
+service AuthService {
+    rpc SendLoginOTP(SendLoginOTPRequest)
+        returns (SendLoginOTPResponse);
+
+    rpc VerifyLoginOTP(VerifyLoginOTPRequest)
+        returns (VerifyLoginOTPResponse);
+}
+
+message SendLoginOTPRequest {
+    string phone = 1;
+}
+
+message SendLoginOTPResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message VerifyLoginOTPRequest {
+    string phone = 1;
+    string otp = 2;
+}
+
+message VerifyLoginOTPResponse {
+    bool success = 1;
+    string message = 2;
+    string access_token = 3;
+    string refresh_token = 4;
+}

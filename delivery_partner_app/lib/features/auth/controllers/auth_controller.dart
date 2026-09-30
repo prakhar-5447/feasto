@@ -6,7 +6,8 @@ import 'package:delivery_partner_app/features/auth/services/auth_service.dart';
 enum AuthStatus { unknown, unauthenticated, authenticated }
 
 class AuthController extends GetxController {
-  AuthController({required this._authService});
+  AuthController({required AuthService authService})
+    : _authService = authService;
 
   final AuthService _authService;
 
@@ -30,14 +31,14 @@ class AuthController extends GetxController {
       final response = await _authService.verifyOtp(phone: phone, otp: otp);
 
       token.value = response.accessToken;
-
       user.value = response.user;
 
       authStatus.value = AuthStatus.authenticated;
     } catch (error) {
       errorMessage.value = error.toString();
-
       authStatus.value = AuthStatus.unauthenticated;
+
+      rethrow;
     } finally {
       isLoading.value = false;
     }
@@ -45,9 +46,7 @@ class AuthController extends GetxController {
 
   void logout() {
     token.value = '';
-
     user.value = null;
-
     authStatus.value = AuthStatus.unauthenticated;
   }
 }

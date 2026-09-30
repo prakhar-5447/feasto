@@ -1,53 +1,84 @@
-import 'package:delivery_partner_app/core/network/api_client.dart';
-import 'package:delivery_partner_app/core/network/api_endpoints.dart';
-
+import 'package:delivery_partner_app/core/network/grpc_client.dart';
+import 'package:delivery_partner_app/core/storage/token_storage.dart';
 import 'package:delivery_partner_app/features/auth/models/auth_user.dart';
+import 'package:delivery_partner_app/generated/auth.pb.dart';
+import 'package:delivery_partner_app/generated/auth.pbgrpc.dart';
 
 class AuthService {
-  AuthService({required this._apiClient});
+  AuthService({required TokenStorage tokenStorage})
+    : _tokenStorage = tokenStorage;
 
-  final ApiClient _apiClient;
+  final TokenStorage _tokenStorage;
+
+  final AuthServiceClient _client = AuthServiceClient(
+    GrpcClient.instance.channel,
+  );
 
   Future<void> sendOtp(String phone) async {
-    await _apiClient.post(ApiEndpoints.sendOtp, body: {'phone': phone});
+    final request = SendLoginOTPRequest()..phone = phone;
+
+    final response = await _client.sendLoginOTP(request);
+
+    if (!response.success) {
+      throw Exception(response.message);
+    }
   }
 
   Future<AuthResponse> verifyOtp({
     required String phone,
     required String otp,
   }) async {
-    // final response = await _apiClient.post(
-    //   ApiEndpoints.verifyOtp,
-    //   body: {'phone': phone, 'otp': otp},
-    // );
+    final request = VerifyLoginOTPRequest()
+      ..phone = phone
+      ..otp = otp;
 
-    // return AuthResponse.fromJson(response);
+    final response = await _client.verifyLoginOTP(request);
 
-    await Future.delayed(const Duration(seconds: 1));
+    if (!response.success) {
+      throw Exception(response.message);
+    }
+
+    if (response.accessToken.isEmpty) {
+      throw Exception('Access token was not returned');
+    }
+
+    await _tokenStorage.saveTokens(
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+    );
+
+    /*
+     * Your current Go VerifyLoginOTP response does not return
+     * the complete user object.
+     *
+     * Therefore we temporarily create the minimum AuthUser
+     * available from the login information.
+     *
+     * Later we should add GetMe() to the Go backend and fetch
+     * the complete delivery-partner profile.
+     */
+    final user = AuthUser(id: '', name: '', phone: phone);
 
     return AuthResponse(
-      accessToken: 'dummy_access_token',
-      user: AuthUser(
-        id: 'delivery_partner_001',
-        name: 'Rahul Kumar',
-        phone: phone,
-        email: 'rahul@example.com',
-        vehicleNumber: 'JH10AB1234',
-      ),
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      user: user,
     );
+  }
+
+  Future<void> logout() async {
+    await _tokenStorage.clear();
   }
 }
 
 class AuthResponse {
-  const AuthResponse({required this.accessToken, required this.user});
+  const AuthResponse({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.user,
+  });
 
   final String accessToken;
+  final String refreshToken;
   final AuthUser user;
-
-  factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    return AuthResponse(
-      accessToken: json['accessToken'] as String,
-      user: AuthUser.fromJson(json['user'] as Map<String, dynamic>),
-    );
-  }
 }
