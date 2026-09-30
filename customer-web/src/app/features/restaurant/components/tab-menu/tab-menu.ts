@@ -13,14 +13,7 @@ import {
 
 import { NgClass } from '@angular/common';
 
-import {
-  FontAwesomeModule
-} from '@fortawesome/angular-fontawesome';
-
-import {
-  faMinus,
-  faPlus
-} from '@fortawesome/free-solid-svg-icons';
+import { LucideMinus, LucidePlus } from '@lucide/angular';
 
 import {
   ActivatedRoute
@@ -65,7 +58,8 @@ import { Button } from '@/app/shared/components/button/button';
 
   imports: [
     NgClass,
-    FontAwesomeModule,
+    LucideMinus,
+    LucidePlus,
     Button
   ],
 
@@ -87,14 +81,6 @@ export class TabMenu {
 
   private readonly store =
     inject(Store<AppState>);
-
-
-  // --------------------------------------------------
-  // Icons
-  // --------------------------------------------------
-
-  readonly faMinus = faMinus;
-  readonly faPlus = faPlus;
 
 
   // --------------------------------------------------

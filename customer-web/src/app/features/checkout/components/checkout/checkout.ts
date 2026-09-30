@@ -27,13 +27,7 @@ import {
   takeUntilDestroyed,
 } from '@angular/core/rxjs-interop';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-import {
-  faLocationDot,
-  faPlus,
-  faTag
-} from '@fortawesome/free-solid-svg-icons';
+import { LucideBadgePercent, LucideMapPin, LucidePlus } from '@lucide/angular';
 
 import { Button } from '@/app/shared/components/button/button';
 import { Input } from '@/app/shared/components/input/input';
@@ -55,7 +49,9 @@ import { CheckoutService } from '../../services/checkout.service';
   standalone: true,
   imports: [
     FormsModule,
-    FontAwesomeModule,
+    LucideBadgePercent,
+    LucideMapPin,
+    LucidePlus,
     Button,
     Input,
     TitleCasePipe
@@ -65,10 +61,6 @@ import { CheckoutService } from '../../services/checkout.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Checkout {
-
-  readonly faPlus = faPlus;
-  readonly faTag = faTag;
-  readonly faLocationDot = faLocationDot;
 
   private readonly store =
     inject(Store<AppState>);

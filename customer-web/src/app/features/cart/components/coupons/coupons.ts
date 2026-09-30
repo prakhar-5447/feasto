@@ -4,8 +4,8 @@ import {
   inject,
   signal
 } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faTags } from '@fortawesome/free-solid-svg-icons';
+
+import { LucideBadgePercent } from '@lucide/angular';
 
 import { CartService } from '@/app/features/cart/services/cart.service';
 import { Input } from '@/app/shared/components/input/input';
@@ -16,7 +16,7 @@ import { Coupon } from '@/app/features/cart/models/coupon.model';
   selector: 'app-coupons',
   standalone: true,
   imports: [
-    FontAwesomeModule,
+    LucideBadgePercent,
     Input,
     Button
   ],
@@ -27,8 +27,6 @@ import { Coupon } from '@/app/features/cart/models/coupon.model';
 export class Coupons {
 
   private readonly cartService = inject(CartService);
-
-  readonly faTags = faTags;
 
   readonly showCoupons = signal(false);
   readonly couponCode = signal('');

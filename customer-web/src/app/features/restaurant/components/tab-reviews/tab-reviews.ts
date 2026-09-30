@@ -16,14 +16,10 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faArrowLeft,
-  faArrowRight,
-  faStar,
-  faThumbsUp
-} from '@fortawesome/free-solid-svg-icons';
+import { LucideArrowLeft, LucideArrowRight, LucideStar, LucideThumbsUp } from '@lucide/angular';
+
 import { Button } from '@/app/shared/components/button/button';
+
 
 interface Review {
   id: string;
@@ -45,7 +41,10 @@ interface ReviewsResponse {
   selector: 'app-tab-reviews',
   standalone: true,
   imports: [
-    FontAwesomeModule,
+    LucideArrowLeft,
+    LucideArrowRight,
+    LucideStar,
+    LucideThumbsUp,
     NgClass,
     ReactiveFormsModule,
     Button
@@ -60,11 +59,6 @@ export class TabReviews {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
-
-  readonly faStar = faStar;
-  readonly faThumbsUp = faThumbsUp;
-  readonly faArrowLeft = faArrowLeft;
-  readonly faArrowRight = faArrowRight;
 
   readonly stars = [1, 2, 3, 4, 5];
 

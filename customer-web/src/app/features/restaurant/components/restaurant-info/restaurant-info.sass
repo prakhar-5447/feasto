@@ -19,6 +19,7 @@
         display: flex
         align-items: center
         gap: $space-8
+        margin-bottom: $space-8
 
         color: $color-text-secondary
         font-size: $font-size-16
@@ -33,6 +34,10 @@
 
         background: $color-success
         color: $color-bg-white
+        .icon
+            width: $space-16
+            height: $space-16
+            color: $color-bg-white
 
     .meta
         display: flex
@@ -46,11 +51,19 @@
     .address
         display: flex
         gap: $space-8
+        .icon
+            width: $space-20
+            height: $space-20
+            color: $color-primary
 
     .time
         display: flex
         align-items: flex-start
         gap: $space-8
+        .icon
+            width: $space-20
+            height: $space-20
+            color: $color-primary
 
     .container
         display: flex
@@ -86,3 +99,8 @@
 
         font-size: $font-size-16
         font-weight: $font-weight-semibold
+
+        .icon
+            width: $space-20
+            height: $space-20
+            color: $color-primary

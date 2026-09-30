@@ -52,6 +52,11 @@
     color: $color-text-white
     cursor: pointer
 
+    .icon
+        width: $space-20
+        height: $space-20
+        color: $color-text-white
+
 .profile-name
     margin: 0
     color: $color-text-primary
@@ -87,14 +92,16 @@
 .input-wrapper
     position: relative
 
-    fa-icon
+    .icon
         position: absolute
         top: 50%
         left: $space-12
         z-index: 1
         color: $color-text-secondary
-        font-size: $font-size-14
         transform: translateY(-50%)
+        width: $space-16
+        height: $space-16
+        color: $color-text-secondary
 
     input
         width: 100%
@@ -137,6 +144,10 @@
     color: $color-success
     font-size: $font-size-14
     font-weight: $font-weight-medium
+    .icon
+        width: $space-16
+        height: $space-16
+        color: $color-success
 
 .primary-button
     @include shared.primary-button

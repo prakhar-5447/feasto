@@ -13,18 +13,19 @@
 
             <div class="stars">
                 @for (star of stars(review.rating); track star) {
-                <fa-icon [icon]="faStar" class="filled"></fa-icon>
+                <svg lucideStar class="icon filled" aria-hidden="true"></svg>
                 }
                 @for (star of emptyStars(review.rating); track star) {
-                <fa-icon [icon]="faStar" class="empty"></fa-icon>
+                <svg lucideStar class="icon empty" aria-hidden="true"></svg>
                 }
             </div>
 
             <p>{{ review.comment }}</p>
 
             <div class="review-actions">
-                <button type="button"><fa-icon [icon]="faEdit"></fa-icon> Edit</button>
-                <button type="button" class="danger"><fa-icon [icon]="faTrash"></fa-icon> Delete</button>
+                <button type="button"> <svg lucideSquarePen class="icon" aria-hidden="true"></svg>Edit</button>
+                <button type="button" class="danger"> <svg lucideTrash class="icon empty" aria-hidden="true"></svg>
+                    Delete</button>
             </div>
         </div>
     </article>

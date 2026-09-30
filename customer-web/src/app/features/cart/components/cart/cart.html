@@ -126,7 +126,7 @@
                     ) {
 
                     <article class="item">
-                        
+
                         <img [src]="item.food.image" [alt]="item.food.name" width="80" height="80" loading="lazy"
                             decoding="async" />
 
@@ -148,16 +148,24 @@
 
                             <div class="qty-box" aria-label="Quantity">
 
-                                <app-button variant="icon" size="sm" [disabled]="item.quantity <= 1" [icon]="faMinus"
+                                <app-button variant="text" size="sm" [disabled]="item.quantity <= 1"
                                     ariaLabel="Decrease quantity"
-                                    (clicked)="decreaseQuantity(item.food._id,item.quantity)"></app-button>
+                                    (clicked)="decreaseQuantity(item.food._id,item.quantity)">
+                                    <div class="icon-box">
+                                        <svg lucideMinus class="icon" aria-hidden="true"></svg>
+                                    </div>
+                                </app-button>
 
                                 <span class="quantity" aria-live="polite">
                                     {{ item.quantity }}
                                 </span>
 
-                                <app-button variant="icon" size="sm" [icon]="faPlus" ariaLabel="Increase quantity"
-                                    (clicked)="increaseQuantity(item.food._id,item.quantity)"></app-button>
+                                <app-button variant="text" size="sm" ariaLabel="Increase quantity"
+                                    (clicked)="increaseQuantity(item.food._id,item.quantity)">
+                                    <div class="icon-box">
+                                        <svg lucidePlus class="icon" aria-hidden="true"></svg>
+                                    </div>
+                                </app-button>
 
                             </div>
 
@@ -223,8 +231,7 @@
                         <div class="row discount">
 
                             <span>
-                                <fa-icon [icon]="faTag" aria-hidden="true"></fa-icon>
-
+                                <svg lucideBadgePercent class="icon" aria-hidden="true"></svg>
                                 Discount
                             </span>
 

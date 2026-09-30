@@ -1,17 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  faBell,
-  faClock,
-  faCreditCard,
-  faGlobe,
-  faHeart,
-  faMapMarkerAlt,
-  faStar,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LucideBell, LucideClock, LucideCreditCard, LucideGlobe, LucideHeart, LucideMapPin, LucideStar, LucideUser } from '@lucide/angular';
+
 
 import {
   Address,
@@ -40,7 +31,6 @@ import { Settings } from '@/app/features/profile/components/settings/settings';
   standalone: true,
   imports: [
     CommonModule,
-    FontAwesomeModule,
     ProfileHero,
     ProfileSidebar,
     ProfileDetails,
@@ -61,29 +51,29 @@ export class Profile {
     {
       group: 'Account',
       items: [
-        { id: 'details', label: 'Profile Details', icon: faUser },
+        { id: 'details', label: 'Profile Details', icon: LucideUser },
       ],
     },
     {
       group: 'Activity',
       items: [
-        { id: 'orders', label: 'Order History', icon: faClock },
-        { id: 'reviews', label: 'My Reviews', icon: faStar },
-        { id: 'favorites', label: 'Favorites', icon: faHeart },
+        { id: 'orders', label: 'Order History', icon: LucideClock },
+        { id: 'reviews', label: 'My Reviews', icon: LucideStar },
+        { id: 'favorites', label: 'Favorites', icon: LucideHeart },
       ],
     },
     {
       group: 'Payment',
       items: [
-        { id: 'addresses', label: 'Addresses', icon: faMapMarkerAlt },
-        { id: 'cards', label: 'Saved Cards', icon: faCreditCard },
+        { id: 'addresses', label: 'Addresses', icon: LucideMapPin },
+        { id: 'cards', label: 'Saved Cards', icon: LucideCreditCard },
       ],
     },
     {
       group: 'More',
       items: [
-        { id: 'notifications', label: 'Notifications', icon: faBell },
-        { id: 'settings', label: 'Settings', icon: faGlobe },
+        { id: 'notifications', label: 'Notifications', icon: LucideBell },
+        { id: 'settings', label: 'Settings', icon: LucideGlobe },
       ],
     },
   ];

@@ -1,12 +1,11 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NavigationGroup, ProfileSection } from '@/app/features/profile/models/profile.models';
 
 @Component({
   selector: 'app-profile-sidebar',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, NgComponentOutlet],
   templateUrl: './profile-sidebar.html',
   styleUrl: './profile-sidebar.sass',
 })

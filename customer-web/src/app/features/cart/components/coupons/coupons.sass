@@ -6,12 +6,18 @@
     border-radius: $radius-8
     box-shadow: $shadow-sm
     .header
+        display: flex
+        align-items: center
+        gap: $space-8
         font-weight: $font-weight-semibold
-        margin-bottom: $space-8
+        margin-bottom: $space-12
         h3
             font-size: $font-size-18
-            fa-icon
-                color: $color-primary
+            color: $color-primary
+        .icon
+            width: $space-24
+            height: $space-24
+            color: $color-primary
     .applied
         display: flex
         justify-content: space-between

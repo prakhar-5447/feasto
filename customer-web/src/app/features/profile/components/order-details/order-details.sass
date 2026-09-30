@@ -14,6 +14,10 @@
     @include shared.text-button
     align-self: flex-start
     color: $color-text-secondary
+    .icon
+        width: $space-16
+        height: $space-16
+        color: $color-text-secondary
 
 .order-detail-card
     padding: 0
@@ -33,8 +37,10 @@
     gap: $space-12
     flex: 1
 
-    > fa-icon
-        font-size: $font-size-24
+    .icon
+        width: $space-24
+        height: $space-24
+        color: $color-text-secondary
 
     p
         margin: 0
@@ -109,6 +115,10 @@
     font-size: $font-size-12
     font-weight: $font-weight-bold
     text-transform: uppercase
+    .icon
+        width: $space-12
+        height: $space-12
+        color: $color-text-secondary
 
 .detail-item
     display: flex
@@ -172,8 +182,10 @@
     gap: $space-12
     padding: $space-16 $space-20
 
-    > fa-icon
+    .icon
         margin-top: 2px
+        width: $space-12
+        height: $space-12
         color: $color-text-secondary
 
     span
@@ -219,11 +231,19 @@
     background: $color-success
     color: $color-text-white
     font-size: 9px
+    .icon
+        width: $space-16
+        height: $space-16
+        color: $color-text-white
 
 .detail-actions
     display: grid
     grid-template-columns: repeat(2, minmax(0, 1fr))
     gap: $space-12
+    .icon
+        width: $space-12
+        height: $space-12
+        color: $color-text-secondary
 
 .primary-button
     @include shared.primary-button

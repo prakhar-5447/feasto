@@ -1,19 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { SavedCard } from '@/app/features/profile/models/profile.models';
+import { LucidePlus, LucideTrash } from '@lucide/angular';
 
 @Component({
   selector: 'app-saved-cards',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, LucidePlus, LucideTrash],
   templateUrl: './saved-cards.html',
   styleUrl: './saved-cards.sass',
 })
 export class SavedCards {
   @Input({ required: true }) cards!: SavedCard[];
-
-  readonly faPlus = faPlus;
-  readonly faTrash = faTrash;
 }

@@ -6,7 +6,7 @@
             <div class="large-avatar">
                 <img [src]="user.avatar" [alt]="user.name" />
                 <button type="button" class="avatar-action" aria-label="Change profile photo">
-                    <fa-icon [icon]="faCamera"></fa-icon>
+                    <svg lucideCamera class="icon" aria-hidden="true"></svg>
                 </button>
             </div>
 
@@ -25,7 +25,7 @@
             <div class="form-field">
                 <label for="profile-name">Full Name</label>
                 <div class="input-wrapper">
-                    <fa-icon [icon]="faUser"></fa-icon>
+                    <svg lucideUser class="icon" aria-hidden="true"></svg>
                     <input id="profile-name" type="text" [(ngModel)]="user.name" />
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="form-field">
                 <label for="profile-email">Email Address</label>
                 <div class="input-wrapper">
-                    <fa-icon [icon]="faEnvelope"></fa-icon>
+                    <svg lucideMail class="icon" aria-hidden="true"></svg>
                     <input id="profile-email" type="email" [(ngModel)]="user.email" />
                 </div>
             </div>
@@ -41,7 +41,7 @@
             <div class="form-field">
                 <label for="profile-phone">Phone Number</label>
                 <div class="input-wrapper">
-                    <fa-icon [icon]="faPhone"></fa-icon>
+                    <svg lucidePhone class="icon" aria-hidden="true"></svg>
                     <input id="profile-phone" type="tel" [(ngModel)]="user.phone" />
                 </div>
             </div>
@@ -49,7 +49,7 @@
             <div class="form-field">
                 <label for="profile-dob">Date of Birth</label>
                 <div class="input-wrapper">
-                    <fa-icon [icon]="faCalendar"></fa-icon>
+                    <svg lucideCalendar class="icon" aria-hidden="true"></svg>
                     <input id="profile-dob" type="date" [(ngModel)]="user.dob" />
                 </div>
             </div>
@@ -67,7 +67,7 @@
         <div class="save-row">
             @if (saved) {
             <p class="saved-message">
-                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
                 Changes saved
             </p>
             }

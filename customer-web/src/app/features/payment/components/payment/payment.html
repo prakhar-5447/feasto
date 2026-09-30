@@ -29,8 +29,7 @@
 
             <div class="secured-badge">
 
-                <fa-icon [icon]="faShieldAlt">
-                </fa-icon>
+                <svg lucideShield class="icon" aria-hidden="true"></svg>
 
                 <span>
                     Secured
@@ -144,8 +143,7 @@
 
                     <div class="expiry-left">
 
-                        <fa-icon [icon]="faClock">
-                        </fa-icon>
+                        <svg lucideClock class="icon" aria-hidden="true"></svg>
 
                         <span>
                             QR expires in
@@ -164,7 +162,7 @@
 
 
                 <div class="supported-text">
-
+                    <svg lucideSmartphone class="icon" aria-hidden="true"></svg>
                     Supports all UPI Apps
 
                 </div>
@@ -228,16 +226,11 @@
                     <div class="step-icon" [class.completed]="step.done">
 
                         @if (step.done) {
-
-                        <fa-icon [icon]="faCheckCircle">
-                        </fa-icon>
-
+                        <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
                         }
 
                         @else {
-
                         <span></span>
-
                         }
 
                     </div>
@@ -278,8 +271,7 @@
 
                     <div class="success-icon">
 
-                        <fa-icon [icon]="faCheckCircle">
-                        </fa-icon>
+                        <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
 
                     </div>
 
@@ -317,8 +309,7 @@
 
                     <div class="bike">
 
-                        <fa-icon [icon]="faMotorcycle">
-                        </fa-icon>
+                        <svg lucideBike class="icon" aria-hidden="true"></svg>
 
                     </div>
 
@@ -370,9 +361,7 @@
             <div class="summary-card">
 
                 <div class="summary-header">
-
-                    <fa-icon [icon]="faShoppingBasket">
-                    </fa-icon>
+                    <svg lucidePackage class="icon" aria-hidden="true"></svg>
 
                     <span>
                         Order from {{ meta.restaurantName }}
@@ -499,8 +488,7 @@
 
             <div class="address-card">
 
-                <fa-icon [icon]="faLocationDot">
-                </fa-icon>
+                <svg lucideMapPin class="icon" aria-hidden="true"></svg>
 
                 <div>
 
@@ -521,8 +509,7 @@
 
                 Back to Home
 
-                <fa-icon [icon]="faAngleRight">
-                </fa-icon>
+                <svg lucideChevronRight class="icon" aria-hidden="true"></svg>
 
             </button>
 

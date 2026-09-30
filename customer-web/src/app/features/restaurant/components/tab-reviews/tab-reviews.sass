@@ -43,7 +43,9 @@
     align-items: center
     gap: $space-4
 
-    .star
+    .icon
+        height: $space-16
+        width: $space-16
         color: $color-neutral-300
 
         &.filled
@@ -103,6 +105,11 @@
             cursor: not-allowed
             opacity: 0.5
 
+        .icon
+            height: $space-16
+            width: $space-16
+            color: $color-text-primary
+
     .page-btn
         font-size: $font-size-16
 
@@ -148,8 +155,16 @@
     .stars
         margin: $space-4 0
 
-        .star
-            font-size: $font-size-12
+        .icon
+            height: $space-16
+            width: $space-16
+            color: $color-neutral-300
+
+            &.filled
+                color: $color-primary
+
+            &.empty
+                color: $color-neutral-300
 
 .ai-container
     padding: $space-16 0

@@ -5,17 +5,8 @@ import {
   input
 } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { Store } from '@ngrx/store';
-
-import {
-  faLocationDot,
-  faStar,
-  faExclamationCircle
-} from '@fortawesome/free-solid-svg-icons';
-
-import { faClock } from '@fortawesome/free-regular-svg-icons';
 
 import {
   RestaurantDetail
@@ -23,11 +14,12 @@ import {
 
 import { selectSelectedLocation } from '@/app/store/location/location.selectors';
 import { AppState } from '@/app/store/app.state';
+import { LucideCircleAlert, LucideMapPin, LucideStar, LucideClock } from '@lucide/angular';
 
 @Component({
   selector: 'app-restaurant-info',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [LucideCircleAlert, LucideMapPin, LucideStar, LucideClock],
   templateUrl: './restaurant-info.html',
   styleUrl: './restaurant-info.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,10 +29,6 @@ export class RestaurantInfo {
   readonly restaurantInfo =
     input.required<RestaurantDetail | null>();
 
-  readonly faClock = faClock;
-  readonly faLocationDot = faLocationDot;
-  readonly faExclamationCircle = faExclamationCircle;
-  readonly faStar = faStar;
   private readonly store = inject(Store<AppState>);
   readonly selectedLocation =
     this.store.selectSignal(

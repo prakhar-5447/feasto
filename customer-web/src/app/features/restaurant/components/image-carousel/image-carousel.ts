@@ -4,26 +4,18 @@ import {
   input
 } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-import {
-  faArrowLeft,
-  faArrowRight
-} from '@fortawesome/free-solid-svg-icons';
+import { LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
 
 
 @Component({
   selector: 'app-image-carousel',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [LucideChevronLeft, LucideChevronRight],
   templateUrl: './image-carousel.html',
   styleUrl: './image-carousel.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageCarousel {
-
-  readonly faArrowLeft = faArrowLeft;
-  readonly faArrowRight = faArrowRight;
 
   currentIndex = 0;
 

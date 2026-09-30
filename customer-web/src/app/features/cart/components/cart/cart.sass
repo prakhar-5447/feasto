@@ -106,6 +106,17 @@
 
     border: $border-width-1 $border-style-solid $color-primary
     border-radius: $radius-8
+    .icon-box
+        display: flex
+        align-items: center
+        justify-content: center
+        width: $space-20
+        height: $space-20
+
+        .icon
+            width: $space-16
+            height: $space-16
+            color: $color-text-primary
 
 .quantity
     min-width: $space-24
@@ -151,8 +162,11 @@
         color: $color-success
         font-weight: $font-weight-medium
 
-        fa-icon
+        .icon
             margin-right: $space-4
+            width: $space-12
+            height: $space-12
+            color: $color-success
 
 .total
     display: flex

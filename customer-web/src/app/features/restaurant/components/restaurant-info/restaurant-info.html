@@ -13,7 +13,7 @@
 
         <div class="rating">
 
-            <fa-icon [icon]="faStar" />
+            <svg lucideStar class="icon" aria-hidden="true"></svg>
 
             {{ restaurantInfo()?.rating?.average }}
 
@@ -31,7 +31,7 @@
 
         <span class="address">
 
-            <fa-icon [icon]="faLocationDot" />
+            <svg lucideMapPin class="icon" aria-hidden="true"></svg>
 
             {{ restaurantInfo()?.location?.address }}
 
@@ -40,7 +40,7 @@
 
         <span class="time">
 
-            <fa-icon [icon]="faClock" />
+            <svg lucideClock class="icon" aria-hidden="true"></svg>
 
             <div class="container">
 
@@ -103,7 +103,7 @@
 
         <span class="offer">
 
-            <fa-icon [icon]="faExclamationCircle" />
+            <svg lucideCircleAlert class="icon" aria-hidden="true"></svg>
 
             {{ restaurantInfo()?.offer }}
 

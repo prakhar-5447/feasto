@@ -3,7 +3,7 @@
     <article class="card address-card">
         <div class="address-content">
             <div class="address-icon">
-                <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+                <svg lucideMapPin class="icon" aria-hidden="true"></svg>
             </div>
 
             <div>
@@ -20,14 +20,14 @@
         <div class="card-actions">
             <button type="button">Edit</button>
             <button type="button" class="delete-button" aria-label="Delete address">
-                <fa-icon [icon]="faTrash"></fa-icon>
+                <svg lucideTrash class="icon" aria-hidden="true"></svg>
             </button>
         </div>
     </article>
     }
 
     <button type="button" class="dashed-add">
-        <fa-icon [icon]="faPlus"></fa-icon>
+        <svg lucidePlus class="icon" aria-hidden="true"></svg>
         Add New Address
     </button>
 </section>

@@ -5,7 +5,7 @@
 
         @for (item of group.items; track item.id) {
         <button type="button" class="nav-item" [class.active]="isActive(item.id)" (click)="selectSection(item.id)">
-            <fa-icon [icon]="item.icon"></fa-icon>
+            <ng-container *ngComponentOutlet="item.icon"></ng-container>
             <span>{{ item.label }}</span>
         </button>
         }

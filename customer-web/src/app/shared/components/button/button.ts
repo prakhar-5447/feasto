@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, input } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-
 import { Loader } from '../loader/loader';
 
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [FontAwesomeModule, Loader],
+  imports: [Loader],
   templateUrl: './button.html',
   styleUrl: './button.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,7 +20,6 @@ export class Button {
       | 'ghost'
       | 'text'
       | 'danger'
-      | 'icon'
     >('primary');
 
   readonly size =
@@ -53,15 +49,6 @@ export class Button {
       | 'submit'
       | 'reset'
     >('button');
-
-  readonly icon =
-    input<IconDefinition | undefined>();
-
-  readonly iconPosition =
-    input<
-      | 'left'
-      | 'right'
-    >('left');
 
   readonly disabled =
     input(false);

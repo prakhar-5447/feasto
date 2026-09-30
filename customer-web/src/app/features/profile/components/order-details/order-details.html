@@ -1,13 +1,13 @@
 <section class="section-stack">
     <button type="button" class="back-button" (click)="back.emit()">
-        <fa-icon [icon]="faArrowLeft"></fa-icon>
+        <svg lucideArrowLeft class="icon" aria-hidden="true"></svg>
         Back to Orders
     </button>
 
     <article class="card order-detail-card">
         <div class="order-success-header">
             <div class="success-heading">
-                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
                 <div>
                     <p>Order Delivered</p>
                     <span>{{ order.date }}</span>
@@ -32,7 +32,7 @@
 
         <div class="detail-section">
             <p class="detail-label">
-                <fa-icon [icon]="faPackage"></fa-icon>
+                <svg lucidePackage class="icon" aria-hidden="true"></svg>
                 Items Ordered
             </p>
 
@@ -68,7 +68,7 @@
         </div>
 
         <div class="delivery-address">
-            <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+            <svg lucideMapPin class="icon" aria-hidden="true"></svg>
             <div>
                 <span>Delivered to</span>
                 <p>{{ order.address }}</p>
@@ -78,28 +78,36 @@
 
     <article class="card timeline-card">
         <p class="detail-label">
-            <fa-icon [icon]="faBike"></fa-icon>
+            <svg lucideBike class="icon" aria-hidden="true"></svg>
             Delivery Timeline
         </p>
 
         <div class="timeline">
             <div class="timeline-item">
-                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span class="timeline-dot">
+                    <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
+                </span>
                 <span>Order placed</span>
                 <small>{{ order.date }}</small>
             </div>
             <div class="timeline-item">
-                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span class="timeline-dot">
+                    <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
+                </span>
                 <span>Restaurant accepted</span>
                 <small>2 min later</small>
             </div>
             <div class="timeline-item">
-                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span class="timeline-dot">
+                    <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
+                </span>
                 <span>Out for delivery</span>
                 <small>25 min later</small>
             </div>
             <div class="timeline-item">
-                <span class="timeline-dot"><fa-icon [icon]="faCheckCircle"></fa-icon></span>
+                <span class="timeline-dot">
+                    <svg lucideCircleCheck class="icon" aria-hidden="true"></svg>
+                </span>
                 <span>Delivered</span>
                 <small>38 min later</small>
             </div>
@@ -108,11 +116,11 @@
 
     <div class="detail-actions">
         <button type="button" class="primary-button">
-            <fa-icon [icon]="faRotateLeft"></fa-icon>
+            <svg lucideRotateCwClock class="icon" aria-hidden="true"></svg>
             Reorder
         </button>
         <button type="button" class="secondary-button">
-            <fa-icon [icon]="faStar"></fa-icon>
+            <svg lucideStar class="icon" aria-hidden="true"></svg>
             Rate Order
         </button>
     </div>

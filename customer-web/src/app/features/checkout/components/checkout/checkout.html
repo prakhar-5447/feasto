@@ -9,8 +9,7 @@
                 <section class="card" aria-labelledby="address-title">
                     <header class="card-header">
                         <h1 id="address-title">
-                            <fa-icon [icon]="faLocationDot" aria-hidden="true"></fa-icon>
-
+                            <svg lucideMapPin class="icon" aria-hidden="true"></svg>
                             Delivery Address
                         </h1>
                     </header>
@@ -61,7 +60,7 @@
                                 selectedAddressId === null &&
                                 showNewAddressForm
                             " (click)="newAddress()">
-                            <fa-icon [icon]="faPlus" aria-hidden="true"></fa-icon>
+                            <svg lucidePlus class="icon" aria-hidden="true"></svg>
 
                             <span>
                                 Add New Address
@@ -302,7 +301,7 @@
 
                 <div class="summary-row discount">
                     <span>
-                        <fa-icon [icon]="faTag" aria-hidden="true"></fa-icon>
+                        <svg lucideBadgePercent class="icon" aria-hidden="true"></svg>
                         Discount
                     </span>
 

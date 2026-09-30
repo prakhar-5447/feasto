@@ -25,11 +25,11 @@
     @if (images().length > 1) {
 
     <button type="button" class="nav prev" aria-label="Previous image" (click)="prev()">
-        <fa-icon [icon]="faArrowLeft"></fa-icon>
+        <svg lucideChevronLeft class="icon" aria-hidden="true"></svg>
     </button>
 
     <button type="button" class="nav next" aria-label="Next image" (click)="next()">
-        <fa-icon [icon]="faArrowRight"></fa-icon>
+        <svg lucideChevronRight class="icon" aria-hidden="true"></svg>
     </button>
 
     }

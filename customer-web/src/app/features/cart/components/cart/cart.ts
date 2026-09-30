@@ -12,14 +12,7 @@ import {
 } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faMinus,
-  faPlus,
-  faTag
-} from '@fortawesome/free-solid-svg-icons';
-
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { LucideBadgePercent, LucideMinus, LucidePlus } from '@lucide/angular';
 
 import { Button } from '@/app/shared/components/button/button';
 import { Coupons } from '@/app/features/cart/components/coupons/coupons';
@@ -42,7 +35,9 @@ import { AppState } from '@/app/store/app.state';
   selector: 'app-cart',
   standalone: true,
   imports: [
-    FontAwesomeModule,
+    LucideBadgePercent,
+    LucideMinus,
+    LucidePlus,
     Button,
     Coupons
   ],
@@ -51,12 +46,6 @@ import { AppState } from '@/app/store/app.state';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Cart {
-
-  readonly faTrashCan = faTrashCan;
-  readonly faMinus = faMinus;
-  readonly faPlus = faPlus;
-  readonly faTag = faTag;
-
 
   private readonly store =
     inject(Store<AppState>);

@@ -4,7 +4,7 @@
         <div class="favorite-image">
             <img [src]="restaurant.image" [alt]="restaurant.name" />
             <button type="button" aria-label="Remove favorite">
-                <fa-icon [icon]="faHeart"></fa-icon>
+                <svg lucideHeart class="icon" aria-hidden="true"></svg>
             </button>
         </div>
 
@@ -14,7 +14,7 @@
 
             <div class="favorite-footer">
                 <div class="rating">
-                    <fa-icon [icon]="faStar"></fa-icon>
+                    <svg lucideStar class="icon" aria-hidden="true"></svg>
                     {{ restaurant.rating }}
                 </div>
                 <button type="button">Order Now</button>

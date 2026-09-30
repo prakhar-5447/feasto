@@ -1,5 +1,3 @@
-import { HttpClient } from '@angular/common/http';
-
 import {
   Component,
   OnInit,
@@ -16,20 +14,10 @@ import {
   Router
 } from '@angular/router';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-import {
-  faShieldAlt,
-  faCheckCircle,
-  faMotorcycle,
-  faShoppingBasket,
-  faLocationDot,
-  faAngleRight,
-  faClock
-} from '@fortawesome/free-solid-svg-icons';
 import { OrderMeta } from '@/app/features/payment/models/order-meta.model';
 import { PaymentStage } from '@/app/features/payment/models/payment-stage.model';
 import { PaymentService } from '../../services/payment.service';
+import { LucideBike, LucideChevronRight, LucideCircleCheck, LucideClock, LucideMapPin, LucidePackage, LucideShield, LucideSmartphone } from '@lucide/angular';
 
 @Component({
 
@@ -38,7 +26,14 @@ import { PaymentService } from '../../services/payment.service';
   standalone: true,
 
   imports: [
-    FontAwesomeModule
+    LucideBike,
+    LucideCircleCheck,
+    LucideChevronRight,
+    LucideClock,
+    LucideMapPin,
+    LucidePackage,
+    LucideShield,
+    LucideSmartphone
   ],
 
   templateUrl: './payment.html',
@@ -48,25 +43,6 @@ import { PaymentService } from '../../services/payment.service';
 })
 export class Payment
   implements OnInit, OnDestroy {
-
-
-  // =========================================================
-  // ICONS
-  // =========================================================
-
-  faShieldAlt = faShieldAlt;
-
-  faCheckCircle = faCheckCircle;
-
-  faMotorcycle = faMotorcycle;
-
-  faShoppingBasket = faShoppingBasket;
-
-  faLocationDot = faLocationDot;
-
-  faAngleRight = faAngleRight;
-
-  faClock = faClock;
 
   private readonly paymentService = inject(PaymentService);
   private readonly route = inject(ActivatedRoute);

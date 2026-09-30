@@ -15,9 +15,6 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-
 import { AppState } from '@/app/store/app.state';
 import { Store } from '@ngrx/store';
 import { selectCartCount, selectCartStatus } from '@/app/store/cart/cart.selectors';
@@ -25,7 +22,6 @@ import { selectCartCount, selectCartStatus } from '@/app/store/cart/cart.selecto
 import { ImageCarousel } from '@/app/features/restaurant/components/image-carousel/image-carousel';
 import { RestaurantInfo } from '@/app/features/restaurant/components/restaurant-info/restaurant-info';
 import { RestaurantDetail } from '@/app/features/restaurant/models/restaurant.model';
-
 
 type RestaurantTab = 'order' | 'reviews' | 'cart';
 
@@ -35,7 +31,6 @@ type RestaurantTab = 'order' | 'reviews' | 'cart';
   imports: [
     RouterLink,
     RouterOutlet,
-    FontAwesomeModule,
     ImageCarousel,
     RestaurantInfo
   ],
@@ -46,8 +41,6 @@ type RestaurantTab = 'order' | 'reviews' | 'cart';
 export class Restaurant {
 
   private readonly route = inject(ActivatedRoute);
-
-  readonly faArrowLeft = faArrowLeft;
 
   private readonly store = inject(Store<AppState>);
   readonly itemCount = this.store.selectSignal(selectCartCount);
