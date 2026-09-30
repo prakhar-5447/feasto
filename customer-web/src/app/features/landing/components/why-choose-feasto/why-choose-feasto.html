@@ -16,7 +16,7 @@
             <li class="feature-card">
 
                 <div class="icon-wrapper" aria-hidden="true">
-                    <fa-icon [icon]="feature.icon"></fa-icon>
+                    <ng-container *ngComponentOutlet="feature.icon"></ng-container>
                 </div>
 
                 <h3>

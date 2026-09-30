@@ -1,18 +1,12 @@
 import { Component } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faDownload, faMobileScreen } from '@fortawesome/free-solid-svg-icons';
-
+import { LucideDownload, LucideSmartphone } from '@lucide/angular';
 
 @Component({
   selector: 'app-app-promotion',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [LucideSmartphone, LucideDownload],
   templateUrl: './app-promotion.html',
   styleUrl: './app-promotion.sass',
 })
-export class AppPromotion {
-
-  readonly faMobile = faMobileScreen;
-  readonly faDownload = faDownload;
-}
+export class AppPromotion { }

@@ -1,11 +1,10 @@
+import { NgComponentOutlet } from '@angular/common';
 import { Component } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBox, faCreditCard, faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-
+import { LucideMapPin, LucideSearch, LucideCreditCard, LucidePackage } from '@lucide/angular';
 
 interface HowItWorksStep {
-  icon: typeof faLocationDot;
+  icon: any;
   title: string;
   description: string;
   step: string;
@@ -15,7 +14,7 @@ interface HowItWorksStep {
 @Component({
   selector: 'app-how-it-works',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [NgComponentOutlet],
   templateUrl: './how-it-works.html',
   styleUrl: './how-it-works.sass',
 })
@@ -23,25 +22,25 @@ export class HowItWorks {
 
   readonly steps: HowItWorksStep[] = [
     {
-      icon: faLocationDot,
+      icon: LucideMapPin,
       title: 'Select Location',
       description: 'Enter your delivery address to discover nearby restaurants',
       step: '01'
     },
     {
-      icon: faMagnifyingGlass,
+      icon: LucideSearch,
       title: 'Choose Restaurant',
       description: 'Browse through menus and select your favorite dishes',
       step: '02'
     },
     {
-      icon: faCreditCard,
+      icon: LucideCreditCard,
       title: 'Pay Online',
       description: 'Secure payment with multiple payment options',
       step: '03'
     },
     {
-      icon: faBox,
+      icon: LucidePackage,
       title: 'Enjoy Your Meal',
       description: 'Get your food delivered hot and fresh to your doorstep',
       step: '04'

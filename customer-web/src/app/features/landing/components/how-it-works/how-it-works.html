@@ -19,7 +19,7 @@
 
           <div class="icon-wrapper">
             <div class="icon-circle" aria-hidden="true">
-              <fa-icon [icon]="step.icon"></fa-icon>
+              <ng-container *ngComponentOutlet="step.icon"></ng-container>
             </div>
 
             <span class="step-number" aria-hidden="true">

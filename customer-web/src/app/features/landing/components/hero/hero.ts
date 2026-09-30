@@ -3,24 +3,20 @@ import { Router } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { LucideMapPin } from '@lucide/angular';
 
 import { Button } from '@/app/shared/components/button/button';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [FontAwesomeModule, Button, FormsModule],
+  imports: [Button, FormsModule, LucideMapPin],
   templateUrl: './hero.html',
   styleUrl: './hero.sass',
 })
 export class Hero {
 
   locationQuery = '';
-
-  faLocationDot = faLocationDot;
-  faMagnifyingGlass = faMagnifyingGlass;
 
   private readonly router = inject(Router);
 
