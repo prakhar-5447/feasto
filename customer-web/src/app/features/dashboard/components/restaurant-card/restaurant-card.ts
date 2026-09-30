@@ -1,11 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, Input } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { faStar, faTag } from '@fortawesome/free-solid-svg-icons';
-
-import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { LucideBadgePercent, LucideClock, LucideStar } from '@lucide/angular';
 
 import { Restaurant } from '@/app/features/dashboard/models/restaurant.model';
 
@@ -13,7 +10,7 @@ import { Restaurant } from '@/app/features/dashboard/models/restaurant.model';
 @Component({
   selector: 'app-restaurant-card',
   standalone: true,
-  imports: [RouterLink, FontAwesomeModule],
+  imports: [RouterLink, LucideStar, LucideBadgePercent, LucideClock],
   templateUrl: './restaurant-card.html',
   styleUrl: './restaurant-card.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,9 +21,5 @@ export class RestaurantCard {
   restaurant!: Restaurant;
 
   readonly city = input('');
-
-  readonly faTag = faTag;
-  readonly faStar = faStar;
-  readonly faClock = faClock;
 
 }

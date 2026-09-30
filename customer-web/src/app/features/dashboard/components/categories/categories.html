@@ -12,7 +12,7 @@
 
             <button type="button" class="carousel-button previous" aria-label="Previous categories"
                 (click)="scrollPrevious()">
-                <fa-icon [icon]="faChevronLeft"></fa-icon>
+                <svg lucideChevronLeft class="icon" aria-hidden="true"></svg>
             </button>
 
             }
@@ -37,7 +37,7 @@
             @if (canScrollNext()) {
 
             <button type="button" class="carousel-button next" aria-label="Next categories" (click)="scrollNext()">
-                <fa-icon [icon]="faChevronRight"></fa-icon>
+                <svg lucideChevronRight class="icon" aria-hidden="true"></svg>
             </button>
 
             }

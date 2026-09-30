@@ -37,11 +37,11 @@
         @if (ads.length > 1) {
 
         <button type="button" class="nav prev" aria-label="Previous offer" (click)="prev()">
-            <fa-icon [icon]="faArrowLeft" aria-hidden="true"></fa-icon>
+            <svg lucideChevronLeft class="icon" aria-hidden="true"></svg>
         </button>
 
         <button type="button" class="nav next" aria-label="Next offer" (click)="next()">
-            <fa-icon [icon]="faArrowRight" aria-hidden="true"></fa-icon>
+            <svg lucideChevronRight class="icon" aria-hidden="true"></svg>
         </button>
 
         }

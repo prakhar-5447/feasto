@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
 
 interface Ad {
   id: number;
@@ -16,15 +13,12 @@ interface Ad {
 @Component({
   selector: 'app-ads-carousel',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [LucideChevronLeft, LucideChevronRight],
   templateUrl: './ads-carousel.html',
   styleUrl: './ads-carousel.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdsCarousel {
-
-  readonly faArrowLeft = faArrowLeft;
-  readonly faArrowRight = faArrowRight;
 
   readonly currentIndex = signal(0);
 

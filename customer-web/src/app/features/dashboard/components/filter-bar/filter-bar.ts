@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, output, input, Output, signal, inject } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCheck, faChevronDown, faClose, faFilter, } from '@fortawesome/free-solid-svg-icons';
+import { LucideCheck, LucideChevronDown, LucideFunnel, LucideX } from '@lucide/angular';
 
 import { RestaurantFilters, SortOption } from '@/app/features/dashboard/models/filter.model';
 import { RESTAURANT_FILTER_OPTIONS } from '@/app/features/dashboard/data/filter-options';
@@ -16,16 +15,12 @@ interface ActiveFilter {
 @Component({
   selector: 'app-filter-bar',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [LucideCheck, LucideChevronDown, LucideFunnel, LucideX],
   templateUrl: './filter-bar.html',
   styleUrl: './filter-bar.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterBar {
-  readonly faCheck = faCheck;
-  readonly faClose = faClose;
-  readonly faFilter = faFilter;
-  readonly faChevronDown = faChevronDown;
 
   private readonly labelPipe = inject(LabelPipe);
 

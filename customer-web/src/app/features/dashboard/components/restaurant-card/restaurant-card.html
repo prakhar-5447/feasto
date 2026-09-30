@@ -14,7 +14,7 @@
         @if (restaurant.offer) {
         <div class="offer">
 
-            <fa-icon [icon]="faTag" aria-hidden="true"></fa-icon>
+            <svg lucideBadgePercent class="icon" aria-hidden="true"></svg>
 
             <span>
                 {{ restaurant.offer }}
@@ -40,7 +40,7 @@
         <div class="meta">
 
             <span class="rating">
-                <fa-icon [icon]="faStar" aria-hidden="true"></fa-icon>
+                <svg lucideStar class="icon" aria-hidden="true"></svg>
 
                 <span>
                     {{ restaurant.rating }}
@@ -50,7 +50,7 @@
 
             <span class="time">
 
-                <fa-icon [icon]="faClock" aria-hidden="true"></fa-icon>
+                <svg lucideClock class="icon" aria-hidden="true"></svg>
 
                 <span>
                     {{ restaurant.estimatedDeliveryTime }} min

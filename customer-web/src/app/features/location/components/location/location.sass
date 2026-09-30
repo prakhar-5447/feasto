@@ -57,13 +57,10 @@
             font-weight: $font-weight-bold
             line-height: $line-height-tight
 
-        .title-icon
-            display: inline-flex
-            align-items: center
-            justify-content: center
-
+        .icon
+            width: $space-20
+            height: $space-20
             color: $color-primary
-            font-size: $font-size-20
 
     .popular-grid
         display: grid
@@ -186,16 +183,13 @@
             align-items: center
             gap: $space-8
 
-        .city-name fa-icon
-            flex-shrink: 0
-
+        .icon
+            width: $space-20
+            height: $space-20
             color: $color-primary
 
         .arrow
-            flex-shrink: 0
-
             color: $color-text-muted
-
             transition: $transition-transform, $transition-color
 
     .city-list-item:hover .arrow

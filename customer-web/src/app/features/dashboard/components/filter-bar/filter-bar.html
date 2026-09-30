@@ -3,7 +3,7 @@
     <!-- Open all filters -->
     <button type="button" class="filter-button" (click)="openFilters()">
 
-        <fa-icon [icon]="faFilter"></fa-icon>
+        <svg lucideFunnel class="icon" aria-hidden="true"></svg>
 
         Filters
 
@@ -18,13 +18,7 @@
         </span>
 
         @if (isVegSelected()) {
-
-        <span class="remove" aria-hidden="true">
-
-            <fa-icon [icon]="faClose"></fa-icon>
-
-        </span>
-
+        <svg lucideX class="icon" aria-hidden="true"></svg>
         }
 
     </button>
@@ -43,7 +37,7 @@
                 {{ currentSortLabel() }}
             </span>
 
-            <fa-icon [icon]="faChevronDown"></fa-icon>
+            <svg lucideChevronDown class="icon" aria-hidden="true"></svg>
         </button>
 
 
@@ -63,9 +57,7 @@
                     </span>
 
                     @if (currentSort() === option.value) {
-                    <span class="check">
-                        <fa-icon [icon]="faCheck"></fa-icon>
-                    </span>
+                    <svg lucideCheck class="icon" aria-hidden="true"></svg>
                     }
 
                 </button>
@@ -93,11 +85,7 @@
             {{ filter.label }}
         </span>
 
-        <span class="remove" aria-hidden="true">
-
-            <fa-icon [icon]="faClose"></fa-icon>
-
-        </span>
+        <svg lucideX class="icon" aria-hidden="true"></svg>
 
     </button>
 

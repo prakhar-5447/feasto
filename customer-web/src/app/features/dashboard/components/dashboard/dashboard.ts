@@ -11,8 +11,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/app.state';
 import { selectSelectedLocation } from '@/app/store/location/location.selectors';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { LucideUtensils } from '@lucide/angular';
 
 import { FilterBar } from '@/app/features/dashboard/components/filter-bar/filter-bar';
 import { AdsCarousel } from '@/app/features/dashboard/components/ads-carousel/ads-carousel';
@@ -32,13 +31,12 @@ import { RestaurantService } from '@/app/features/dashboard/services/restuarant.
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [FilterBar, Modal, FilterModal, AdsCarousel, Categories, RestaurantList, FontAwesomeModule, AdsCarouselSkeleton, CategoriesSkeleton, RestaurantListSkeleton],
+  imports: [FilterBar, Modal, FilterModal, AdsCarousel, Categories, RestaurantList, AdsCarouselSkeleton, CategoriesSkeleton, RestaurantListSkeleton, LucideUtensils],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Dashboard {
-  readonly faUtensils = faUtensils
 
   private readonly document = inject(DOCUMENT);
 

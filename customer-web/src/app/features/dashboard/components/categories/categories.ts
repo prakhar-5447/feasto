@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, output, signal, ViewChild } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
+
 import { Category } from '@/app/features/dashboard/models/category.model';
 import { RESTAURANT_CATEGORIES } from '@/app/features/dashboard/data/restaurant-categories';
 
@@ -9,15 +9,12 @@ import { RESTAURANT_CATEGORIES } from '@/app/features/dashboard/data/restaurant-
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [LucideChevronLeft, LucideChevronRight],
   templateUrl: './categories.html',
   styleUrl: './categories.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Categories {
-  faChevronLeft = faChevronLeft
-  faChevronRight = faChevronRight
-
   @ViewChild('categoryList')
   categoryList!: ElementRef<HTMLDivElement>;
 

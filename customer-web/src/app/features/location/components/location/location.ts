@@ -2,29 +2,25 @@ import { Component, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faArrowRight, faLineChart, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-
 import { SlugPipe } from '@/app/shared/pipes/slug.pipe';
 import { City, PopularCity } from '@/app/features/location/models/city.model';
 import { LocationPicker } from '../location-picker/location-picker';
+import { LucideMapPin, LucideChevronRight, LucideTrendingUp } from '@lucide/angular';
 
 @Component({
   selector: 'app-location',
   standalone: true,
   imports: [
-    FontAwesomeModule,
     RouterLink,
-    LocationPicker
+    LocationPicker,
+    LucideTrendingUp,
+    LucideMapPin,
+    LucideChevronRight
   ],
   templateUrl: './location.html',
   styleUrl: './location.sass',
 })
 export class Location {
-
-  readonly faLineChart = faLineChart;
-  readonly faLocationDot = faLocationDot;
-  readonly faArrowRight = faArrowRight;
 
   readonly slugPipe = inject(SlugPipe);
 

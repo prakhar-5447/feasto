@@ -45,14 +45,17 @@
     border-radius: $radius-circle
     background: transparent
 
-    color: $color-text-secondary
-    font-size: $font-size-14
-
     cursor: pointer
 
     &:hover
         background: $color-neutral-300
-        color: $color-text-primary
+        .icon
+            color: $color-text-primary
+
+    .icon
+        width: $space-16
+        height: $space-16
+        color: $color-text-secondary
 
 .filter-body
     flex: 1

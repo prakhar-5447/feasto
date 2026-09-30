@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { LucideX } from '@lucide/angular';
 
 import { DietaryOption, PriceRange, RestaurantFilters, SortOption } from '@/app/features/dashboard/models/filter.model';
 import { Button } from '@/app/shared/components/button/button';
@@ -12,14 +11,12 @@ import { Category } from '@/app/features/dashboard/models/category.model';
 @Component({
   selector: 'app-filter-modal',
   standalone: true,
-  imports: [Button, FontAwesomeModule],
+  imports: [Button, LucideX],
   templateUrl: './filter-modal.html',
   styleUrl: './filter-modal.sass',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterModal implements OnChanges {
-  faClose = faClose;
-
   @Input()
   filters: RestaurantFilters = {};
 
