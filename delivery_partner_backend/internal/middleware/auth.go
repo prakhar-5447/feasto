@@ -6,17 +6,36 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-
-	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type contextKey string
 
-const UserIDKey contextKey = "userID"
+const userIDKey contextKey = "userID"
+
+func SetUserID(
+	ctx context.Context,
+	userID bson.ObjectID,
+) context.Context {
+	return context.WithValue(
+		ctx,
+		userIDKey,
+		userID,
+	)
+}
+
+func UserIDFromContext(
+	ctx context.Context,
+) (bson.ObjectID, bool) {
+
+	userID, ok := ctx.Value(userIDKey).(bson.ObjectID)
+
+	return userID, ok
+}
 
 func AuthInterceptor(
 	jwtSecret string,
@@ -29,15 +48,9 @@ func AuthInterceptor(
 		handler grpc.UnaryHandler,
 	) (interface{}, error) {
 
-		if strings.Contains(
-			info.FullMethod,
-			"SendLoginOTP",
-		) ||
-			strings.Contains(
-				info.FullMethod,
-				"VerifyLoginOTP",
-			) {
-
+		if strings.Contains(info.FullMethod, "SendLoginOTP") ||
+			strings.Contains(info.FullMethod, "VerifyLoginOTP") ||
+			strings.Contains(info.FullMethod, "RefreshToken") {
 			return handler(ctx, req)
 		}
 
@@ -61,10 +74,7 @@ func AuthInterceptor(
 
 		authHeader := values[0]
 
-		if !strings.HasPrefix(
-			authHeader,
-			"Bearer ",
-		) {
+		if !strings.HasPrefix(authHeader, "Bearer ") {
 			return nil, status.Error(
 				codes.Unauthenticated,
 				"invalid authorization header",
@@ -133,11 +143,8 @@ func AuthInterceptor(
 			)
 		}
 
-		ctx = context.WithValue(
-			ctx,
-			UserIDKey,
-			userID,
-		)
+		// Put user ID into context.
+		ctx = SetUserID(ctx, userID)
 
 		return handler(ctx, req)
 	}

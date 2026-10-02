@@ -11,6 +11,15 @@ type RestaurantSnapshot struct {
 	Address string `bson:"address"`
 }
 
+type OrderItem struct {
+	Food     *bson.ObjectID `bson:"food,omitempty"`
+	Name     string         `bson:"name"`
+	Image    string         `bson:"image"`
+	Price    float64        `bson:"price"`
+	Quantity int            `bson:"quantity"`
+	Total    float64        `bson:"total"`
+}
+
 type DeliveryAddress struct {
 	FullAddress string  `bson:"fullAddress"`
 	Lat         float64 `bson:"lat"`
@@ -31,6 +40,24 @@ type DriverSnapshot struct {
 	Phone string `bson:"phone"`
 }
 
+type OrderStatus string
+
+const (
+	OrderStatusPendingPayment    OrderStatus = "pending_payment"
+	OrderStatusPlaced            OrderStatus = "placed"
+	OrderStatusAccepted          OrderStatus = "accepted"
+	OrderStatusPreparing         OrderStatus = "preparing"
+	OrderStatusReady             OrderStatus = "ready"
+	OrderStatusDriverAssigned    OrderStatus = "driver_assigned"
+	OrderStatusPickedUp          OrderStatus = "picked_up"
+	OrderStatusDelivered         OrderStatus = "delivered"
+	OrderStatusCancelled         OrderStatus = "cancelled"
+	OrderStatusCancelledReturning OrderStatus = "cancelled_returning"
+	OrderStatusReturnReceived    OrderStatus = "return_received"
+	OrderStatusRefundProcessing  OrderStatus = "refund_processing"
+	OrderStatusRefunded          OrderStatus = "refunded"
+)
+
 type Order struct {
 	ID bson.ObjectID `bson:"_id,omitempty"`
 
@@ -41,12 +68,14 @@ type Order struct {
 
 	RestaurantSnapshot RestaurantSnapshot `bson:"restaurantSnapshot"`
 
+	Items []OrderItem `bson:"items"`
+
 	Billing Billing `bson:"billing"`
 
 	DeliveryAddress DeliveryAddress `bson:"deliveryAddress"`
 
-	OrderStatus   string `bson:"orderStatus"`
-	PaymentStatus string `bson:"paymentStatus"`
+	OrderStatus   OrderStatus `bson:"orderStatus"`
+	PaymentStatus string      `bson:"paymentStatus"`
 
 	Driver         *bson.ObjectID  `bson:"driver,omitempty"`
 	DriverSnapshot *DriverSnapshot `bson:"driverSnapshot,omitempty"`
