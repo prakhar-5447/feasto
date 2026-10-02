@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from proto/delivery.proto.
+// Generated from delivery.proto.
 
 // @dart = 3.3
 
@@ -88,6 +88,27 @@ class DeliveryServiceClient extends $grpc.Client {
     return $createUnaryCall(_$getDeliveryHistory, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.UpdateAvailabilityResponse> updateAvailability(
+    $0.UpdateAvailabilityRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$updateAvailability, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetRiderStatusResponse> getRiderStatus(
+    $0.GetRiderStatusRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getRiderStatus, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetUpcomingOrderResponse> getUpcomingOrder(
+    $0.GetUpcomingOrderRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getUpcomingOrder, request, options: options);
+  }
+
   // method descriptors
 
   static final _$getAvailableOrders = $grpc.ClientMethod<
@@ -130,6 +151,21 @@ class DeliveryServiceClient extends $grpc.Client {
       '/delivery.DeliveryService/GetDeliveryHistory',
       ($0.GetDeliveryHistoryRequest value) => value.writeToBuffer(),
       $0.GetDeliveryHistoryResponse.fromBuffer);
+  static final _$updateAvailability = $grpc.ClientMethod<
+          $0.UpdateAvailabilityRequest, $0.UpdateAvailabilityResponse>(
+      '/delivery.DeliveryService/UpdateAvailability',
+      ($0.UpdateAvailabilityRequest value) => value.writeToBuffer(),
+      $0.UpdateAvailabilityResponse.fromBuffer);
+  static final _$getRiderStatus =
+      $grpc.ClientMethod<$0.GetRiderStatusRequest, $0.GetRiderStatusResponse>(
+          '/delivery.DeliveryService/GetRiderStatus',
+          ($0.GetRiderStatusRequest value) => value.writeToBuffer(),
+          $0.GetRiderStatusResponse.fromBuffer);
+  static final _$getUpcomingOrder = $grpc.ClientMethod<
+          $0.GetUpcomingOrderRequest, $0.GetUpcomingOrderResponse>(
+      '/delivery.DeliveryService/GetUpcomingOrder',
+      ($0.GetUpcomingOrderRequest value) => value.writeToBuffer(),
+      $0.GetUpcomingOrderResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('delivery.DeliveryService')
@@ -209,6 +245,33 @@ abstract class DeliveryServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.GetDeliveryHistoryRequest.fromBuffer(value),
         ($0.GetDeliveryHistoryResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateAvailabilityRequest,
+            $0.UpdateAvailabilityResponse>(
+        'UpdateAvailability',
+        updateAvailability_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.UpdateAvailabilityRequest.fromBuffer(value),
+        ($0.UpdateAvailabilityResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetRiderStatusRequest,
+            $0.GetRiderStatusResponse>(
+        'GetRiderStatus',
+        getRiderStatus_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.GetRiderStatusRequest.fromBuffer(value),
+        ($0.GetRiderStatusResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetUpcomingOrderRequest,
+            $0.GetUpcomingOrderResponse>(
+        'GetUpcomingOrder',
+        getUpcomingOrder_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.GetUpcomingOrderRequest.fromBuffer(value),
+        ($0.GetUpcomingOrderResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.GetAvailableOrdersResponse> getAvailableOrders_Pre(
@@ -279,4 +342,31 @@ abstract class DeliveryServiceBase extends $grpc.Service {
 
   $async.Future<$0.GetDeliveryHistoryResponse> getDeliveryHistory(
       $grpc.ServiceCall call, $0.GetDeliveryHistoryRequest request);
+
+  $async.Future<$0.UpdateAvailabilityResponse> updateAvailability_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UpdateAvailabilityRequest> $request) async {
+    return updateAvailability($call, await $request);
+  }
+
+  $async.Future<$0.UpdateAvailabilityResponse> updateAvailability(
+      $grpc.ServiceCall call, $0.UpdateAvailabilityRequest request);
+
+  $async.Future<$0.GetRiderStatusResponse> getRiderStatus_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.GetRiderStatusRequest> $request) async {
+    return getRiderStatus($call, await $request);
+  }
+
+  $async.Future<$0.GetRiderStatusResponse> getRiderStatus(
+      $grpc.ServiceCall call, $0.GetRiderStatusRequest request);
+
+  $async.Future<$0.GetUpcomingOrderResponse> getUpcomingOrder_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.GetUpcomingOrderRequest> $request) async {
+    return getUpcomingOrder($call, await $request);
+  }
+
+  $async.Future<$0.GetUpcomingOrderResponse> getUpcomingOrder(
+      $grpc.ServiceCall call, $0.GetUpcomingOrderRequest request);
 }

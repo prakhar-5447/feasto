@@ -160,6 +160,14 @@ class _HomePageState extends State<HomePage> {
       // flex items-end
       //
       // overlay.
+      floatingActionButton: FloatingActionButton(
+        onPressed: homeController.fetchUpcomingOrder,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.primaryForeground,
+        elevation: 4,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add_rounded, size: 26),
+      ),
       bottomSheet: Obx(() {
         final order = homeController.incomingOrder.value;
 

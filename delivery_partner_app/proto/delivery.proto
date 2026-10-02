@@ -29,6 +29,56 @@ service DeliveryService {
 
     rpc GetDeliveryHistory(GetDeliveryHistoryRequest)
         returns (GetDeliveryHistoryResponse);
+
+    rpc UpdateAvailability(UpdateAvailabilityRequest)
+        returns (UpdateAvailabilityResponse);
+    
+    rpc GetRiderStatus(GetRiderStatusRequest)
+        returns (GetRiderStatusResponse);
+
+    rpc GetUpcomingOrder(GetUpcomingOrderRequest)
+    returns (GetUpcomingOrderResponse);
+}
+
+message GetUpcomingOrderRequest {}
+
+message GetUpcomingOrderResponse {
+    bool success = 1;
+    string message = 2;
+    bool has_order = 3;
+
+    string order_id = 4;
+    string restaurant = 5;
+    string restaurant_area = 6;
+    string pickup_distance = 7;
+
+    string customer_name = 8;
+    string delivery_area = 9;
+    string delivery_distance = 10;
+
+    string total_distance = 11;
+    string earnings = 12;
+
+    int32 items = 13;
+    string eta = 14;
+}
+
+message GetRiderStatusRequest {}
+
+message GetRiderStatusResponse {
+    bool success = 1;
+    string message = 2;
+    string status = 3;
+}
+
+message UpdateAvailabilityRequest {
+    string status = 1;
+}
+
+message UpdateAvailabilityResponse {
+    bool success = 1;
+    string message = 2;
+    string status = 3;
 }
 
 message GetAvailableOrdersRequest {}

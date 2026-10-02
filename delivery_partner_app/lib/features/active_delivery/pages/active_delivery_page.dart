@@ -9,6 +9,7 @@ import 'package:delivery_partner_app/features/active_delivery/models/delivery_or
 import 'package:delivery_partner_app/features/active_delivery/models/delivery_phase.dart';
 import 'package:delivery_partner_app/features/active_delivery/widgets/delivery_bottom_sheet.dart';
 import 'package:delivery_partner_app/features/active_delivery/widgets/delivery_map.dart';
+import 'package:delivery_partner_app/features/home/services/delivery_services.dart';
 
 class ActiveDeliveryPage extends StatelessWidget {
   const ActiveDeliveryPage({super.key, required this.order});
@@ -29,7 +30,10 @@ class GetBuilderScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ActiveDeliveryController>(
-      init: ActiveDeliveryController(order: order),
+      init: ActiveDeliveryController(
+        order: order,
+        deliveryService: Get.find<DeliveryService>(),
+      ),
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppColors.background,
@@ -46,7 +50,10 @@ class GetBuilderScope extends StatelessWidget {
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: DeliveryMap(order: order, phase: phase),
+                        child: DeliveryMap(
+                          order: order,
+                          phase: phase,
+                        ),
                       ),
 
                       _TopBar(controller: controller),

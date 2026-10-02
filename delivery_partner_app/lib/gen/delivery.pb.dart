@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from proto/delivery.proto.
+// Generated from delivery.proto.
 
 // @dart = 3.3
 
@@ -15,6 +15,538 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+class GetUpcomingOrderRequest extends $pb.GeneratedMessage {
+  factory GetUpcomingOrderRequest() => GetUpcomingOrderRequest._();
+
+  GetUpcomingOrderRequest._();
+
+  factory GetUpcomingOrderRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetUpcomingOrderRequest()..mergeFromBuffer(data, registry);
+  factory GetUpcomingOrderRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetUpcomingOrderRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetUpcomingOrderRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'delivery'),
+      createEmptyInstance: GetUpcomingOrderRequest.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetUpcomingOrderRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetUpcomingOrderRequest copyWith(
+          void Function(GetUpcomingOrderRequest) updates) =>
+      super.copyWith((message) => updates(message as GetUpcomingOrderRequest))
+          as GetUpcomingOrderRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use GetUpcomingOrderRequest() / GetUpcomingOrderRequest.new instead')
+  static GetUpcomingOrderRequest create() => GetUpcomingOrderRequest._();
+  static $pb.GeneratedMessage $_createMessage() => GetUpcomingOrderRequest._();
+  @$core.override
+  GetUpcomingOrderRequest createEmptyInstance() => GetUpcomingOrderRequest._();
+  @$core.pragma('dart2js:noInline')
+  static GetUpcomingOrderRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetUpcomingOrderRequest>(
+          GetUpcomingOrderRequest.$_createMessage);
+  static GetUpcomingOrderRequest? _defaultInstance;
+}
+
+class GetUpcomingOrderResponse extends $pb.GeneratedMessage {
+  factory GetUpcomingOrderResponse({
+    $core.bool? success,
+    $core.String? message,
+    $core.bool? hasOrder,
+    $core.String? orderId,
+    $core.String? restaurant,
+    $core.String? restaurantArea,
+    $core.String? pickupDistance,
+    $core.String? customerName,
+    $core.String? deliveryArea,
+    $core.String? deliveryDistance,
+    $core.String? totalDistance,
+    $core.String? earnings,
+    $core.int? items,
+    $core.String? eta,
+  }) {
+    final result = GetUpcomingOrderResponse._();
+    if (success != null) result.success = success;
+    if (message != null) result.message = message;
+    if (hasOrder != null) result.hasOrder = hasOrder;
+    if (orderId != null) result.orderId = orderId;
+    if (restaurant != null) result.restaurant = restaurant;
+    if (restaurantArea != null) result.restaurantArea = restaurantArea;
+    if (pickupDistance != null) result.pickupDistance = pickupDistance;
+    if (customerName != null) result.customerName = customerName;
+    if (deliveryArea != null) result.deliveryArea = deliveryArea;
+    if (deliveryDistance != null) result.deliveryDistance = deliveryDistance;
+    if (totalDistance != null) result.totalDistance = totalDistance;
+    if (earnings != null) result.earnings = earnings;
+    if (items != null) result.items = items;
+    if (eta != null) result.eta = eta;
+    return result;
+  }
+
+  GetUpcomingOrderResponse._();
+
+  factory GetUpcomingOrderResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetUpcomingOrderResponse()..mergeFromBuffer(data, registry);
+  factory GetUpcomingOrderResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetUpcomingOrderResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetUpcomingOrderResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'delivery'),
+      createEmptyInstance: GetUpcomingOrderResponse.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..aOB(3, _omitFieldNames ? '' : 'hasOrder')
+    ..aOS(4, _omitFieldNames ? '' : 'orderId')
+    ..aOS(5, _omitFieldNames ? '' : 'restaurant')
+    ..aOS(6, _omitFieldNames ? '' : 'restaurantArea')
+    ..aOS(7, _omitFieldNames ? '' : 'pickupDistance')
+    ..aOS(8, _omitFieldNames ? '' : 'customerName')
+    ..aOS(9, _omitFieldNames ? '' : 'deliveryArea')
+    ..aOS(10, _omitFieldNames ? '' : 'deliveryDistance')
+    ..aOS(11, _omitFieldNames ? '' : 'totalDistance')
+    ..aOS(12, _omitFieldNames ? '' : 'earnings')
+    ..aI(13, _omitFieldNames ? '' : 'items')
+    ..aOS(14, _omitFieldNames ? '' : 'eta')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetUpcomingOrderResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetUpcomingOrderResponse copyWith(
+          void Function(GetUpcomingOrderResponse) updates) =>
+      super.copyWith((message) => updates(message as GetUpcomingOrderResponse))
+          as GetUpcomingOrderResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use GetUpcomingOrderResponse() / GetUpcomingOrderResponse.new instead')
+  static GetUpcomingOrderResponse create() => GetUpcomingOrderResponse._();
+  static $pb.GeneratedMessage $_createMessage() => GetUpcomingOrderResponse._();
+  @$core.override
+  GetUpcomingOrderResponse createEmptyInstance() =>
+      GetUpcomingOrderResponse._();
+  @$core.pragma('dart2js:noInline')
+  static GetUpcomingOrderResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetUpcomingOrderResponse>(
+          GetUpcomingOrderResponse.$_createMessage);
+  static GetUpcomingOrderResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get hasOrder => $_getBF(2);
+  @$pb.TagNumber(3)
+  set hasOrder($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasHasOrder() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHasOrder() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get orderId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set orderId($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasOrderId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearOrderId() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get restaurant => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set restaurant($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasRestaurant() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRestaurant() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get restaurantArea => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set restaurantArea($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasRestaurantArea() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearRestaurantArea() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get pickupDistance => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set pickupDistance($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasPickupDistance() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearPickupDistance() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get customerName => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set customerName($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCustomerName() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCustomerName() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get deliveryArea => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set deliveryArea($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasDeliveryArea() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearDeliveryArea() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get deliveryDistance => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set deliveryDistance($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasDeliveryDistance() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearDeliveryDistance() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get totalDistance => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set totalDistance($core.String value) => $_setString(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasTotalDistance() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearTotalDistance() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get earnings => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set earnings($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasEarnings() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearEarnings() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.int get items => $_getIZ(12);
+  @$pb.TagNumber(13)
+  set items($core.int value) => $_setSignedInt32(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasItems() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearItems() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get eta => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set eta($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasEta() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearEta() => $_clearField(14);
+}
+
+class GetRiderStatusRequest extends $pb.GeneratedMessage {
+  factory GetRiderStatusRequest() => GetRiderStatusRequest._();
+
+  GetRiderStatusRequest._();
+
+  factory GetRiderStatusRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetRiderStatusRequest()..mergeFromBuffer(data, registry);
+  factory GetRiderStatusRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetRiderStatusRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetRiderStatusRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'delivery'),
+      createEmptyInstance: GetRiderStatusRequest.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetRiderStatusRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetRiderStatusRequest copyWith(
+          void Function(GetRiderStatusRequest) updates) =>
+      super.copyWith((message) => updates(message as GetRiderStatusRequest))
+          as GetRiderStatusRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use GetRiderStatusRequest() / GetRiderStatusRequest.new instead')
+  static GetRiderStatusRequest create() => GetRiderStatusRequest._();
+  static $pb.GeneratedMessage $_createMessage() => GetRiderStatusRequest._();
+  @$core.override
+  GetRiderStatusRequest createEmptyInstance() => GetRiderStatusRequest._();
+  @$core.pragma('dart2js:noInline')
+  static GetRiderStatusRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetRiderStatusRequest>(
+          GetRiderStatusRequest.$_createMessage);
+  static GetRiderStatusRequest? _defaultInstance;
+}
+
+class GetRiderStatusResponse extends $pb.GeneratedMessage {
+  factory GetRiderStatusResponse({
+    $core.bool? success,
+    $core.String? message,
+    $core.String? status,
+  }) {
+    final result = GetRiderStatusResponse._();
+    if (success != null) result.success = success;
+    if (message != null) result.message = message;
+    if (status != null) result.status = status;
+    return result;
+  }
+
+  GetRiderStatusResponse._();
+
+  factory GetRiderStatusResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetRiderStatusResponse()..mergeFromBuffer(data, registry);
+  factory GetRiderStatusResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      GetRiderStatusResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetRiderStatusResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'delivery'),
+      createEmptyInstance: GetRiderStatusResponse.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..aOS(3, _omitFieldNames ? '' : 'status')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetRiderStatusResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetRiderStatusResponse copyWith(
+          void Function(GetRiderStatusResponse) updates) =>
+      super.copyWith((message) => updates(message as GetRiderStatusResponse))
+          as GetRiderStatusResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use GetRiderStatusResponse() / GetRiderStatusResponse.new instead')
+  static GetRiderStatusResponse create() => GetRiderStatusResponse._();
+  static $pb.GeneratedMessage $_createMessage() => GetRiderStatusResponse._();
+  @$core.override
+  GetRiderStatusResponse createEmptyInstance() => GetRiderStatusResponse._();
+  @$core.pragma('dart2js:noInline')
+  static GetRiderStatusResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetRiderStatusResponse>(
+          GetRiderStatusResponse.$_createMessage);
+  static GetRiderStatusResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get status => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set status($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasStatus() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearStatus() => $_clearField(3);
+}
+
+class UpdateAvailabilityRequest extends $pb.GeneratedMessage {
+  factory UpdateAvailabilityRequest({
+    $core.String? status,
+  }) {
+    final result = UpdateAvailabilityRequest._();
+    if (status != null) result.status = status;
+    return result;
+  }
+
+  UpdateAvailabilityRequest._();
+
+  factory UpdateAvailabilityRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateAvailabilityRequest()..mergeFromBuffer(data, registry);
+  factory UpdateAvailabilityRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateAvailabilityRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateAvailabilityRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'delivery'),
+      createEmptyInstance: UpdateAvailabilityRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'status')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateAvailabilityRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateAvailabilityRequest copyWith(
+          void Function(UpdateAvailabilityRequest) updates) =>
+      super.copyWith((message) => updates(message as UpdateAvailabilityRequest))
+          as UpdateAvailabilityRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use UpdateAvailabilityRequest() / UpdateAvailabilityRequest.new instead')
+  static UpdateAvailabilityRequest create() => UpdateAvailabilityRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      UpdateAvailabilityRequest._();
+  @$core.override
+  UpdateAvailabilityRequest createEmptyInstance() =>
+      UpdateAvailabilityRequest._();
+  @$core.pragma('dart2js:noInline')
+  static UpdateAvailabilityRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateAvailabilityRequest>(
+          UpdateAvailabilityRequest.$_createMessage);
+  static UpdateAvailabilityRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => $_clearField(1);
+}
+
+class UpdateAvailabilityResponse extends $pb.GeneratedMessage {
+  factory UpdateAvailabilityResponse({
+    $core.bool? success,
+    $core.String? message,
+    $core.String? status,
+  }) {
+    final result = UpdateAvailabilityResponse._();
+    if (success != null) result.success = success;
+    if (message != null) result.message = message;
+    if (status != null) result.status = status;
+    return result;
+  }
+
+  UpdateAvailabilityResponse._();
+
+  factory UpdateAvailabilityResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateAvailabilityResponse()..mergeFromBuffer(data, registry);
+  factory UpdateAvailabilityResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UpdateAvailabilityResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateAvailabilityResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'delivery'),
+      createEmptyInstance: UpdateAvailabilityResponse.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..aOS(3, _omitFieldNames ? '' : 'status')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateAvailabilityResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateAvailabilityResponse copyWith(
+          void Function(UpdateAvailabilityResponse) updates) =>
+      super.copyWith(
+              (message) => updates(message as UpdateAvailabilityResponse))
+          as UpdateAvailabilityResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use UpdateAvailabilityResponse() / UpdateAvailabilityResponse.new instead')
+  static UpdateAvailabilityResponse create() => UpdateAvailabilityResponse._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      UpdateAvailabilityResponse._();
+  @$core.override
+  UpdateAvailabilityResponse createEmptyInstance() =>
+      UpdateAvailabilityResponse._();
+  @$core.pragma('dart2js:noInline')
+  static UpdateAvailabilityResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateAvailabilityResponse>(
+          UpdateAvailabilityResponse.$_createMessage);
+  static UpdateAvailabilityResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get status => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set status($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasStatus() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearStatus() => $_clearField(3);
+}
 
 class GetAvailableOrdersRequest extends $pb.GeneratedMessage {
   factory GetAvailableOrdersRequest() => GetAvailableOrdersRequest._();

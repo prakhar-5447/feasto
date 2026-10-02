@@ -30,6 +30,7 @@ import 'package:delivery_partner_app/core/network/api_client.dart';
 import 'package:delivery_partner_app/features/auth/controllers/auth_controller.dart';
 import 'package:delivery_partner_app/features/auth/services/auth_service.dart';
 import 'package:delivery_partner_app/core/storage/token_storage.dart';
+import 'package:delivery_partner_app/features/home/services/delivery_services.dart';
 
 class AppBindings extends Bindings {
   @override
@@ -46,10 +47,27 @@ class AppBindings extends Bindings {
       fenix: true,
     );
 
-    Get.lazyPut<HomeService>(
-      () => HomeService(apiClient: Get.find<ApiClient>()),
-      fenix: true,
-    );
+  Get.lazyPut<HomeService>(
+  () => HomeService(
+    apiClient: Get.find<ApiClient>(),
+    tokenStorage: Get.find<TokenStorage>(),
+  ),
+  fenix: true,
+);
+
+Get.lazyPut<HomeController>(
+  () => HomeController(
+    homeService: Get.find<HomeService>(),
+  ),
+  fenix: true,
+);
+
+Get.lazyPut<DeliveryService>(
+  () => DeliveryService(
+    tokenStorage: Get.find<TokenStorage>(),
+  ),
+  fenix: true,
+);
 
     Get.lazyPut<HomeController>(
       () => HomeController(homeService: Get.find<HomeService>()),
@@ -171,5 +189,7 @@ class AppBindings extends Bindings {
       ),
       fenix: true,
     );
+
+    Get.lazyPut(() => TokenStorage());
   }
 }

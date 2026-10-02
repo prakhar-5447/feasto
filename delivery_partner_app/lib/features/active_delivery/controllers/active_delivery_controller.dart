@@ -5,11 +5,18 @@ import 'package:get/get.dart';
 import 'package:delivery_partner_app/features/active_delivery/models/delivery_order.dart';
 import 'package:delivery_partner_app/features/active_delivery/models/delivery_phase.dart';
 import 'package:delivery_partner_app/features/active_delivery/models/issue_category.dart';
+import 'package:delivery_partner_app/core/storage/token_storage.dart';
+import 'package:delivery_partner_app/features/home/services/delivery_services.dart';
 
 class ActiveDeliveryController extends GetxController {
-  ActiveDeliveryController({required this.order});
+ActiveDeliveryController({
+  required this.order,
+  required DeliveryService deliveryService,
+}) : _deliveryService = deliveryService;
 
-  final DeliveryOrder order;
+final DeliveryOrder order;
+
+final DeliveryService _deliveryService;
 
   // ---------------------------------------------------------------------------
   // DELIVERY PHASE
@@ -293,4 +300,113 @@ class ActiveDeliveryController extends GetxController {
     _waitTimer?.cancel();
     super.onClose();
   }
+
+  final isActionLoading = false.obs;
+
+Future<void> confirmPickup() async {
+  if (phase.value != DeliveryPhase.arrivedAtRestaurant) {
+    return;
+  }
+
+  try {
+    isActionLoading.value = true;
+
+    await _deliveryService.pickupOrder(
+      order.id,
+    );
+
+    phase.value = DeliveryPhase.orderPickedUp;
+  } catch (error) {
+    Get.snackbar(
+      'Pickup failed',
+      error.toString().replaceFirst(
+        'Exception: ',
+        '',
+      ),
+    );
+  } finally {
+    isActionLoading.value = false;
+  }
+}
+
+void startCustomerDelivery() {
+  if (phase.value != DeliveryPhase.orderPickedUp) {
+    return;
+  }
+
+  phase.value = DeliveryPhase.goingToCustomer;
+}
+
+void reachCustomer() {
+  if (phase.value != DeliveryPhase.goingToCustomer) {
+    return;
+  }
+
+  phase.value = DeliveryPhase.arrivedAtCustomer;
+}
+
+Future<void> requestCustomerOTP() async {
+  if (phase.value != DeliveryPhase.arrivedAtCustomer) {
+    return;
+  }
+
+  try {
+    isActionLoading.value = true;
+
+    await _deliveryService.requestDeliveryOTP(
+      order.id,
+    );
+
+    phase.value = DeliveryPhase.pinVerification;
+
+    Get.snackbar(
+      'OTP requested',
+      'Ask the customer for their 4-digit OTP.',
+    );
+  } catch (error) {
+    Get.snackbar(
+      'OTP failed',
+      error.toString().replaceFirst(
+        'Exception: ',
+        '',
+      ),
+    );
+  } finally {
+    isActionLoading.value = false;
+  }
+}
+
+Future<void> verifyCustomerOTP() async {
+  if (!pinComplete) {
+    return;
+  }
+
+  try {
+    isActionLoading.value = true;
+
+    final otp = pin.join();
+
+    await _deliveryService.verifyDeliveryOTP(
+      order.id,
+      otp,
+    );
+
+    phase.value = DeliveryPhase.delivered;
+
+    Get.snackbar(
+      'Delivery completed',
+      'Order delivered successfully.',
+    );
+  } catch (error) {
+    Get.snackbar(
+      'Invalid OTP',
+      error.toString().replaceFirst(
+        'Exception: ',
+        '',
+      ),
+    );
+  } finally {
+    isActionLoading.value = false;
+  }
+}
 }

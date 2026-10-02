@@ -2,21 +2,22 @@ package main
 
 import (
 	"log"
-	"net"
 
-	"delivery_partner_backend/gen"
 	"delivery_partner_backend/internal/config"
 	"delivery_partner_backend/internal/database"
+	grpcserver "delivery_partner_backend/internal/grpc"
 	"delivery_partner_backend/internal/handler"
-	"delivery_partner_backend/internal/middleware"
 	"delivery_partner_backend/internal/repository"
 	"delivery_partner_backend/internal/service"
 
 	"github.com/joho/godotenv"
-	"google.golang.org/grpc"
 )
 
 func main() {
+
+	log.Println("========================================")
+	log.Println("Starting Feasto Delivery Partner Backend")
+	log.Println("========================================")
 
 	_ = godotenv.Load()
 
@@ -39,14 +40,9 @@ func main() {
 	}
 
 	// MongoDB
-	mongoDB, err :=
-		database.ConnectMongo(cfg)
-
+	mongoDB, err := database.ConnectMongo(cfg)
 	if err != nil {
-		log.Fatal(
-			"MongoDB connection failed:",
-			err,
-		)
+		log.Fatal("MongoDB connection failed:", err)
 	}
 
 	defer mongoDB.Client.Disconnect(nil)
@@ -54,78 +50,55 @@ func main() {
 	log.Println("MongoDB connected")
 
 	// Repositories
-	userRepository :=
-		repository.NewUserRepository(
-			mongoDB.Database,
-		)
+	userRepository := repository.NewUserRepository(
+		mongoDB.Database,
+	)
 
-	orderRepository :=
-		repository.NewOrderRepository(
-			mongoDB.Database,
-		)
+	driverRepository := repository.NewDriverRepository(
+		mongoDB.Database,
+	)
+
+	orderRepository := repository.NewOrderRepository(
+		mongoDB.Database,
+	)
 
 	// Services
-	authService :=
-		service.NewAuthService(
-			userRepository,
-			cfg.JWTSecret,
-		)
+	authService := service.NewAuthService(
+		userRepository,
+		cfg.JWTSecret,
+	)
 
-	deliveryService :=
-		service.NewDeliveryService(
-			orderRepository,
-			userRepository,
-		)
+	deliveryService := service.NewDeliveryService(
+		orderRepository,
+		userRepository,
+		driverRepository,
+	)
+
+	driverService := service.NewDriverService(
+		driverRepository,
+		userRepository,
+	)
 
 	// Handlers
-	authHandler :=
-		handler.NewAuthHandler(
-			authService,
-		)
-
-	deliveryHandler :=
-		handler.NewDeliveryHandler(
-			deliveryService,
-		)
-
-	// gRPC
-	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(
-			middleware.AuthInterceptor(
-				cfg.JWTSecret,
-			),
-		),
+	authHandler := handler.NewAuthHandler(
+		authService,
+		driverService,
 	)
 
-	gen.RegisterAuthServiceServer(
-		grpcServer,
+	deliveryHandler := handler.NewDeliveryHandler(
+		deliveryService,
+		driverService,
+	)
+
+	// gRPC Server
+	grpcServer := grpcserver.NewServer(
 		authHandler,
-	)
-
-	gen.RegisterDeliveryServiceServer(
-		grpcServer,
 		deliveryHandler,
+		cfg.JWTSecret,
 	)
 
-	// Listener
-	listener, err :=
-		net.Listen(
-			"tcp",
-			":"+cfg.Port,
-		)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println(
-		"Delivery Partner gRPC server running on :" +
-			cfg.Port,
-	)
-
-	if err :=
-		grpcServer.Serve(listener); err != nil {
-
-		log.Fatal(err)
+	// Start
+	if err := grpcServer.Start(cfg.Port); err != nil {
+		log.Fatal("gRPC server error:", err)
 	}
 }

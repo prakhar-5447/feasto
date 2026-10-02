@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from proto/auth.proto.
+// Generated from auth.proto.
 
 // @dart = 3.3
 
@@ -46,6 +46,27 @@ class AuthServiceClient extends $grpc.Client {
     return $createUnaryCall(_$verifyLoginOTP, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.CompleteProfileResponse> completeProfile(
+    $0.CompleteProfileRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$completeProfile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetProfileResponse> getProfile(
+    $0.GetProfileRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getProfile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.RefreshTokenResponse> refreshToken(
+    $0.RefreshTokenRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$refreshToken, request, options: options);
+  }
+
   // method descriptors
 
   static final _$sendLoginOTP =
@@ -58,6 +79,21 @@ class AuthServiceClient extends $grpc.Client {
           '/auth.AuthService/VerifyLoginOTP',
           ($0.VerifyLoginOTPRequest value) => value.writeToBuffer(),
           $0.VerifyLoginOTPResponse.fromBuffer);
+  static final _$completeProfile =
+      $grpc.ClientMethod<$0.CompleteProfileRequest, $0.CompleteProfileResponse>(
+          '/auth.AuthService/CompleteProfile',
+          ($0.CompleteProfileRequest value) => value.writeToBuffer(),
+          $0.CompleteProfileResponse.fromBuffer);
+  static final _$getProfile =
+      $grpc.ClientMethod<$0.GetProfileRequest, $0.GetProfileResponse>(
+          '/auth.AuthService/GetProfile',
+          ($0.GetProfileRequest value) => value.writeToBuffer(),
+          $0.GetProfileResponse.fromBuffer);
+  static final _$refreshToken =
+      $grpc.ClientMethod<$0.RefreshTokenRequest, $0.RefreshTokenResponse>(
+          '/auth.AuthService/RefreshToken',
+          ($0.RefreshTokenRequest value) => value.writeToBuffer(),
+          $0.RefreshTokenResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('auth.AuthService')
@@ -83,6 +119,31 @@ abstract class AuthServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.VerifyLoginOTPRequest.fromBuffer(value),
         ($0.VerifyLoginOTPResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CompleteProfileRequest,
+            $0.CompleteProfileResponse>(
+        'CompleteProfile',
+        completeProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.CompleteProfileRequest.fromBuffer(value),
+        ($0.CompleteProfileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetProfileRequest, $0.GetProfileResponse>(
+        'GetProfile',
+        getProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetProfileRequest.fromBuffer(value),
+        ($0.GetProfileResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.RefreshTokenRequest, $0.RefreshTokenResponse>(
+            'RefreshToken',
+            refreshToken_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.RefreshTokenRequest.fromBuffer(value),
+            ($0.RefreshTokenResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.SendLoginOTPResponse> sendLoginOTP_Pre(
@@ -102,4 +163,30 @@ abstract class AuthServiceBase extends $grpc.Service {
 
   $async.Future<$0.VerifyLoginOTPResponse> verifyLoginOTP(
       $grpc.ServiceCall call, $0.VerifyLoginOTPRequest request);
+
+  $async.Future<$0.CompleteProfileResponse> completeProfile_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.CompleteProfileRequest> $request) async {
+    return completeProfile($call, await $request);
+  }
+
+  $async.Future<$0.CompleteProfileResponse> completeProfile(
+      $grpc.ServiceCall call, $0.CompleteProfileRequest request);
+
+  $async.Future<$0.GetProfileResponse> getProfile_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.GetProfileRequest> $request) async {
+    return getProfile($call, await $request);
+  }
+
+  $async.Future<$0.GetProfileResponse> getProfile(
+      $grpc.ServiceCall call, $0.GetProfileRequest request);
+
+  $async.Future<$0.RefreshTokenResponse> refreshToken_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.RefreshTokenRequest> $request) async {
+    return refreshToken($call, await $request);
+  }
+
+  $async.Future<$0.RefreshTokenResponse> refreshToken(
+      $grpc.ServiceCall call, $0.RefreshTokenRequest request);
 }

@@ -74,10 +74,10 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
+      authController.phone.value = phone;
       final authService = Get.find<AuthService>();
 
       await authService.sendOtp(phone);
-
       if (!mounted) return;
 
       setState(() {
@@ -155,17 +155,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      await authController.login(phone: phone, otp: otp.join());
-
-      // Do NOT navigate here.
-      //
-      // AuthController changes:
-      // AuthStatus.unauthenticated
-      //          ↓
-      // AuthStatus.authenticated
-      //
-      // _AppRoot in app.dart observes that change
-      // and automatically shows AppShell.
+      await authController.login(otp: otp.join());
     } catch (error) {
       if (!mounted) return;
 

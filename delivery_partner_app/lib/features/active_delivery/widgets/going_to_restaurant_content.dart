@@ -2,81 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:delivery_partner_app/core/theme/app_colors.dart';
+import 'package:delivery_partner_app/core/theme/app_radius.dart';
 import 'package:delivery_partner_app/core/theme/app_spacing.dart';
 import 'package:delivery_partner_app/core/theme/app_typography.dart';
 
 import 'package:delivery_partner_app/features/active_delivery/controllers/active_delivery_controller.dart';
 
-class OrderPickedUp extends GetView<ActiveDeliveryController> {
-  const OrderPickedUp({super.key});
+class GoingToRestaurant extends GetView<ActiveDeliveryController> {
+  const GoingToRestaurant({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.success.withValues(alpha: .12),
-              ),
-              child: const Icon(
-                Icons.check,
-                color: AppColors.success,
-                size: 18,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Text(
-              'Order Picked Up ✓',
-              style: AppTypography.titleMedium.copyWith(
-                color: AppColors.success,
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: AppSpacing.lg),
-
-        Text(
-          'DELIVER TO',
-          style: AppTypography.labelSmall.copyWith(
-            color: AppColors.success,
-            letterSpacing: 1,
-          ),
+        _SectionLabel(
+          text: 'Pickup from',
+          color: AppColors.primary,
         ),
 
         Text(
-          controller.order.customerName,
+          controller.order.restaurant,
           style: AppTypography.headingSmall,
         ),
 
         Text(
-          controller.order.deliveryArea,
+          controller.order.restaurantArea,
           style: AppTypography.bodyMedium.copyWith(
             color: AppColors.secondaryForeground,
           ),
         ),
 
-        const SizedBox(height: 2),
-
-        Text(
-          'Block B, Flat 402',
-          style: AppTypography.bodySmall.copyWith(
-            color: AppColors.secondaryForeground,
-          ),
-        ),
-
         const SizedBox(height: AppSpacing.lg),
 
         Row(
           children: [
-            _Info(value: '3.4 km', label: 'Distance'),
-            _Info(value: '12 min', label: 'ETA'),
+            _StatCard(
+              value: '1.8 km',
+              label: 'Distance',
+            ),
+            _StatCard(
+              value: '7 min',
+              label: 'ETA',
+            ),
+            _StatCard(
+              value: controller.order.earnings,
+              label: 'Earning',
+              accent: true,
+            ),
           ],
         ),
 
@@ -94,11 +67,10 @@ class OrderPickedUp extends GetView<ActiveDeliveryController> {
             Expanded(
               flex: 2,
               child: ElevatedButton(
-                onPressed: controller.startCustomerDelivery,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.success,
+                onPressed: controller.advance,
+                child: const Text(
+                  'Arrived at Restaurant →',
                 ),
-                child: const Text('Start Delivery →'),
               ),
             ),
           ],
@@ -108,31 +80,59 @@ class OrderPickedUp extends GetView<ActiveDeliveryController> {
   }
 }
 
-class _Info extends StatelessWidget {
-  const _Info({
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({
+    required this.text,
+    required this.color,
+  });
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text.toUpperCase(),
+      style: AppTypography.labelSmall.copyWith(
+        color: color,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1,
+      ),
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  const _StatCard({
     required this.value,
     required this.label,
+    this.accent = false,
   });
 
   final String value;
   final String label;
+  final bool accent;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(right: AppSpacing.sm),
+        padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           color: AppColors.secondary,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppColors.border),
         ),
         child: Column(
           children: [
             Text(
               value,
-              style: AppTypography.titleMedium,
+              style: AppTypography.titleMedium.copyWith(
+                color: accent
+                    ? AppColors.primary
+                    : AppColors.foreground,
+              ),
             ),
             Text(
               label,

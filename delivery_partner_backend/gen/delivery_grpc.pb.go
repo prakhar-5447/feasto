@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.36.2
-// source: proto/delivery.proto
+// source: delivery.proto
 
 package gen
 
@@ -27,6 +27,9 @@ const (
 	DeliveryService_VerifyDeliveryOTP_FullMethodName  = "/delivery.DeliveryService/VerifyDeliveryOTP"
 	DeliveryService_GetCurrentOrder_FullMethodName    = "/delivery.DeliveryService/GetCurrentOrder"
 	DeliveryService_GetDeliveryHistory_FullMethodName = "/delivery.DeliveryService/GetDeliveryHistory"
+	DeliveryService_UpdateAvailability_FullMethodName = "/delivery.DeliveryService/UpdateAvailability"
+	DeliveryService_GetRiderStatus_FullMethodName     = "/delivery.DeliveryService/GetRiderStatus"
+	DeliveryService_GetUpcomingOrder_FullMethodName   = "/delivery.DeliveryService/GetUpcomingOrder"
 )
 
 // DeliveryServiceClient is the client API for DeliveryService service.
@@ -41,6 +44,9 @@ type DeliveryServiceClient interface {
 	VerifyDeliveryOTP(ctx context.Context, in *VerifyDeliveryOTPRequest, opts ...grpc.CallOption) (*VerifyDeliveryOTPResponse, error)
 	GetCurrentOrder(ctx context.Context, in *GetCurrentOrderRequest, opts ...grpc.CallOption) (*GetCurrentOrderResponse, error)
 	GetDeliveryHistory(ctx context.Context, in *GetDeliveryHistoryRequest, opts ...grpc.CallOption) (*GetDeliveryHistoryResponse, error)
+	UpdateAvailability(ctx context.Context, in *UpdateAvailabilityRequest, opts ...grpc.CallOption) (*UpdateAvailabilityResponse, error)
+	GetRiderStatus(ctx context.Context, in *GetRiderStatusRequest, opts ...grpc.CallOption) (*GetRiderStatusResponse, error)
+	GetUpcomingOrder(ctx context.Context, in *GetUpcomingOrderRequest, opts ...grpc.CallOption) (*GetUpcomingOrderResponse, error)
 }
 
 type deliveryServiceClient struct {
@@ -131,6 +137,36 @@ func (c *deliveryServiceClient) GetDeliveryHistory(ctx context.Context, in *GetD
 	return out, nil
 }
 
+func (c *deliveryServiceClient) UpdateAvailability(ctx context.Context, in *UpdateAvailabilityRequest, opts ...grpc.CallOption) (*UpdateAvailabilityResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateAvailabilityResponse)
+	err := c.cc.Invoke(ctx, DeliveryService_UpdateAvailability_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deliveryServiceClient) GetRiderStatus(ctx context.Context, in *GetRiderStatusRequest, opts ...grpc.CallOption) (*GetRiderStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRiderStatusResponse)
+	err := c.cc.Invoke(ctx, DeliveryService_GetRiderStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deliveryServiceClient) GetUpcomingOrder(ctx context.Context, in *GetUpcomingOrderRequest, opts ...grpc.CallOption) (*GetUpcomingOrderResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUpcomingOrderResponse)
+	err := c.cc.Invoke(ctx, DeliveryService_GetUpcomingOrder_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DeliveryServiceServer is the server API for DeliveryService service.
 // All implementations must embed UnimplementedDeliveryServiceServer
 // for forward compatibility.
@@ -143,6 +179,9 @@ type DeliveryServiceServer interface {
 	VerifyDeliveryOTP(context.Context, *VerifyDeliveryOTPRequest) (*VerifyDeliveryOTPResponse, error)
 	GetCurrentOrder(context.Context, *GetCurrentOrderRequest) (*GetCurrentOrderResponse, error)
 	GetDeliveryHistory(context.Context, *GetDeliveryHistoryRequest) (*GetDeliveryHistoryResponse, error)
+	UpdateAvailability(context.Context, *UpdateAvailabilityRequest) (*UpdateAvailabilityResponse, error)
+	GetRiderStatus(context.Context, *GetRiderStatusRequest) (*GetRiderStatusResponse, error)
+	GetUpcomingOrder(context.Context, *GetUpcomingOrderRequest) (*GetUpcomingOrderResponse, error)
 	mustEmbedUnimplementedDeliveryServiceServer()
 }
 
@@ -176,6 +215,15 @@ func (UnimplementedDeliveryServiceServer) GetCurrentOrder(context.Context, *GetC
 }
 func (UnimplementedDeliveryServiceServer) GetDeliveryHistory(context.Context, *GetDeliveryHistoryRequest) (*GetDeliveryHistoryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetDeliveryHistory not implemented")
+}
+func (UnimplementedDeliveryServiceServer) UpdateAvailability(context.Context, *UpdateAvailabilityRequest) (*UpdateAvailabilityResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateAvailability not implemented")
+}
+func (UnimplementedDeliveryServiceServer) GetRiderStatus(context.Context, *GetRiderStatusRequest) (*GetRiderStatusResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetRiderStatus not implemented")
+}
+func (UnimplementedDeliveryServiceServer) GetUpcomingOrder(context.Context, *GetUpcomingOrderRequest) (*GetUpcomingOrderResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUpcomingOrder not implemented")
 }
 func (UnimplementedDeliveryServiceServer) mustEmbedUnimplementedDeliveryServiceServer() {}
 func (UnimplementedDeliveryServiceServer) testEmbeddedByValue()                         {}
@@ -342,6 +390,60 @@ func _DeliveryService_GetDeliveryHistory_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DeliveryService_UpdateAvailability_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAvailabilityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeliveryServiceServer).UpdateAvailability(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DeliveryService_UpdateAvailability_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeliveryServiceServer).UpdateAvailability(ctx, req.(*UpdateAvailabilityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DeliveryService_GetRiderStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRiderStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeliveryServiceServer).GetRiderStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DeliveryService_GetRiderStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeliveryServiceServer).GetRiderStatus(ctx, req.(*GetRiderStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DeliveryService_GetUpcomingOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUpcomingOrderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeliveryServiceServer).GetUpcomingOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DeliveryService_GetUpcomingOrder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeliveryServiceServer).GetUpcomingOrder(ctx, req.(*GetUpcomingOrderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DeliveryService_ServiceDesc is the grpc.ServiceDesc for DeliveryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -381,7 +483,19 @@ var DeliveryService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetDeliveryHistory",
 			Handler:    _DeliveryService_GetDeliveryHistory_Handler,
 		},
+		{
+			MethodName: "UpdateAvailability",
+			Handler:    _DeliveryService_UpdateAvailability_Handler,
+		},
+		{
+			MethodName: "GetRiderStatus",
+			Handler:    _DeliveryService_GetRiderStatus_Handler,
+		},
+		{
+			MethodName: "GetUpcomingOrder",
+			Handler:    _DeliveryService_GetUpcomingOrder_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/delivery.proto",
+	Metadata: "delivery.proto",
 }
