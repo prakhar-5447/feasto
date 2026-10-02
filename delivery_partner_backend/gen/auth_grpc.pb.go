@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.36.2
-// source: proto/auth.proto
+// source: auth.proto
 
 package gen
 
@@ -19,8 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_SendLoginOTP_FullMethodName   = "/auth.AuthService/SendLoginOTP"
-	AuthService_VerifyLoginOTP_FullMethodName = "/auth.AuthService/VerifyLoginOTP"
+	AuthService_SendLoginOTP_FullMethodName    = "/auth.AuthService/SendLoginOTP"
+	AuthService_VerifyLoginOTP_FullMethodName  = "/auth.AuthService/VerifyLoginOTP"
+	AuthService_CompleteProfile_FullMethodName = "/auth.AuthService/CompleteProfile"
+	AuthService_GetProfile_FullMethodName      = "/auth.AuthService/GetProfile"
+	AuthService_RefreshToken_FullMethodName    = "/auth.AuthService/RefreshToken"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -29,6 +32,9 @@ const (
 type AuthServiceClient interface {
 	SendLoginOTP(ctx context.Context, in *SendLoginOTPRequest, opts ...grpc.CallOption) (*SendLoginOTPResponse, error)
 	VerifyLoginOTP(ctx context.Context, in *VerifyLoginOTPRequest, opts ...grpc.CallOption) (*VerifyLoginOTPResponse, error)
+	CompleteProfile(ctx context.Context, in *CompleteProfileRequest, opts ...grpc.CallOption) (*CompleteProfileResponse, error)
+	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error)
+	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
 }
 
 type authServiceClient struct {
@@ -59,12 +65,45 @@ func (c *authServiceClient) VerifyLoginOTP(ctx context.Context, in *VerifyLoginO
 	return out, nil
 }
 
+func (c *authServiceClient) CompleteProfile(ctx context.Context, in *CompleteProfileRequest, opts ...grpc.CallOption) (*CompleteProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CompleteProfileResponse)
+	err := c.cc.Invoke(ctx, AuthService_CompleteProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetProfileResponse)
+	err := c.cc.Invoke(ctx, AuthService_GetProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefreshTokenResponse)
+	err := c.cc.Invoke(ctx, AuthService_RefreshToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility.
 type AuthServiceServer interface {
 	SendLoginOTP(context.Context, *SendLoginOTPRequest) (*SendLoginOTPResponse, error)
 	VerifyLoginOTP(context.Context, *VerifyLoginOTPRequest) (*VerifyLoginOTPResponse, error)
+	CompleteProfile(context.Context, *CompleteProfileRequest) (*CompleteProfileResponse, error)
+	GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error)
+	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -80,6 +119,15 @@ func (UnimplementedAuthServiceServer) SendLoginOTP(context.Context, *SendLoginOT
 }
 func (UnimplementedAuthServiceServer) VerifyLoginOTP(context.Context, *VerifyLoginOTPRequest) (*VerifyLoginOTPResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method VerifyLoginOTP not implemented")
+}
+func (UnimplementedAuthServiceServer) CompleteProfile(context.Context, *CompleteProfileRequest) (*CompleteProfileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CompleteProfile not implemented")
+}
+func (UnimplementedAuthServiceServer) GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetProfile not implemented")
+}
+func (UnimplementedAuthServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RefreshToken not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 func (UnimplementedAuthServiceServer) testEmbeddedByValue()                     {}
@@ -138,6 +186,60 @@ func _AuthService_VerifyLoginOTP_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_CompleteProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompleteProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).CompleteProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_CompleteProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).CompleteProfile(ctx, req.(*CompleteProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetProfile(ctx, req.(*GetProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).RefreshToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_RefreshToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).RefreshToken(ctx, req.(*RefreshTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -153,7 +255,19 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "VerifyLoginOTP",
 			Handler:    _AuthService_VerifyLoginOTP_Handler,
 		},
+		{
+			MethodName: "CompleteProfile",
+			Handler:    _AuthService_CompleteProfile_Handler,
+		},
+		{
+			MethodName: "GetProfile",
+			Handler:    _AuthService_GetProfile_Handler,
+		},
+		{
+			MethodName: "RefreshToken",
+			Handler:    _AuthService_RefreshToken_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/auth.proto",
+	Metadata: "auth.proto",
 }

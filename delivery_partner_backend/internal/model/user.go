@@ -6,10 +6,18 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+type UserRole string
+
+const (
+	UserRoleCustomer          UserRole = "customer"
+	UserRoleRestaurantPartner UserRole = "restaurant_partner"
+	UserRoleDeliveryPartner   UserRole = "delivery_partner"
+)
+
 type User struct {
 	ID        bson.ObjectID `bson:"_id,omitempty"`
 	Name      string        `bson:"name,omitempty"`
-	Role      string        `bson:"role"`
+	Role      UserRole      `bson:"role"`
 	Phone     string        `bson:"phone"`
 	Email     string        `bson:"email,omitempty"`
 	Avatar    *string       `bson:"avatar,omitempty"`

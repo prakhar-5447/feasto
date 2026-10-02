@@ -10,6 +10,15 @@ service AuthService {
 
     rpc VerifyLoginOTP(VerifyLoginOTPRequest)
         returns (VerifyLoginOTPResponse);
+
+    rpc CompleteProfile(CompleteProfileRequest)
+        returns (CompleteProfileResponse);
+
+    rpc GetProfile(GetProfileRequest)
+        returns (GetProfileResponse);
+
+    rpc RefreshToken(RefreshTokenRequest)
+        returns (RefreshTokenResponse);
 }
 
 message SendLoginOTPRequest {
@@ -27,6 +36,44 @@ message VerifyLoginOTPRequest {
 }
 
 message VerifyLoginOTPResponse {
+    bool success = 1;
+    string message = 2;
+    string access_token = 3;
+    string refresh_token = 4;
+}
+
+message CompleteProfileRequest {
+    string name = 1;
+    string email = 2;
+    string vehicle_type = 3;
+    string vehicle_number = 4;
+    string license_number = 5;
+}
+
+message CompleteProfileResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message GetProfileRequest {
+}
+
+message GetProfileResponse {
+    bool success = 1;
+    string message = 2;
+    string user_id = 3;
+    string name = 4;
+    string email = 5;
+    string phone = 6;
+    string vehicle_number = 7;
+    string vehicle_type = 8;
+}
+
+message RefreshTokenRequest {
+    string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
     bool success = 1;
     string message = 2;
     string access_token = 3;

@@ -6,7 +6,6 @@ import 'package:delivery_partner_app/core/theme/app_spacing.dart';
 import 'package:delivery_partner_app/core/theme/app_typography.dart';
 
 import 'package:delivery_partner_app/features/app_settings/controllers/app_settings_controller.dart';
-import 'package:delivery_partner_app/features/app_settings/models/app_settings.dart';
 import 'package:delivery_partner_app/features/app_settings/widgets/map_type_selector.dart';
 import 'package:delivery_partner_app/features/app_settings/widgets/setting_row.dart';
 import 'package:delivery_partner_app/features/app_settings/widgets/setting_section.dart';
