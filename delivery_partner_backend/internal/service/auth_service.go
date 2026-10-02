@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"delivery_partner_backend/internal/model"
 	"delivery_partner_backend/internal/repository"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -66,7 +67,7 @@ func (s *AuthService) SendLoginOTP(
 		return fmt.Errorf("user not found")
 	}
 
-	if user.Role != "delivery_partner" {
+	if user.Role != model.UserRoleDeliveryPartner {
 		return fmt.Errorf("user is not a delivery partner")
 	}
 
@@ -172,13 +173,12 @@ func (s *AuthService) VerifyLoginOTP(
 
 func (s *AuthService) generateToken(
 	userID bson.ObjectID,
-	role string,
+	role model.UserRole,
 	duration time.Duration,
 ) (string, error) {
-
 	claims := jwt.MapClaims{
 		"userId": userID.Hex(),
-		"role":   role,
+		"role":   string(role),
 		"exp":    time.Now().Add(duration).Unix(),
 		"iat":    time.Now().Unix(),
 	}
@@ -191,4 +191,80 @@ func (s *AuthService) generateToken(
 	return token.SignedString(
 		[]byte(s.jwtSecret),
 	)
+}
+
+func (s *AuthService) RefreshAccessToken(
+	ctx context.Context,
+	refreshToken string,
+) (string, string, error) {
+
+	token, err := jwt.Parse(
+		refreshToken,
+		func(token *jwt.Token) (interface{}, error) {
+			if token.Method != jwt.SigningMethodHS256 {
+				return nil, fmt.Errorf("unexpected signing method")
+			}
+
+			return []byte(s.jwtSecret), nil
+		},
+	)
+
+	if err != nil || !token.Valid {
+		return "", "", fmt.Errorf("invalid refresh token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", "", fmt.Errorf("invalid token claims")
+	}
+
+	userIDString, ok := claims["userId"].(string)
+	if !ok {
+		return "", "", fmt.Errorf("user id missing")
+	}
+
+	role, ok := claims["role"].(string)
+
+	if !ok || role != string(model.UserRoleDeliveryPartner) {
+		return "", "", fmt.Errorf("invalid user role")
+	}
+
+	userID, err := bson.ObjectIDFromHex(userIDString)
+	if err != nil {
+		return "", "", fmt.Errorf("invalid user id")
+	}
+
+	user, err := s.userRepository.FindByID(ctx, userID)
+	if err != nil {
+		return "", "", fmt.Errorf("user not found")
+	}
+
+	if user.Role != model.UserRoleDeliveryPartner {
+		return "", "", fmt.Errorf("user is not a delivery partner")
+	}
+
+	if !user.IsActive {
+		return "", "", fmt.Errorf("account is inactive")
+	}
+
+	accessToken, err := s.generateToken(
+		user.ID,
+		user.Role,
+		15*time.Minute,
+	)
+	if err != nil {
+		return "", "", err
+	}
+
+	newRefreshToken, err := s.generateToken(
+		user.ID,
+		user.Role,
+		30*24*time.Hour,
+	)
+
+	if err != nil {
+		return "", "", err
+	}
+
+	return accessToken, newRefreshToken, nil
 }

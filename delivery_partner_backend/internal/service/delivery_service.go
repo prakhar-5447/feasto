@@ -2,31 +2,39 @@ package service
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"time"
 
+	"go.mongodb.org/mongo-driver/v2/bson"
+
 	"delivery_partner_backend/internal/model"
 	"delivery_partner_backend/internal/repository"
-
-	"go.mongodb.org/mongo-driver/v2/bson"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type DeliveryService struct {
-	orderRepository *repository.OrderRepository
-	userRepository  *repository.UserRepository
+	orderRepository  *repository.OrderRepository
+	userRepository   *repository.UserRepository
+	driverRepository *repository.DriverRepository
+
+	deliveryOTPStore *DeliveryOTPStore
 }
 
 func NewDeliveryService(
 	orderRepository *repository.OrderRepository,
 	userRepository *repository.UserRepository,
+	driverRepository *repository.DriverRepository,
 ) *DeliveryService {
 
 	return &DeliveryService{
-		orderRepository: orderRepository,
-		userRepository:  userRepository,
+		orderRepository:  orderRepository,
+		userRepository:   userRepository,
+		driverRepository: driverRepository,
+
+		deliveryOTPStore: NewDeliveryOTPStore(),
 	}
 }
 
@@ -39,47 +47,55 @@ func (s *DeliveryService) GetAvailableOrders(
 
 func (s *DeliveryService) AcceptOrder(
 	ctx context.Context,
-	orderID bson.ObjectID,
-	driverID bson.ObjectID,
-) (*model.Order, error) {
+	userID bson.ObjectID,
+	orderID string,
+) error {
 
-	driver, err := s.userRepository.FindByID(
+	id, err := bson.ObjectIDFromHex(orderID)
+
+	if err != nil {
+		return errors.New("invalid order id")
+	}
+
+	user, err := s.userRepository.FindByID(
 		ctx,
-		driverID,
+		userID,
 	)
 
 	if err != nil {
-		return nil, fmt.Errorf("driver not found")
+		return err
 	}
 
-	if driver.Role != "delivery_partner" {
-		return nil, fmt.Errorf("not a delivery partner")
+	if user.Role != model.UserRoleDeliveryPartner {
+		return ErrUserNotDeliveryPartner
 	}
 
-	if !driver.IsActive {
-		return nil, fmt.Errorf("driver account inactive")
-	}
-
-	order, err := s.orderRepository.AcceptOrder(
+	driver, err := s.driverRepository.FindByUserID(
 		ctx,
-		orderID,
-		driverID,
-		driver.Name,
-		driver.Phone,
+		userID,
 	)
 
 	if err != nil {
-
-		if err == mongo.ErrNoDocuments {
-			return nil, fmt.Errorf(
-				"order is no longer available",
-			)
-		}
-
-		return nil, err
+		return err
 	}
 
-	return order, nil
+	if driver.Status != model.DriverStatusActive {
+		return errors.New("driver account is not active")
+	}
+
+	if !driver.IsVerified {
+		return errors.New("driver is not verified")
+	}
+
+	if driver.Availability != model.DriverAvailabilityOnline {
+		return errors.New("driver must be online")
+	}
+
+	return s.orderRepository.AcceptOrder(
+		ctx,
+		id,
+		userID,
+	)
 }
 
 func (s *DeliveryService) RejectOrder(
@@ -127,100 +143,84 @@ func (s *DeliveryService) RejectOrder(
 
 func (s *DeliveryService) PickupOrder(
 	ctx context.Context,
-	orderID bson.ObjectID,
-	driverID bson.ObjectID,
-) (*model.Order, error) {
+	userID bson.ObjectID,
+	orderID string,
+) error {
 
-	order, err := s.orderRepository.PickupOrder(
-		ctx,
-		orderID,
-		driverID,
-	)
+	id, err := bson.ObjectIDFromHex(orderID)
 
 	if err != nil {
-		return nil, fmt.Errorf(
-			"order cannot be picked up: %w",
-			err,
-		)
+		return errors.New("invalid order id")
 	}
 
-	return order, nil
-}
-
-func hashOTP(otp string) string {
-
-	hash := sha256.Sum256(
-		[]byte(otp),
-	)
-
-	return hex.EncodeToString(
-		hash[:],
+	return s.orderRepository.PickupOrder(
+		ctx,
+		id,
+		userID,
 	)
 }
 
 func (s *DeliveryService) RequestDeliveryOTP(
 	ctx context.Context,
-	orderID bson.ObjectID,
-	driverID bson.ObjectID,
+	userID bson.ObjectID,
+	orderID string,
 ) error {
 
-	order, err := s.orderRepository.GetOrderForDriver(
-		ctx,
-		orderID,
-		driverID,
-	)
-
+	id, err := bson.ObjectIDFromHex(orderID)
 	if err != nil {
-		return fmt.Errorf("order not found")
+		return errors.New("invalid order id")
 	}
 
-	if order.OrderStatus != "picked_up" {
-		return fmt.Errorf(
-			"order has not been picked up",
+	// Make sure this order belongs to this driver
+	// and is currently picked up.
+	order, err := s.orderRepository.GetOrderForDriver(
+		ctx,
+		id,
+		userID,
+	)
+	if err != nil {
+		return errors.New("order not found for this driver")
+	}
+
+	if order.OrderStatus != model.OrderStatusPickedUp {
+		return errors.New(
+			"delivery OTP can only be requested after pickup",
 		)
 	}
 
-	otp, err := generateOTP()
-
+	otp, err := generateDeliveryOTP()
 	if err != nil {
-		return err
+		return errors.New("failed to generate delivery OTP")
 	}
+
+	otpHash := hashDeliveryOTP(otp)
 
 	expiresAt := time.Now().Add(5 * time.Minute)
 
 	err = s.orderRepository.SetDeliveryOTP(
 		ctx,
-		orderID,
-		driverID,
-		hashOTP(otp),
+		id,
+		userID,
+		otpHash,
 		expiresAt,
 	)
-
 	if err != nil {
 		return err
 	}
 
-	customer, err := s.userRepository.FindByID(
-		ctx,
-		order.Customer,
-	)
-
-	if err != nil {
-		return fmt.Errorf(
-			"customer not found",
-		)
-	}
-
-	// DEVELOPMENT ONLY.
-	//
-	// Production:
-	// send this OTP through SMS/WhatsApp/notification.
+	// Development only.
+	// Later this should be sent to the customer.
 	fmt.Printf(
-		"\nDELIVERY OTP\nCustomer: %s\nPhone: %s\nOrder: %s\nOTP: %s\n\n",
-		customer.Name,
-		customer.Phone,
-		order.OrderID,
-		otp,
+		"\n========== DELIVERY OTP ==========\n",
+	)
+	fmt.Printf("Order: %s\n", id.Hex())
+	fmt.Printf("OTP: %s\n", otp)
+	fmt.Printf(
+		"Expires: %s\n",
+		expiresAt.Format(time.RFC3339),
+	)
+	fmt.Printf(
+		"==================================\n\n",
 	)
 
 	return nil
@@ -228,59 +228,37 @@ func (s *DeliveryService) RequestDeliveryOTP(
 
 func (s *DeliveryService) VerifyDeliveryOTP(
 	ctx context.Context,
-	orderID bson.ObjectID,
-	driverID bson.ObjectID,
+	userID bson.ObjectID,
+	orderID string,
 	otp string,
 ) error {
 
-	order, err := s.orderRepository.GetOrderForDriver(
+	id, err := bson.ObjectIDFromHex(orderID)
+	if err != nil {
+		return errors.New("invalid order id")
+	}
+
+	if len(otp) != 4 {
+		return errors.New("OTP must contain 4 digits")
+	}
+
+	for _, ch := range otp {
+		if ch < '0' || ch > '9' {
+			return errors.New("OTP must contain 4 digits")
+		}
+	}
+
+	otpHash := hashDeliveryOTP(otp)
+
+	err = s.orderRepository.VerifyDeliveryOTP(
 		ctx,
-		orderID,
-		driverID,
+		id,
+		userID,
+		otpHash,
 	)
 
 	if err != nil {
-		return fmt.Errorf("order not found")
-	}
-
-	if order.OrderStatus != "picked_up" {
-		return fmt.Errorf(
-			"order is not ready for delivery completion",
-		)
-	}
-
-	if order.DeliveryOTPHash == "" {
-		return fmt.Errorf(
-			"delivery OTP has not been requested",
-		)
-	}
-
-	if order.DeliveryOTPExpiresAt == nil {
-		return fmt.Errorf(
-			"delivery OTP expiry missing",
-		)
-	}
-
-	if time.Now().After(
-		*order.DeliveryOTPExpiresAt,
-	) {
-		return fmt.Errorf("delivery OTP expired")
-	}
-
-	if hashOTP(otp) != order.DeliveryOTPHash {
-		return fmt.Errorf("invalid delivery OTP")
-	}
-
-	err = s.orderRepository.DeliverOrder(
-		ctx,
-		orderID,
-		driverID,
-	)
-
-	if err != nil {
-		return fmt.Errorf(
-			"failed to complete delivery",
-		)
+		return errors.New("invalid or expired delivery OTP")
 	}
 
 	return nil
@@ -322,4 +300,77 @@ func (s *DeliveryService) GetHistory(
 		skip,
 		int64(limit),
 	)
+}
+
+func (s *DeliveryService) GetUpcomingOrder(
+	ctx context.Context,
+	userID bson.ObjectID,
+) (*model.Order, error) {
+
+	user, err := s.userRepository.FindByID(
+		ctx,
+		userID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if user.Role != model.UserRoleDeliveryPartner {
+		return nil, ErrUserNotDeliveryPartner
+	}
+
+	if !user.IsActive {
+		return nil, errors.New(
+			"delivery partner account is inactive",
+		)
+	}
+
+	driver, err := s.driverRepository.FindByUserID(
+		ctx,
+		userID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if driver.Status != model.DriverStatusActive {
+		return nil, errors.New(
+			"driver account is not active",
+		)
+	}
+
+	if !driver.IsVerified {
+		return nil, errors.New(
+			"driver is not verified",
+		)
+	}
+
+	if driver.Availability != model.DriverAvailabilityOnline {
+		return nil, errors.New(
+			"driver must be online",
+		)
+	}
+
+	return s.orderRepository.FindUpcomingOrder(ctx)
+}
+
+func generateDeliveryOTP() (string, error) {
+	var bytes [2]byte
+
+	_, err := rand.Read(bytes[:])
+	if err != nil {
+		return "", err
+	}
+
+	number := int(bytes[0])<<8 | int(bytes[1])
+	number = number % 10000
+
+	return fmt.Sprintf("%04d", number), nil
+}
+
+func hashDeliveryOTP(otp string) string {
+	hash := sha256.Sum256([]byte(otp))
+	return hex.EncodeToString(hash[:])
 }
