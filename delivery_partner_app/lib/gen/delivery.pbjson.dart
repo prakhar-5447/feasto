@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from proto/delivery.proto.
+// Generated from delivery.proto.
 
 // @dart = 3.3
 
@@ -14,6 +14,108 @@
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
+
+@$core.Deprecated('Use getUpcomingOrderRequestDescriptor instead')
+const GetUpcomingOrderRequest$json = {
+  '1': 'GetUpcomingOrderRequest',
+};
+
+/// Descriptor for `GetUpcomingOrderRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getUpcomingOrderRequestDescriptor =
+    $convert.base64Decode('ChdHZXRVcGNvbWluZ09yZGVyUmVxdWVzdA==');
+
+@$core.Deprecated('Use getUpcomingOrderResponseDescriptor instead')
+const GetUpcomingOrderResponse$json = {
+  '1': 'GetUpcomingOrderResponse',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'has_order', '3': 3, '4': 1, '5': 8, '10': 'hasOrder'},
+    {'1': 'order_id', '3': 4, '4': 1, '5': 9, '10': 'orderId'},
+    {'1': 'restaurant', '3': 5, '4': 1, '5': 9, '10': 'restaurant'},
+    {'1': 'restaurant_area', '3': 6, '4': 1, '5': 9, '10': 'restaurantArea'},
+    {'1': 'pickup_distance', '3': 7, '4': 1, '5': 9, '10': 'pickupDistance'},
+    {'1': 'customer_name', '3': 8, '4': 1, '5': 9, '10': 'customerName'},
+    {'1': 'delivery_area', '3': 9, '4': 1, '5': 9, '10': 'deliveryArea'},
+    {
+      '1': 'delivery_distance',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'deliveryDistance'
+    },
+    {'1': 'total_distance', '3': 11, '4': 1, '5': 9, '10': 'totalDistance'},
+    {'1': 'earnings', '3': 12, '4': 1, '5': 9, '10': 'earnings'},
+    {'1': 'items', '3': 13, '4': 1, '5': 5, '10': 'items'},
+    {'1': 'eta', '3': 14, '4': 1, '5': 9, '10': 'eta'},
+  ],
+};
+
+/// Descriptor for `GetUpcomingOrderResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getUpcomingOrderResponseDescriptor = $convert.base64Decode(
+    'ChhHZXRVcGNvbWluZ09yZGVyUmVzcG9uc2USGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIYCg'
+    'dtZXNzYWdlGAIgASgJUgdtZXNzYWdlEhsKCWhhc19vcmRlchgDIAEoCFIIaGFzT3JkZXISGQoI'
+    'b3JkZXJfaWQYBCABKAlSB29yZGVySWQSHgoKcmVzdGF1cmFudBgFIAEoCVIKcmVzdGF1cmFudB'
+    'InCg9yZXN0YXVyYW50X2FyZWEYBiABKAlSDnJlc3RhdXJhbnRBcmVhEicKD3BpY2t1cF9kaXN0'
+    'YW5jZRgHIAEoCVIOcGlja3VwRGlzdGFuY2USIwoNY3VzdG9tZXJfbmFtZRgIIAEoCVIMY3VzdG'
+    '9tZXJOYW1lEiMKDWRlbGl2ZXJ5X2FyZWEYCSABKAlSDGRlbGl2ZXJ5QXJlYRIrChFkZWxpdmVy'
+    'eV9kaXN0YW5jZRgKIAEoCVIQZGVsaXZlcnlEaXN0YW5jZRIlCg50b3RhbF9kaXN0YW5jZRgLIA'
+    'EoCVINdG90YWxEaXN0YW5jZRIaCghlYXJuaW5ncxgMIAEoCVIIZWFybmluZ3MSFAoFaXRlbXMY'
+    'DSABKAVSBWl0ZW1zEhAKA2V0YRgOIAEoCVIDZXRh');
+
+@$core.Deprecated('Use getRiderStatusRequestDescriptor instead')
+const GetRiderStatusRequest$json = {
+  '1': 'GetRiderStatusRequest',
+};
+
+/// Descriptor for `GetRiderStatusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRiderStatusRequestDescriptor =
+    $convert.base64Decode('ChVHZXRSaWRlclN0YXR1c1JlcXVlc3Q=');
+
+@$core.Deprecated('Use getRiderStatusResponseDescriptor instead')
+const GetRiderStatusResponse$json = {
+  '1': 'GetRiderStatusResponse',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'status', '3': 3, '4': 1, '5': 9, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `GetRiderStatusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRiderStatusResponseDescriptor =
+    $convert.base64Decode(
+        'ChZHZXRSaWRlclN0YXR1c1Jlc3BvbnNlEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbW'
+        'Vzc2FnZRgCIAEoCVIHbWVzc2FnZRIWCgZzdGF0dXMYAyABKAlSBnN0YXR1cw==');
+
+@$core.Deprecated('Use updateAvailabilityRequestDescriptor instead')
+const UpdateAvailabilityRequest$json = {
+  '1': 'UpdateAvailabilityRequest',
+  '2': [
+    {'1': 'status', '3': 1, '4': 1, '5': 9, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `UpdateAvailabilityRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateAvailabilityRequestDescriptor =
+    $convert.base64Decode(
+        'ChlVcGRhdGVBdmFpbGFiaWxpdHlSZXF1ZXN0EhYKBnN0YXR1cxgBIAEoCVIGc3RhdHVz');
+
+@$core.Deprecated('Use updateAvailabilityResponseDescriptor instead')
+const UpdateAvailabilityResponse$json = {
+  '1': 'UpdateAvailabilityResponse',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'status', '3': 3, '4': 1, '5': 9, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `UpdateAvailabilityResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateAvailabilityResponseDescriptor =
+    $convert.base64Decode(
+        'ChpVcGRhdGVBdmFpbGFiaWxpdHlSZXNwb25zZRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEh'
+        'gKB21lc3NhZ2UYAiABKAlSB21lc3NhZ2USFgoGc3RhdHVzGAMgASgJUgZzdGF0dXM=');
 
 @$core.Deprecated('Use getAvailableOrdersRequestDescriptor instead')
 const GetAvailableOrdersRequest$json = {

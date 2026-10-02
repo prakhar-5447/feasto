@@ -5,8 +5,9 @@ import 'package:delivery_partner_app/core/theme/app_colors.dart';
 import 'package:delivery_partner_app/core/theme/app_radius.dart';
 import 'package:delivery_partner_app/core/theme/app_spacing.dart';
 import 'package:delivery_partner_app/core/theme/app_typography.dart';
-import 'package:delivery_partner_app/features/active_delivery/models/issue_category.dart';
+
 import 'package:delivery_partner_app/features/active_delivery/controllers/active_delivery_controller.dart';
+import 'package:delivery_partner_app/features/active_delivery/models/issue_category.dart';
 
 class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
   const ArrivedAtRestaurant({super.key});
@@ -15,19 +16,25 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
   Widget build(BuildContext context) {
     return Obx(() {
       final delayed = controller.isDelayed.value;
+      final loading = controller.isActionLoading.value;
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              _IconCircle(icon: '📍', color: AppColors.primary),
+              _IconCircle(
+                icon: '📍',
+                color: AppColors.primary,
+              ),
               const SizedBox(width: AppSpacing.sm),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    delayed ? '⚠️ Order Delayed' : "You're at the restaurant",
+                    delayed
+                        ? '⚠️ Order Delayed'
+                        : "You're at the restaurant",
                     style: AppTypography.titleMedium,
                   ),
                   Text(
@@ -60,21 +67,27 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     children: [
                       Text(
                         delayed
                             ? 'Restaurant taking longer than expected'
                             : 'Order is being prepared',
-                        style: AppTypography.labelMedium.copyWith(
-                          color: delayed ? AppColors.danger : AppColors.primary,
+                        style:
+                            AppTypography.labelMedium.copyWith(
+                          color: delayed
+                              ? AppColors.danger
+                              : AppColors.primary,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         'Est. preparation: 12 min',
-                        style: AppTypography.bodySmall.copyWith(
-                          color: AppColors.secondaryForeground,
+                        style:
+                            AppTypography.bodySmall.copyWith(
+                          color:
+                              AppColors.secondaryForeground,
                         ),
                       ),
                     ],
@@ -85,7 +98,8 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
                   children: [
                     Text(
                       controller.formattedWaitTime,
-                      style: AppTypography.headingMedium.copyWith(
+                      style:
+                          AppTypography.headingMedium.copyWith(
                         color: delayed
                             ? AppColors.danger
                             : AppColors.foreground,
@@ -93,8 +107,10 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
                     ),
                     Text(
                       'waiting',
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.secondaryForeground,
+                      style:
+                          AppTypography.bodySmall.copyWith(
+                        color:
+                            AppColors.secondaryForeground,
                       ),
                     ),
                   ],
@@ -116,7 +132,8 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
                 Expanded(
                   child: _SmallAction(
                     text: 'Contact Support',
-                    color: AppColors.secondaryForeground,
+                    color:
+                        AppColors.secondaryForeground,
                   ),
                 ),
                 Expanded(
@@ -131,7 +148,7 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
 
           const SizedBox(height: AppSpacing.md),
 
-          _OrderSummary(),
+          const _OrderSummary(),
 
           const SizedBox(height: AppSpacing.md),
 
@@ -139,8 +156,12 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () =>
-                      controller.openIssue(category: IssueCategory.restaurant),
+                  onPressed: loading
+                      ? null
+                      : () => controller.openIssue(
+                            category:
+                                IssueCategory.restaurant,
+                          ),
                   child: const Text('Report Issue'),
                 ),
               ),
@@ -148,8 +169,17 @@ class ArrivedAtRestaurant extends GetView<ActiveDeliveryController> {
               Expanded(
                 flex: 2,
                 child: ElevatedButton(
-                  onPressed: controller.advance,
-                  child: const Text('✓ Confirm Pickup'),
+                  onPressed:
+                      loading ? null : controller.confirmPickup,
+                  child: loading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text('✓ Confirm Pickup'),
                 ),
               ),
             ],
@@ -190,12 +220,16 @@ class _OrderSummary extends GetView<ActiveDeliveryController> {
           ),
           ...items.map(
             (item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
                   const Text('•'),
                   const SizedBox(width: 8),
-                  Text(item, style: AppTypography.bodyMedium),
+                  Text(
+                    item,
+                    style: AppTypography.bodyMedium,
+                  ),
                 ],
               ),
             ),
@@ -207,7 +241,10 @@ class _OrderSummary extends GetView<ActiveDeliveryController> {
 }
 
 class _IconCircle extends StatelessWidget {
-  const _IconCircle({required this.icon, required this.color});
+  const _IconCircle({
+    required this.icon,
+    required this.color,
+  });
 
   final String icon;
   final Color color;
@@ -221,13 +258,18 @@ class _IconCircle extends StatelessWidget {
         shape: BoxShape.circle,
         color: color.withValues(alpha: .12),
       ),
-      child: Center(child: Text(icon)),
+      child: Center(
+        child: Text(icon),
+      ),
     );
   }
 }
 
 class _SmallAction extends StatelessWidget {
-  const _SmallAction({required this.text, required this.color});
+  const _SmallAction({
+    required this.text,
+    required this.color,
+  });
 
   final String text;
   final Color color;
@@ -236,15 +278,19 @@ class _SmallAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 6),
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding:
+          const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.muted,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
+        borderRadius:
+            BorderRadius.circular(AppRadius.sm),
       ),
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: AppTypography.labelSmall.copyWith(color: color),
+        style: AppTypography.labelSmall.copyWith(
+          color: color,
+        ),
       ),
     );
   }

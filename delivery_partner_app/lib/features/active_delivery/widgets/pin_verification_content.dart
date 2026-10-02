@@ -19,16 +19,21 @@ class _PinVerificationState extends State<PinVerification> {
   final controller = Get.find<ActiveDeliveryController>();
 
   late final List<TextEditingController> _controllers;
-
   late final List<FocusNode> _focusNodes;
 
   @override
   void initState() {
     super.initState();
 
-    _controllers = List.generate(4, (_) => TextEditingController());
+    _controllers = List.generate(
+      4,
+      (_) => TextEditingController(),
+    );
 
-    _focusNodes = List.generate(4, (_) => FocusNode());
+    _focusNodes = List.generate(
+      4,
+      (_) => FocusNode(),
+    );
   }
 
   @override
@@ -56,10 +61,14 @@ class _PinVerificationState extends State<PinVerification> {
   Widget build(BuildContext context) {
     return Obx(() {
       final complete = controller.pinComplete;
+      final loading = controller.isActionLoading.value;
 
       return Column(
         children: [
-          Text('Enter Customer PIN', style: AppTypography.titleLarge),
+          Text(
+            'Enter Customer PIN',
+            style: AppTypography.titleLarge,
+          ),
 
           const SizedBox(height: 2),
 
@@ -76,39 +85,50 @@ class _PinVerificationState extends State<PinVerification> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(4, (index) {
-              final filled = controller.pin[index].isNotEmpty;
+              final filled =
+                  controller.pin[index].isNotEmpty;
 
               return Container(
                 width: 56,
                 height: 56,
-                margin: const EdgeInsets.symmetric(horizontal: 6),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 6,
+                ),
                 child: TextField(
                   controller: _controllers[index],
                   focusNode: _focusNodes[index],
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   maxLength: 1,
+                  enabled: !loading,
                   style: AppTypography.headingMedium,
                   decoration: InputDecoration(
                     counterText: '',
                     filled: true,
                     fillColor: AppColors.secondary,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius:
+                          BorderRadius.circular(AppRadius.md),
                       borderSide: BorderSide(
-                        color: filled ? AppColors.success : AppColors.border,
+                        color: filled
+                            ? AppColors.success
+                            : AppColors.border,
                         width: 2,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius:
+                          BorderRadius.circular(AppRadius.md),
                       borderSide: BorderSide(
-                        color: filled ? AppColors.success : AppColors.border,
+                        color: filled
+                            ? AppColors.success
+                            : AppColors.border,
                         width: 2,
                       ),
                     ),
                   ),
-                  onChanged: (value) => _onChanged(index, value),
+                  onChanged: (value) =>
+                      _onChanged(index, value),
                 ),
               );
             }),
@@ -117,10 +137,12 @@ class _PinVerificationState extends State<PinVerification> {
           const SizedBox(height: AppSpacing.md),
 
           TextButton(
-            onPressed: () {
-              // Camera verification can be
-              // integrated later.
-            },
+            onPressed: loading
+                ? null
+                : () {
+                    // Camera verification can be
+                    // integrated later.
+                  },
             child: const Text('📷 Take photo instead'),
           ),
 
@@ -129,11 +151,21 @@ class _PinVerificationState extends State<PinVerification> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: complete ? controller.advance : null,
+              onPressed: complete && !loading
+                  ? controller.verifyCustomerOTP
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.success,
               ),
-              child: const Text('✓ Confirm Delivery'),
+              child: loading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Text('✓ Confirm Delivery'),
             ),
           ),
         ],

@@ -14,87 +14,112 @@ class ArrivedAtCustomer extends GetView<ActiveDeliveryController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.success.withValues(alpha: .12),
-                shape: BoxShape.circle,
+    return Obx(() {
+      final loading = controller.isActionLoading.value;
+
+      return Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: AppColors.success.withValues(alpha: .12),
+                  shape: BoxShape.circle,
+                ),
+                child: const Text(
+                  '🏠',
+                  textAlign: TextAlign.center,
+                ),
               ),
-              child: const Text('🏠', textAlign: TextAlign.center),
+              const SizedBox(width: AppSpacing.sm),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "You're at the customer",
+                    style: AppTypography.titleMedium,
+                  ),
+                  Text(
+                    controller.order.id,
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.secondaryForeground,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSpacing.md),
+
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: AppColors.success.withValues(alpha: .08),
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              border: Border.all(
+                color: AppColors.success.withValues(alpha: .2),
+              ),
             ),
-            const SizedBox(width: AppSpacing.sm),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "You're at the customer",
-                  style: AppTypography.titleMedium,
+                  'Payment Status',
+                  style: AppTypography.bodyMedium,
                 ),
                 Text(
-                  controller.order.id,
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.secondaryForeground,
+                  '✓ Paid Online',
+                  style: AppTypography.titleMedium.copyWith(
+                    color: AppColors.success,
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-
-        const SizedBox(height: AppSpacing.md),
-
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: AppColors.success.withValues(alpha: .08),
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: AppColors.success.withValues(alpha: .2)),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          const SizedBox(height: AppSpacing.md),
+
+          Row(
             children: [
-              Text('Payment Status', style: AppTypography.bodyMedium),
-              Text(
-                '✓ Paid Online',
-                style: AppTypography.titleMedium.copyWith(
-                  color: AppColors.success,
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: loading
+                      ? null
+                      : () => controller.openIssue(
+                            category: IssueCategory.customer,
+                          ),
+                  child: const Text('Report Issue'),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton(
+                  onPressed: loading
+                      ? null
+                      : controller.requestCustomerOTP,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                  ),
+                  child: loading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text('Enter Delivery PIN →'),
                 ),
               ),
             ],
           ),
-        ),
-
-        const SizedBox(height: AppSpacing.md),
-
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () =>
-                    controller.openIssue(category: IssueCategory.customer),
-                child: const Text('Report Issue'),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              flex: 2,
-              child: ElevatedButton(
-                onPressed: controller.advance,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.success,
-                ),
-                child: const Text('Enter Delivery PIN →'),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }
