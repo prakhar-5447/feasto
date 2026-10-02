@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"delivery_partner_backend/internal/model"
@@ -53,51 +54,6 @@ func (r *OrderRepository) GetAvailableOrders(
 	return orders, nil
 }
 
-func (r *OrderRepository) AcceptOrder(
-	ctx context.Context,
-	orderID bson.ObjectID,
-	driverID bson.ObjectID,
-	driverName string,
-	driverPhone string,
-) (*model.Order, error) {
-
-	filter := bson.M{
-		"_id":         orderID,
-		"orderStatus": "ready",
-		"driver":      nil,
-	}
-
-	update := bson.M{
-		"$set": bson.M{
-			"driver": driverID,
-			"driverSnapshot": bson.M{
-				"name":  driverName,
-				"phone": driverPhone,
-			},
-			"orderStatus": "driver_assigned",
-			"updatedAt":   time.Now(),
-		},
-	}
-
-	var result model.Order
-
-	err := r.collection.
-		FindOneAndUpdate(
-			ctx,
-			filter,
-			update,
-			options.FindOneAndUpdate().
-				SetReturnDocument(options.After),
-		).
-		Decode(&result)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &result, nil
-}
-
 func (r *OrderRepository) RejectOrder(
 	ctx context.Context,
 	orderID bson.ObjectID,
@@ -123,52 +79,11 @@ func (r *OrderRepository) RejectOrder(
 	return err
 }
 
-func (r *OrderRepository) PickupOrder(
-	ctx context.Context,
-	orderID bson.ObjectID,
-	driverID bson.ObjectID,
-) (*model.Order, error) {
-
-	now := time.Now()
-
-	filter := bson.M{
-		"_id":         orderID,
-		"driver":      driverID,
-		"orderStatus": "driver_assigned",
-	}
-
-	update := bson.M{
-		"$set": bson.M{
-			"orderStatus": "picked_up",
-			"pickedUpAt":  now,
-			"updatedAt":   now,
-		},
-	}
-
-	var order model.Order
-
-	err := r.collection.
-		FindOneAndUpdate(
-			ctx,
-			filter,
-			update,
-			options.FindOneAndUpdate().
-				SetReturnDocument(options.After),
-		).
-		Decode(&order)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &order, nil
-}
-
 func (r *OrderRepository) SetDeliveryOTP(
 	ctx context.Context,
 	orderID bson.ObjectID,
 	driverID bson.ObjectID,
-	hash string,
+	otpHash string,
 	expiresAt time.Time,
 ) error {
 
@@ -177,11 +92,11 @@ func (r *OrderRepository) SetDeliveryOTP(
 		bson.M{
 			"_id":         orderID,
 			"driver":      driverID,
-			"orderStatus": "picked_up",
+			"orderStatus": model.OrderStatusPickedUp,
 		},
 		bson.M{
 			"$set": bson.M{
-				"deliveryOtpHash":      hash,
+				"deliveryOtpHash":      otpHash,
 				"deliveryOtpExpiresAt": expiresAt,
 				"updatedAt":            time.Now(),
 			},
@@ -193,7 +108,7 @@ func (r *OrderRepository) SetDeliveryOTP(
 	}
 
 	if result.MatchedCount == 0 {
-		return mongo.ErrNoDocuments
+		return ErrOrderNotFound
 	}
 
 	return nil
@@ -334,4 +249,149 @@ func (r *OrderRepository) GetHistory(
 	}
 
 	return orders, nil
+}
+
+var ErrOrderNotFound = errors.New("order not found")
+
+var ErrOrderAlreadyAccepted = errors.New(
+	"order is no longer available",
+)
+
+func (r *OrderRepository) FindUpcomingOrder(
+	ctx context.Context,
+) (*model.Order, error) {
+
+	var order model.Order
+
+	err := r.collection.FindOne(
+		ctx,
+		bson.M{
+			"orderStatus": model.OrderStatusReady,
+		},
+	).Decode(&order)
+
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, ErrOrderNotFound
+		}
+
+		return nil, err
+	}
+
+	return &order, nil
+}
+
+func (r *OrderRepository) AcceptOrder(
+	ctx context.Context,
+	orderID bson.ObjectID,
+	driverID bson.ObjectID,
+) error {
+
+	now := time.Now()
+
+	result, err := r.collection.UpdateOne(
+		ctx,
+		bson.M{
+			"_id":         orderID,
+			"orderStatus": model.OrderStatusReady,
+			"driver":      nil,
+		},
+		bson.M{
+			"$set": bson.M{
+				"driver":      driverID,
+				"orderStatus": model.OrderStatusDriverAssigned,
+				"updatedAt":   now,
+			},
+		},
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if result.MatchedCount == 0 {
+		return ErrOrderAlreadyAccepted
+	}
+
+	return nil
+}
+
+func (r *OrderRepository) PickupOrder(
+	ctx context.Context,
+	orderID bson.ObjectID,
+	driverID bson.ObjectID,
+) error {
+
+	now := time.Now()
+
+	result, err := r.collection.UpdateOne(
+		ctx,
+		bson.M{
+			"_id":         orderID,
+			"driver":      driverID,
+			"orderStatus": model.OrderStatusDriverAssigned,
+		},
+		bson.M{
+			"$set": bson.M{
+				"orderStatus": model.OrderStatusPickedUp,
+				"pickedUpAt":  now,
+				"updatedAt":   now,
+			},
+		},
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if result.MatchedCount == 0 {
+		return ErrOrderNotFound
+	}
+
+	return nil
+}
+
+func (r *OrderRepository) VerifyDeliveryOTP(
+	ctx context.Context,
+	orderID bson.ObjectID,
+	driverID bson.ObjectID,
+	otpHash string,
+) error {
+
+	now := time.Now()
+
+	result, err := r.collection.UpdateOne(
+		ctx,
+		bson.M{
+			"_id":             orderID,
+			"driver":          driverID,
+			"orderStatus":     model.OrderStatusPickedUp,
+			"deliveryOtpHash": otpHash,
+			"deliveryOtpExpiresAt": bson.M{
+				"$gt": now,
+			},
+		},
+		bson.M{
+			"$set": bson.M{
+				"orderStatus":           model.OrderStatusDelivered,
+				"deliveryOtpVerifiedAt": now,
+				"deliveredAt":           now,
+				"updatedAt":             now,
+			},
+			"$unset": bson.M{
+				"deliveryOtpHash":      "",
+				"deliveryOtpExpiresAt": "",
+			},
+		},
+	)
+
+	if err != nil {
+		return err
+	}
+
+	if result.MatchedCount == 0 {
+		return ErrOrderNotFound
+	}
+
+	return nil
 }
