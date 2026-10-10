@@ -1,223 +1,89 @@
 # Feasto Architecture
 
-## 1. Overview
-
-Feasto is a multi-platform food delivery ecosystem consisting of:
-
-- Customer Web Application
-- Restaurant Partner Web Application
-- Delivery Partner Mobile Application
-- Backend APIs
-- PostgreSQL
-- MongoDB
-
-The current priority is a reliable end-to-end ordering system before introducing Redis, WebSockets, message brokers, event-driven architecture, Elasticsearch, ELK, Prometheus, Grafana, or distributed tracing.
-
-## 2. High-Level Architecture
+## System view
 
 ```text
-                         FEASTO
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
-   Customer Web     Restaurant Web    Delivery Flutter
-     Angular           Next.js             Flutter
-          │                │                │
-          └────────────────┼────────────────┘
-                           │
-                           ▼
-                    Backend APIs
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-         PostgreSQL                  MongoDB
-      Users / Orders /          Restaurants / Menu /
-      Payments / Delivery       Food Catalog
+Angular Customer Web ─────┐
+                          │
+Next.js Restaurant Web ───┼── shared business/data contracts (integration to verify)
+                          │
+Flutter Delivery App ─ gRPC ─ Go Delivery Backend ─ MongoDB
 ```
 
-## 3. Applications
+The customer and restaurant apps have their own app architectures. The delivery app communicates with the Go backend through gRPC in the implementation described so far. Do not assume the customer or restaurant apps call the Go backend directly; inspect their API clients and server integration.
 
-### Customer Web
+## Delivery backend architecture
+
+Current described layout:
+
+```text
+delivery_partner_backend/
+├── cmd/
+│   └── server/
+├── gen/                 # generated Go protobuf/gRPC code
+├── internal/
+│   ├── config/
+│   ├── database/
+│   ├── handler/
+│   ├── middleware/
+│   ├── model/
+│   ├── repository/
+│   └── service/
+└── proto/
+```
+
 Responsibilities:
-- Authentication
-- Location selection
-- Restaurant discovery
-- Restaurant details
-- Menu browsing
-- Cart
-- Checkout
-- Payment selection
-- Order placement
-- Order history
-- Order tracking
-- Profile management
-- Reviews and ratings
 
-### Restaurant Partner Web
-Responsibilities:
-- Restaurant authentication
-- Restaurant profile
-- Menu management
-- Food item management
-- Incoming orders
-- Accepting/rejecting orders
-- Preparing/ready states
-- Order history
+- `cmd/server`: application startup, dependency wiring, gRPC server registration/listening.
+- `internal/config`: environment-based configuration.
+- `internal/database`: MongoDB connection.
+- `internal/handler`: gRPC request/response adaptation and validation at the transport boundary.
+- `internal/middleware`: gRPC authentication interceptor.
+- `internal/model`: Go domain/persistence models.
+- `internal/repository`: MongoDB reads/writes.
+- `internal/service`: business rules and orchestration.
+- `proto`: source API contracts.
+- `gen`: generated Go protobuf and gRPC code.
 
-### Delivery Partner Mobile
-Responsibilities:
-- OTP authentication
-- Delivery partner profile
-- Available orders
-- Accepting assignments
-- Pickup
-- Delivery
-- Earnings
-- Order history
-
-## 4. Backend
-
-Initial backend modules:
+## Dependency direction
 
 ```text
-Authentication
-Users
-Restaurants
-Menu
-Cart
-Orders
-Payments
-Delivery
-Reviews
-Admin / Development Operations
+gRPC request
+   ↓
+Handler
+   ↓
+Service
+   ↓
+Repository
+   ↓
+MongoDB
 ```
 
-The backend owns business rules, state transitions, authorization, payment state, delivery assignment, database consistency, and error handling.
+The handler extracts the authenticated rider identity from context where required. The service enforces business rules. The repository performs MongoDB operations.
 
-## 5. Database
+## Architecture style
 
-PostgreSQL is the source of truth for transactional data:
+The current backend is a **layered modular monolith**: one server process with separated responsibilities. It is not currently described as a microservices system.
 
-```text
-users
-addresses
-restaurant_users
-delivery_partners
-orders
-order_items
-payments
-order_status_history
-coupons
-reviews
-```
+Do not split into domain packages or microservices as a cleanup-only task. The existing global layer folders are acceptable for the current project size. Consider domain-oriented packaging only when there is a concrete maintenance benefit.
 
-MongoDB is primarily for restaurant/catalog information:
+## Cross-application integration
 
-```text
-restaurants
-menus
-categories
-food_items
-addons
-collections
-```
+The apps are separate clients/surfaces. When implementing a complete order journey, inspect and align:
+- order creation and restaurant acceptance in customer/restaurant code,
+- order schema and status values in the shared database,
+- delivery backend order queries and transitions,
+- generated protobuf contracts,
+- Flutter client calls and UI states.
 
-## 6. Initial Communication Model
+The delivery backend currently queries MongoDB `orders` and `users` collections. Whether all three apps share the same MongoDB database and collection conventions must be verified from each app's source and configuration.
 
-REST APIs are used initially.
+## Networking
 
-```text
-Customer   ──HTTP──> Backend ──> Database
-Restaurant ──HTTP──> Backend ──> Database
-Delivery   ──HTTP──> Backend ──> Database
-```
+For a physical Android device, the Flutter app must reach the development PC over the LAN. The gRPC host is a hostname/IP without `http://`; the port is configured separately. The backend listener has been shown using `net.Listen("tcp", ":"+cfg.Port)`, which binds to all interfaces.
 
-No message broker is required initially.
+Do not commit machine-specific LAN IP addresses into shared production configuration. Prefer environment/flavor configuration for local development and a secure production endpoint for deployment.
 
-## 7. Real-Time Updates
+## Operational simplicity
 
-WebSockets are intentionally deferred. Clients can initially refresh resources using REST APIs such as:
-
-```text
-GET /orders/:id
-GET /restaurant/orders
-GET /delivery/orders/available
-```
-
-## 8. Redis
-
-Redis is intentionally deferred. Later it may support:
-- OTP rate limiting
-- Sessions
-- Availability
-- Caching
-- Temporary state
-- Distributed coordination
-
-## 9. Event-Driven Architecture
-
-Initially use synchronous operations. Later, events such as:
-
-```text
-OrderCreated
-OrderAccepted
-OrderReady
-DeliveryAssigned
-OrderPickedUp
-OrderDelivered
-PaymentCompleted
-PaymentFailed
-OrderCancelled
-```
-
-can be introduced when asynchronous processing or service decoupling becomes necessary.
-
-## 10. Authentication and Authorization
-
-Roles:
-
-```text
-CUSTOMER
-RESTAURANT
-DELIVERY_PARTNER
-ADMIN
-```
-
-Every protected endpoint validates:
-1. Authentication
-2. Identity
-3. Role
-4. Resource ownership
-5. Allowed operation
-
-## 11. Core Principle
-
-The frontend displays state. The backend owns state.
-
-A frontend request must never be allowed to arbitrarily set an order status.
-
-## 12. Development Priority
-
-```text
-1. Core REST APIs
-2. Database models
-3. Authentication
-4. Authorization
-5. Cart
-6. Checkout
-7. Orders
-8. Restaurant workflow
-9. Delivery workflow
-10. COD
-11. Online payment
-12. Cancellation
-13. Refunds
-14. End-to-end testing
-15. WebSockets
-16. Redis
-17. Event-driven architecture
-18. Observability
-19. Scaling
-```
+Current target: get a reliable core order flow running with straightforward synchronous gRPC and MongoDB operations. Add caching, message brokers, WebSockets, observability stacks, or service extraction only when required.
