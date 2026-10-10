@@ -1,0 +1,21 @@
+# compose.yaml
+services:
+  floci:
+    image: floci/floci:latest
+    ports:
+      - "4566:4566"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - floci-data:/app/data
+
+  floci-dash:
+    image: ghcr.io/ofsazib/floci-dash
+    ports:
+      - "9877:3000"
+    environment:
+      FLOCI_URL: http://host.docker.internal:4566
+    depends_on:
+      - floci
+
+volumes:
+  floci-data:
